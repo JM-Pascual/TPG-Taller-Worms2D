@@ -41,4 +41,6 @@
 .*.swp
 *~
 
+target
+build
 .vscode
