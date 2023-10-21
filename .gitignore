@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+
+# Mac
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+.*.swp
+*~
+
+.vscode
