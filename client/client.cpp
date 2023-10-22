@@ -26,19 +26,31 @@ void Client::run() {
     SDL_Event e;
     bool quit = false;
     while (!quit) {
+        SDL_PollEvent(&e);
         if (e.type == SDL_QUIT) {
             quit = true;
         } else if (e.type == SDL_KEYDOWN) {
-            while (SDL_PollEvent(&e) != 0) {
-                switch (e.key.keysym.sym) {
-                    case SDLK_a:
-                        send.queueUp(0);
-                    case SDLK_d:
-                        send.queueUp(1);
-
-                    default:
-                        break;
-                }
+            switch (e.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    quit = true;
+                    break;
+                case SDLK_a:
+                    send.queueUp(0);
+                    break;
+                case SDLK_d:
+                    send.queueUp(1);
+                    break;
+                default:
+                    break;
+            }
+        } else if (e.type == SDL_KEYUP) {
+            switch (e.key.keysym.sym) {
+                case SDLK_a:
+                    break;
+                case SDLK_d:
+                    break;
+                default:
+                    break;
             }
         }
     }
