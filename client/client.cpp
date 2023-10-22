@@ -1,5 +1,9 @@
 #include "client.h"
 
+#include "SDL2pp/SDL2pp.hh"
+
+#include "cparser.h"
+
 Client::Client(const char* hostname, const char* servname):
         recv(&this->protocol), send(&this->protocol), protocol(hostname, servname) {
     recv.start();
@@ -14,12 +18,28 @@ Client::~Client() {
 }
 
 void Client::run() {
-    char command;
-    while (std::cin >> command) {
-        if (command == 'a') {
-            send.queueUp(5);
-        } else if (command == 'q') {
-            break;
+    SDL2pp::SDL sdl(SDL_INIT_VIDEO);
+
+    SDL2pp::Window window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480,
+                          SDL_WINDOW_RESIZABLE);
+
+    SDL_Event e;
+    bool quit = false;
+    while (!quit) {
+        if (e.type == SDL_QUIT) {
+            quit = true;
+        } else if (e.type == SDL_KEYDOWN) {
+            while (SDL_PollEvent(&e) != 0) {
+                switch (e.key.keysym.sym) {
+                    case SDLK_a:
+                        send.queueUp(0);
+                    case SDLK_d:
+                        send.queueUp(1);
+
+                    default:
+                        break;
+                }
+            }
         }
     }
 }
