@@ -10,10 +10,10 @@ class Protocol;
 class Receiver: public Thread {
 private:
     ClientSide::Protocol* protocol;
-    Queue<uint8_t> queue;
+    Queue<uint8_t>& queue;
 
 public:
-    explicit Receiver(ClientSide::Protocol* protocol);
+    explicit Receiver(ClientSide::Protocol* protocol, Queue<uint8_t>& game_state_queue);
 
     void run() override;
 };

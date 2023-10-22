@@ -11,7 +11,7 @@ private:
     ClientSide::Receiver recv;
     ClientSide::Sender send;
     ClientSide::Protocol protocol;
-
+    Queue<uint8_t> game_state_queue;
 public:
     /*
         Construye el cliente con su protocolo

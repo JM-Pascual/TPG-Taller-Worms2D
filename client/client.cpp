@@ -5,7 +5,7 @@
 #include "cparser.h"
 
 Client::Client(const char* hostname, const char* servname):
-        recv(&this->protocol), send(&this->protocol), protocol(hostname, servname) {
+        recv(&this->protocol, game_state_queue), send(&this->protocol), protocol(hostname, servname) {
     recv.start();
     send.start();
 }
@@ -53,5 +53,18 @@ void Client::run() {
                     break;
             }
         }
+
+        uint8_t x;
+        if(game_state_queue.try_pop(x)){
+            std::cout << "x: " << (int)x << std::endl;
+        }
+
     }
+
+    //render
+    //repeat
+
+
+
+
 }

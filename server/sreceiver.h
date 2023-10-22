@@ -12,7 +12,7 @@ class Receiver: public Thread {
 private:
     ServerSide::Protocol* protocol;
     Lobby* lobby;
-
+    uint8_t x = 0; //simulación de la pos de un jugador
 public:
     explicit Receiver(ServerSide::Protocol* protocol, Lobby* lobby);
 
