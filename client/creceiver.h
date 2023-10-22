@@ -9,11 +9,11 @@ class Protocol;
 
 class Receiver: public Thread {
 private:
-    ClientSide::Protocol* protocol;
+    ClientSide::Protocol& protocol;
     Queue<uint8_t>& queue;
 
 public:
-    explicit Receiver(ClientSide::Protocol* protocol, Queue<uint8_t>& game_state_queue);
+    explicit Receiver(ClientSide::Protocol& protocol, Queue<uint8_t>& game_state_queue);
 
     void run() override;
 };

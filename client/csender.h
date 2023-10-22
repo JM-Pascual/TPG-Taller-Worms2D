@@ -11,7 +11,7 @@ class Protocol;
 
 class Sender: public Thread {
 private:
-    ClientSide::Protocol* protocol;
+    ClientSide::Protocol& protocol;
     Queue<uint8_t> queue;
     /*
         Cierra la queue forzosamente
@@ -19,7 +19,7 @@ private:
     void closeQueue();
 
 public:
-    explicit Sender(ClientSide::Protocol* protocol);
+    explicit Sender(ClientSide::Protocol& protocol);
     /*
         Corre el sender esperando que la queue tenga un elemento para poder enviar a traves del
         protocolo

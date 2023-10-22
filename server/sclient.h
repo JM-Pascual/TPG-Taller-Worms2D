@@ -12,9 +12,9 @@ class Lobby;
 namespace ServerSide {
 class Client {
 private:
+    ServerSide::Protocol protocol;
     ServerSide::Receiver recv;
     ServerSide::Sender send;
-    ServerSide::Protocol protocol;
     std::atomic<bool> killed;
 
 public:

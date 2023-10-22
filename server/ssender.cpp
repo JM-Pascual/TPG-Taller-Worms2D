@@ -2,7 +2,7 @@
 
 #include "sprotocol.h"
 
-ServerSide::Sender::Sender(ServerSide::Protocol* protocol, Lobby* lobby):
+ServerSide::Sender::Sender(ServerSide::Protocol& protocol, Lobby* lobby):
         protocol(protocol), lobby(lobby) {}
 
 void ServerSide::Sender::run() {
@@ -16,7 +16,7 @@ void ServerSide::Sender::run() {
     } while (this->_keep_running);
 }
 
-void ServerSide::Sender::send(uint8_t o) { this->protocol->send(&o, 1); }
+void ServerSide::Sender::send(uint8_t o) { this->protocol.send(&o, 1); }
 
 void ServerSide::Sender::queueUp(uint8_t o) { queue.push(o); }
 

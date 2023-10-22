@@ -13,7 +13,7 @@ class Protocol;
 
 class Sender: public Thread {
 private:
-    ServerSide::Protocol* protocol;
+    ServerSide::Protocol& protocol;
     Queue<uint8_t> queue;
     Lobby* lobby;
     /*
@@ -22,7 +22,7 @@ private:
     void closeQueue();
 
 public:
-    explicit Sender(ServerSide::Protocol* protocol, Lobby* lobby);
+    explicit Sender(ServerSide::Protocol& protocol, Lobby* lobby);
     /*
         Corre el sender esperando que la queue tenga un elemento para poder enviar a traves del
         protocolo

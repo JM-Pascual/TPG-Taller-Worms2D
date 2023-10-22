@@ -5,9 +5,9 @@
 #include "lobby.h"
 
 ServerSide::Client::Client(Socket&& peer, Lobby* lobby):
-        recv(&this->protocol, lobby),
-        send(&this->protocol, lobby),
         protocol(std::move(peer)),
+        recv(this->protocol, lobby),
+        send(this->protocol, lobby),
         killed(false) {
     recv.start();
     send.start();

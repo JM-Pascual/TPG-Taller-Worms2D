@@ -3,15 +3,13 @@
 #include "lobby.h"
 #include "sprotocol.h"
 
-ServerSide::Receiver::Receiver(ServerSide::Protocol* protocol, Lobby* lobby):
-        protocol(protocol), lobby(lobby) {
-        x = 0;
-}
+ServerSide::Receiver::Receiver(ServerSide::Protocol& protocol, Lobby* lobby):
+        protocol(protocol), lobby(lobby), x(0) {}
 
 void ServerSide::Receiver::run() {
     uint8_t o;
     do {
-        protocol->recv(&o, 1);
+        protocol.recv(&o, 1);
 
         if (o == 0) {
             x--;
