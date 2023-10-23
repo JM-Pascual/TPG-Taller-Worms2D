@@ -1,7 +1,5 @@
 #include "csender.h"
 
-#include "../common/command.h"
-
 #include "cprotocol.h"
 
 ClientSide::Sender::Sender(ClientSide::Protocol& protocol): Thread(), protocol(protocol) {}

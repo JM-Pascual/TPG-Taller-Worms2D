@@ -1,21 +1,19 @@
 #include "sreceiver.h"
 
+#include "command.h"
 #include "game.h"
+#include "sparser.h"
 #include "sprotocol.h"
 
 ServerSide::Receiver::Receiver(ServerSide::Protocol& protocol, Game* lobby):
         protocol(protocol), lobby(lobby), x(0) {}
 
 void ServerSide::Receiver::run() {
-    uint8_t o;
+    Commands o;
+    ServerSide::Parser parser;
     do {
-        protocol.recv(&o, 1);
-
-        if (o == 0) {
-            x--;
-        } else if (o == 1) {
-            x++;
-        }
+        protocol.recvCommand(o);
+        parser.makeCommand(o, protocol).get()->execute(x);
 
         lobby->notifyAllClients(x);
     } while (_keep_running);

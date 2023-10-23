@@ -35,9 +35,11 @@ void Client::run() {
                     quit = true;
                     break;
                 case SDLK_a:
+                    send.queueUp(3);
                     send.queueUp(0);
                     break;
                 case SDLK_d:
+                    send.queueUp(3);
                     send.queueUp(1);
                     break;
                 default:

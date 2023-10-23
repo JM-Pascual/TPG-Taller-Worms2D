@@ -1,6 +1,9 @@
 #ifndef SERVER_PROTOCOL_H
 #define SERVER_PROTOCOL_H
 
+#include <stdint.h>
+
+#include "../common/const.h"
 #include "../common/socket.h"
 
 namespace ServerSide {
@@ -14,6 +17,14 @@ private:
     */
     bool send_was_closed;
     bool recv_was_closed;
+    /*
+        Recibe data chequeando si se cierra el socket
+    */
+    void recv(void* data, unsigned int sz);
+    /*
+        Recibe un int de 8 bits sin signo
+    */
+    uint8_t recvUint8();
 
 public:
     /*
@@ -21,13 +32,17 @@ public:
     */
     void send(const void* data, unsigned int sz);
     /*
-        Recibe data chequeando si se cierra el socket
-    */
-    void recv(void* data, unsigned int sz);
-    /*
         Construye el protocolo y su respectivo socket
     */
     explicit Protocol(Socket&& peer);
+    /*
+        Recibe el comando que el cliente desea ejecutar
+    */
+    void recvCommand(Commands&);
+    /*
+        Recibe la direccion hacia la cual se debe mover el gusano
+    */
+    void recvMoveDir(MoveDir&);
     /*
         Cierra forzosamente el socket del protocolo (en caso de que no se haya hecho)
     */

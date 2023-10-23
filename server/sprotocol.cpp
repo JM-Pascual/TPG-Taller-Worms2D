@@ -6,7 +6,12 @@
 #include <errno.h>
 #include <stdint.h>
 
+#include "../common/const.h"
 #include "../common/liberror.h"
+
+ServerSide::Protocol::Protocol(Socket&& peer):
+        peer(std::move(peer)), send_was_closed(false), recv_was_closed(false) {}
+
 
 void ServerSide::Protocol::send(const void* data, unsigned int sz) {
     unsigned int sz_sent = peer.sendall(data, sz, &send_was_closed);
@@ -24,6 +29,7 @@ void ServerSide::Protocol::recv(void* data, unsigned int sz) {
     }
 }
 
+
 void ServerSide::Protocol::close() {
     if (not(send_was_closed || recv_was_closed)) {
         this->peer.shutdown(SHUT_RDWR);
@@ -31,5 +37,13 @@ void ServerSide::Protocol::close() {
     }
 }
 
-ServerSide::Protocol::Protocol(Socket&& peer):
-        peer(std::move(peer)), send_was_closed(false), recv_was_closed(false) {}
+
+uint8_t ServerSide::Protocol::recvUint8() {
+    uint8_t n;
+    this->recv(&n, sizeof(uint8_t));
+    return n;
+}
+
+void ServerSide::Protocol::recvCommand(Commands& c) { c = (Commands)this->recvUint8(); }
+
+void ServerSide::Protocol::recvMoveDir(MoveDir& d) { d = (MoveDir)this->recvUint8(); }
