@@ -28,6 +28,7 @@ public:
     virtual void execute(uint8_t&) = 0;
     // Este int no tiene que ir, supongo que sera un metodo sin args. Esta de momento
     // por la simulacion experimental de moverse
+    virtual ~Command() = default;
 };
 
 class Move: public Command {
@@ -43,6 +44,8 @@ public:
         Delega al servidor el movimiento del gusano
     */
     void execute(uint8_t&) override;
+
+    ~Move() override = default;
 };
 
 class Create: public Command {
@@ -61,6 +64,8 @@ public:
 
     */
     void execute(uint8_t&) override;
+
+    ~Create() override = default;
 };
 
 // class Jump: public Command {
