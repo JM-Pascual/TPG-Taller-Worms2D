@@ -8,9 +8,9 @@
 #include "../common/const.h"
 #include "../common/socket.h"
 
-#include "lobby.h"
+#include "game_browser.h"
 
-LobbyClient::LobbyClient(Socket&& skt, Lobby& lobby, const uint8_t id):
+LobbyClient::LobbyClient(Socket&& skt, GameBrowser& lobby, const uint8_t id):
         protocol(std::move(skt)), lobby(lobby), id(id) {}
 
 void LobbyClient::run() {

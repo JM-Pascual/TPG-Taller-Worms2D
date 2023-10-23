@@ -1,10 +1,10 @@
-#include "lobby.h"
+#include "game_browser.h"
 
 #include <utility>
 
-Lobby::Lobby() = default;
+GameBrowser::GameBrowser() = default;
 
-uint8_t Lobby::create_game() {
+uint8_t GameBrowser::create_game() {
     // Por el momento no tiene args, despues tendra nombre, mapa, etc
     std::unique_lock<std::mutex> lck(m);
 
@@ -14,7 +14,7 @@ uint8_t Lobby::create_game() {
     return game_id;
 }
 
-void Lobby::join_game(uint8_t game_code, std::unique_ptr<LobbyClient>& client) {
+void GameBrowser::join_game(uint8_t game_code, std::unique_ptr<LobbyClient>& client) {
 
     // Falta joinear el client <LobbyClient>
     // Supongo que vamos a tener que tener un LobbyCleaner y uno por Game
@@ -30,7 +30,7 @@ void Lobby::join_game(uint8_t game_code, std::unique_ptr<LobbyClient>& client) {
     }
 }
 
-void Lobby::infoGames(std::vector<std::string>& info) {
+void GameBrowser::infoGames(std::vector<std::string>& info) {
     std::unique_lock<std::mutex> lck(m);
     for (const auto& [id, game]: games) {
         std::string s("Game id: " +
@@ -39,20 +39,20 @@ void Lobby::infoGames(std::vector<std::string>& info) {
     }
 }
 
-void Lobby::pushLobbyClient(std::unique_ptr<LobbyClient> client, uint8_t id) {
+void GameBrowser::pushLobbyClient(std::unique_ptr<LobbyClient> client, uint8_t id) {
     std::unique_lock<std::mutex> lck(m);
     waiting_clients[id] = std::move(client);
     waiting_clients[id]->start();
 }
 
-void Lobby::killAll() {
+void GameBrowser::killAll() {
     std::unique_lock<std::mutex> lck(m);
     for (const auto& [id, game]: games) {
         game->killAll();
     }
 }
 
-Lobby::~Lobby() {
+GameBrowser::~GameBrowser() {
     std::unique_lock<std::mutex> lck(m);
 
     for (const auto& [id, game]: waiting_clients) {

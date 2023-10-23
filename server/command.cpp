@@ -14,7 +14,7 @@ void Move::execute(uint8_t& x) { x += 2 * (uint8_t)direction - 1; }
 
 // Damage::Damage(uint8_t id): Command(id) {}
 
-Create::Create(uint8_t id, ServerSide::Protocol& protocol, Lobby& lobby,
+Create::Create(uint8_t id, ServerSide::Protocol& protocol, GameBrowser& lobby,
                std::unique_ptr<LobbyClient>& client):
         Command(id), lobby(lobby), client(client) {
     /*

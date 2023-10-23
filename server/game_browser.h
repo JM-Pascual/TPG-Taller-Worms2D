@@ -16,7 +16,7 @@
 #include "lobby_client.h"
 #include "sclient.h"
 
-class Lobby {
+class GameBrowser {
 private:
     std::mutex m;
     /*
@@ -27,7 +27,7 @@ private:
     std::map<uint8_t, std::unique_ptr<LobbyClient>> waiting_clients;
 
 public:
-    Lobby();
+    GameBrowser();
     uint8_t create_game();
 
     void join_game(uint8_t game_code, std::unique_ptr<LobbyClient>& client);
@@ -43,16 +43,16 @@ public:
 
     */
     void killAll();
-    ~Lobby();
+    ~GameBrowser();
 
     /*
      *  No queremos ni copiar ni mover el monitor
      */
-    Lobby(const Lobby&) = delete;
-    Lobby& operator=(const Lobby&) = delete;
+    GameBrowser(const GameBrowser&) = delete;
+    GameBrowser& operator=(const GameBrowser&) = delete;
 
-    Lobby(Lobby&&) = delete;
-    Lobby& operator=(Lobby&&) = delete;
+    GameBrowser(GameBrowser&&) = delete;
+    GameBrowser& operator=(GameBrowser&&) = delete;
 };
 
 

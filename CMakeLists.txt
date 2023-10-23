@@ -39,8 +39,7 @@ target_link_libraries(client_exe PUBLIC SDL2_mixer)
 target_link_libraries(client_exe PUBLIC ${SDL2PP_LIBRARIES})
 
 
-add_executable(server_exe ${COMMON_SRC} ${SERVER_SRC}
-        server/lobby.h)
+add_executable(server_exe ${COMMON_SRC} ${SERVER_SRC})
 
 set_target_properties(client_exe server_exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TARGET_DIR})
 set_target_properties(client_exe PROPERTIES OUTPUT_NAME worms2d)

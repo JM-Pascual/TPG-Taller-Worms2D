@@ -7,7 +7,7 @@
 
 #include "../common/const.h"
 
-#include "lobby.h"
+#include "game_browser.h"
 
 namespace ServerSide {
 class Protocol;
@@ -50,7 +50,7 @@ public:
 
 class Create: public Command {
 private:
-    Lobby& lobby;
+    GameBrowser& lobby;
     uint8_t game_id;
     std::unique_ptr<LobbyClient>& client;
 
@@ -58,7 +58,7 @@ public:
     /*
 
     */
-    explicit Create(uint8_t, ServerSide::Protocol&, Lobby& lobby,
+    explicit Create(uint8_t, ServerSide::Protocol&, GameBrowser& lobby,
                     std::unique_ptr<LobbyClient>& client);
     /*
 
