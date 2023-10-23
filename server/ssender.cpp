@@ -2,8 +2,8 @@
 
 #include "sprotocol.h"
 
-ServerSide::Sender::Sender(ServerSide::Protocol& protocol, Game* lobby):
-        protocol(protocol), lobby(lobby) {}
+ServerSide::Sender::Sender(ServerSide::Protocol& protocol, std::unique_ptr<Game>& game):
+        protocol(protocol), game(game) {}
 
 void ServerSide::Sender::run() {
     do {

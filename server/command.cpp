@@ -13,3 +13,16 @@ void Move::execute(uint8_t& x) { x += 2 * (uint8_t)direction - 1; }
 // Jump::Jump(uint8_t id): Command(id) {}
 
 // Damage::Damage(uint8_t id): Command(id) {}
+
+Create::Create(uint8_t id, ServerSide::Protocol& protocol, Lobby& lobby,
+               std::unique_ptr<LobbyClient>& client):
+        Command(id), lobby(lobby), client(client) {
+    /*
+        Recibe nombre de la sala, mapa y ...
+        Pienso que quedaria de la forma
+        (atributo de Create) uint8_t game_id = lobby.create_game(args)
+    */
+    game_id = lobby.create_game();
+}
+
+void Create::execute(uint8_t& d) { lobby.join_game(game_id, client); }

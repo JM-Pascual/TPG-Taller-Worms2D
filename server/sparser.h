@@ -14,7 +14,9 @@ class Parser {
 
 private:
 public:
-    std::unique_ptr<Command> makeCommand(const Commands&, ServerSide::Protocol&);
+    std::unique_ptr<Command> makeGameCommand(const Commands&, ServerSide::Protocol&);
+
+    std::unique_ptr<Command> makeLobbyCommand(const Commands&, ServerSide::Protocol&);
 };
 }  // namespace ServerSide
 

@@ -3,12 +3,24 @@
 #include <utility>
 
 #include "game.h"
+#include "lobby_client.h"
 
-ServerSide::Client::Client(Socket&& peer, Game* lobby):
+ServerSide::Client::Client(LobbyClient* lc, std::unique_ptr<Game>& game):
+        protocol(std::move(lc->protocol)),
+        recv(this->protocol, game),
+        send(this->protocol, game),
+        killed(false),
+        id(lc->id) {
+    recv.start();
+    send.start();
+}
+
+ServerSide::Client::Client(Socket&& peer, std::unique_ptr<Game>& game, const uint8_t id):
         protocol(std::move(peer)),
-        recv(this->protocol, lobby),
-        send(this->protocol, lobby),
-        killed(false) {
+        recv(this->protocol, game),
+        send(this->protocol, game),
+        killed(false),
+        id(id) {
     recv.start();
     send.start();
 }

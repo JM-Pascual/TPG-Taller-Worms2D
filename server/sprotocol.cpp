@@ -12,6 +12,11 @@
 ServerSide::Protocol::Protocol(Socket&& peer):
         peer(std::move(peer)), send_was_closed(false), recv_was_closed(false) {}
 
+ServerSide::Protocol::Protocol(Protocol&& p):
+        peer(std::move(p.peer)),
+        send_was_closed(p.send_was_closed),
+        recv_was_closed(p.recv_was_closed) {}
+
 
 void ServerSide::Protocol::send(const void* data, unsigned int sz) {
     unsigned int sz_sent = peer.sendall(data, sz, &send_was_closed);

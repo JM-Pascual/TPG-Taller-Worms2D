@@ -1,6 +1,8 @@
 #ifndef SERVER_SENDER_H
 #define SERVER_SENDER_H
 
+#include <memory>
+
 #include <stdint.h>
 
 #include "../common/queue.h"
@@ -15,14 +17,14 @@ class Sender: public Thread {
 private:
     ServerSide::Protocol& protocol;
     Queue<uint8_t> queue;
-    Game* lobby;
+    std::unique_ptr<Game>& game;
     /*
         Cierra la queue forzosamente
     */
     void closeQueue();
 
 public:
-    explicit Sender(ServerSide::Protocol& protocol, Game* lobby);
+    explicit Sender(ServerSide::Protocol& protocol, std::unique_ptr<Game>& game);
     /*
         Corre el sender esperando que la queue tenga un elemento para poder enviar a traves del
         protocolo

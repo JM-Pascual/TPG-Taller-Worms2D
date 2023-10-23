@@ -2,6 +2,7 @@
 
 #include "../common/liberror.h"
 
+#include "lobby_client.h"
 #include "sclient.h"
 #include "sprotocol.h"
 
@@ -22,8 +23,10 @@ Acceptor::~Acceptor() {
 
 void Acceptor::run() {
     try {
+        uint8_t id = 0;
         do {
-            lobby.pushClient(new ServerSide::Client(skt.accept(), &lobby));
+            lobby.pushLobbyClient(std::make_unique<LobbyClient>(skt.accept(), lobby, id), id);
+            id++;
         } while (this->_keep_running);
 
     } catch (const LibError& e) {

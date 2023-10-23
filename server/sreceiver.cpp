@@ -5,17 +5,17 @@
 #include "sparser.h"
 #include "sprotocol.h"
 
-ServerSide::Receiver::Receiver(ServerSide::Protocol& protocol, Game* lobby):
-        protocol(protocol), lobby(lobby), x(0) {}
+ServerSide::Receiver::Receiver(ServerSide::Protocol& protocol, std::unique_ptr<Game>& game):
+        protocol(protocol), game(game), x(0) {}
 
 void ServerSide::Receiver::run() {
     Commands o;
     ServerSide::Parser parser;
     do {
         protocol.recvCommand(o);
-        parser.makeCommand(o, protocol).get()->execute(x);
+        parser.makeGameCommand(o, protocol).get()->execute(x);
 
-        lobby->notifyAllClients(x);
+        game->notifyAllClients(x);
     } while (_keep_running);
 }
 

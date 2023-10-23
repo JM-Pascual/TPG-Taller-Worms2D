@@ -1,6 +1,8 @@
 #ifndef SERVER_RECEIVER_H
 #define SERVER_RECEIVER_H
 
+#include <memory>
+
 #include "../common/thread.h"
 
 class Game;
@@ -11,10 +13,10 @@ class Protocol;
 class Receiver: public Thread {
 private:
     ServerSide::Protocol& protocol;
-    Game* lobby;
+    std::unique_ptr<Game>& game;
     uint8_t x;  // simulación de la pos de un jugador
 public:
-    explicit Receiver(ServerSide::Protocol& protocol, Game* lobby);
+    explicit Receiver(ServerSide::Protocol& protocol, std::unique_ptr<Game>& game);
 
     void run() override;
     /*

@@ -8,7 +8,7 @@
 #include "../common/thread.h"
 
 #include "cleaner.h"
-#include "game.h"
+#include "lobby.h"
 
 namespace ServerSide {
 class Protocol;
@@ -21,7 +21,7 @@ class Acceptor: public Thread {
 private:
     Socket skt;
     Cleaner cleaner;
-    Game lobby;
+    Lobby lobby;
     std::atomic<bool> killed;
 
 public:

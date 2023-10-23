@@ -2,7 +2,8 @@
 #define CLIENTS_H
 
 #include <condition_variable>
-#include <list>
+#include <map>
+#include <memory>
 #include <mutex>
 #include <string>
 
@@ -14,7 +15,7 @@ class Game {
 private:
     std::mutex m;
     std::mutex m_clean;
-    std::list<ServerSide::Client*> clients;
+    std::map<uint8_t, std::unique_ptr<ServerSide::Client>> clients;
     std::condition_variable can_delete;
 
 public:
@@ -29,11 +30,11 @@ public:
     /*
         Pushea un cliente a la lista
     */
-    void pushClient(ServerSide::Client* c);
+    void pushClient(std::unique_ptr<ServerSide::Client> client);
     /*
         Elimina los clientes muertos y devuelve un bool dependiendo si elimino alguno
     */
-    bool deleteDeaths();
+    // bool deleteDeaths();
     /*
         Mata todos los clientes conectados
     */

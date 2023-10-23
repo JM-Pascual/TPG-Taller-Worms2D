@@ -1,51 +1,51 @@
 #include "game.h"
 
 #include <algorithm>
+#include <utility>
 
 #include "sclient.h"
 
 void Game::notifyAllClients(const uint8_t& dto) {
-    for (ServerSide::Client* client: clients) {
+    std::lock_guard<std::mutex> lock(m);
+    for (const auto& [id, client]: clients) {
         client->sendChat(dto);
     }
 }
 
-void Game::pushClient(ServerSide::Client* c) {
+void Game::pushClient(std::unique_ptr<ServerSide::Client> client) {
     std::lock_guard<std::mutex> lock(m);
-    clients.push_back(c);
+    clients[client->id] = std::move(client);
 }
 
-bool Game::deleteDeaths() {
-    std::unique_lock<std::mutex> lock(m_clean);
-    can_delete.wait(lock);
-    std::lock_guard<std::mutex> l(m);
+// Esto lo usaba el cleaner de mi tp2, y quedo cuando lo pase. Supongo que igual ahora con los id
+// va a cambiar el tema
+// bool Game::deleteDeaths() {
+//  std::unique_lock<std::mutex> lock(m_clean);
+//  can_delete.wait(lock);
+//  std::lock_guard<std::mutex> l(m);
 
-    size_t prev_size = clients.size();
+// size_t prev_size = clients.size();
 
-    auto end = std::remove_if(clients.begin(), clients.end(), [](ServerSide::Client* c) {
-        if (!c->isAlive()) {
-            delete c;
-            return true;
-        }
-        return false;
-    });
+// auto end = std::remove_if(clients.begin(), clients.end(), [](ServerSide::Client* c) {
+//     if (!c->isAlive()) {
+//         delete c;
+//         return true;
+//     }
+//     return false;
+// });
 
-    clients.erase(end, clients.end());
+// clients.erase(end, clients.end());
 
-    return (prev_size > clients.size());
-}
+// return (prev_size > clients.size());
+//}
 
 void Game::killAll() {
-    for (ServerSide::Client* c: clients) {
-        c->kill();
+    std::lock_guard<std::mutex> lock(m);
+    for (const auto& [id, client]: clients) {
+        client->kill();
     }
 }
 
 void Game::notifyClean() { can_delete.notify_all(); }
 
-Game::~Game() {
-    std::lock_guard<std::mutex> lock(m);
-    for (ServerSide::Client* client: clients) {
-        delete client;
-    }
-}
+Game::~Game() {}  // Todo RAII
