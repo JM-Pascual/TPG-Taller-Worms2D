@@ -3,7 +3,7 @@
 
 #include "../common/thread.h"
 
-class Lobby;
+class Game;
 
 namespace ServerSide {
 class Protocol;
@@ -11,10 +11,10 @@ class Protocol;
 class Receiver: public Thread {
 private:
     ServerSide::Protocol& protocol;
-    Lobby* lobby;
+    Game* lobby;
     uint8_t x;  // simulación de la pos de un jugador
 public:
-    explicit Receiver(ServerSide::Protocol& protocol, Lobby* lobby);
+    explicit Receiver(ServerSide::Protocol& protocol, Game* lobby);
 
     void run() override;
     /*

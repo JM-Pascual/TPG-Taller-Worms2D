@@ -1,51 +1,25 @@
 #include "lobby.h"
 
-#include <algorithm>
+Lobby::Lobby() = default;
 
-#include "sclient.h"
+void Lobby::create_game(uint8_t game_code, ServerSide::Client* client) {
+    auto* game = new Game();
+    game->pushClient(client);
+    std::unique_lock<std::mutex> lck(m);
+    games.insert(std::pair<uint8_t,Game*>(game_code, game));
+}
 
-void Lobby::notifyAllClients(const uint8_t& dto) {
-    for (ServerSide::Client* client: clients) {
-        client->sendChat(dto);
+void Lobby::join_game(uint8_t game_code, ServerSide::Client* client) {
+    std::unique_lock<std::mutex> lck(m);
+    if(games.count(game_code) > 0){ //Solo puede llegar a ver una solo elemento con esa llave, ver si cambio a == 1.
+        games.at(game_code)->pushClient(client);
     }
 }
-
-void Lobby::pushClient(ServerSide::Client* c) {
-    std::lock_guard<std::mutex> lock(m);
-    clients.push_back(c);
-}
-
-bool Lobby::deleteDeaths() {
-    std::unique_lock<std::mutex> lock(m_clean);
-    can_delete.wait(lock);
-    std::lock_guard<std::mutex> l(m);
-
-    size_t prev_size = clients.size();
-
-    auto end = std::remove_if(clients.begin(), clients.end(), [](ServerSide::Client* c) {
-        if (!c->isAlive()) {
-            delete c;
-            return true;
-        }
-        return false;
-    });
-
-    clients.erase(end, clients.end());
-
-    return (prev_size > clients.size());
-}
-
-void Lobby::killAll() {
-    for (ServerSide::Client* c: clients) {
-        c->kill();
-    }
-}
-
-void Lobby::notifyClean() { can_delete.notify_all(); }
-
+//Ver si lo dejo acá el destructor o lo tengo que hacer cuando hago el kill
 Lobby::~Lobby() {
-    std::lock_guard<std::mutex> lock(m);
-    for (ServerSide::Client* client: clients) {
-        delete client;
+    std::unique_lock<std::mutex> lck(m);
+    for (auto const& x : games) {
+        delete x.second;
     }
+    games.clear();
 }

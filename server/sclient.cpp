@@ -2,9 +2,9 @@
 
 #include <utility>
 
-#include "lobby.h"
+#include "game.h"
 
-ServerSide::Client::Client(Socket&& peer, Lobby* lobby):
+ServerSide::Client::Client(Socket&& peer, Game* lobby):
         protocol(std::move(peer)),
         recv(this->protocol, lobby),
         send(this->protocol, lobby),

@@ -1,54 +1,29 @@
-#ifndef CLIENTS_H
-#define CLIENTS_H
+#ifndef WORMS2D_LOBBY_H
+#define WORMS2D_LOBBY_H
 
-#include <condition_variable>
-#include <list>
-#include <mutex>
-#include <string>
+#include <iostream>
+#include <cstdint>
+#include <map>
 
-namespace ServerSide {
-class Client;
-}
+#include "game.h"
+#include "../common/queue.h"
+#include "sclient.h"
 
 class Lobby {
 private:
+    std::map<uint8_t,Game*> games;
     std::mutex m;
-    std::mutex m_clean;
-    std::list<ServerSide::Client*> clients;
-    std::condition_variable can_delete;
-
 public:
-    /*
-        Crea la lista de clientes vacia
-    */
-    Lobby() = default;
-    /*
-        Envia el DTO a todos los clientes conectados
-    */
-    void notifyAllClients(const uint8_t& dto);
-    /*
-        Pushea un cliente a la lista
-    */
-    void pushClient(ServerSide::Client* c);
-    /*
-        Elimina los clientes muertos y devuelve un bool dependiendo si elimino alguno
-    */
-    bool deleteDeaths();
-    /*
-        Mata todos los clientes conectados
-    */
-    void killAll();
-    /*
-        Se utiliza para notificar a can_delete que hay un cliente disponible para ser eliminado
-    */
-    void notifyClean();
-    /*
-        Libera los recursos de todos los clientes
-    */
+    Lobby();
+    //Ver si está bien usar void o tengo que devolver la partida creada o a la que me uno para poder acceder más fácil
+    void create_game(uint8_t game_code,ServerSide::Client* client); //Ver si paso puntero o puedo usar una referencia
+    void join_game(uint8_t game_code, ServerSide::Client* client);
+
     ~Lobby();
+
     /*
-        No queremos ni copiar ni mover el monitor
-    */
+     *  No queremos ni copiar ni mover el monitor
+     */
     Lobby(const Lobby&) = delete;
     Lobby& operator=(const Lobby&) = delete;
 
@@ -57,4 +32,4 @@ public:
 };
 
 
-#endif
+#endif //WORMS2D_LOBBY_H

@@ -2,7 +2,7 @@
 
 #include "sprotocol.h"
 
-ServerSide::Sender::Sender(ServerSide::Protocol& protocol, Lobby* lobby):
+ServerSide::Sender::Sender(ServerSide::Protocol& protocol, Game* lobby):
         protocol(protocol), lobby(lobby) {}
 
 void ServerSide::Sender::run() {

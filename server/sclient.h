@@ -7,7 +7,7 @@
 #include "sreceiver.h"
 #include "ssender.h"
 
-class Lobby;
+class Game;
 
 namespace ServerSide {
 class Client {
@@ -18,7 +18,7 @@ private:
     std::atomic<bool> killed;
 
 public:
-    explicit Client(Socket&& peer, Lobby* lobby);
+    explicit Client(Socket&& peer, Game* lobby);
     /*
         Retorna si ambos hilos estan 'vivos'
     */

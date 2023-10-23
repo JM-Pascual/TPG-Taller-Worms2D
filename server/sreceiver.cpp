@@ -1,9 +1,9 @@
 #include "sreceiver.h"
 
-#include "lobby.h"
+#include "game.h"
 #include "sprotocol.h"
 
-ServerSide::Receiver::Receiver(ServerSide::Protocol& protocol, Lobby* lobby):
+ServerSide::Receiver::Receiver(ServerSide::Protocol& protocol, Game* lobby):
         protocol(protocol), lobby(lobby), x(0) {}
 
 void ServerSide::Receiver::run() {

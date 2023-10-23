@@ -6,7 +6,7 @@
 #include "../common/queue.h"
 #include "../common/thread.h"
 
-class Lobby;
+class Game;
 
 namespace ServerSide {
 class Protocol;
@@ -15,14 +15,14 @@ class Sender: public Thread {
 private:
     ServerSide::Protocol& protocol;
     Queue<uint8_t> queue;
-    Lobby* lobby;
+    Game* lobby;
     /*
         Cierra la queue forzosamente
     */
     void closeQueue();
 
 public:
-    explicit Sender(ServerSide::Protocol& protocol, Lobby* lobby);
+    explicit Sender(ServerSide::Protocol& protocol, Game* lobby);
     /*
         Corre el sender esperando que la queue tenga un elemento para poder enviar a traves del
         protocolo
