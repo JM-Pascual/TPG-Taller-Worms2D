@@ -6,18 +6,13 @@
 #include "sclient.h"
 #include "sprotocol.h"
 
-Acceptor::Acceptor(const char* servname):
-        Thread(), skt(Socket(servname)), cleaner(), killed(false) {
-    // cleaner.start();
-}
+Acceptor::Acceptor(const char* servname): Thread(), skt(Socket(servname)), killed(false) {}
 
 Acceptor::~Acceptor() {
-    if (!killed) {
+    if (not killed) {
         this->kill();
     }
     lobby.killAll();
-    // cleaner.kill();
-    // cleaner.join();
 }
 
 

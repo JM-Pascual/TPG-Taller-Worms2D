@@ -13,16 +13,11 @@ uint8_t GameBrowser::create_game() {
     return game_id_count++;  // Pos incremento para devolver el valor anterior al incremento
 }
 
-void GameBrowser::join_game(uint8_t game_code, std::unique_ptr<LobbyClient>& client) {
-
-    // Falta joinear el client <LobbyClient>
-    // Supongo que vamos a tener que tener un LobbyCleaner y uno por Game
-
+void GameBrowser::join_game(const uint8_t& game_code, std::unique_ptr<LobbyClient>& client) {
     std::unique_lock<std::mutex> lck(m);
     if (games.count(game_code) == 1) {
         games[game_code]->pushClient(
                 std::make_unique<ServerSide::Client>(client.get(), games[game_code]));
-        // avisar a la eventual cond_var
     } else {
         // log
         // throw
@@ -38,14 +33,9 @@ void GameBrowser::infoGames(std::vector<std::string>& info) {
     }
 }
 
-void GameBrowser::pushLobbyClient(std::unique_ptr<LobbyClient> client, uint8_t id) {
-    std::unique_lock<std::mutex> lck(m);
-    waiting_clients[id] = std::move(client);
-    waiting_clients[id]->start();
-}
-
 void GameBrowser::killAll() {
     std::unique_lock<std::mutex> lck(m);
+
     for (const auto& [id, game]: games) {
         game->killAll();
     }
@@ -53,10 +43,6 @@ void GameBrowser::killAll() {
 
 GameBrowser::~GameBrowser() {
     std::unique_lock<std::mutex> lck(m);
-
-    for (const auto& [id, game]: waiting_clients) {
-        game->join();
-    }
 
     games.clear();
 }

@@ -1,6 +1,7 @@
-#ifndef WORMS2D_LOBBY_H
-#define WORMS2D_LOBBY_H
+#ifndef WORMS2D_GB_H
+#define WORMS2D_GB_H
 
+#include <condition_variable>
 #include <cstdint>
 #include <iostream>
 #include <map>
@@ -19,19 +20,22 @@
 class GameBrowser {
 private:
     std::mutex m;
-    /*
-        Ambos uint8_t son usados como ids, por lo cual el maximo de games / clientes esperando es
-       256
-    */
     std::map<uint8_t, std::unique_ptr<Game>> games;
-    std::map<uint8_t, std::unique_ptr<LobbyClient>> waiting_clients;
     uint8_t game_id_count;
 
 public:
+    /*
+        Inicializa el conteo de las id de Game en 0 (game_id_count)
+    */
     GameBrowser();
-    uint8_t create_game();
+    /*
 
-    void join_game(uint8_t game_code, std::unique_ptr<LobbyClient>& client);
+    */
+    uint8_t create_game();
+    /*
+        Agrega client al Game especificado por game_code
+    */
+    void join_game(const uint8_t& game_code, std::unique_ptr<LobbyClient>& client);
     /*
 
     */
@@ -39,13 +43,11 @@ public:
     /*
 
     */
-    void pushLobbyClient(std::unique_ptr<LobbyClient>, uint8_t id);
+    void killAll();
     /*
 
     */
-    void killAll();
     ~GameBrowser();
-
     /*
      *  No queremos ni copiar ni mover el monitor
      */

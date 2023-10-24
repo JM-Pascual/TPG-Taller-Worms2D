@@ -7,8 +7,7 @@
 #include "../common/socket.h"
 #include "../common/thread.h"
 
-#include "cleaner.h"
-#include "game_browser.h"
+#include "lobby.h"
 
 namespace ServerSide {
 class Protocol;
@@ -20,8 +19,7 @@ class Acceptor: public Thread {
 
 private:
     Socket skt;
-    Cleaner cleaner;
-    GameBrowser lobby;
+    Lobby lobby;
     std::atomic<bool> killed;
 
 public:
@@ -32,6 +30,14 @@ public:
     void kill();
 
     ~Acceptor();
+    /*
+     *  No queremos ni copiar ni mover el acceptor
+     */
+    Acceptor(const Acceptor&) = delete;
+    Acceptor& operator=(const Acceptor&) = delete;
+
+    Acceptor(Acceptor&&) = delete;
+    Acceptor& operator=(Acceptor&&) = delete;
 };
 
 #endif
