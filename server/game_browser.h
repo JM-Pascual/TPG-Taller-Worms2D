@@ -25,6 +25,7 @@ private:
     */
     std::map<uint8_t, std::unique_ptr<Game>> games;
     std::map<uint8_t, std::unique_ptr<LobbyClient>> waiting_clients;
+    uint8_t game_id_count;
 
 public:
     GameBrowser();

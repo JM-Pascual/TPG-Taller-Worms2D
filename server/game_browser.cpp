@@ -2,16 +2,15 @@
 
 #include <utility>
 
-GameBrowser::GameBrowser() = default;
+GameBrowser::GameBrowser(): game_id_count(0) {}
 
 uint8_t GameBrowser::create_game() {
     // Por el momento no tiene args, despues tendra nombre, mapa, etc
     std::unique_lock<std::mutex> lck(m);
 
-    uint8_t game_id = games.size();
-    games[game_id] = std::make_unique<Game>();
+    games[game_id_count] = std::make_unique<Game>();
 
-    return game_id;
+    return game_id_count++;  // Pos incremento para devolver el valor anterior al incremento
 }
 
 void GameBrowser::join_game(uint8_t game_code, std::unique_ptr<LobbyClient>& client) {
