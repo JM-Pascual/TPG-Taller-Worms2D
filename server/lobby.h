@@ -58,10 +58,8 @@ class LobbyClient;
 class Lobby {
 private:
     std::mutex m;
-    std::mutex m_clients;
     std::map<uint8_t, std::unique_ptr<LobbyClient>> waiting_clients;
     Queue<uint8_t> erase_client;
-    std::condition_variable cv_clients;
 
     std::atomic<bool> killed;
 

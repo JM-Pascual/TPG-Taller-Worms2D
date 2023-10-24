@@ -4,14 +4,13 @@
 
 #include "lobby_client.h"
 
-Lobby::Lobby(): cleaner(*this), killed(false) { cleaner.start(); }
+Lobby::Lobby(): killed(false), cleaner(*this) { cleaner.start(); }
 
 uint8_t Lobby::createGame() { return gb.create_game(); }
 
 void Lobby::joinGame(const uint8_t& game_code, std::unique_ptr<LobbyClient>& client) {
     gb.join_game(game_code, client);
     erase_client.push(client->id);
-    cv_clients.notify_all();
 }
 
 void Lobby::infoGames(std::vector<std::string>& info) { gb.infoGames(info); }
@@ -25,8 +24,6 @@ void Lobby::pushLobbyClient(std::unique_ptr<LobbyClient> client, uint8_t id) {
 void Lobby::killAll() {
     std::unique_lock<std::mutex> lck(m);
 
-    killed = true;
-
     cleaner.kill();
     erase_client.close();
 
@@ -35,29 +32,27 @@ void Lobby::killAll() {
     }
 
     gb.killAll();
+
+    killed = true;
 }
 
 void Lobby::eraseClient() {
-    uint8_t client_id;
-    std::unique_lock<std::mutex> lck(m_clients);
+    uint8_t client_id = erase_client.pop();
 
-    while (not erase_client.try_pop(client_id)) {
-        cv_clients.wait(lck);
-    }
-
+    std::unique_lock<std::mutex> lck(m);
     waiting_clients[client_id]->join();
     waiting_clients.erase(client_id);
 }
 
 Lobby::~Lobby() {
-    std::unique_lock<std::mutex> lck(m_clients);
+    // Sin Lock, ya que si se esta llamando a este destructor no se van a aniadir ni eliminar nuevos
+    // clientes
 
     if (not killed) {
-        erase_client.close();
+        this->killAll();
     }
 
     for (const auto& [id, client]: waiting_clients) {
-        client->kill();
         client->join();
     }
 
