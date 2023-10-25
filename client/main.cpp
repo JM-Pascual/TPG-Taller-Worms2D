@@ -9,6 +9,8 @@
 #define HOSTNAME argv[1]
 #define SERVNAME argv[2]
 
+#define LOGNAME "client"
+#define LOGFILE "logs/client.txt"
 
 int main(int argc, char* argv[]) try {
 
@@ -19,7 +21,7 @@ int main(int argc, char* argv[]) try {
     }
     // Cuando haya multiples clientes se podria cambiar la inicializacion del log a cuando se le
     // pasa la id al cliente para que no se interfieran multiples logs en un archivo
-    Logger l("logs/client.txt");
+    Logger l(LOGNAME, LOGFILE);
     Client client(HOSTNAME, SERVNAME);
     client.run();
     return SUCCESS_;

@@ -1,6 +1,12 @@
 #include "server.h"
 
-Server::Server(char* servname): acceptor(servname) { acceptor.start(); }
+#include <spdlog/spdlog.h>
+
+Server::Server(char* servname): acceptor(servname) {
+    spdlog::get("server")->debug("Iniciando hilo aceptador");
+    acceptor.start();
+    spdlog::get("server")->debug("Hilo aceptador iniciado con exito");
+}
 
 void Server::run() {
     char command;
@@ -13,5 +19,6 @@ void Server::run() {
 
 Server::~Server() {
     acceptor.kill();
+    spdlog::get("server")->debug("Joineando hilo aceptador");
     acceptor.join();
 }

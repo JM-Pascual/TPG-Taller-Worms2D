@@ -2,6 +2,8 @@
 
 #include <utility>
 
+#include <spdlog/spdlog.h>
+
 GameBrowser::GameBrowser(): game_id_count(0) {}
 
 uint8_t GameBrowser::create_game() {
@@ -15,17 +17,16 @@ uint8_t GameBrowser::create_game() {
 
 void GameBrowser::join_game(const uint8_t& game_code, std::unique_ptr<LobbyClient>& client) {
     std::unique_lock<std::mutex> lck(m);
-    if (games.count(game_code) == 1) {
-        games[game_code]->pushClient(
-                std::make_unique<ServerSide::Client>(client.get(), games[game_code]));
-    } else {
-        // log
-        // throw
-    }
+
+    spdlog::get("server")->info("Agregando el cliente {:d} al juego {:d}", client->id, game_code);
+    games[game_code]->pushClient(
+            std::make_unique<ServerSide::Client>(client.get(), games[game_code]));
 }
 
 void GameBrowser::infoGames(std::vector<std::string>& info) {
     std::unique_lock<std::mutex> lck(m);
+
+    spdlog::get("server")->debug("Recolectando informacion de los juegos en ejecucion");
     for (const auto& [id, game]: games) {
         std::string s("Game id: " +
                       std::to_string(id));  // + "players: " + std::to_string(value.playersCount());
@@ -41,8 +42,4 @@ void GameBrowser::killAll() {
     }
 }
 
-GameBrowser::~GameBrowser() {
-    std::unique_lock<std::mutex> lck(m);
-
-    games.clear();
-}
+GameBrowser::~GameBrowser() {}

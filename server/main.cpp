@@ -8,6 +8,9 @@
 
 #define SERVNAME argv[1]
 
+#define LOGNAME "server"
+#define LOGFILE "logs/server.txt"
+
 
 int main(int argc, char* argv[]) try {
 
@@ -16,7 +19,7 @@ int main(int argc, char* argv[]) try {
         return ERROR_;
     }
 
-    Logger l("logs/server.txt");
+    Logger l(LOGNAME, LOGFILE);
     Server sv(SERVNAME);
     sv.run();
     return SUCCESS_;

@@ -8,14 +8,21 @@
 
 Client::Client(const char* hostname, const char* servname):
         protocol(hostname, servname), recv(this->protocol, game_state_queue), send(this->protocol) {
+    spdlog::get("client")->debug("Iniciando hilo receptor en el cliente");
     recv.start();
-    spdlog::get("client")->debug("Iniciando recv cliente");
+    spdlog::get("client")->debug("Receptor iniciado con exito");
+    spdlog::get("client")->debug("Iniciando hilo sender en el cliente");
     send.start();
+    spdlog::get("client")->debug("Sender iniciado con exito");
 }
 
 Client::~Client() {
+    spdlog::get("client")->debug("Cerrando protocolo del cliente");
     protocol.close();
+    spdlog::get("client")->debug("Protocolo cerrado con exito");
+    spdlog::get("client")->debug("Joineando receptor en el cliente");
     recv.join();
+    spdlog::get("client")->debug("Joineando sender en el cliente");
     send.kill();
     send.join();
 }

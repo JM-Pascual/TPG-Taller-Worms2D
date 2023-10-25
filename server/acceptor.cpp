@@ -1,5 +1,7 @@
 #include "acceptor.h"
 
+#include <spdlog/spdlog.h>
+
 #include "../common/liberror.h"
 
 #include "lobby_client.h"
@@ -20,13 +22,15 @@ void Acceptor::run() {
     try {
         uint8_t id = 0;
         do {
+            spdlog::get("server")->debug("Esperando un cliente para aceptar");
             lobby.pushLobbyClient(std::make_unique<LobbyClient>(skt.accept(), lobby, id), id);
+            spdlog::get("server")->info("Cliente {:d} aceptado con exito", id);
             id++;
         } while (this->_keep_running);
 
     } catch (const LibError& e) {
         if (not killed) {
-            std::cerr << e.what() << " en acceptor";
+            spdlog::get("server")->error("Ocurrio un error con el socket en acceptor");
         }
     }
 }
