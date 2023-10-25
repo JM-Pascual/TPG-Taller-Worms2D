@@ -7,9 +7,9 @@ class Logger {
 private:
 public:
     /*
-        Configura al logger global a dumpear los logs en logfile
+        Configura al logger global de nombre log_name a dumpear los logs en logfile
     */
-    explicit Logger(const std::string& logfile);
+    explicit Logger(const std::string& log_name, const std::string& logfile);
 
     ~Logger();
 };
