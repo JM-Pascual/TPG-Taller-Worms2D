@@ -1,5 +1,7 @@
 #include "client.h"
 
+#include <spdlog/spdlog.h>
+
 #include "SDL2pp/SDL2pp.hh"
 
 #include "cparser.h"
@@ -7,6 +9,7 @@
 Client::Client(const char* hostname, const char* servname):
         protocol(hostname, servname), recv(this->protocol, game_state_queue), send(this->protocol) {
     recv.start();
+    spdlog::get("client")->debug("Iniciando recv cliente");
     send.start();
 }
 
@@ -37,10 +40,12 @@ void Client::run() {
                 case SDLK_a:
                     send.queueUp(3);
                     send.queueUp(0);
+                    SPDLOG_INFO("cero");
                     break;
                 case SDLK_d:
                     send.queueUp(3);
                     send.queueUp(1);
+                    SPDLOG_INFO("uno");
                     break;
                 default:
                     break;

@@ -2,6 +2,7 @@
 
 #include "../common/const.h"
 #include "../common/liberror.h"
+#include "../common/logger.h"
 
 #include "client.h"
 
@@ -14,22 +15,24 @@ int main(int argc, char* argv[]) try {
     if (argc != 3) {
         std::cerr << "Bad program call. Expected " << argv[0]
                   << " <ip/hostname server> <port/servicename>\n";
-        return ERROR;
+        return ERROR_;
     }
-
+    // Cuando haya multiples clientes se podria cambiar la inicializacion del log a cuando se le
+    // pasa la id al cliente para que no se interfieran multiples logs en un archivo
+    Logger l("logs/client.txt");
     Client client(HOSTNAME, SERVNAME);
     client.run();
-    return SUCCESS;
+    return SUCCESS_;
 
 } catch (const LibError& e) {
     std::cerr << e.what();
-    return ERROR;
+    return ERROR_;
 
 } catch (const std::exception& e) {
     std::cerr << e.what();
-    return ERROR;
+    return ERROR_;
 
 } catch (...) {
     std::cerr << "Error desconocido";
-    return ERROR;
+    return ERROR_;
 }

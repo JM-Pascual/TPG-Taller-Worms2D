@@ -6,13 +6,14 @@ find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_mixer 2.6.3 REQUIRED)
 find_package(SDL2pp REQUIRED)
-# find_package(log4cpp REQUIRED) por alguna razon no encuentra archivos .cmake que necesita
+find_package(spdlog REQUIRED)
 
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
 include_directories(${SDL2_MIXER_INCLUDE_DIRS})
 include_directories(${SDL2PP_INCLUDE_DIRS})
-include_directories(${LOG4CPP_INCLUDE_DIRS}) 
+include_directories(${SPDLOG_INCLUDE_DIRS}) 
+
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -34,6 +35,7 @@ target_include_directories(client_exe PUBLIC ${SDL2_INCLUDE_DIRS})
 target_include_directories(client_exe PUBLIC ${SDL2_IMAGE_INCLUDE_DIRS})
 target_include_directories(client_exe PUBLIC ${SDL2_MIXER_INCLUDE_DIRS})
 
+target_link_libraries(client_exe PRIVATE spdlog::spdlog)
 target_link_libraries(client_exe PUBLIC SDL2pp::SDL2pp)
 target_link_libraries(client_exe PUBLIC SDL2)
 target_link_libraries(client_exe PUBLIC SDL2_image)
@@ -43,7 +45,7 @@ target_link_libraries(client_exe PUBLIC ${LOG4CPP_LIBRARIES})
 
 add_executable(server_exe ${COMMON_SRC} ${SERVER_SRC})
 
-target_link_libraries(server_exe PUBLIC ${LOG4CPP_LIBRARIES})
+target_link_libraries(server_exe PRIVATE spdlog::spdlog)
 
 set_target_properties(client_exe server_exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TARGET_DIR})
 set_target_properties(client_exe PROPERTIES OUTPUT_NAME worms2d)
