@@ -6,16 +6,16 @@
 #include "sprotocol.h"
 
 ServerSide::Receiver::Receiver(ServerSide::Protocol& protocol, std::unique_ptr<Game>& game):
-        protocol(protocol), game(game), x(0) {}
+        protocol(protocol), game(game) {}
 
 void ServerSide::Receiver::run() {
     Commands o;
     ServerSide::Parser parser;
     do {
         protocol.recvCommand(o);
-        parser.makeGameCommand(o, protocol).get()->execute(x);
+        parser.makeGameCommand(o, protocol).get()->execute();
 
-        game->notifyAllClients(x);
+        game->notifyAllClients(0);
     } while (_keep_running);
 }
 

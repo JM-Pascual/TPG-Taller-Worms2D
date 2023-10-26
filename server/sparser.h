@@ -4,6 +4,7 @@
 #include <memory>
 
 class Command;
+class Lobby;
 enum class Commands;
 
 namespace ServerSide {
@@ -14,9 +15,10 @@ class Parser {
 
 private:
 public:
-    std::unique_ptr<Command> makeGameCommand(const Commands&, ServerSide::Protocol&);
+    std::unique_ptr<Command> makeGameCommand(const Commands& c, ServerSide::Protocol&);
 
-    std::unique_ptr<Command> makeLobbyCommand(const Commands&, ServerSide::Protocol&);
+    std::unique_ptr<Command> makeLobbyCommand(const Commands& c, ServerSide::Protocol&,
+                                              uint8_t client_id, Lobby& lobby);
 };
 }  // namespace ServerSide
 

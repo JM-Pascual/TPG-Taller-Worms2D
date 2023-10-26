@@ -42,6 +42,8 @@ void ServerSide::Protocol::close() {
     }
 }
 
+void ServerSide::Protocol::recvGameID(uint8_t& id) { id = this->recvUint8(); }
+
 
 uint8_t ServerSide::Protocol::recvUint8() {
     uint8_t n;

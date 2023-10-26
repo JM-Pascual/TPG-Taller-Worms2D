@@ -10,9 +10,9 @@ Lobby::Lobby(): killed(false), cleaner(*this) { cleaner.start(); }
 
 uint8_t Lobby::createGame() { return gb.create_game(); }
 
-void Lobby::joinGame(const uint8_t& game_code, std::unique_ptr<LobbyClient>& client) {
-    gb.join_game(game_code, client);
-    erase_client.push(client->id);
+void Lobby::joinGame(const uint8_t& game_code, const uint8_t& client_id) {
+    gb.join_game(game_code, waiting_clients[client_id]);
+    erase_client.push(client_id);
 }
 
 void Lobby::infoGames(std::vector<std::string>& info) { gb.infoGames(info); }

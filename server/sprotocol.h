@@ -48,6 +48,10 @@ public:
     */
     void close();
     /*
+        Recibe la id del game al que se quiere conectar el cliente
+    */
+    void recvGameID(uint8_t&);
+    /*
         No tiene sentido ni copiar ni mover el protocolo
     */
     Protocol(const Protocol&) = delete;

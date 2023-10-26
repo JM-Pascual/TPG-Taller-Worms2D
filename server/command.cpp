@@ -1,28 +1,41 @@
 #include "command.h"
 
+#include "lobby.h"
 #include "sprotocol.h"
 
-Command::Command(uint8_t id): client_id(id) {}
+// ----------------------- COMMAND ----------------------
 
-Move::Move(uint8_t id, ServerSide::Protocol& protocol): Command(id) {
-    protocol.recvMoveDir(this->direction);
-}
+// ----------------------- NULL_COMMAND ----------------------
 
-void Move::execute(uint8_t& x) { x += 2 * (uint8_t)direction - 1; }
+void NullCommand::execute() {}
 
-// Jump::Jump(uint8_t id): Command(id) {}
+// ----------------------- MOVE ----------------------
 
-// Damage::Damage(uint8_t id): Command(id) {}
+Move::Move(ServerSide::Protocol& protocol): Command() { protocol.recvMoveDir(this->direction); }
 
-Create::Create(uint8_t id, ServerSide::Protocol& protocol, GameBrowser& lobby,
-               std::unique_ptr<LobbyClient>& client):
-        Command(id), lobby(lobby), client(client) {
+void Move::execute() {}  // Saque la simulacion
+
+// ----------------------- JUMP ----------------------
+
+// Jump::Jump(): Command(id) {}
+
+
+// ----------------------- DAMAGE ----------------------
+
+// Damage::Damage(): Command(id) {}
+
+// ----------------------- JOIN ----------------------
+
+Join::Join(Lobby& lobby, uint8_t id, uint8_t game_id):
+        lobby(lobby), game_id(game_id), client_id(id) {}
+
+void Join::execute() { lobby.joinGame(game_id, client_id); }
+// ----------------------- CREATE ----------------------
+
+Create::Create(uint8_t id, Lobby& lobby): Join(lobby, id, lobby.createGame()) {
     /*
         Recibe nombre de la sala, mapa y ...
         Pienso que quedaria de la forma
         (atributo de Create) uint8_t game_id = lobby.create_game(args)
     */
-    game_id = lobby.create_game();
 }
-
-void Create::execute(uint8_t& d) { lobby.join_game(game_id, client); }

@@ -80,7 +80,7 @@ public:
         Delega a GameBrowser unir el cliente al Game especificado por game_code, luego pushea la id
         de este LobbyClient a la queue y avisa para que sea eliminado
     */
-    void joinGame(const uint8_t& game_code, std::unique_ptr<LobbyClient>& client);
+    void joinGame(const uint8_t& game_code, const uint8_t& client_id);
     /*
         Delega a GameBrowser la generacion de la informacion sobre todos los Game disponibles
     */

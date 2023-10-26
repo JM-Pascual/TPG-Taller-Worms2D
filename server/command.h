@@ -7,29 +7,48 @@
 
 #include "../common/const.h"
 
-#include "game_browser.h"
+class Lobby;
 
 namespace ServerSide {
 class Protocol;
 }
 
-class Command {
-protected:
-    uint8_t client_id;
+// ----------------------- COMMAND ----------------------
 
+class Command {
 public:
     /*
-        Asigna la id del cliente
+        Constructor default
     */
-    explicit Command(uint8_t);
+    Command() = default;
     /*
         Ejecuta el comando
     */
-    virtual void execute(uint8_t&) = 0;
+    virtual void execute() = 0;
     // Este int no tiene que ir, supongo que sera un metodo sin args. Esta de momento
     // por la simulacion experimental de moverse
     virtual ~Command() = default;
 };
+
+// ----------------------- NULL_COMMAND ----------------------
+
+class NullCommand: public Command {
+public:
+    /*
+        Llama al constructor de command
+    */
+    NullCommand() = default;
+    /*
+        Null pattern, no hace nada
+    */
+    void execute() override;
+    /*
+        No hay que liberar nada que no este en stack, destructor default es suficiente.
+    */
+    ~NullCommand() override = default;
+};
+
+// ----------------------- MOVE ----------------------
 
 class Move: public Command {
 private:
@@ -39,34 +58,44 @@ public:
     /*
         LLama al constructor de Command, y recibe a traves del protocolo la direccion a moverse
     */
-    explicit Move(uint8_t, ServerSide::Protocol&);
+    explicit Move(ServerSide::Protocol&);
     /*
         Delega al servidor el movimiento del gusano
     */
-    void execute(uint8_t&) override;
+    void execute() override;
 
     ~Move() override = default;
 };
 
-class Create: public Command {
-private:
-    GameBrowser& lobby;
-    uint8_t game_id;
-    std::unique_ptr<LobbyClient>& client;
+// ----------------------- JOIN ----------------------
 
+class Join: public Command {
+private:
+    Lobby& lobby;
+    uint8_t game_id;
+    uint8_t client_id;
+
+public:
+    explicit Join(Lobby& lobby, uint8_t id, uint8_t game_id);
+
+    void execute() override;
+
+    virtual ~Join() override = default;
+};
+
+// ----------------------- CREATE ----------------------
+
+class Create: public Join {
 public:
     /*
 
     */
-    explicit Create(uint8_t, ServerSide::Protocol&, GameBrowser& lobby,
-                    std::unique_ptr<LobbyClient>& client);
-    /*
-
-    */
-    void execute(uint8_t&) override;
+    explicit Create(uint8_t id, Lobby& lobby);
 
     ~Create() override = default;
 };
+
+// ----------------------- JUMP ----------------------
 
 // class Jump: public Command {
 // private:
@@ -75,6 +104,8 @@ public:
 // public:
 //     explicit Jump(uint8_t);
 // };
+
+// ----------------------- DAMAGE ----------------------
 
 // class Damage: public Command {
 // private:
