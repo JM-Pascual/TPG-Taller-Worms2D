@@ -15,7 +15,7 @@
 #include "sparser.h"
 
 LobbyClient::LobbyClient(Socket&& skt, Lobby& lobby, const uint8_t id):
-        protocol(std::move(skt)), lobby(lobby), id(id) {}
+        protocol(std::move(skt)), lobby(lobby), killed(false), id(id) {}
 
 void LobbyClient::run() {
     /*
