@@ -14,7 +14,6 @@
 #include "../common/queue.h"
 
 #include "game.h"
-#include "lobby_client.h"
 #include "sclient.h"
 
 class GameBrowser {
@@ -35,7 +34,7 @@ public:
     /*
         Agrega client al Game especificado por game_code
     */
-    void join_game(const uint8_t& game_code, std::unique_ptr<LobbyClient>& client);
+    Queue<uint8_t>& join_game(const uint8_t& game_code, std::unique_ptr<LobbyClient>& client);
     /*
 
     */

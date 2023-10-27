@@ -1,11 +1,12 @@
 #ifndef SERVER_RECEIVER_H
 #define SERVER_RECEIVER_H
 
+#include <atomic>
 #include <memory>
 
 #include "../common/thread.h"
 
-class Game;
+class GameBrowser;
 
 namespace ServerSide {
 class Protocol;
@@ -13,10 +14,11 @@ class Protocol;
 class Receiver: public Thread {
 private:
     ServerSide::Protocol& protocol;
-    std::unique_ptr<Game>& game;
+    const GameBrowser& gb;
+    std::atomic<bool> joined_game;
 
 public:
-    explicit Receiver(ServerSide::Protocol& protocol, std::unique_ptr<Game>& game);
+    explicit Receiver(ServerSide::Protocol& protocol, const GameBrowser& gb);
 
     void run() override;
     /*

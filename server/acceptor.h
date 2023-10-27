@@ -2,6 +2,7 @@
 #define ACCEPTOR_H
 
 #include <atomic>
+#include <map>
 #include <memory>
 
 #include "../common/socket.h"
@@ -19,8 +20,9 @@ class Acceptor: public Thread {
 
 private:
     Socket skt;
-    Lobby lobby;
+    GameBrowser gb;
     std::atomic<bool> killed;
+    std::map<uint8_t, std::unique_ptr<ServerSide::Client>> waiting_clients;
 
 public:
     explicit Acceptor(const char* servname);

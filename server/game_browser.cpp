@@ -15,12 +15,15 @@ uint8_t GameBrowser::create_game() {
     return game_id_count++;  // Pos incremento para devolver el valor anterior al incremento
 }
 
-void GameBrowser::join_game(const uint8_t& game_code, std::unique_ptr<LobbyClient>& client) {
+Queue<uint8_t>& GameBrowser::join_game(const uint8_t& game_code,
+                                       std::unique_ptr<LobbyClient>& client) {
     std::unique_lock<std::mutex> lck(m);
 
     spdlog::get("server")->info("Agregando el cliente {:d} al juego {:d}", client->id, game_code);
     games[game_code]->pushClient(
             std::make_unique<ServerSide::Client>(client.get(), games[game_code]));
+
+    return games[game_code]->getQueue();
 }
 
 void GameBrowser::infoGames(std::vector<std::string>& info) {

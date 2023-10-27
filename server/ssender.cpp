@@ -2,13 +2,13 @@
 
 #include "sprotocol.h"
 
-ServerSide::Sender::Sender(ServerSide::Protocol& protocol, std::unique_ptr<Game>& game):
-        protocol(protocol), game(game) {}
+ServerSide::Sender::Sender(ServerSide::Protocol& protocol, Queue<uint8_t>& game_states):
+        protocol(protocol), game_states(game_states) {}
 
 void ServerSide::Sender::run() {
     do {
         try {
-            this->send(queue.pop());
+            this->send(game_states.pop());
 
         } catch (const ClosedQueue& e) {
             break;
@@ -18,11 +18,11 @@ void ServerSide::Sender::run() {
 
 void ServerSide::Sender::send(uint8_t o) { this->protocol.send(&o, 1); }
 
-void ServerSide::Sender::queueUp(uint8_t o) { queue.push(o); }
+void ServerSide::Sender::queueUp(uint8_t o) { game_states.push(o); }
 
 void ServerSide::Sender::kill() {
     this->_is_alive = false;
     this->closeQueue();
 }
 
-void ServerSide::Sender::closeQueue() { queue.close(); }
+void ServerSide::Sender::closeQueue() { game_states.close(); }

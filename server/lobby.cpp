@@ -4,7 +4,6 @@
 
 #include <spdlog/spdlog.h>
 
-#include "lobby_client.h"
 
 Lobby::Lobby(): killed(false), cleaner(*this) { cleaner.start(); }
 

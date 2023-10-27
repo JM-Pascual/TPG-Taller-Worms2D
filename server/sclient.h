@@ -6,6 +6,8 @@
 
 #include <stdint.h>
 
+#include "../common/queue.h"
+
 #include "sprotocol.h"
 #include "sreceiver.h"
 #include "ssender.h"
@@ -20,13 +22,12 @@ private:
     ServerSide::Receiver recv;
     ServerSide::Sender send;
     std::atomic<bool> killed;
+    Queue<uint8_t> game_state;
 
 public:
     const uint8_t id;
 
-    explicit Client(LobbyClient*, std::unique_ptr<Game>&);
-
-    explicit Client(Socket&& peer, std::unique_ptr<Game>&, const uint8_t);
+    explicit Client(Socket&& peer, const GameBrowser& gb, const uint8_t id);
     /*
         Retorna si ambos hilos estan 'vivos'
     */

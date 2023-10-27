@@ -7,6 +7,8 @@
 #include <mutex>
 #include <string>
 
+#include "../common/queue.h"
+
 namespace ServerSide {
 class Client;
 }
@@ -17,6 +19,7 @@ private:
     std::mutex m_clean;
     std::map<uint8_t, std::unique_ptr<ServerSide::Client>> clients;
     std::condition_variable can_delete;
+    Queue<uint8_t> queue;
 
 public:
     /*
@@ -27,6 +30,10 @@ public:
         Envia el DTO a todos los clientes conectados
     */
     void notifyAllClients(const uint8_t& dto);
+    /*
+
+    */
+    Queue<uint8_t>& getQueue();
     /*
         Pushea un cliente a la lista
     */

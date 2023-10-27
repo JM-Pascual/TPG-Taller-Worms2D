@@ -6,8 +6,9 @@
 #include <stdint.h>
 
 #include "../common/const.h"
+#include "../common/queue.h"
 
-class Lobby;
+class GameBrowser;
 
 namespace ServerSide {
 class Protocol;
@@ -71,12 +72,13 @@ public:
 
 class Join: public Command {
 private:
-    Lobby& lobby;
+    GameBrowser& gb;
     uint8_t game_id;
     uint8_t client_id;
+    Queue<uint8_t>& game_queue;
 
 public:
-    explicit Join(Lobby& lobby, uint8_t id, uint8_t game_id);
+    explicit Join(GameBrowser& gb, uint8_t id, uint8_t game_id, Queue<uint8_t>& game_queue);
 
     void execute() override;
 
@@ -90,7 +92,7 @@ public:
     /*
 
     */
-    explicit Create(uint8_t id, Lobby& lobby);
+    explicit Create(uint8_t id, GameBrowser& gb, Queue<uint8_t>& game_queue);
 
     ~Create() override = default;
 };

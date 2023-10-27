@@ -5,24 +5,12 @@
 #include <spdlog/spdlog.h>
 
 #include "game.h"
-#include "lobby_client.h"
 
-ServerSide::Client::Client(LobbyClient* lc, std::unique_ptr<Game>& game):
-        protocol(std::move(lc->protocol)),
-        recv(this->protocol, game),
-        send(this->protocol, game),
-        killed(false),
-        id(lc->id) {
-    spdlog::get("server")->debug("Iniciando receptor en cliente {:d}", id);
-    recv.start();
-    spdlog::get("server")->debug("Iniciando sender en cliente {:d}", id);
-    send.start();
-}
 
-ServerSide::Client::Client(Socket&& peer, std::unique_ptr<Game>& game, const uint8_t id):
+ServerSide::Client::Client(Socket&& peer, const GameBrowser& gb, const uint8_t id):
         protocol(std::move(peer)),
-        recv(this->protocol, game),
-        send(this->protocol, game),
+        recv(this->protocol, gb),
+        send(this->protocol, game_state),
         killed(false),
         id(id) {
     spdlog::get("server")->debug("Iniciando receptor en cliente {:d}", id);

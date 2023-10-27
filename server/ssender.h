@@ -16,15 +16,14 @@ class Protocol;
 class Sender: public Thread {
 private:
     ServerSide::Protocol& protocol;
-    Queue<uint8_t> queue;
-    std::unique_ptr<Game>& game;
+    Queue<uint8_t>& game_states;
     /*
         Cierra la queue forzosamente
     */
     void closeQueue();
 
 public:
-    explicit Sender(ServerSide::Protocol& protocol, std::unique_ptr<Game>& game);
+    explicit Sender(ServerSide::Protocol& protocol, Queue<uint8_t>& game_states);
     /*
         Corre el sender esperando que la queue tenga un elemento para poder enviar a traves del
         protocolo
