@@ -43,13 +43,13 @@ void LobbyClient::run() {
 
     } catch (const LibError& e) {
         if (not killed) {
-            spdlog::get("server")->error("Ocurrio un error en el socket del cliente {:u}", id);
+            spdlog::get("server")->error("Ocurrio un error en el socket del cliente {:d}", id);
         }
     }
 }
 
 void LobbyClient::kill() {
     killed = true;
-    spdlog::get("server")->debug("Cerrando el socket del cliente {:u}", id);
+    spdlog::get("server")->debug("Cerrando el socket del cliente {:d}", id);
     protocol.close();
 }
