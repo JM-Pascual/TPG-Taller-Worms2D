@@ -41,7 +41,6 @@ target_link_libraries(client_exe PUBLIC SDL2)
 target_link_libraries(client_exe PUBLIC SDL2_image)
 target_link_libraries(client_exe PUBLIC SDL2_mixer)
 target_link_libraries(client_exe PUBLIC ${SDL2PP_LIBRARIES})
-target_link_libraries(client_exe PUBLIC ${LOG4CPP_LIBRARIES})
 
 add_executable(server_exe ${COMMON_SRC} ${SERVER_SRC})
 
