@@ -41,4 +41,9 @@
 .*.swp
 *~
 
+target
+build
+logs
 .vscode
+.idea/
+cmake-build-debug/
