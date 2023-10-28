@@ -3,13 +3,12 @@
 
 #include <memory>
 
-#include <stdint.h>
-
 #include "../common/const.h"
 #include "../common/queue.h"
 
 class GameBrowser;
 class Game;
+class Dto;
 
 namespace ServerSide {
 class Protocol;
@@ -94,10 +93,10 @@ private:
     GameBrowser& gb;
     uint8_t& game_id;
     std::atomic<bool>& joined_game;
-    Queue<uint8_t>& game_state;
-
+    Queue<std::unique_ptr<Dto>>& game_state;
+    
 public:
-    explicit Join(GameBrowser& gb, uint8_t& id_to_join, Queue<uint8_t>& game_state, std::atomic<bool>& connected_to_room);
+    explicit Join(GameBrowser& gb, uint8_t& id_to_join, Queue<std::unique_ptr<Dto>>& game_state, std::atomic<bool>& connected_to_room);
 
     void execute() override;
 
@@ -108,7 +107,7 @@ public:
 
 class Create: public Join {
 public:
-    explicit Create(GameBrowser& gb, uint8_t& id_to_create, Queue<uint8_t>& game_state, std::atomic<bool>& connected_to_room);
+    explicit Create(GameBrowser& gb, uint8_t& id_to_create, Queue<std::unique_ptr<Dto>>& game_state, std::atomic<bool>& connected_to_room);
 
     ~Create() override = default;
 };

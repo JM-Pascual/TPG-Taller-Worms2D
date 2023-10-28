@@ -1,6 +1,9 @@
 #ifndef CLIENT_PROTOCOL_H
 #define CLIENT_PROTOCOL_H
 
+#include <stdint.h>
+
+#include "../common/const.h"
 #include "../common/socket.h"
 
 namespace ClientSide {
@@ -14,8 +17,6 @@ private:
     */
     bool send_was_closed;
     bool recv_was_closed;
-
-public:
     /*
         Envia data chequeando si se cierra el socket
     */
@@ -24,6 +25,15 @@ public:
         Recibe data chequeando si se cierra el socket
     */
     void recv(void* data, unsigned int sz);
+
+    uint8_t recvUint8();
+
+public:
+    void recvCommand(Commands& c);
+
+    float recvFloat();
+
+    bool recvBool();
     /*
         Construye el protocolo y su respectivo socket
     */

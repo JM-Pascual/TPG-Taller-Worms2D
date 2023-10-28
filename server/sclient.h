@@ -22,7 +22,7 @@ private:
     ServerSide::Receiver recv;
     ServerSide::Sender send;
     std::atomic<bool> killed;
-    Queue<uint8_t> game_state;
+    Queue<std::unique_ptr<Dto>> game_state;
 
 public:
     const uint8_t id;

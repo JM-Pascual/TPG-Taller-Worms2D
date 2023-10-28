@@ -3,12 +3,11 @@
 
 #include <memory>
 
-#include <stdint.h>
-
 #include "../common/queue.h"
 #include "../common/thread.h"
 
 class Game;
+class Dto;
 
 namespace ServerSide {
 class Protocol;
@@ -16,21 +15,21 @@ class Protocol;
 class Sender: public Thread {
 private:
     ServerSide::Protocol& protocol;
-    Queue<uint8_t>& game_states;
+    Queue<std::unique_ptr<Dto>>& game_states;
     /*
         Cierra la event_queue forzosamente
     */
     void closeQueue();
 
 public:
-    explicit Sender(ServerSide::Protocol& protocol, Queue<uint8_t>& game_states);
+    explicit Sender(ServerSide::Protocol& protocol, Queue<std::unique_ptr<Dto>>& game_states);
     /*
         Corre el sender esperando que la event_queue tenga un elemento para poder enviar a traves del
         protocolo
     */
     void run() override;
 
-    void send(uint8_t o);
+    void send(std::unique_ptr<Dto> o);
 
     void kill();
     /*

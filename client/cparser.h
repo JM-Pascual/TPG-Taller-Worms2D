@@ -1,17 +1,18 @@
-// #ifndef CLIENT_PARSER_H
-// #define CLIENT_PARSER_H
+#ifndef CLIENT_PARSER_H
+#define CLIENT_PARSER_H
 
-// #include <memory>
+#include <memory>
 
-// class Command;
+#include "../common/const.h"
 
-// namespace ClientSide {
+class Dto;
 
-//     class Parser {
-//     public:
-//         std::unique_ptr<Command> makeCommand();
-//     };
-// }
+namespace ClientSide {
+class Parser {
+public:
+    static std::unique_ptr<Dto> makeGStateDto(const Commands& c, ClientSide::Protocol& protocol);
+};
+}  // namespace ClientSide
 
 
-// #endif
+#endif

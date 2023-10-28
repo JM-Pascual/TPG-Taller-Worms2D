@@ -16,7 +16,8 @@ void GameBrowser::create_game(uint8_t& game_id_to_create) {
     spdlog::get("server")->info("Se creo la sala de juego {:d}", (game_id_to_create-1));
 }
 
-void GameBrowser::join_game(const uint8_t& game_id_to_join, Queue<uint8_t>& client_state_queue, std::atomic<bool>& succesful_join) {
+void GameBrowser::join_game(const uint8_t& game_id_to_join, Queue<std::unique_ptr<Dto>>& client_state_queue, std::atomic<bool>& succesful_join) {
+
     std::unique_lock<std::mutex> lck(m);
 
     if (games.count(game_id_to_join) != 1) {

@@ -1,27 +1,21 @@
 #include "csender.h"
 
+#include "../common/dto.h"
+
+#include "command_dto.h"
 #include "cprotocol.h"
 
-ClientSide::Sender::Sender(ClientSide::Protocol& protocol): Thread(), protocol(protocol) {}
+ClientSide::Sender::Sender(ClientSide::Protocol& protocol,
+                           Queue<std::unique_ptr<CommandDto>>& commands_queue):
+        Thread(), protocol(protocol), commands_queue(commands_queue) {}
 
 void ClientSide::Sender::run() {
     do {
         try {
-            this->send(queue.pop());
+            commands_queue.pop()->send(protocol);
 
         } catch (const ClosedQueue& e) {
             break;
         }
     } while (this->_keep_running);
 }
-
-void ClientSide::Sender::send(uint8_t o) { this->protocol.send(&o, 1); }
-
-void ClientSide::Sender::queueUp(uint8_t o) { queue.push(o); }
-
-void ClientSide::Sender::kill() {
-    this->_is_alive = false;
-    this->closeQueue();
-}
-
-void ClientSide::Sender::closeQueue() { queue.close(); }

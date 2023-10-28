@@ -22,6 +22,26 @@ void ClientSide::Protocol::recv(void* data, unsigned int sz) {
     }
 }
 
+void ClientSide::Protocol::recvCommand(Commands& c) { c = (Commands)recvUint8(); }
+
+uint8_t ClientSide::Protocol::recvUint8() {
+    uint8_t i;
+    recv(&i, sizeof(uint8_t));
+    return i;
+}
+
+float ClientSide::Protocol::recvFloat() {
+    float f;
+    recv(&f, sizeof(float));
+    return ntohl(f);
+}
+
+bool ClientSide::Protocol::recvBool() {
+    bool b;
+    recv(&b, sizeof(bool));
+    return b;
+}
+
 ClientSide::Protocol::Protocol(const char* hostname, const char* servname):
         skt(hostname, servname), send_was_closed(false), recv_was_closed(false) {}
 

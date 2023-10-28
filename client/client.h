@@ -1,9 +1,14 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include <memory>
+
 #include "cprotocol.h"
 #include "creceiver.h"
 #include "csender.h"
+
+class Dto;
+class CommandDto;
 
 class Client {
 
@@ -11,7 +16,8 @@ private:
     ClientSide::Protocol protocol;
     ClientSide::Receiver recv;
     ClientSide::Sender send;
-    Queue<uint8_t> game_state_queue;
+    Queue<std::unique_ptr<Dto>> game_state_queue;
+    Queue<std::unique_ptr<CommandDto>> commands_queue;
 
 public:
     /*

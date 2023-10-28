@@ -1,5 +1,7 @@
 #include "sreceiver.h"
 
+#include "../common/dto.h"
+
 #include "command.h"
 #include "game.h"
 #include "game_browser.h"
@@ -7,7 +9,7 @@
 #include "sprotocol.h"
 
 ServerSide::Receiver::Receiver(ServerSide::Protocol& protocol, GameBrowser& gb,
-                               Queue<uint8_t>& game_state):
+                               Queue<std::unique_ptr<Dto>>& game_state):
         protocol(protocol),
         gb(gb),
         connected_to_room(false),

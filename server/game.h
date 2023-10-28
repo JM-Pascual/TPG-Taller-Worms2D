@@ -13,6 +13,8 @@
 
 #include "command.h"
 
+class Dto;
+
 namespace ServerSide {
 class Client;
 }
@@ -20,7 +22,7 @@ class Client;
 class Game: public Thread {
 private:
     std::mutex m;
-    std::list<Queue<uint8_t>*> broadcast_list;
+    std::list<Queue<std::unique_ptr<Dto>>*> broadcast_list;
     Queue<std::shared_ptr<Command>> event_queue;
 
 public:
@@ -33,7 +35,7 @@ public:
     /*
         Envia el DTO a todos los clientes conectados
     */
-    void broadcast(const uint8_t& dto);
+    void broadcast(const std::unique_ptr<Dto>& dto);
     /*
 
     */
@@ -45,7 +47,7 @@ public:
     /*
 
     */
-    void add_client_queue(Queue<uint8_t>& client_game_state);
+    void add_client_queue(Queue<std::unique_ptr<Dto>>& client_game_state);
     /*
         Elimina los clientes muertos y devuelve un bool dependiendo si elimino alguno
     */

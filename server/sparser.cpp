@@ -1,6 +1,7 @@
 #include "sparser.h"
 
 #include "../common/const.h"
+#include "../common/dto.h"
 
 #include "command.h"
 #include "game_browser.h"
@@ -22,7 +23,7 @@ std::shared_ptr<Command> ServerSide::Parser::makeGameCommand(const Commands& c,
 
 std::shared_ptr<LobbyCommand> ServerSide::Parser::makeLobbyCommand(
         const Commands& c, ServerSide::Protocol& protocol, GameBrowser& gb,
-        std::atomic<bool>& connected_to_room, uint8_t& game_id, Queue<uint8_t>& game_state) {
+        std::atomic<bool>& connected_to_room, uint8_t& game_id, Queue<std::unique_ptr<Dto>>& game_state) {
 
     switch (c) {
         case Commands::CREATE:

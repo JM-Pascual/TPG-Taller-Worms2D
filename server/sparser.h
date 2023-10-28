@@ -6,6 +6,7 @@
 
 #include "../common/queue.h"
 
+class Dto;
 class Command;
 class LobbyCommand;
 class GameBrowser;
@@ -23,7 +24,7 @@ public:
                                                           GameBrowser& gb,
                                                           std::atomic<bool>& connected_to_room,
                                                           uint8_t& game_id,
-                                                          Queue<uint8_t>& game_state);
+                                                          Queue<std::unique_ptr<Dto>>& game_state);
 };
 }  // namespace ServerSide
 

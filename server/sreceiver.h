@@ -10,6 +10,7 @@
 #include "../common/thread.h"
 
 class GameBrowser;
+class Dto;
 
 namespace ServerSide {
 class Protocol;
@@ -20,10 +21,11 @@ private:
     GameBrowser& gb;
     std::atomic<bool> connected_to_room;
     uint8_t room_id;
-    Queue<uint8_t>& game_state;
+    Queue<std::unique_ptr<Dto>>& game_state;
 
 public:
-    explicit Receiver(ServerSide::Protocol& protocol, GameBrowser& gb, Queue<uint8_t>& game_state);
+    explicit Receiver(ServerSide::Protocol& protocol, GameBrowser& gb,
+                      Queue<std::unique_ptr<Dto>>& game_state);
 
     void run() override;
     /*
