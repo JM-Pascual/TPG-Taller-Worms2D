@@ -4,7 +4,10 @@
 #include <atomic>
 #include <memory>
 
+#include "../common/queue.h"
+
 class Command;
+class LobbyCommand;
 class GameBrowser;
 enum class Commands;
 

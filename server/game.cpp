@@ -12,14 +12,14 @@ Game::Game(): x(0) {}
 void Game::broadcast(const uint8_t& dto) {
     std::lock_guard<std::mutex> lock(m);
     for (auto& client_gstate: broadcast_list) {
-        client_gstate.push(dto);
+        client_gstate->push(dto);
     }
 }
 
 Queue<std::shared_ptr<Command>>& Game::getQueue() { return this->queue; }
 
 void Game::pushQueue(Queue<uint8_t>& client_game_state) {
-    broadcast_list.push_back(client_game_state);
+    broadcast_list.push_back(&client_game_state);
 }
 
 void Game::run() {

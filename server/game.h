@@ -20,7 +20,7 @@ class Client;
 class Game: public Thread {
 private:
     std::mutex m;
-    std::list<Queue<uint8_t>&> broadcast_list;
+    std::list<Queue<uint8_t>*> broadcast_list;
     Queue<std::shared_ptr<Command>> queue;
 
 public:
