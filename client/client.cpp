@@ -45,13 +45,15 @@ void Client::run() {
                     quit = true;
                     break;
                 case SDLK_a:
-                    send.queueUp(3);
+                    send.queueUp(4);
                     send.queueUp(0);
-                    SPDLOG_INFO("cero");
                     break;
                 case SDLK_d:
-                    send.queueUp(3);
+                    send.queueUp(4);
                     send.queueUp(1);
+                    break;
+                case SDLK_c:
+                    send.queueUp(1);  // create
                     SPDLOG_INFO("uno");
                     break;
                 default:

@@ -4,6 +4,9 @@
 #include <atomic>
 #include <memory>
 
+#include <stdint.h>
+
+#include "../common/queue.h"
 #include "../common/thread.h"
 
 class GameBrowser;
@@ -17,8 +20,10 @@ private:
     GameBrowser& gb;
     std::atomic<bool> connected_to_room;
     uint8_t room_id;
+    Queue<uint8_t>& game_state;
+
 public:
-    explicit Receiver(ServerSide::Protocol& protocol, GameBrowser& gb);
+    explicit Receiver(ServerSide::Protocol& protocol, GameBrowser& gb, Queue<uint8_t>& game_state);
 
     void run() override;
     /*

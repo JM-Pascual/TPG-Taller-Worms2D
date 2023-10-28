@@ -7,9 +7,9 @@
 #include "game.h"
 
 
-ServerSide::Client::Client(Socket&& peer, const GameBrowser& gb, const uint8_t id):
+ServerSide::Client::Client(Socket&& peer, GameBrowser& gb, const uint8_t id):
         protocol(std::move(peer)),
-        recv(this->protocol, gb),
+        recv(this->protocol, gb, game_state),
         send(this->protocol, game_state),
         killed(false),
         id(id) {
@@ -20,8 +20,6 @@ ServerSide::Client::Client(Socket&& peer, const GameBrowser& gb, const uint8_t i
 }
 
 const bool ServerSide::Client::isAlive() { return (recv.is_alive() && send.is_alive()); }
-
-void ServerSide::Client::sendChat(const uint8_t& dto) { send.queueUp(dto); }
 
 void ServerSide::Client::stop() {
     recv.stop();

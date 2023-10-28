@@ -3,51 +3,41 @@
 #include <algorithm>
 #include <utility>
 
+#include <unistd.h>
+
 #include "sclient.h"
 
-void Game::notifyAllClients(const uint8_t& dto) {
+Game::Game(): x(0) {}
+
+void Game::broadcast(const uint8_t& dto) {
     std::lock_guard<std::mutex> lock(m);
-    for (const auto& [id, client]: clients) {
-        client->sendChat(dto);
+    for (auto& client_gstate: broadcast_list) {
+        client_gstate.push(dto);
     }
 }
 
 Queue<std::shared_ptr<Command>>& Game::getQueue() { return this->queue; }
 
-void Game::pushClient(std::unique_ptr<ServerSide::Client> client) {
-    std::lock_guard<std::mutex> lock(m);
-    clients[client->id] = std::move(client);
+void Game::pushQueue(Queue<uint8_t>& client_game_state) {
+    broadcast_list.push_back(client_game_state);
 }
 
-// Esto lo usaba el cleaner de mi tp2, y quedo cuando lo pase. Supongo que igual ahora con los id
-// va a cambiar el tema
-// bool Game::deleteDeaths() {
-//  std::unique_lock<std::mutex> lock(m_clean);
-//  can_delete.wait(lock);
-//  std::lock_guard<std::mutex> l(m);
-
-// size_t prev_size = clients.size();
-
-// auto end = std::remove_if(clients.begin(), clients.end(), [](ServerSide::Client* c) {
-//     if (!c->isAlive()) {
-//         delete c;
-//         return true;
-//     }
-//     return false;
-// });
-
-// clients.erase(end, clients.end());
-
-// return (prev_size > clients.size());
-//}
-
-void Game::killAll() {
-    std::lock_guard<std::mutex> lock(m);
-    for (const auto& [id, client]: clients) {
-        client->kill();
+void Game::run() {
+    while (1)  // Aca se podria meter un bool que se cambia con un comando exit
+    {
+        std::shared_ptr<Command> c;
+        while (queue.try_pop(c)) {
+            sleep(10);
+        }
+        c->execute(*this);
+        this->broadcast(x);
     }
 }
-
-void Game::notifyClean() { can_delete.notify_all(); }
+// void Game::killAll() {
+//     std::lock_guard<std::mutex> lock(m);
+//     for (const auto& [id, client]: clients) {
+//         client->kill();
+//     }
+// }
 
 Game::~Game() {}  // Todo RAII

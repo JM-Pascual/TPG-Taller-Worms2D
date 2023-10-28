@@ -57,10 +57,7 @@ public:
     Protocol(const Protocol&) = delete;
     Protocol& operator=(const Protocol&) = delete;
 
-    /*
-
-    */
-    Protocol(Protocol&&);
+    Protocol(Protocol&&) = delete;
     Protocol& operator=(Protocol&&) = delete;
 };
 }  // namespace ServerSide

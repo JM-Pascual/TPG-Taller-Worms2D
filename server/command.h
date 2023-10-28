@@ -9,6 +9,7 @@
 #include "../common/queue.h"
 
 class GameBrowser;
+class Game;
 
 namespace ServerSide {
 class Protocol;
@@ -25,29 +26,11 @@ public:
     /*
         Ejecuta el comando
     */
-    virtual void execute() = 0;
-    // Este int no tiene que ir, supongo que sera un metodo sin args. Esta de momento
-    // por la simulacion experimental de moverse
+    virtual void execute(Game& game) = 0;
+
     virtual ~Command() = default;
 };
 
-// ----------------------- NULL_COMMAND ----------------------
-
-class NullCommand: public Command {
-public:
-    /*
-        Llama al constructor de command
-    */
-    NullCommand() = default;
-    /*
-        Null pattern, no hace nada
-    */
-    void execute() override;
-    /*
-        No hay que liberar nada que no este en stack, destructor default es suficiente.
-    */
-    ~NullCommand() override = default;
-};
 
 // ----------------------- MOVE ----------------------
 
@@ -63,38 +46,9 @@ public:
     /*
         Delega al servidor el movimiento del gusano
     */
-    void execute() override;
+    void execute(Game& game) override;
 
     ~Move() override = default;
-};
-
-// ----------------------- JOIN ----------------------
-
-class Join: public Command {
-private:
-    GameBrowser& gb;
-    uint8_t& game_id;
-
-public:
-    explicit Join(GameBrowser& gb, uint8_t& id_to_join);
-
-    void execute() override;
-
-    ~Join() override = default;
-};
-
-// ----------------------- CREATE ----------------------
-
-class Create: public Command {
-private:
-    GameBrowser& gb;
-    uint8_t& id_to_create;
-public:
-    explicit Create(GameBrowser& gb, uint8_t& id_to_create);
-
-    void execute() override;
-
-    ~Create() override = default;
 };
 
 // ----------------------- JUMP ----------------------
@@ -116,6 +70,69 @@ public:
 // public:
 //     explicit Damage(uint8_t);
 // };
+
+// ------------------------ LOBBY COMMANDS -----------------------
+
+class LobbyCommand {
+public:
+    /*
+        Constructor default
+    */
+    LobbyCommand() = default;
+    /*
+        Ejecuta el comando
+    */
+    virtual void execute() = 0;
+
+    virtual ~LobbyCommand() = default;
+};
+
+// ----------------------- JOIN ----------------------
+
+class Join: public LobbyCommand {
+private:
+    GameBrowser& gb;
+    uint8_t& game_id;
+    Queue<uint8_t>& game_stateQ;
+
+public:
+    explicit Join(GameBrowser& gb, uint8_t& id_to_join, Queue<uint8_t>& game_stateQ);
+
+    void execute() override;
+
+    ~Join() override = default;
+};
+
+// ----------------------- CREATE ----------------------
+
+class Create: public Join {
+public:
+    explicit Create(GameBrowser& gb, uint8_t& id_to_create, Queue<uint8_t>& game_stateQ);
+
+    ~Create() override = default;
+};
+
+// ----------------------- NULL_COMMAND ----------------------
+
+class NullCommand: public Command, public LobbyCommand {
+public:
+    /*
+        Llama al constructor de command
+    */
+    NullCommand() = default;
+    /*
+        Null pattern, no hace nada
+    */
+    void execute(Game& game) override;
+    /*
+        Null pattern, no hace nada
+    */
+    void execute() override;
+    /*
+        No hay que liberar nada que no este en stack, destructor default es suficiente.
+    */
+    ~NullCommand() override = default;
+};
 
 
 #endif

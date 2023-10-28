@@ -10,6 +10,6 @@ enum class MoveDir { LEFT = 0, RIGHT = 1 };
 
 enum class JumpDir { FRONT = 0, BACK = 1 };
 
-enum class Commands { CREATE = 0x1, JOIN = 0x2, MOVE = 0x3, JUMP = 0x4 };
+enum class Commands { CREATE = 0x1, JOIN = 0x2, SHOW_GAMES = 0x3, MOVE = 0x4, JUMP = 0x5 };
 
 #endif

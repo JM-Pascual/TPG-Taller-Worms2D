@@ -27,15 +27,11 @@ private:
 public:
     const uint8_t id;
 
-    explicit Client(Socket&& peer, const GameBrowser& gb, const uint8_t id);
+    explicit Client(Socket&& peer, GameBrowser& gb, const uint8_t id);
     /*
         Retorna si ambos hilos estan 'vivos'
     */
     const bool isAlive();
-    /*
-        Envia al chat del cliente el mensaje incluido en el DTO
-    */
-    void sendChat(const uint8_t& dto);
     /*
         Detiene los hilos recv y send de forma forzosa y (en un supuesto caso) de forma 'gentil'
     */

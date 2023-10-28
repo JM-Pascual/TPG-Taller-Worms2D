@@ -32,8 +32,6 @@ public:
 
     void send(uint8_t o);
 
-    void queueUp(uint8_t o);
-
     void kill();
     /*
         No tiene sentido ni copiar ni mover el sender ya que al ser un thread lo vamos a utilizar en

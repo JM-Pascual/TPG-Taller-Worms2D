@@ -8,7 +8,7 @@
 #include "../common/socket.h"
 #include "../common/thread.h"
 
-#include "lobby.h"
+#include "game_browser.h"
 
 namespace ServerSide {
 class Protocol;
@@ -25,6 +25,7 @@ private:
     std::map<uint8_t, std::unique_ptr<ServerSide::Client>> clients_connected;
 
     void reap_dead();
+
 public:
     explicit Acceptor(const char* servname);
 

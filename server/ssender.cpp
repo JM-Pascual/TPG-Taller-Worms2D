@@ -18,8 +18,6 @@ void ServerSide::Sender::run() {
 
 void ServerSide::Sender::send(uint8_t o) { this->protocol.send(&o, 1); }
 
-void ServerSide::Sender::queueUp(uint8_t o) { game_states.push(o); }
-
 void ServerSide::Sender::kill() {
     this->_is_alive = false;
     this->closeQueue();

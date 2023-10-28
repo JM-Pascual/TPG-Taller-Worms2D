@@ -16,10 +16,11 @@ class Parser {
 public:
     static std::shared_ptr<Command> makeGameCommand(const Commands& c, ServerSide::Protocol&);
 
-    static std::shared_ptr<Command> makeLobbyCommand(const Commands& c, ServerSide::Protocol&,
-                                              GameBrowser& gb,
-                                              std::atomic<bool>& joined_game,
-                                              uint8_t& game_id);
+    static std::shared_ptr<LobbyCommand> makeLobbyCommand(const Commands& c, ServerSide::Protocol&,
+                                                          GameBrowser& gb,
+                                                          std::atomic<bool>& joined_game,
+                                                          uint8_t& game_id,
+                                                          Queue<uint8_t>& game_state);
 };
 }  // namespace ServerSide
 
