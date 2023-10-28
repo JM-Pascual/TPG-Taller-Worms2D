@@ -24,7 +24,6 @@ std::shared_ptr<LobbyCommand> ServerSide::Parser::makeLobbyCommand(
         const Commands& c, ServerSide::Protocol& protocol, GameBrowser& gb,
         std::atomic<bool>& connected_to_room, uint8_t& game_id, Queue<uint8_t>& game_state) {
 
-    connected_to_room = true;
     switch (c) {
         case Commands::CREATE:
             return std::make_shared<Create>(gb, game_id, game_state, connected_to_room);
@@ -34,7 +33,6 @@ std::shared_ptr<LobbyCommand> ServerSide::Parser::makeLobbyCommand(
             return std::make_shared<Join>(gb, game_id, game_state, connected_to_room);
 
         default:
-            connected_to_room = false;
             return std::make_shared<NullCommand>();
     }
 }

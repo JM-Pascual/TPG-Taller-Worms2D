@@ -16,9 +16,9 @@ void Game::broadcast(const uint8_t& dto) {
     }
 }
 
-Queue<std::shared_ptr<Command>>& Game::getQueue() { return this->event_queue; }
+Queue<std::shared_ptr<Command>>& Game::get_event_queue() { return this->event_queue; }
 
-void Game::pushQueue(Queue<uint8_t>& client_game_state) {
+void Game::add_client_queue(Queue<uint8_t>& client_game_state) {
     std::lock_guard<std::mutex> lock(m);
     broadcast_list.push_back(&client_game_state);
 }

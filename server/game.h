@@ -37,7 +37,7 @@ public:
     /*
 
     */
-    Queue<std::shared_ptr<Command>>& getQueue();
+    Queue<std::shared_ptr<Command>>& get_event_queue();
     /*
 
     */
@@ -45,7 +45,7 @@ public:
     /*
 
     */
-    void pushQueue(Queue<uint8_t>& client_game_state);
+    void add_client_queue(Queue<uint8_t>& client_game_state);
     /*
         Elimina los clientes muertos y devuelve un bool dependiendo si elimino alguno
     */

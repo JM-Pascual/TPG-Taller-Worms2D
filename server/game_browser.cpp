@@ -9,6 +9,7 @@ void GameBrowser::create_game(uint8_t& game_id_to_create) {
     std::unique_lock<std::mutex> lck(m);
 
     games[game_id_count] = std::make_unique<Game>();
+    games[game_id_count]->start();
     game_id_to_create =
             game_id_count++;  // Post Incremento para devolver el valor anterior y luego inc
 
@@ -21,15 +22,15 @@ void GameBrowser::join_game(const uint8_t& game_id_to_join, Queue<uint8_t>& clie
     if (games.count(game_id_to_join) != 1) {
         spdlog::get("server")->debug("No existe la sala {:d}", game_id_to_join);
     } else {
-        games[game_id_to_join]->run();
-        games[game_id_to_join]->pushQueue(client_state_queue);
+        games[game_id_to_join]->add_client_queue(client_state_queue);
         spdlog::get("server")->debug("Cliente asignado a la sala {:d}", game_id_to_join);
         succesful_join = true;
     }
 }
 
 Queue<std::shared_ptr<Command>>& GameBrowser::getQueue(const uint8_t& game_id) {
-    return games[game_id]->getQueue();
+    std::unique_lock<std::mutex> lck(m);
+    return games[game_id]->get_event_queue();
 }
 
 void GameBrowser::infoGames(std::vector<std::string>& info) {
