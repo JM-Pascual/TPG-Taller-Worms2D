@@ -93,10 +93,10 @@ private:
     GameBrowser& gb;
     uint8_t& game_id;
     std::atomic<bool>& joined_game;
-    Queue<std::unique_ptr<Dto>>& game_state;
+    Queue<std::shared_ptr<Dto>>& game_state;
     
 public:
-    explicit Join(GameBrowser& gb, uint8_t& id_to_join, Queue<std::unique_ptr<Dto>>& game_state, std::atomic<bool>& connected_to_room);
+    explicit Join(GameBrowser& gb, uint8_t& id_to_join, Queue<std::shared_ptr<Dto>>& game_state, std::atomic<bool>& connected_to_room);
 
     void execute() override;
 
@@ -107,7 +107,7 @@ public:
 
 class Create: public Join {
 public:
-    explicit Create(GameBrowser& gb, uint8_t& id_to_create, Queue<std::unique_ptr<Dto>>& game_state, std::atomic<bool>& connected_to_room);
+    explicit Create(GameBrowser& gb, uint8_t& id_to_create, Queue<std::shared_ptr<Dto>>& game_state, std::atomic<bool>& connected_to_room);
 
     ~Create() override = default;
 };

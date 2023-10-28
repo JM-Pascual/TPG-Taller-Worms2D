@@ -11,7 +11,7 @@
 
 Game::Game(): x(0) {}
 
-void Game::broadcast(const std::unique_ptr<Dto>& dto) {
+void Game::broadcast(const std::shared_ptr<Dto>& dto) {
     std::lock_guard<std::mutex> lock(m);
     for (auto& client_gstate: broadcast_list) {
         client_gstate->push(dto);
@@ -20,7 +20,7 @@ void Game::broadcast(const std::unique_ptr<Dto>& dto) {
 
 Queue<std::shared_ptr<Command>>& Game::get_event_queue() { return this->event_queue; }
 
-void Game::add_client_queue(Queue<std::unique_ptr<Dto>>& client_game_state) {
+void Game::add_client_queue(Queue<std::shared_ptr<Dto>>& client_game_state) {
     std::lock_guard<std::mutex> lock(m);
     broadcast_list.push_back(&client_game_state);
 }

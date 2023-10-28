@@ -21,11 +21,11 @@ private:
     GameBrowser& gb;
     std::atomic<bool> connected_to_room;
     uint8_t room_id;
-    Queue<std::unique_ptr<Dto>>& game_state;
+    Queue<std::shared_ptr<Dto>>& game_state;
 
 public:
     explicit Receiver(ServerSide::Protocol& protocol, GameBrowser& gb,
-                      Queue<std::unique_ptr<Dto>>& game_state);
+                      Queue<std::shared_ptr<Dto>>& game_state);
 
     void run() override;
     /*

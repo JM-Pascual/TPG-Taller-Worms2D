@@ -24,7 +24,7 @@ public:
                                                           GameBrowser& gb,
                                                           std::atomic<bool>& connected_to_room,
                                                           uint8_t& game_id,
-                                                          Queue<std::unique_ptr<Dto>>& game_state);
+                                                          Queue<std::shared_ptr<Dto>>& game_state);
 };
 }  // namespace ServerSide
 

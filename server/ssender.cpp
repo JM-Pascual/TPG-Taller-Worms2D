@@ -5,7 +5,7 @@
 #include "sprotocol.h"
 
 ServerSide::Sender::Sender(ServerSide::Protocol& protocol,
-                           Queue<std::unique_ptr<Dto>>& game_states):
+                           Queue<std::shared_ptr<Dto>>& game_states):
         protocol(protocol), game_states(game_states) {}
 
 void ServerSide::Sender::run() {
@@ -19,7 +19,7 @@ void ServerSide::Sender::run() {
     } while (this->_keep_running);
 }
 
-void ServerSide::Sender::send(std::unique_ptr<Dto> o) { this->protocol.send(&o, 1); }
+void ServerSide::Sender::send(std::shared_ptr<Dto> o) { this->protocol.send(&o, 1); }
 
 void ServerSide::Sender::kill() {
     this->_is_alive = false;

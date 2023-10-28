@@ -9,7 +9,7 @@
 #include "sprotocol.h"
 
 ServerSide::Receiver::Receiver(ServerSide::Protocol& protocol, GameBrowser& gb,
-                               Queue<std::unique_ptr<Dto>>& game_state):
+                               Queue<std::shared_ptr<Dto>>& game_state):
         protocol(protocol),
         gb(gb),
         connected_to_room(false),
