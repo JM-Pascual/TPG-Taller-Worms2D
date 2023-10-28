@@ -16,21 +16,21 @@ void Game::broadcast(const uint8_t& dto) {
     }
 }
 
-Queue<std::shared_ptr<Command>>& Game::getQueue() { return this->queue; }
+Queue<std::shared_ptr<Command>>& Game::getQueue() { return this->event_queue; }
 
 void Game::pushQueue(Queue<uint8_t>& client_game_state) {
+    std::lock_guard<std::mutex> lock(m);
     broadcast_list.push_back(&client_game_state);
 }
 
 void Game::run() {
-    while (1)  // Aca se podria meter un bool que se cambia con un comando exit
-    {
+    while (1) { // ToDo Aca se podria meter un bool que se cambia con un comando exit
         std::shared_ptr<Command> c;
-        while (queue.try_pop(c)) {
-            sleep(10);
+        if (event_queue.try_pop(c)) {
+            c->execute(*this);
+            this->broadcast(x);
         }
-        c->execute(*this);
-        this->broadcast(x);
+        sleep(1);
     }
 }
 // void Game::killAll() {

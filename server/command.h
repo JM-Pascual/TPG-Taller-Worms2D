@@ -93,10 +93,11 @@ class Join: public LobbyCommand {
 private:
     GameBrowser& gb;
     uint8_t& game_id;
-    Queue<uint8_t>& game_stateQ;
+    std::atomic<bool>& joined_game;
+    Queue<uint8_t>& game_state;
 
 public:
-    explicit Join(GameBrowser& gb, uint8_t& id_to_join, Queue<uint8_t>& game_stateQ);
+    explicit Join(GameBrowser& gb, uint8_t& id_to_join, Queue<uint8_t>& game_state, std::atomic<bool>& connected_to_room);
 
     void execute() override;
 
@@ -107,7 +108,7 @@ public:
 
 class Create: public Join {
 public:
-    explicit Create(GameBrowser& gb, uint8_t& id_to_create, Queue<uint8_t>& game_stateQ);
+    explicit Create(GameBrowser& gb, uint8_t& id_to_create, Queue<uint8_t>& game_state, std::atomic<bool>& connected_to_room);
 
     ~Create() override = default;
 };

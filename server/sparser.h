@@ -21,7 +21,7 @@ public:
 
     static std::shared_ptr<LobbyCommand> makeLobbyCommand(const Commands& c, ServerSide::Protocol&,
                                                           GameBrowser& gb,
-                                                          std::atomic<bool>& joined_game,
+                                                          std::atomic<bool>& connected_to_room,
                                                           uint8_t& game_id,
                                                           Queue<uint8_t>& game_state);
 };

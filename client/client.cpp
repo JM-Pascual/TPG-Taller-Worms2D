@@ -54,7 +54,6 @@ void Client::run() {
                     break;
                 case SDLK_c:
                     send.queueUp(1);  // create
-                    SPDLOG_INFO("uno");
                     break;
                 default:
                     break;

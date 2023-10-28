@@ -19,7 +19,7 @@ ServerSide::Client::Client(Socket&& peer, GameBrowser& gb, const uint8_t id):
     send.start();
 }
 
-const bool ServerSide::Client::isAlive() { return (recv.is_alive() && send.is_alive()); }
+bool ServerSide::Client::isAlive() { return (recv.is_alive() && send.is_alive()); }
 
 void ServerSide::Client::stop() {
     recv.stop();

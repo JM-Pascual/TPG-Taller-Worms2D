@@ -21,7 +21,7 @@ class Game: public Thread {
 private:
     std::mutex m;
     std::list<Queue<uint8_t>*> broadcast_list;
-    Queue<std::shared_ptr<Command>> queue;
+    Queue<std::shared_ptr<Command>> event_queue;
 
 public:
     uint8_t x;

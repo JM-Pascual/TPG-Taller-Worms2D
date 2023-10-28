@@ -14,14 +14,14 @@ private:
     ClientSide::Protocol& protocol;
     Queue<uint8_t> queue;
     /*
-        Cierra la queue forzosamente
+        Cierra la event_queue forzosamente
     */
     void closeQueue();
 
 public:
     explicit Sender(ClientSide::Protocol& protocol);
     /*
-        Corre el sender esperando que la queue tenga un elemento para poder enviar a traves del
+        Corre el sender esperando que la event_queue tenga un elemento para poder enviar a traves del
         protocolo
     */
     void run() override;

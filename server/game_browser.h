@@ -33,7 +33,7 @@ public:
     /*
         Agrega client al Game especificado por game_code
     */
-    void join_game(const uint8_t& game_code, Queue<uint8_t>& client_gstate);
+    void join_game(const uint8_t& game_code, Queue<uint8_t>& client_state_queue, std::atomic<bool>& succesful_join);
     /*
 
     */

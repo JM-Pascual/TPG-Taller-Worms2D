@@ -12,18 +12,19 @@ void GameBrowser::create_game(uint8_t& game_id_to_create) {
     game_id_to_create =
             game_id_count++;  // Post Incremento para devolver el valor anterior y luego inc
 
-    spdlog::get("server")->info("Se creo la sala de juego {:d}", game_id_to_create);
+    spdlog::get("server")->info("Se creo la sala de juego {:d}", (game_id_to_create-1));
 }
 
-void GameBrowser::join_game(const uint8_t& game_id_to_join, Queue<uint8_t>& client_gstate) {
+void GameBrowser::join_game(const uint8_t& game_id_to_join, Queue<uint8_t>& client_state_queue, std::atomic<bool>& succesful_join) {
     std::unique_lock<std::mutex> lck(m);
 
     if (games.count(game_id_to_join) != 1) {
         spdlog::get("server")->debug("No existe la sala {:d}", game_id_to_join);
-        // Handle room no existente
     } else {
-        games[game_id_to_join]->pushQueue(client_gstate);
+        games[game_id_to_join]->run();
+        games[game_id_to_join]->pushQueue(client_state_queue);
         spdlog::get("server")->debug("Cliente asignado a la sala {:d}", game_id_to_join);
+        succesful_join = true;
     }
 }
 
