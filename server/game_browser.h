@@ -9,10 +9,9 @@
 #include <string>
 #include <vector>
 
-#include <stdint.h>
-
 #include "../common/queue.h"
 
+#include "command.h"
 #include "game.h"
 #include "sclient.h"
 
@@ -30,14 +29,17 @@ public:
     /*
 
     */
-    uint8_t create_game();
+    void create_game(uint8_t& game_id_to_create);
     /*
         Agrega client al Game especificado por game_code
     */
-    Queue<uint8_t>& join_game(const uint8_t& game_code, std::unique_ptr<LobbyClient>& client);
+    Queue<uint8_t>& join_game(const uint8_t& game_code);
     /*
 
     */
+
+    Queue<std::shared_ptr<Command>>& getQueue(const uint8_t& game_id);
+
     void infoGames(std::vector<std::string>&);
     /*
 
@@ -58,4 +60,4 @@ public:
 };
 
 
-#endif  // WORMS2D_LOBBY_H
+#endif  // WORMS2D_GB_H

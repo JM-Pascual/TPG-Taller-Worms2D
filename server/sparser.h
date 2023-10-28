@@ -13,15 +13,13 @@ namespace ServerSide {
 class Protocol;
 
 class Parser {
-
-private:
 public:
-    std::unique_ptr<Command> makeGameCommand(const Commands& c, ServerSide::Protocol&);
+    static std::shared_ptr<Command> makeGameCommand(const Commands& c, ServerSide::Protocol&);
 
-    std::unique_ptr<Command> makeLobbyCommand(const Commands& c, ServerSide::Protocol&,
-                                              uint8_t client_id, const GameBrowser& gb,
+    static std::shared_ptr<Command> makeLobbyCommand(const Commands& c, ServerSide::Protocol&,
+                                              GameBrowser& gb,
                                               std::atomic<bool>& joined_game,
-                                              Queue<uint8_t>& game_queue);
+                                              uint8_t& game_id);
 };
 }  // namespace ServerSide
 

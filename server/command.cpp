@@ -26,17 +26,12 @@ void Move::execute() {}  // Saque la simulacion
 
 // ----------------------- JOIN ----------------------
 
-Join::Join(GameBrowser& gb, uint8_t id, uint8_t game_id, Queue<uint8_t>& game_queue):
-        gb(gb), game_id(game_id), client_id(id), game_queue(game_queue) {}
+Join::Join(GameBrowser& gb, uint8_t& id_to_join):
+        gb(gb), game_id(id_to_join) {}
 
-void Join::execute() { game_queue = gb.join_game(game_id, client_id); }
+void Join::execute() { gb.join_game(game_id); }
 // ----------------------- CREATE ----------------------
 
-Create::Create(uint8_t id, GameBrowser& gb, Queue<uint8_t>& game_queue):
-        Join(gb, id, gb.create_game(), game_queue) {
-    /*
-        Recibe nombre de la sala, mapa y ...
-        Pienso que quedaria de la forma
-        (atributo de Create) uint8_t game_id = lobby.create_game(args)
-    */
-}
+Create::Create(GameBrowser& gb, uint8_t& id_to_create) : gb(gb), id_to_create(id_to_create) {}
+
+void Create::execute() { gb.create_game(id_to_create); }

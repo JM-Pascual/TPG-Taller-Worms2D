@@ -73,26 +73,26 @@ public:
 class Join: public Command {
 private:
     GameBrowser& gb;
-    uint8_t game_id;
-    uint8_t client_id;
-    Queue<uint8_t>& game_queue;
+    uint8_t& game_id;
 
 public:
-    explicit Join(GameBrowser& gb, uint8_t id, uint8_t game_id, Queue<uint8_t>& game_queue);
+    explicit Join(GameBrowser& gb, uint8_t& id_to_join);
 
     void execute() override;
 
-    virtual ~Join() override = default;
+    ~Join() override = default;
 };
 
 // ----------------------- CREATE ----------------------
 
-class Create: public Join {
+class Create: public Command {
+private:
+    GameBrowser& gb;
+    uint8_t& id_to_create;
 public:
-    /*
+    explicit Create(GameBrowser& gb, uint8_t& id_to_create);
 
-    */
-    explicit Create(uint8_t id, GameBrowser& gb, Queue<uint8_t>& game_queue);
+    void execute() override;
 
     ~Create() override = default;
 };

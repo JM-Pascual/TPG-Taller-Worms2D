@@ -9,6 +9,8 @@
 
 #include "../common/queue.h"
 
+#include "command.h"
+
 namespace ServerSide {
 class Client;
 }
@@ -19,7 +21,7 @@ private:
     std::mutex m_clean;
     std::map<uint8_t, std::unique_ptr<ServerSide::Client>> clients;
     std::condition_variable can_delete;
-    Queue<uint8_t> queue;
+    Queue<std::shared_ptr<Command>> queue;
 
 public:
     /*
@@ -33,7 +35,7 @@ public:
     /*
 
     */
-    Queue<uint8_t>& getQueue();
+    Queue<std::shared_ptr<Command>>& getQueue();
     /*
         Pushea un cliente a la lista
     */

@@ -6,19 +6,21 @@
 #include "sparser.h"
 #include "sprotocol.h"
 
-ServerSide::Receiver::Receiver(ServerSide::Protocol& protocol, const GameBrowser& gb):
-        protocol(protocol), gb(gb), joined_game(false) {}
+ServerSide::Receiver::Receiver(ServerSide::Protocol& protocol, GameBrowser& gb):
+        protocol(protocol), gb(gb), connected_to_room(false) {}
 
 void ServerSide::Receiver::run() {
     Commands o;
-    ServerSide::Parser parser;
-    Queue<uint8_t> game_queue;
     do {
-        while (not joined_game) {
+        while (not connected_to_room) {
             protocol.recvCommand(o);
-            parser.makeLobbyCommand(o, protocol, 1, gb, joined_game, game_queue)->execute();
+            ServerSide::Parser::makeLobbyCommand(o, protocol, gb, connected_to_room, room_id)->execute();
         }
-
+        Queue<std::shared_ptr<Command>>& q = gb.getQueue(room_id);
+        while (connected_to_room) {
+            protocol.recvCommand(o);
+            q.push(ServerSide::Parser::makeGameCommand(o, protocol));
+        }
 
     } while (_keep_running);
 }

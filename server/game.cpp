@@ -12,7 +12,7 @@ void Game::notifyAllClients(const uint8_t& dto) {
     }
 }
 
-Queue<uint8_t>& Game::getQueue() { return this->queue; }
+Queue<std::shared_ptr<Command>>& Game::getQueue() { return this->queue; }
 
 void Game::pushClient(std::unique_ptr<ServerSide::Client> client) {
     std::lock_guard<std::mutex> lock(m);

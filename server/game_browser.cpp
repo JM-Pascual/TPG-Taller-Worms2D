@@ -1,30 +1,32 @@
 #include "game_browser.h"
 
-#include <utility>
-
 #include <spdlog/spdlog.h>
 
 GameBrowser::GameBrowser(): game_id_count(0) {}
 
-uint8_t GameBrowser::create_game() {
+void GameBrowser::create_game(uint8_t& game_id_to_create) {
     // Por el momento no tiene args, despues tendra nombre, mapa, etc
     std::unique_lock<std::mutex> lck(m);
 
     games[game_id_count] = std::make_unique<Game>();
+    game_id_to_create = game_id_count;
 
-    return game_id_count++;  // Pos incremento para devolver el valor anterior al incremento
+    game_id_count++;
 }
 
-Queue<uint8_t>& GameBrowser::join_game(const uint8_t& game_code,
-                                       std::unique_ptr<LobbyClient>& client) {
+Queue<uint8_t>& GameBrowser::join_game(const uint8_t& game_id_to_join) {
     std::unique_lock<std::mutex> lck(m);
 
-    spdlog::get("server")->info("Agregando el cliente {:d} al juego {:d}", client->id, game_code);
-    games[game_code]->pushClient(
-            std::make_unique<ServerSide::Client>(client.get(), games[game_code]));
+    if (games.find(game_id_to_join) == games.end()) {
+        spdlog::get("server")->debug("No existe la sala {:d}", game_id_to_join);
+        //Handle room no existente
+    } else {
+        spdlog::get("server")->debug("Cliente asignado a la sala {:d}", game_id_to_join);
+    }
 
-    return games[game_code]->getQueue();
 }
+
+Queue<std::shared_ptr<Command>>& GameBrowser::getQueue(const uint8_t& game_id) { return games[game_id]->getQueue(); }
 
 void GameBrowser::infoGames(std::vector<std::string>& info) {
     std::unique_lock<std::mutex> lck(m);
@@ -44,5 +46,4 @@ void GameBrowser::killAll() {
         game->killAll();
     }
 }
-
 GameBrowser::~GameBrowser() {}

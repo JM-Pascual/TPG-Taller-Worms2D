@@ -14,11 +14,11 @@ class Protocol;
 class Receiver: public Thread {
 private:
     ServerSide::Protocol& protocol;
-    const GameBrowser& gb;
-    std::atomic<bool> joined_game;
-
+    GameBrowser& gb;
+    std::atomic<bool> connected_to_room;
+    uint8_t room_id;
 public:
-    explicit Receiver(ServerSide::Protocol& protocol, const GameBrowser& gb);
+    explicit Receiver(ServerSide::Protocol& protocol, GameBrowser& gb);
 
     void run() override;
     /*
