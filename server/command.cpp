@@ -31,14 +31,14 @@ void Move::execute(Game& game) { game.x += (2 * ((int)direction) - 1); }
 // ----------------------- JOIN ----------------------
 
 
-Join::Join(GameBrowser& gb, uint8_t& id_to_join, Queue<std::shared_ptr<Dto>>& game_state, std::atomic<bool>& connected_to_room):
+Join::Join(GameBrowser& gb, uint8_t& id_to_join, Queue<std::shared_ptr<MoveDto>>& game_state, std::atomic<bool>& connected_to_room):
         gb(gb), game_id(id_to_join), joined_game(connected_to_room), game_state(game_state) {}
 
 void Join::execute() { gb.join_game(game_id, game_state, joined_game); }
 
 // ----------------------- CREATE ----------------------
 
-Create::Create(GameBrowser& gb, uint8_t& id_to_create, Queue<std::shared_ptr<Dto>>& game_state, std::atomic<bool>& connected_to_room):
+Create::Create(GameBrowser& gb, uint8_t& id_to_create, Queue<std::shared_ptr<MoveDto>>& game_state, std::atomic<bool>& connected_to_room):
         Join(gb, id_to_create, game_state, connected_to_room) {
     gb.create_game(id_to_create);
 }

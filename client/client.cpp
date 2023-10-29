@@ -5,7 +5,7 @@
 #include "../common/dto.h"
 #include "SDL2pp/SDL2pp.hh"
 
-#include "command_dto.h"
+#include "Action.h"
 #include "cparser.h"
 
 Client::Client(const char* hostname, const char* servname):

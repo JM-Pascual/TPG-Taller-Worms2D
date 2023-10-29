@@ -2,11 +2,11 @@
 
 #include "../common/dto.h"
 
-#include "command_dto.h"
+#include "Action.h"
 #include "cprotocol.h"
 
 ClientSide::Sender::Sender(ClientSide::Protocol& protocol,
-                           Queue<std::unique_ptr<CommandDto>>& commands_queue):
+                           Queue<std::unique_ptr<Action>>& commands_queue):
         Thread(), protocol(protocol), commands_queue(commands_queue) {}
 
 void ClientSide::Sender::run() {

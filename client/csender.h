@@ -9,7 +9,7 @@
 #include "../common/thread.h"
 
 class Dto;
-class CommandDto;
+class Action;
 
 namespace ClientSide {
 class Protocol;
@@ -17,11 +17,11 @@ class Protocol;
 class Sender: public Thread {
 private:
     ClientSide::Protocol& protocol;
-    Queue<std::unique_ptr<CommandDto>>& commands_queue;
+    Queue<std::unique_ptr<Action>>& commands_queue;
 
 public:
     explicit Sender(ClientSide::Protocol& protocol,
-                    Queue<std::unique_ptr<CommandDto>>& commands_queue);
+                    Queue<std::unique_ptr<Action>>& commands_queue);
     /*
         Corre el sender esperando que la event_queue tenga un elemento para poder enviar a traves del
         protocolo

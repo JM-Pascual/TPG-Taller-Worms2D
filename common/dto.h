@@ -21,15 +21,7 @@ public:
     /*
 
     */
-    explicit Dto(const Commands c);
-    /*
-
-    */
-    virtual void send(ServerSide::Protocol& protocol) = 0;
-    /*
-
-    */
-    virtual void render() = 0;
+    explicit Dto(Commands c);
     /*
 
     */

@@ -8,9 +8,9 @@
 
 #include "../common/queue.h"
 #include "../common/thread.h"
+#include "../common/dto.h"
 
 class GameBrowser;
-class Dto;
 
 namespace ServerSide {
 class Protocol;
@@ -21,11 +21,11 @@ private:
     GameBrowser& gb;
     std::atomic<bool> connected_to_room;
     uint8_t room_id;
-    Queue<std::shared_ptr<Dto>>& game_state;
+    Queue<std::shared_ptr<MoveDto>>& game_state;
 
 public:
     explicit Receiver(ServerSide::Protocol& protocol, GameBrowser& gb,
-                      Queue<std::shared_ptr<Dto>>& game_state);
+                      Queue<std::shared_ptr<MoveDto>>& game_state);
 
     void run() override;
     /*

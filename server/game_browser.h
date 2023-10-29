@@ -35,7 +35,7 @@ public:
     /*
         Agrega client al Game especificado por game_code
     */
-    void join_game(const uint8_t& game_code, Queue<std::shared_ptr<Dto>>& client_state_queue, std::atomic<bool>& succesful_join);
+    void join_game(const uint8_t& game_code, Queue<std::shared_ptr<MoveDto>>& client_state_queue, std::atomic<bool>& succesful_join);
     /*
 
     */

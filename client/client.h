@@ -8,7 +8,7 @@
 #include "csender.h"
 
 class Dto;
-class CommandDto;
+class Action;
 
 class Client {
 
@@ -17,7 +17,7 @@ private:
     ClientSide::Receiver recv;
     ClientSide::Sender send;
     Queue<std::unique_ptr<Dto>> game_state_queue;
-    Queue<std::unique_ptr<CommandDto>> commands_queue;
+    Queue<std::unique_ptr<Action>> commands_queue;
 
 public:
     /*

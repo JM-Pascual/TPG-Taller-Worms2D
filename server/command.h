@@ -5,10 +5,10 @@
 
 #include "../common/const.h"
 #include "../common/queue.h"
+#include "../common/dto.h"
 
 class GameBrowser;
 class Game;
-class Dto;
 
 namespace ServerSide {
 class Protocol;
@@ -96,7 +96,7 @@ private:
     Queue<std::shared_ptr<Dto>>& game_state;
     
 public:
-    explicit Join(GameBrowser& gb, uint8_t& id_to_join, Queue<std::shared_ptr<Dto>>& game_state, std::atomic<bool>& connected_to_room);
+    explicit Join(GameBrowser& gb, uint8_t& id_to_join, Queue<std::shared_ptr<MoveDto>>& game_state, std::atomic<bool>& connected_to_room);
 
     void execute() override;
 
@@ -107,7 +107,7 @@ public:
 
 class Create: public Join {
 public:
-    explicit Create(GameBrowser& gb, uint8_t& id_to_create, Queue<std::shared_ptr<Dto>>& game_state, std::atomic<bool>& connected_to_room);
+    explicit Create(GameBrowser& gb, uint8_t& id_to_create, Queue<std::shared_ptr<MoveDto>>& game_state, std::atomic<bool>& connected_to_room);
 
     ~Create() override = default;
 };

@@ -5,9 +5,9 @@
 
 #include "../common/queue.h"
 #include "../common/thread.h"
+#include "../common/dto.h"
 
 class Game;
-class Dto;
 
 namespace ServerSide {
 class Protocol;
@@ -15,21 +15,21 @@ class Protocol;
 class Sender: public Thread {
 private:
     ServerSide::Protocol& protocol;
-    Queue<std::shared_ptr<Dto>>& game_states;
+    Queue<std::shared_ptr<MoveDto>>& game_states;
     /*
         Cierra la event_queue forzosamente
     */
     void closeQueue();
 
 public:
-    explicit Sender(ServerSide::Protocol& protocol, Queue<std::shared_ptr<Dto>>& game_states);
+    explicit Sender(ServerSide::Protocol& protocol, Queue<std::shared_ptr<MoveDto>>& game_states);
     /*
         Corre el sender esperando que la event_queue tenga un elemento para poder enviar a traves del
         protocolo
     */
     void run() override;
 
-    void send(std::shared_ptr<Dto> o);
+    void send(std::shared_ptr<MoveDto> o);
 
     void kill();
     /*
