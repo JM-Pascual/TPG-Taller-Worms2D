@@ -1,52 +1,55 @@
-#ifndef COMMAND_DTO
-#define COMMAND_DTO
+#ifndef ACTION_H
+#define ACTION_H
 
 #include "../common/const.h"
+#include "cprotocol.h"
 
-namespace ClientSide {
-class Protocol;
-}
+// ------------------------------- ACTION INTERFACE --------------------------
 
 class Action {
 public:
-    const Commands c;
+    const Actions c;
 
-    explicit Action(const Commands c): c(c) {}
+    explicit Action(const Actions c): c(c) {}
 
     virtual void send(ClientSide::Protocol& protocol) = 0;
 
     virtual ~Action() = default;
 };
 
-// ------------------------------- GAME COMMANDS --------------------------
+// ------------------------------- GAME ACTIONS --------------------------
 
 class StartMoving: public Action {
+private:
+    const MoveDir direction;
 public:
-    const bool is_walking;
-    const bool facing_right;
+    explicit StartMoving(MoveDir facing_right);
 
-    explicit StartMoving(bool is_walking, bool facing_right):
-            Action(Commands::MOVE), is_walking(is_walking), facing_right(facing_right) {}
+    void send(ClientSide::Protocol& protocol) override;
 
-    void send(ClientSide::Protocol& protocol) override {
-        protocol.sendUint8(c);
-        protocol.sendBool(is_walking);
-        protocol.sendBool(facing_right);
-    }
-
-    ~StartMoving() = default;
+    ~StartMoving() override = default;
 };
 
-// ----------------------------------- LOBBY COMMANDS -------------------------
+// ----------------------------------- LOBBY ACTIONS -------------------------
 
 class CreateGame: public Action {
 public:
     CreateGame() :
-            Action(Commands::CREATE) {}
+            Action(Actions::CREATE) {}
 
     void send(ClientSide::Protocol& protocol) override;
 
-    ~CreateGame() = default;
+    ~CreateGame() override = default;
+};
+
+class JoinGame: public Action {
+public:
+    JoinGame() :
+            Action(Actions::JOIN) {}
+
+    void send(ClientSide::Protocol& protocol) override;
+
+    ~JoinGame() override = default;
 };
 
 #endif

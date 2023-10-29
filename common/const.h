@@ -12,6 +12,6 @@ enum class IsMoving { NO = 0, YES = 1 };
 
 enum class JumpDir { FRONT = 0, BACK = 1 };
 
-enum class Commands { CREATE = 0x1, JOIN = 0x2, SHOW_GAMES = 0x3, MOVE = 0x4, JUMP = 0x5 };
+enum class Actions { CREATE = 0x1, JOIN = 0x2, SHOW_GAMES = 0x3, START_MOVING = 0x4, STOP_MOVING = 0x5, JUMP = 0x6 };
 
 #endif

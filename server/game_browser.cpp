@@ -8,7 +8,7 @@ void GameBrowser::create_game(uint8_t& game_id_to_create) {
     // Por el momento no tiene args, despues tendra nombre, mapa, etc
     std::unique_lock<std::mutex> lck(m);
 
-    games[game_id_count] = std::make_unique<Game>();
+    games[game_id_count] = std::make_unique<GameLoop>();
     games[game_id_count]->start();
     game_id_to_create =
             game_id_count++;  // Post Incremento para devolver el valor anterior y luego inc
@@ -16,7 +16,7 @@ void GameBrowser::create_game(uint8_t& game_id_to_create) {
     spdlog::get("server")->info("Se creo la sala de juego {:d}", (game_id_to_create-1));
 }
 
-void GameBrowser::join_game(const uint8_t& game_id_to_join, Queue<std::shared_ptr<MoveDto>>& client_state_queue, std::atomic<bool>& succesful_join) {
+void GameBrowser::join_game(const uint8_t& game_id_to_join, Queue<GameState>& client_state_queue, std::atomic<bool>& succesful_join) {
 
     std::unique_lock<std::mutex> lck(m);
 
@@ -29,7 +29,7 @@ void GameBrowser::join_game(const uint8_t& game_id_to_join, Queue<std::shared_pt
     }
 }
 
-Queue<std::shared_ptr<Command>>& GameBrowser::getQueue(const uint8_t& game_id) {
+Queue<std::shared_ptr<PlayerAction>>& GameBrowser::getQueue(const uint8_t& game_id) {
     std::unique_lock<std::mutex> lck(m);
     return games[game_id]->get_event_queue();
 }
@@ -39,7 +39,7 @@ void GameBrowser::infoGames(std::vector<std::string>& info) {
 
     spdlog::get("server")->debug("Recolectando informacion de los juegos en ejecucion");
     for (const auto& [id, game]: games) {
-        std::string s("Game id: " +
+        std::string s("GameLoop id: " +
                       std::to_string(id));  // + "players: " + std::to_string(value.playersCount());
         info.push_back(s);
     }

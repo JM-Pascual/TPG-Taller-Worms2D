@@ -10,7 +10,7 @@ class Dto;
 namespace ClientSide {
 class Parser {
 public:
-    static std::unique_ptr<Dto> makeGStateDto(const Commands& c, ClientSide::Protocol& protocol);
+    static std::unique_ptr<Dto> makeGStateDto(const Actions& c, ClientSide::Protocol& protocol);
 };
 }  // namespace ClientSide
 

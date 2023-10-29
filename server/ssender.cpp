@@ -1,11 +1,9 @@
 #include "ssender.h"
 
-#include "../common/dto.h"
-
 #include "sprotocol.h"
 
 ServerSide::Sender::Sender(ServerSide::Protocol& protocol,
-                           Queue<std::shared_ptr<MoveDto>>& game_states):
+                           Queue<std::shared_ptr<GameState>>& game_states):
         protocol(protocol), game_states(game_states) {}
 
 void ServerSide::Sender::run() {
@@ -19,8 +17,8 @@ void ServerSide::Sender::run() {
     } while (this->_keep_running);
 }
 
-void ServerSide::Sender::send(std::shared_ptr<MoveDto> o) {
-    this->protocol.send(&o, 1);
+void ServerSide::Sender::send(std::shared_ptr<GameState> state) {
+    this->protocol.send_game_state(state);
     // ToDo Este método tiene que hacer 3 sends, uno para cada atributo del dto
     // Se podría hacer un método send game state que justamente reciba el dto y lo serialice
 }

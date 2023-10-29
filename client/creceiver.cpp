@@ -11,7 +11,7 @@ ClientSide::Receiver::Receiver(ClientSide::Protocol& protocol,
 
 void ClientSide::Receiver::run() {
 
-    Commands c;
+    Actions c;
 
     do {
         protocol.recvCommand(c);

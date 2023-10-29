@@ -45,6 +45,6 @@ uint8_t ServerSide::Protocol::recvUint8() {
     return n;
 }
 
-void ServerSide::Protocol::recvCommand(Commands& c) { c = (Commands)this->recvUint8(); }
+void ServerSide::Protocol::recvCommand(Actions& c) { c = (Actions)this->recvUint8(); }
 
-void ServerSide::Protocol::recvMoveDir(MoveDir& d) { d = (MoveDir)this->recvUint8(); }
+void ServerSide::Protocol::recvDirection(MoveDir&) { d = (MoveDir)this->recvUint8(); }

@@ -5,9 +5,9 @@
 
 #include "../common/queue.h"
 #include "../common/thread.h"
-#include "../common/dto.h"
+#include "../common/GameState.h"
 
-class Game;
+class GameLoop;
 
 namespace ServerSide {
 class Protocol;
@@ -15,27 +15,21 @@ class Protocol;
 class Sender: public Thread {
 private:
     ServerSide::Protocol& protocol;
-    Queue<std::shared_ptr<MoveDto>>& game_states;
-    /*
-        Cierra la event_queue forzosamente
-    */
-    void closeQueue();
+    Queue<std::shared_ptr<GameState>>& game_states;
 
+    //Cierra la event_queue forzosamente
+    void closeQueue();
 public:
-    explicit Sender(ServerSide::Protocol& protocol, Queue<std::shared_ptr<MoveDto>>& game_states);
-    /*
-        Corre el sender esperando que la event_queue tenga un elemento para poder enviar a traves del
-        protocolo
-    */
+    explicit Sender(ServerSide::Protocol& protocol, Queue<std::shared_ptr<GameState>>& game_states);
+    //Corre el sender esperando que la event_queue tenga un elemento para poder enviar
+    // a traves del protocolo
     void run() override;
 
-    void send(std::shared_ptr<MoveDto> o);
+    void send(std::shared_ptr<GameState> state);
 
     void kill();
-    /*
-        No tiene sentido ni copiar ni mover el sender ya que al ser un thread lo vamos a utilizar en
-        el heap
-    */
+
+    //Debido al uso del heap no se puede copiar ni mover el loop
     Sender(const Sender&) = delete;
     Sender& operator=(const Sender&) = delete;
 

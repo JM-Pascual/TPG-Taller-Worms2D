@@ -15,8 +15,10 @@ private:
         Los separo en dos bool y no en uno atomic ya que el socket necesita un *bool. Podria usar
         load de atomic pero estaria en la misma situacion que en un solo bool normal.
     */
+
     bool send_was_closed;
     bool recv_was_closed;
+
     /*
         Recibe data chequeando si se cierra el socket
     */
@@ -38,11 +40,11 @@ public:
     /*
         Recibe el comando que el cliente desea ejecutar
     */
-    void recvCommand(Commands&);
+    void recvCommand(Actions&);
     /*
         Recibe la direccion hacia la cual se debe mover el gusano
     */
-    void recvMoveDir(MoveDir&);
+    void recvDirection(MoveDir&);
     /*
         Cierra forzosamente el socket del protocolo (en caso de que no se haya hecho)
     */

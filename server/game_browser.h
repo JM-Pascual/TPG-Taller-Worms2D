@@ -11,8 +11,8 @@
 
 #include "../common/queue.h"
 
-#include "command.h"
-#include "game.h"
+#include "game_loop.h"
+#include "player_action.h"
 #include "sclient.h"
 
 class Dto;
@@ -20,12 +20,11 @@ class Dto;
 class GameBrowser {
 private:
     std::mutex m;
-    std::map<uint8_t, std::shared_ptr<Game>> games;
+    std::map<uint8_t, std::shared_ptr<GameLoop>> games;
     uint8_t game_id_count;
-
 public:
     /*
-        Inicializa el conteo de las id de Game en 0 (game_id_count)
+        Inicializa el conteo de las id de GameLoop en 0 (game_id_count)
     */
     GameBrowser();
     /*
@@ -33,14 +32,14 @@ public:
     */
     void create_game(uint8_t& game_id_to_create);
     /*
-        Agrega client al Game especificado por game_code
+        Agrega client al GameLoop especificado por game_code
     */
-    void join_game(const uint8_t& game_code, Queue<std::shared_ptr<MoveDto>>& client_state_queue, std::atomic<bool>& succesful_join);
+    void join_game(const uint8_t& game_code, Queue<GameState>& client_state_queue, std::atomic<bool>& succesful_join);
     /*
 
     */
 
-    Queue<std::shared_ptr<Command>>& getQueue(const uint8_t& game_id);
+    Queue<std::shared_ptr<PlayerAction>>& getQueue(const uint8_t& game_id);
 
     void infoGames(std::vector<std::string>&);
     /*

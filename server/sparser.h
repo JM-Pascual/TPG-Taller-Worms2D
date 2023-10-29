@@ -5,12 +5,12 @@
 #include <memory>
 
 #include "../common/queue.h"
-#include "../common/dto.h"
+#include "../common/GameState.h"
 
-class Command;
-class LobbyCommand;
+class PlayerAction;
+class LobbyAction;
 class GameBrowser;
-enum class Commands;
+enum class Actions;
 
 namespace ServerSide {
 
@@ -18,13 +18,13 @@ class Protocol;
 
 class Parser {
 public:
-    static std::shared_ptr<Command> makeGameCommand(const Commands& c, ServerSide::Protocol&);
+    static std::shared_ptr<PlayerAction> makePlayerAction(const Actions& c, ServerSide::Protocol&);
 
-    static std::shared_ptr<LobbyCommand> makeLobbyCommand(const Commands& c, ServerSide::Protocol&,
-                                                          GameBrowser& gb,
+    static std::shared_ptr<LobbyAction> makeLobbyAction(const Actions& c, ServerSide::Protocol&,
+                                                          GameBrowser& browser,
                                                           std::atomic<bool>& connected_to_room,
                                                           uint8_t& game_id,
-                                                          Queue<std::shared_ptr<MoveDto>>& game_state);
+                                                          Queue<GameState>& game_state);
 };
 }  // namespace ServerSide
 

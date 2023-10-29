@@ -7,13 +7,12 @@
 #include <stdint.h>
 
 #include "../common/queue.h"
+#include "../common/GameState.h"
 
 #include "sprotocol.h"
 #include "sreceiver.h"
 #include "ssender.h"
-
-class Game;
-class LobbyClient;
+#include "game_loop.h"
 
 namespace ServerSide {
 class Client {
@@ -22,12 +21,11 @@ private:
     ServerSide::Receiver recv;
     ServerSide::Sender send;
     std::atomic<bool> killed;
-    Queue<std::shared_ptr<Dto>> game_state;
-
+    Queue<std::shared_ptr<GameState>> state_queue;
 public:
     const uint8_t id;
 
-    explicit Client(Socket&& peer, GameBrowser& gb, uint8_t id);
+    explicit Client(Socket&& peer, GameBrowser& browser, uint8_t id);
     /*
         Retorna si ambos hilos estan 'vivos'
     */

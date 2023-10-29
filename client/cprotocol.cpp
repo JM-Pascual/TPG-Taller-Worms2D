@@ -22,7 +22,7 @@ void ClientSide::Protocol::recv(void* data, unsigned int sz) {
     }
 }
 
-void ClientSide::Protocol::recvCommand(Commands& c) { c = (Commands)recvUint8(); }
+void ClientSide::Protocol::recvCommand(Actions& c) { c = (Actions)recvUint8(); }
 
 uint8_t ClientSide::Protocol::recvUint8() {
     uint8_t i;

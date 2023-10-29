@@ -5,6 +5,7 @@
 
 #include "../common/const.h"
 #include "../common/socket.h"
+#include "Action.h"
 
 namespace ClientSide {
 class Protocol {
@@ -18,22 +19,18 @@ private:
     bool send_was_closed;
     bool recv_was_closed;
     /*
-        Envia data chequeando si se cierra el socket
-    */
-    void send(const void* data, unsigned int sz);
-    /*
         Recibe data chequeando si se cierra el socket
     */
     void recv(void* data, unsigned int sz);
 
     uint8_t recvUint8();
 
-public:
-    void recvCommand(Commands& c);
+    void recvCommand(Actions& c);
 
     float recvFloat();
 
     bool recvBool();
+public:
     /*
         Construye el protocolo y su respectivo socket
     */
@@ -41,6 +38,10 @@ public:
     /*
         Cierra forzosamente el socket del protocolo (en caso de que no se haya hecho)
     */
+
+    //Envia data chequeando si se cierra el socket
+    void send(const void* data, unsigned int sz);
+
     void close();
     /*
         No tiene sentido ni copiar ni mover el protocolo
@@ -50,6 +51,7 @@ public:
 
     Protocol(Protocol&&) = delete;
     Protocol& operator=(Protocol&&) = delete;
+
 };
 }  // namespace ClientSide
 

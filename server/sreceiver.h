@@ -8,7 +8,7 @@
 
 #include "../common/queue.h"
 #include "../common/thread.h"
-#include "../common/dto.h"
+#include "../common/GameState.h"
 
 class GameBrowser;
 
@@ -18,14 +18,13 @@ class Protocol;
 class Receiver: public Thread {
 private:
     ServerSide::Protocol& protocol;
-    GameBrowser& gb;
+    GameBrowser& browser;
     std::atomic<bool> connected_to_room;
     uint8_t room_id;
-    Queue<std::shared_ptr<MoveDto>>& game_state;
-
+    Queue<GameState>& state_queue;
 public:
-    explicit Receiver(ServerSide::Protocol& protocol, GameBrowser& gb,
-                      Queue<std::shared_ptr<MoveDto>>& game_state);
+    explicit Receiver(ServerSide::Protocol& protocol, GameBrowser& browser,
+                      Queue<GameState>& state_queue);
 
     void run() override;
     /*

@@ -4,13 +4,13 @@
 
 #include <spdlog/spdlog.h>
 
-#include "game.h"
+#include "game_loop.h"
 
 
-ServerSide::Client::Client(Socket&& peer, GameBrowser& gb, const uint8_t id):
+ServerSide::Client::Client(Socket&& peer, GameBrowser& browser, const uint8_t id):
         protocol(std::move(peer)),
-        recv(this->protocol, gb, game_state),
-        send(this->protocol, game_state),
+        recv(this->protocol, browser, state_queue),
+        send(this->protocol, state_queue),
         killed(false),
         id(id) {
     spdlog::get("server")->debug("Iniciando receptor en cliente {:d}", id);
