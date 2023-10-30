@@ -29,10 +29,6 @@ public:
 
     void run() override;
     /*
-        Termina de forma forzosa el thread
-    */
-    void kill();
-    /*
         Destructor default ya que no tiene que liberar ningun recurso
     */
     ~Receiver() override = default;

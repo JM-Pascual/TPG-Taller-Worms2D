@@ -27,11 +27,10 @@ void ServerSide::Client::stop() {
 }
 
 void ServerSide::Client::kill() {
+    spdlog::get("server")->debug("Matando cliente {:d}", id);
     killed = true;
     this->stop();
-    send.kill();
-    recv.kill();
-    spdlog::get("server")->debug("Cerrando protocolo en cliente {:d}", id);
+    state_queue.close();
     protocol.close();
 }
 

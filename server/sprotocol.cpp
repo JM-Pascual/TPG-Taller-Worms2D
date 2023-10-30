@@ -34,7 +34,7 @@ void ServerSide::Protocol::send(const void* data, unsigned int sz) {
     unsigned int sz_sent = peer.sendall(data, sz, &send_was_closed);
 
     if (sz_sent == 0 || send_was_closed) {
-        throw LibError(errno, "El cliente cerro el socket");
+        throw LibError(errno, "se cerro la conexion con el cliente");
     }
 }
 
@@ -42,7 +42,7 @@ void ServerSide::Protocol::recv(void* data, unsigned int sz) {
     unsigned int sz_recv = peer.recvall(data, sz, &recv_was_closed);
 
     if (sz_recv == 0 || recv_was_closed) {
-        throw LibError(errno, "El cliente cerro el socket");
+        throw LibError(errno, "se cerro la conexion con el cliente");
     }
 }
 
@@ -81,24 +81,10 @@ void ServerSide::Protocol::sendPosition(const PlayerPosition& pos) {
     memcpy(&y_net, &pos.y, sizeof(uint32_t));
     y_net = htonl(y_net);
     send(&y_net, sizeof(uint32_t));
-
-
-
-    // int32_t y = htonl(pos.y);
-    // send(&y, sizeof(int32_t));
 }
 
 void ServerSide::Protocol::sendGameState(const std::shared_ptr<GameState>& game_state) {
-
-
-    std::cout << game_state->player_position.x << std::endl;
-    std::cout << game_state->player_position.y << std::endl;
-    std::cout << game_state->is_walking << std::endl;
-    std::cout << game_state->facing_right<< std::endl;
-
     this->sendPosition(game_state->player_position);
     send(&game_state->is_walking, sizeof(bool));
     send(&game_state->facing_right, sizeof(bool));
-
-
 }

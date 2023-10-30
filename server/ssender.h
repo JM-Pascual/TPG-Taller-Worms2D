@@ -17,16 +17,11 @@ private:
     ServerSide::Protocol& protocol;
     Queue<std::shared_ptr<GameState>>& game_states;
 
-    // Cierra la event_queue forzosamente
-    void closeQueue();
-
 public:
     explicit Sender(ServerSide::Protocol& protocol, Queue<std::shared_ptr<GameState>>& game_states);
     // Corre el sender esperando que la event_queue tenga un elemento para poder enviar
     //  a traves del protocolo
     void run() override;
-
-    void kill();
 
     // Debido al uso del heap no se puede copiar ni mover el loop
     Sender(const Sender&) = delete;

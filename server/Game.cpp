@@ -7,10 +7,8 @@ std::shared_ptr<GameState> Game::get_game_state() const {
 }
 
 void Game::update_game_state() {
-    spdlog::get("server")->info("is_wk: {:d}", player.is_walking);
     if (player.is_walking) {
-        player.x += (float(2 * player.facing_right - 1));
-        spdlog::get("server")->info("x: {:f}", player.x);
+        player.x += (2 * player.facing_right - 1);
     }
 }
 

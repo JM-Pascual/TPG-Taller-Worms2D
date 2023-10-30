@@ -15,7 +15,6 @@
 #include "player_action.h"
 #include "sclient.h"
 
-class Dto;
 
 class GameBrowser {
 private:

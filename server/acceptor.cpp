@@ -7,30 +7,32 @@
 #include "sclient.h"
 #include "sprotocol.h"
 
-Acceptor::Acceptor(const char* servname): Thread(), skt(Socket(servname)), killed(false) {}
+Acceptor::Acceptor(const char* servname): Thread(), skt(Socket(servname)) {}
 
 void Acceptor::run() {
-    try {
-        uint8_t id = 0;
-        do {
+    uint8_t id = 0;
+    do {
+
+        try {
             spdlog::get("server")->debug("Esperando un cliente para aceptar");
             clients_connected[id] = std::make_unique<ServerSide::Client>(skt.accept(), gb, id);
             spdlog::get("server")->info("Cliente {:d} aceptado con exito", id);
             id++;
             reap_dead();
-        } while (this->_keep_running);
 
-    } catch (const LibError& e) {
-        if (not killed) {
-            spdlog::get("server")->error("Ocurrio un error con el socket en acceptor");
+        } catch (const LibError& e) {
+            if (_keep_running) {
+                spdlog::get("server")->error("Ocurrio un error con el socket en acceptor");
+            }
         }
-    }
+
+    } while (this->_keep_running);
 }
 
 void Acceptor::kill() {
-    this->killed = true;
     this->stop();
     skt.shutdown(SHUTDOWN_RW);
+    skt.close();
 }
 
 void Acceptor::reap_dead() {
@@ -43,7 +45,7 @@ void Acceptor::reap_dead() {
 }
 
 Acceptor::~Acceptor() {
-    if (not killed) {
+    if (_keep_running) {
         this->kill();
     }
     gb.killAll();

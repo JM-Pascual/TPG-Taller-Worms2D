@@ -21,7 +21,6 @@ class Acceptor: public Thread {
 private:
     Socket skt;
     GameBrowser gb;
-    std::atomic<bool> killed;
     std::map<uint8_t, std::unique_ptr<ServerSide::Client>> clients_connected;
 
     void reap_dead();

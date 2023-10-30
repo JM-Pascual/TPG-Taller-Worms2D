@@ -19,7 +19,7 @@ void ClientSide::Receiver::run() {
 
         } catch (const ClosedQueue& e) {
             if (_keep_running) {
-                spdlog::get("client")->error("Se cerro la action_queue del receiver: {:s}",
+                spdlog::get("client")->error("Se cerro la game_state_queue del receiver: {:s}",
                                              e.what());
             }
             break;
