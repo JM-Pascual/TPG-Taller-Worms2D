@@ -1,20 +1,16 @@
 #include "creceiver.h"
 
-#include "../common/dto.h"
+#include "../common/GameState.h"
 
-#include "cparser.h"
+#include "Action.h"
 #include "cprotocol.h"
 
 ClientSide::Receiver::Receiver(ClientSide::Protocol& protocol,
-                               Queue<std::unique_ptr<Dto>>& game_state_queue):
+                               Queue<std::shared_ptr<GameState>>& game_state_queue):
         Thread(), protocol(protocol), game_stateQ(game_state_queue) {}
 
 void ClientSide::Receiver::run() {
-
-    Actions c;
-
     do {
-        protocol.recvCommand(c);
-        game_stateQ.push(ClientSide::Parser::makeGStateDto(c, protocol));
+        game_stateQ.push(protocol.recvGameState());
     } while (_keep_running);
 }

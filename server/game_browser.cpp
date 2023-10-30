@@ -13,10 +13,12 @@ void GameBrowser::create_game(uint8_t& game_id_to_create) {
     game_id_to_create =
             game_id_count++;  // Post Incremento para devolver el valor anterior y luego inc
 
-    spdlog::get("server")->info("Se creo la sala de juego {:d}", (game_id_to_create-1));
+    spdlog::get("server")->info("Se creo la sala de juego {:d}", (game_id_to_create));
 }
 
-void GameBrowser::join_game(const uint8_t& game_id_to_join, Queue<GameState>& client_state_queue, std::atomic<bool>& succesful_join) {
+void GameBrowser::join_game(const uint8_t& game_id_to_join,
+                            Queue<std::shared_ptr<GameState>>& client_state_queue,
+                            std::atomic<bool>& succesful_join) {
 
     std::unique_lock<std::mutex> lck(m);
 
@@ -31,7 +33,7 @@ void GameBrowser::join_game(const uint8_t& game_id_to_join, Queue<GameState>& cl
 
 Queue<std::shared_ptr<PlayerAction>>& GameBrowser::getQueue(const uint8_t& game_id) {
     std::unique_lock<std::mutex> lck(m);
-    return games[game_id]->get_event_queue();
+    return games[game_id]->get_action_queue();
 }
 
 void GameBrowser::infoGames(std::vector<std::string>& info) {

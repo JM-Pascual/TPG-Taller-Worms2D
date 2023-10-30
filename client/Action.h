@@ -2,7 +2,10 @@
 #define ACTION_H
 
 #include "../common/const.h"
-#include "cprotocol.h"
+
+namespace ClientSide {
+class Protocol;
+}
 
 // ------------------------------- ACTION INTERFACE --------------------------
 
@@ -17,11 +20,21 @@ public:
     virtual ~Action() = default;
 };
 
+class NullAction: public Action {
+public:
+    NullAction();
+
+    void send(ClientSide::Protocol& protocol) override;
+
+    ~NullAction() = default;
+};
+
 // ------------------------------- GAME ACTIONS --------------------------
 
 class StartMoving: public Action {
 private:
     const MoveDir direction;
+
 public:
     explicit StartMoving(MoveDir facing_right);
 
@@ -30,12 +43,20 @@ public:
     ~StartMoving() override = default;
 };
 
+class StopMoving: public Action {
+public:
+    StopMoving();
+
+    void send(ClientSide::Protocol& protocol) override;
+
+    ~StopMoving() override = default;
+};
+
 // ----------------------------------- LOBBY ACTIONS -------------------------
 
 class CreateGame: public Action {
 public:
-    CreateGame() :
-            Action(Actions::CREATE) {}
+    CreateGame(): Action(Actions::CREATE) {}
 
     void send(ClientSide::Protocol& protocol) override;
 
@@ -44,8 +65,7 @@ public:
 
 class JoinGame: public Action {
 public:
-    JoinGame() :
-            Action(Actions::JOIN) {}
+    JoinGame(): Action(Actions::JOIN) {}
 
     void send(ClientSide::Protocol& protocol) override;
 

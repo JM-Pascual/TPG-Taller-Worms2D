@@ -1,10 +1,15 @@
 #ifndef SERVER_PROTOCOL_H
 #define SERVER_PROTOCOL_H
 
+#include <memory>
+
 #include <stdint.h>
 
 #include "../common/const.h"
 #include "../common/socket.h"
+
+class GameState;
+struct PlayerPosition;
 
 namespace ServerSide {
 class Protocol {
@@ -24,15 +29,18 @@ private:
     */
     void recv(void* data, unsigned int sz);
     /*
+        Envia data chequeando si se cierra el socket
+    */
+    void send(const void* data, unsigned int sz);
+    /*
         Recibe un int de 8 bits sin signo
     */
     uint8_t recvUint8();
 
+    void sendPosition(const PlayerPosition& pos);
+
 public:
-    /*
-        Envia data chequeando si se cierra el socket
-    */
-    void send(const void* data, unsigned int sz);
+    void sendGameState(const std::shared_ptr<GameState>& game_state);
     /*
         Construye el protocolo y su respectivo socket
     */

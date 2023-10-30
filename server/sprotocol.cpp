@@ -1,13 +1,30 @@
 #include "sprotocol.h"
 
 #include <utility>
+#include <vector>
 
 #include <arpa/inet.h>
 #include <errno.h>
+#include <spdlog/spdlog.h>
 #include <stdint.h>
 
+#include "../common/GameState.h"
 #include "../common/const.h"
 #include "../common/liberror.h"
+
+float ReverseFloat(const float inFloat) {
+    float retVal;
+    char* floatToConvert = (char*)&inFloat;
+    char* returnFloat = (char*)&retVal;
+
+    // swap the bytes into a temporary buffer
+    returnFloat[0] = floatToConvert[3];
+    returnFloat[1] = floatToConvert[2];
+    returnFloat[2] = floatToConvert[1];
+    returnFloat[3] = floatToConvert[0];
+
+    return retVal;
+}
 
 ServerSide::Protocol::Protocol(Socket&& peer):
         peer(std::move(peer)), send_was_closed(false), recv_was_closed(false) {}
@@ -36,8 +53,9 @@ void ServerSide::Protocol::close() {
     }
 }
 
-void ServerSide::Protocol::recvGameID(uint8_t& id) { id = this->recvUint8(); }
+// ------------------------------ RECEIVE ----------------------------------
 
+void ServerSide::Protocol::recvGameID(uint8_t& id) { id = this->recvUint8(); }
 
 uint8_t ServerSide::Protocol::recvUint8() {
     uint8_t n;
@@ -47,4 +65,26 @@ uint8_t ServerSide::Protocol::recvUint8() {
 
 void ServerSide::Protocol::recvCommand(Actions& c) { c = (Actions)this->recvUint8(); }
 
-void ServerSide::Protocol::recvDirection(MoveDir&) { d = (MoveDir)this->recvUint8(); }
+void ServerSide::Protocol::recvDirection(MoveDir& d) { d = (MoveDir)this->recvUint8(); }
+
+// ------------------------------ SEND -----------------------------------
+
+void ServerSide::Protocol::sendPosition(const PlayerPosition& pos) {
+    uint32_t i;
+    std::vector<char> x;
+    x.resize(sizeof(float));
+    memcpy(x.data(), &pos.x, sizeof(float));
+    memcpy(&i, x.data(), sizeof(float));
+    i = htonl(i);
+    send(&i, sizeof(float));
+
+    // int32_t y = htonl(pos.y);
+    // send(&y, sizeof(int32_t));
+}
+
+void ServerSide::Protocol::sendGameState(const std::shared_ptr<GameState>& game_state) {
+
+    this->sendPosition(game_state->player_position);
+    // send(&game_state->is_walking, sizeof(uint8_t));
+    // send(&game_state->direction, sizeof(uint8_t));
+}

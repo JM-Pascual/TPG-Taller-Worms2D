@@ -19,10 +19,9 @@ class Protocol;
 
 class PlayerAction {
 public:
-
     PlayerAction() = default;
 
-    //Da la interfaz para ejecutar el comando
+    // Da la interfaz para ejecutar el comando
     virtual void execute(Game& game) = 0;
 
     virtual ~PlayerAction() = default;
@@ -36,10 +35,10 @@ private:
     MoveDir direction;
 
 public:
-    //LLama al constructor de PlayerAction, y recibe a traves del protocolo la direccion a moverse
+    // LLama al constructor de PlayerAction, y recibe a traves del protocolo la direccion a moverse
     explicit StartMoving(ServerSide::Protocol&);
 
-    //Delega al servidor el movimiento del gusano
+    // Delega al servidor el movimiento del gusano
     void execute(Game& game) override;
 
     ~StartMoving() override = default;
@@ -52,10 +51,10 @@ private:
     MoveDir direction;
 
 public:
-    //LLama al constructor de PlayerAction, y recibe a traves del protocolo la direccion a moverse
+    // LLama al constructor de PlayerAction, y recibe a traves del protocolo la direccion a moverse
     explicit StopMoving(ServerSide::Protocol&);
 
-    //Delega al servidor el movimiento del gusano
+    // Delega al servidor el movimiento del gusano
     void execute(Game& game) override;
 
     ~StopMoving() override = default;
@@ -104,10 +103,12 @@ private:
     GameBrowser& gb;
     uint8_t& game_id;
     std::atomic<bool>& joined_game;
-    Queue<GameState>& state_queue;
-    
+    Queue<std::shared_ptr<GameState>>& state_queue;
+
 public:
-    explicit Join(GameBrowser& gb, uint8_t& id_to_join, Queue<GameState>& state_queue, std::atomic<bool>& connected_to_room);
+    explicit Join(GameBrowser& gb, uint8_t& id_to_join,
+                  Queue<std::shared_ptr<GameState>>& state_queue,
+                  std::atomic<bool>& connected_to_room);
 
     void execute() override;
 
@@ -118,7 +119,9 @@ public:
 
 class Create: public Join {
 public:
-    explicit Create(GameBrowser& gb, uint8_t& id_to_create, Queue<GameState>& state_queue, std::atomic<bool>& connected_to_room);
+    explicit Create(GameBrowser& gb, uint8_t& id_to_create,
+                    Queue<std::shared_ptr<GameState>>& state_queue,
+                    std::atomic<bool>& connected_to_room);
 
     ~Create() override = default;
 };
@@ -129,13 +132,13 @@ class NullCommand: public PlayerAction, public LobbyAction {
 public:
     NullCommand() = default;
 
-    //Comportamiento nulo
+    // Comportamiento nulo
     void execute(Game& game) override;
 
-    //Comportamiento nulo
+    // Comportamiento nulo
     void execute() override;
 
-    //No hay que liberar nada que no este en stack, destructor default es suficiente.
+    // No hay que liberar nada que no este en stack, destructor default es suficiente.
     ~NullCommand() override = default;
 };
 

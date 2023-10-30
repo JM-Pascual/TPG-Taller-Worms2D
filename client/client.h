@@ -7,8 +7,8 @@
 #include "creceiver.h"
 #include "csender.h"
 
-class Dto;
 class Action;
+class GameState;
 
 class Client {
 
@@ -16,8 +16,8 @@ private:
     ClientSide::Protocol protocol;
     ClientSide::Receiver recv;
     ClientSide::Sender send;
-    Queue<std::unique_ptr<Dto>> game_state_queue;
-    Queue<std::unique_ptr<Action>> commands_queue;
+    Queue<std::shared_ptr<GameState>> game_state_queue;
+    Queue<std::shared_ptr<Action>> action_queue;
 
 public:
     /*

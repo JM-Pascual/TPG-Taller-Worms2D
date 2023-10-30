@@ -17,14 +17,13 @@ class Protocol;
 class Sender: public Thread {
 private:
     ClientSide::Protocol& protocol;
-    Queue<std::unique_ptr<Action>>& commands_queue;
+    Queue<std::shared_ptr<Action>>& action_queue;
 
 public:
-    explicit Sender(ClientSide::Protocol& protocol,
-                    Queue<std::unique_ptr<Action>>& commands_queue);
+    explicit Sender(ClientSide::Protocol& protocol, Queue<std::shared_ptr<Action>>& action_queue);
     /*
-        Corre el sender esperando que la event_queue tenga un elemento para poder enviar a traves del
-        protocolo
+        Corre el sender esperando que la action_queue tenga un elemento para poder enviar a traves
+       del protocolo
     */
     void run() override;
     /*

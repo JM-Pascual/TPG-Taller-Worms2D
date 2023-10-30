@@ -1,11 +1,16 @@
 #ifndef CLIENT_PROTOCOL_H
 #define CLIENT_PROTOCOL_H
 
+#include <memory>
+
 #include <stdint.h>
 
 #include "../common/const.h"
 #include "../common/socket.h"
+
 #include "Action.h"
+
+class GameState;
 
 namespace ClientSide {
 class Protocol {
@@ -23,14 +28,19 @@ private:
     */
     void recv(void* data, unsigned int sz);
 
+
     uint8_t recvUint8();
 
-    void recvCommand(Actions& c);
 
     float recvFloat();
 
     bool recvBool();
+
 public:
+    // Envia data chequeando si se cierra el socket
+    void send(const void* data, unsigned int sz);
+
+    void recvCommand(Actions& c);
     /*
         Construye el protocolo y su respectivo socket
     */
@@ -38,11 +48,9 @@ public:
     /*
         Cierra forzosamente el socket del protocolo (en caso de que no se haya hecho)
     */
-
-    //Envia data chequeando si se cierra el socket
-    void send(const void* data, unsigned int sz);
-
     void close();
+
+    std::shared_ptr<GameState> recvGameState();
     /*
         No tiene sentido ni copiar ni mover el protocolo
     */
@@ -51,7 +59,6 @@ public:
 
     Protocol(Protocol&&) = delete;
     Protocol& operator=(Protocol&&) = delete;
-
 };
 }  // namespace ClientSide
 

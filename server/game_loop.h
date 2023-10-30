@@ -3,39 +3,41 @@
 
 #include <memory>
 #include <string>
+
 #include <stdint.h>
 
+#include "../common/GameState.h"
 #include "../common/queue.h"
 #include "../common/thread.h"
-#include "../common/GameState.h"
 
 #include "Game.h"
 #include "player_action.h"
 
 class GameLoop: public Thread {
 private:
-    Queue<std::shared_ptr<PlayerAction>> event_queue;
+    Queue<std::shared_ptr<PlayerAction>> action_queue;
     Game game;
+
 public:
-    //Crea la lista de clientes vacia
+    // Crea la lista de clientes vacia
     GameLoop() = default;
 
-    Queue<std::shared_ptr<PlayerAction>>& get_event_queue();
+    Queue<std::shared_ptr<PlayerAction>>& get_action_queue();
 
     void run() override;
 
-    void add_client_queue(Queue<GameState>& client_state_queue);
+    void add_client_queue(Queue<std::shared_ptr<GameState>>& client_state_queue);
 
     // bool deleteDeaths();
 
-    //Mata todos los clientes conectados
+    // Mata todos los clientes conectados
 
     // void killAll();
 
-    //Libera los recursos de todos los clientes
+    // Libera los recursos de todos los clientes
     ~GameLoop() override;
 
-    //No queremos ni copiar ni mover el monitor
+    // No queremos ni copiar ni mover el monitor
     GameLoop(const GameLoop&) = delete;
     GameLoop& operator=(const GameLoop&) = delete;
 

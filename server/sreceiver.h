@@ -6,9 +6,9 @@
 
 #include <stdint.h>
 
+#include "../common/GameState.h"
 #include "../common/queue.h"
 #include "../common/thread.h"
-#include "../common/GameState.h"
 
 class GameBrowser;
 
@@ -21,10 +21,11 @@ private:
     GameBrowser& browser;
     std::atomic<bool> connected_to_room;
     uint8_t room_id;
-    Queue<GameState>& state_queue;
+    Queue<std::shared_ptr<GameState>>& state_queue;
+
 public:
     explicit Receiver(ServerSide::Protocol& protocol, GameBrowser& browser,
-                      Queue<GameState>& state_queue);
+                      Queue<std::shared_ptr<GameState>>& state_queue);
 
     void run() override;
     /*

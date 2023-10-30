@@ -22,6 +22,7 @@ private:
     std::mutex m;
     std::map<uint8_t, std::shared_ptr<GameLoop>> games;
     uint8_t game_id_count;
+
 public:
     /*
         Inicializa el conteo de las id de GameLoop en 0 (game_id_count)
@@ -34,7 +35,8 @@ public:
     /*
         Agrega client al GameLoop especificado por game_code
     */
-    void join_game(const uint8_t& game_code, Queue<GameState>& client_state_queue, std::atomic<bool>& succesful_join);
+    void join_game(const uint8_t& game_code, Queue<std::shared_ptr<GameState>>& client_state_queue,
+                   std::atomic<bool>& succesful_join);
     /*
 
     */

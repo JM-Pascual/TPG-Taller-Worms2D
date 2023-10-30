@@ -7,7 +7,7 @@
 #include "sprotocol.h"
 
 std::shared_ptr<PlayerAction> ServerSide::Parser::makePlayerAction(const Actions& c,
-                                                             ServerSide::Protocol& protocol) {
+                                                                   ServerSide::Protocol& protocol) {
     switch (c) {
         case Actions::START_MOVING:
             return std::make_shared<StartMoving>(protocol);
@@ -25,7 +25,8 @@ std::shared_ptr<PlayerAction> ServerSide::Parser::makePlayerAction(const Actions
 
 std::shared_ptr<LobbyAction> ServerSide::Parser::makeLobbyAction(
         const Actions& c, ServerSide::Protocol& protocol, GameBrowser& browser,
-        std::atomic<bool>& connected_to_room, uint8_t& game_id, Queue<GameState>& game_state) {
+        std::atomic<bool>& connected_to_room, uint8_t& game_id,
+        Queue<std::shared_ptr<GameState>>& game_state) {
 
     switch (c) {
         case Actions::CREATE:

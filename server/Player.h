@@ -10,12 +10,13 @@ private:
     float x;
     float y;
     bool is_walking;
-    MoveDir direction;
+    bool facing_right;
+
 public:
     Player();
     Player(float initial_x, float initial_y);
 
-friend class Game;
+    friend class Game;
 };
 
-#endif  //PLAYER_H
+#endif  // PLAYER_H

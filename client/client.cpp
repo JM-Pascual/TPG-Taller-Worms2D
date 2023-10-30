@@ -2,16 +2,15 @@
 
 #include <spdlog/spdlog.h>
 
-#include "../common/dto.h"
+#include "../common/GameState.h"
 #include "SDL2pp/SDL2pp.hh"
 
 #include "Action.h"
-#include "cparser.h"
 
 Client::Client(const char* hostname, const char* servname):
         protocol(hostname, servname),
         recv(this->protocol, game_state_queue),
-        send(this->protocol, this->commands_queue) {
+        send(this->protocol, this->action_queue) {
     spdlog::get("client")->debug("Iniciando hilo receptor en el cliente");
     recv.start();
     spdlog::get("client")->debug("Receptor iniciado con exito");
@@ -39,6 +38,7 @@ void Client::run() {
 
     SDL_Event e;
     bool quit = false;
+    bool mov_press = false;
     while (!quit) {
         SDL_PollEvent(&e);
         if (e.type == SDL_QUIT) {
@@ -46,43 +46,55 @@ void Client::run() {
 
         } else if (e.type == SDL_KEYDOWN) {
             switch (e.key.keysym.sym) {
+
                 case SDLK_ESCAPE:
                     quit = true;
                     break;
+
                 case SDLK_a:
-                    this->commands_queue.push(
-                            std::make_unique<MoveDto>(IsMoving::YES, MoveDir::LEFT));
+                    if (not mov_press) {
+                        this->action_queue.push(std::make_shared<StartMoving>(MoveDir::LEFT));
+                        mov_press = true;
+                    }
                     break;
+
                 case SDLK_d:
-                    this->commands_queue.push(
-                            std::make_unique<MoveDto>(IsMoving::YES, MoveDir::RIGHT));
+                    if (not mov_press) {
+                        this->action_queue.push(std::make_shared<StartMoving>(MoveDir::RIGHT));
+                        mov_press = true;
+                    }
                     break;
+
                 case SDLK_c:
-                    this->commands_queue.push(std::make_unique<CreateDto>());
+                    this->action_queue.push(std::make_shared<CreateGame>());
                     break;
+
                 default:
                     break;
             }
 
         } else if (e.type == SDL_KEYUP) {
             switch (e.key.keysym.sym) {
+
                 case SDLK_a:
-                    this->commands_queue.push(
-                            std::make_unique<MoveDto>(IsMoving::NO, MoveDir::LEFT));
+                    this->action_queue.push(std::make_shared<StopMoving>());
+                    mov_press = false;
                     break;
+
                 case SDLK_d:
-                    this->commands_queue.push(
-                            std::make_unique<MoveDto>(IsMoving::NO, MoveDir::RIGHT));
+                    this->action_queue.push(std::make_shared<StopMoving>());
+                    mov_press = false;
                     break;
+
                 default:
                     break;
             }
         }
 
-        // uint8_t x;
-        // if (game_state_queue.try_pop(x)) {
-        //     std::cout << "x: " << (int)x << std::endl;
-        // }
+        std::shared_ptr<GameState> z;
+        if (game_state_queue.try_pop(z)) {
+            std::cout << "z: " << z->player_position.x << std::endl;
+        }
     }
 
     // render
