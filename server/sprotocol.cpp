@@ -70,7 +70,7 @@ void ServerSide::Protocol::recvDirection(MoveDir& d) { d = (MoveDir)this->recvUi
 
 // ------------------------------ SEND -----------------------------------
 
-void ServerSide::Protocol::sendPosition(const PlayerPosition& pos) {
+void ServerSide::Protocol::sendPosition(const Vector2D_GS& pos) {
 
     uint32_t x_net;
     memcpy(&x_net, &pos.x, sizeof(uint32_t));

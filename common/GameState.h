@@ -3,20 +3,21 @@
 
 #include "const.h"
 
-struct PlayerPosition {
-    float x;
-    float y;
 
-    PlayerPosition(float x, float y);
+class Vector2D_GS {
+public:
+    const float x;
+    const float y;
+    Vector2D_GS(const float& x, const float& y);
 };
 
 class GameState {
 public:
-    const PlayerPosition player_position;
+    const Vector2D_GS player_position;
     const bool is_walking;
     const bool facing_right;
 
-    GameState(float x, float y, bool is_walking, bool direction);
+    GameState(const float& x, const float& y, bool is_walking, bool direction);
 
     ~GameState() = default;
 };

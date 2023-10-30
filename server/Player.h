@@ -3,13 +3,14 @@
 
 #include "../common/const.h"
 
+#include "vector2d.h"
+
 class Game;
 
 class Player {
 private:
-    float x;
-    float y;
-    bool is_walking;
+    Vector2D position;
+    Vector2D velocity;
     bool facing_right;
 
 public:

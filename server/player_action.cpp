@@ -17,7 +17,7 @@ StartMoving::StartMoving(ServerSide::Protocol& protocol): PlayerAction() {
     protocol.recvDirection(this->direction);
 }
 // ToDo por ahora start moving y stop moving son iguales y no discriminan por direccion
-void StartMoving::execute(Game& game) { game.player_start_moving(); }
+void StartMoving::execute(Game& game) { game.player_start_moving(direction); }
 
 // ----------------------- STOP MOVING ----------------------
 
