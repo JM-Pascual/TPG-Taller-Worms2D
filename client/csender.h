@@ -8,7 +8,6 @@
 #include "../common/queue.h"
 #include "../common/thread.h"
 
-class Dto;
 class Action;
 
 namespace ClientSide {
@@ -27,8 +26,7 @@ public:
     */
     void run() override;
     /*
-        No tiene sentido ni copiar ni mover el sender ya que al ser un thread lo vamos a utilizar en
-        el heap
+        No tiene sentido ni copiar ni mover el sender
     */
     Sender(const Sender&) = delete;
     Sender& operator=(const Sender&) = delete;

@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <spdlog/spdlog.h>
+
 #include "../common/const.h"
 #include "../common/liberror.h"
 #include "../common/logger.h"
@@ -24,17 +26,21 @@ int main(int argc, char* argv[]) try {
     Logger l(LOGNAME, LOGFILE);
     Client client(HOSTNAME, SERVNAME);
     client.run();
+    spdlog::dump_backtrace();
     return SUCCESS_;
 
 } catch (const LibError& e) {
-    std::cerr << e.what();
+    spdlog::get("client")->error("{:s}", e.what());
+    spdlog::dump_backtrace();
     return ERROR_;
 
 } catch (const std::exception& e) {
-    std::cerr << e.what();
+    spdlog::get("client")->error("{:s}", e.what());
+    spdlog::dump_backtrace();
     return ERROR_;
 
 } catch (...) {
-    std::cerr << "Error desconocido";
+    spdlog::get("client")->error("Error desconocido");
+    spdlog::dump_backtrace();
     return ERROR_;
 }

@@ -13,17 +13,15 @@ Client::Client(const char* hostname, const char* servname):
         send(this->protocol, this->action_queue) {
     spdlog::get("client")->debug("Iniciando hilo receptor en el cliente");
     recv.start();
-    spdlog::get("client")->debug("Receptor iniciado con exito");
     spdlog::get("client")->debug("Iniciando hilo sender en el cliente");
     send.start();
-    spdlog::get("client")->debug("Sender iniciado con exito");
 }
 
 Client::~Client() {
     spdlog::get("client")->debug("Cerrando protocolo del cliente");
     protocol.close();
-    spdlog::get("client")->debug("Protocolo cerrado con exito");
     spdlog::get("client")->debug("Joineando receptor en el cliente");
+    recv.stop();
     recv.join();
     spdlog::get("client")->debug("Joineando sender en el cliente");
     send.stop();
@@ -33,14 +31,14 @@ Client::~Client() {
 void Client::run() {
     SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 
-    SDL2pp::Window window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480,
-                          SDL_WINDOW_RESIZABLE);
+    SDL2pp::Window window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280,
+                          720, SDL_WINDOW_RESIZABLE);
 
     SDL_Event e;
     bool quit = false;
     bool mov_press = false;
     while (!quit) {
-        while(SDL_PollEvent(&e)){
+        while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) {
                 quit = true;
 
