@@ -36,13 +36,12 @@ void Client::run() {
 
     SDL_Event e;
     bool quit = false;
-    bool mov_press = false;
     while (!quit) {
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) {
                 quit = true;
 
-            } else if (e.type == SDL_KEYDOWN) {
+            } else if (e.key.repeat == 0 && e.type == SDL_KEYDOWN) {
                 switch (e.key.keysym.sym) {
 
                     case SDLK_ESCAPE:
@@ -50,17 +49,11 @@ void Client::run() {
                         break;
 
                     case SDLK_a:
-                        if (not mov_press) {
-                            this->action_queue.push(std::make_shared<StartMoving>(MoveDir::LEFT));
-                            mov_press = true;
-                        }
+                        this->action_queue.push(std::make_shared<StartMoving>(MoveDir::LEFT));
                         break;
 
                     case SDLK_d:
-                        if (not mov_press) {
-                            this->action_queue.push(std::make_shared<StartMoving>(MoveDir::RIGHT));
-                            mov_press = true;
-                        }
+                        this->action_queue.push(std::make_shared<StartMoving>(MoveDir::RIGHT));
                         break;
 
                     case SDLK_c:
@@ -75,12 +68,10 @@ void Client::run() {
                 switch (e.key.keysym.sym) {
                     case SDLK_a:
                         this->action_queue.push(std::make_shared<StopMoving>());
-                        mov_press = false;
                         break;
 
                     case SDLK_d:
                         this->action_queue.push(std::make_shared<StopMoving>());
-                        mov_press = false;
                         break;
 
                     default:
