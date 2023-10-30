@@ -1,11 +1,10 @@
 #include "cprotocol.h"
 
+#include <cerrno>
 #include <cstring>
-#include <vector>
+#include <iostream>
 
 #include <arpa/inet.h>
-#include <errno.h>
-#include <stdint.h>
 
 #include "../common/GameState.h"
 #include "../common/liberror.h"
@@ -35,18 +34,20 @@ uint8_t ClientSide::Protocol::recvUint8() {
 }
 
 float ClientSide::Protocol::recvFloat() {
-    uint32_t i;
-    recv(&i, sizeof(uint32_t));
-    i = ntohl(i);
-    float f;
-    memcpy(&f, &i, sizeof(float));
-    return f;
+    uint32_t raw_bits;
+    recv(&raw_bits, sizeof(uint32_t));
+    raw_bits = ntohl(raw_bits);
+    float float_value;
+    memcpy(&float_value, &raw_bits, sizeof(uint32_t));
+    std::cout << "float_value: " << float_value << std::endl;
+    return float_value;
 }
 
 bool ClientSide::Protocol::recvBool() {
-    bool b;
-    recv(&b, sizeof(bool));
-    return b;
+    bool bool_net;
+    recv(&bool_net, sizeof(bool));
+    bool bool_final = ntohl(bool_net);
+    return bool_final;
 }
 
 ClientSide::Protocol::Protocol(const char* hostname, const char* servname):

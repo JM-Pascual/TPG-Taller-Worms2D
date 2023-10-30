@@ -13,8 +13,8 @@ struct PlayerPosition {
 class GameState {
 public:
     const PlayerPosition player_position;
-    const IsMoving is_walking;
-    const MoveDir direction;
+    const bool is_walking;
+    const bool facing_right;
 
     GameState(float x, float y, bool is_walking, bool direction);
 

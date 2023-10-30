@@ -26,6 +26,7 @@ public:
     Game() = default;
 
     void add_client_queue(Queue<std::shared_ptr<GameState>>& client_game_state);
+
     // Envia el DTO GameState a todos los clientes conectados
     void broadcast_game_state();
 

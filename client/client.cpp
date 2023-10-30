@@ -91,9 +91,9 @@ void Client::run() {
             }
         }
 
-        std::shared_ptr<GameState> z;
-        if (game_state_queue.try_pop(z)) {
-            std::cout << "z: " << z->player_position.x << std::endl;
+        std::shared_ptr<GameState> z = nullptr;
+        if (game_state_queue.try_pop(z) && z != nullptr) {
+            std::cout << "z: " << float(z->player_position.x) << std::endl;
         }
     }
 
