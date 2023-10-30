@@ -61,5 +61,9 @@ void ClientSide::Protocol::close() {
 }
 
 std::shared_ptr<GameState> ClientSide::Protocol::recvGameState() {
-    return std::make_shared<GameState>(recvFloat(), recvFloat(), recvBool(), recvBool());
+    float x = recvFloat();
+    float y  = recvFloat();
+    bool is_wa =  recvBool();
+    bool direction = recvBool();
+    return std::make_shared<GameState>(x, y, is_wa, direction);
 }
