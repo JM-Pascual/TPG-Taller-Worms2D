@@ -48,5 +48,4 @@ Acceptor::~Acceptor() {
     if (_keep_running) {
         this->kill();
     }
-    gb.killAll();
 }

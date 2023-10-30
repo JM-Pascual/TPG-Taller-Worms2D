@@ -26,11 +26,5 @@ void GameLoop::run() {
         sleep(1);
     }
 }
-// void GameLoop::killAll() {
-//     std::lock_guard<std::mutex> lock(m);
-//     for (const auto& [id, client]: clients) {
-//         client->kill();
-//     }
-// }
 
 GameLoop::~GameLoop() {}

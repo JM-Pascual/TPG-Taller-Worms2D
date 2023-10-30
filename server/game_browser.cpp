@@ -47,12 +47,8 @@ void GameBrowser::infoGames(std::vector<std::string>& info) {
     }
 }
 
-void GameBrowser::killAll() {
-    std::unique_lock<std::mutex> lck(m);
-
-    // for (const auto& [id, game]: games) {
-    //     game->killAll();
-    // }
+GameBrowser::~GameBrowser() {
+    for (const auto& [id, game]: games) {
+        game->join();
+    }
 }
-
-GameBrowser::~GameBrowser() {}

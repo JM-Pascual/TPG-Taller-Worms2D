@@ -46,10 +46,6 @@ public:
     /*
 
     */
-    void killAll();
-    /*
-
-    */
     ~GameBrowser();
     /*
      *  No queremos ni copiar ni mover el monitor
