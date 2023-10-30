@@ -71,10 +71,7 @@ void ServerSide::Protocol::recvDirection(MoveDir& d) { d = (MoveDir)this->recvUi
 
 void ServerSide::Protocol::sendPosition(const PlayerPosition& pos) {
     uint32_t i;
-    std::vector<char> x;
-    x.resize(sizeof(float));
-    memcpy(x.data(), &pos.x, sizeof(float));
-    memcpy(&i, x.data(), sizeof(float));
+    memcpy(&i, &pos.x, sizeof(float));
     i = htonl(i);
     send(&i, sizeof(float));
 

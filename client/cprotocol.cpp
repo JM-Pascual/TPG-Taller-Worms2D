@@ -38,13 +38,8 @@ float ClientSide::Protocol::recvFloat() {
     uint32_t i;
     recv(&i, sizeof(uint32_t));
     i = ntohl(i);
-
-    std::vector<char> x;
-    x.resize(sizeof(float));
-    memcpy(x.data(), &i, sizeof(float));
-
     float f;
-    memcpy(&f, x.data(), sizeof(float));
+    memcpy(&f, &i, sizeof(float));
     return f;
 }
 
