@@ -40,59 +40,59 @@ void Client::run() {
     bool quit = false;
     bool mov_press = false;
     while (!quit) {
-        SDL_PollEvent(&e);
-        if (e.type == SDL_QUIT) {
-            quit = true;
+        while(SDL_PollEvent(&e)){
+            if (e.type == SDL_QUIT) {
+                quit = true;
 
-        } else if (e.type == SDL_KEYDOWN) {
-            switch (e.key.keysym.sym) {
+            } else if (e.type == SDL_KEYDOWN) {
+                switch (e.key.keysym.sym) {
 
-                case SDLK_ESCAPE:
-                    quit = true;
-                    break;
+                    case SDLK_ESCAPE:
+                        quit = true;
+                        break;
 
-                case SDLK_a:
-                    if (not mov_press) {
-                        this->action_queue.push(std::make_shared<StartMoving>(MoveDir::LEFT));
-                        mov_press = true;
-                    }
-                    break;
+                    case SDLK_a:
+                        if (not mov_press) {
+                            this->action_queue.push(std::make_shared<StartMoving>(MoveDir::LEFT));
+                            mov_press = true;
+                        }
+                        break;
 
-                case SDLK_d:
-                    if (not mov_press) {
-                        this->action_queue.push(std::make_shared<StartMoving>(MoveDir::RIGHT));
-                        mov_press = true;
-                    }
-                    break;
+                    case SDLK_d:
+                        if (not mov_press) {
+                            this->action_queue.push(std::make_shared<StartMoving>(MoveDir::RIGHT));
+                            mov_press = true;
+                        }
+                        break;
 
-                case SDLK_c:
-                    this->action_queue.push(std::make_shared<CreateGame>());
-                    break;
+                    case SDLK_c:
+                        this->action_queue.push(std::make_shared<CreateGame>());
+                        break;
 
-                default:
-                    break;
-            }
+                    default:
+                        break;
+                }
 
-        } else if (e.type == SDL_KEYUP) {
-            switch (e.key.keysym.sym) {
+            } else if (e.type == SDL_KEYUP) {
+                switch (e.key.keysym.sym) {
+                    case SDLK_a:
+                        this->action_queue.push(std::make_shared<StopMoving>());
+                        mov_press = false;
+                        break;
 
-                case SDLK_a:
-                    this->action_queue.push(std::make_shared<StopMoving>());
-                    mov_press = false;
-                    break;
+                    case SDLK_d:
+                        this->action_queue.push(std::make_shared<StopMoving>());
+                        mov_press = false;
+                        break;
 
-                case SDLK_d:
-                    this->action_queue.push(std::make_shared<StopMoving>());
-                    mov_press = false;
-                    break;
-
-                default:
-                    break;
+                    default:
+                        break;
+                }
             }
         }
 
         std::shared_ptr<GameState> z = nullptr;
-        if (game_state_queue.try_pop(z) && z != nullptr) {
+        if (game_state_queue.try_pop(z)) {
             std::cout << "z: " << float(z->player_position.x) << std::endl;
         }
     }

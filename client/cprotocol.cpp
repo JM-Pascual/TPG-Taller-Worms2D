@@ -2,8 +2,6 @@
 
 #include <cerrno>
 #include <cstring>
-#include <iostream>
-
 #include <arpa/inet.h>
 
 #include "../common/GameState.h"
@@ -39,7 +37,6 @@ float ClientSide::Protocol::recvFloat() {
     raw_bits = ntohl(raw_bits);
     float float_value;
     memcpy(&float_value, &raw_bits, sizeof(uint32_t));
-    std::cout << "float_value: " << float_value << std::endl;
     return float_value;
 }
 

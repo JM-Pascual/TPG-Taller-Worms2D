@@ -47,12 +47,9 @@ public:
 // ----------------------- STOP MOVING ----------------------
 
 class StopMoving: public PlayerAction {
-private:
-    MoveDir direction;
-
 public:
     // LLama al constructor de PlayerAction, y recibe a traves del protocolo la direccion a moverse
-    explicit StopMoving(ServerSide::Protocol&);
+    explicit StopMoving();
 
     // Delega al servidor el movimiento del gusano
     void execute(Game& game) override;

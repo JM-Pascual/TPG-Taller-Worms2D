@@ -13,7 +13,7 @@ std::shared_ptr<PlayerAction> ServerSide::Parser::makePlayerAction(const Actions
             return std::make_shared<StartMoving>(protocol);
 
         case Actions::STOP_MOVING:
-            return std::make_shared<StopMoving>(protocol);
+            return std::make_shared<StopMoving>();
 
         case Actions::JUMP:
             return std::make_shared<NullCommand>();

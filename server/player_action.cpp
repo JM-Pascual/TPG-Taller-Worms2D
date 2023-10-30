@@ -21,9 +21,7 @@ void StartMoving::execute(Game& game) { game.player_start_moving(); }
 
 // ----------------------- STOP MOVING ----------------------
 
-StopMoving::StopMoving(ServerSide::Protocol& protocol): PlayerAction() {
-    protocol.recvDirection(this->direction);
-}
+StopMoving::StopMoving(): PlayerAction() {}
 
 void StopMoving::execute(Game& game) { game.player_stop_moving(); }
 
