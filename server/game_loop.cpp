@@ -1,5 +1,7 @@
 #include "game_loop.h"
 
+#include <chrono>
+
 #include <spdlog/spdlog.h>
 #include <unistd.h>
 
@@ -16,6 +18,8 @@ void GameLoop::add_client_queue(Queue<std::shared_ptr<GameState>>& client_state_
 
 void GameLoop::run() {
     while (1) {  // ToDo Aca se podria meter un bool que se cambia con un comando exit
+        std::chrono::time_point<std::chrono::system_clock> before =
+                std::chrono::system_clock::now();
         std::shared_ptr<PlayerAction> c;
         if (action_queue.try_pop(c)) {
             c->execute(game);
@@ -23,7 +27,11 @@ void GameLoop::run() {
 
         game.broadcast_game_state();
         // dormir(tiempo del tick del sv - tiempo que tarde en llegar acá)
-        sleep(1);
+        std::chrono::time_point<std::chrono::system_clock> after = std::chrono::system_clock::now();
+        std::chrono::duration<double> elapsed_seconds =
+                std::chrono::milliseconds(EST_TICK_TIME) - (after - before);
+
+        std::this_thread::sleep_for(elapsed_seconds);
     }
 }
 

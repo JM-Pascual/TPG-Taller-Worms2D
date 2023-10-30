@@ -11,6 +11,8 @@
 
 #include "Player.h"
 
+#define TICK_RATE 30
+#define EST_TICK_TIME 1000 / TICK_RATE
 
 class Game {
 private:
@@ -31,7 +33,7 @@ public:
     void broadcast_game_state();
 
     // temp protocol
-    void player_start_moving();
+    void player_start_moving(const MoveDir& direction);
     void player_stop_moving();
 };
 

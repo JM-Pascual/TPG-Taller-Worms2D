@@ -3,13 +3,13 @@
 #include <spdlog/spdlog.h>
 
 std::shared_ptr<GameState> Game::get_game_state() const {
-    return std::make_shared<GameState>(player.x, player.y, player.is_walking, player.facing_right);
+    return std::make_shared<GameState>(player.position.x, player.position.y, player.velocity.x != 0,
+                                       player.facing_right);
 }
 
 void Game::update_game_state() {
-    if (player.is_walking) {
-        player.x += (2 * player.facing_right - 1);
-    }
+    player.position.x += player.velocity.x;
+    player.position.y += player.velocity.y;
 }
 
 void Game::add_client_queue(Queue<std::shared_ptr<GameState>>& client_game_state) {
@@ -27,5 +27,9 @@ void Game::broadcast_game_state() {
     }
 }
 
-void Game::player_start_moving() { player.is_walking = true; }
-void Game::player_stop_moving() { player.is_walking = false; }
+void Game::player_start_moving(const MoveDir& direction) {
+    player.facing_right = (bool)direction;
+    player.velocity.x += 0.2 * std::pow(-1, 1 - player.facing_right) / TICK_RATE;
+}
+
+void Game::player_stop_moving() { player.velocity.x = 0; }
