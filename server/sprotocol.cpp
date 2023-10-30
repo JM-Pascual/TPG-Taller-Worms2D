@@ -71,21 +71,15 @@ void ServerSide::Protocol::recvDirection(MoveDir& d) { d = (MoveDir)this->recvUi
 // ------------------------------ SEND -----------------------------------
 
 void ServerSide::Protocol::sendPosition(const PlayerPosition& pos) {
-    uint32_t x_net;
-    memcpy(&x_net, &pos.x, sizeof(uint32_t));
-    x_net = htonl(x_net);
-    send(&x_net, sizeof(uint32_t));
-
-    std::cout << "float_value prev: " << pos.x << std::endl;
-    std::cout << "float_value final: " << x_net << std::endl;
-
     uint32_t y_net;
     memcpy(&y_net, &pos.y, sizeof(uint32_t));
     y_net = htonl(y_net);
     send(&y_net, sizeof(uint32_t));
 
-    std::cout << "float_value prev: " << pos.y << std::endl;
-    std::cout << "float_value final: " << y_net << std::endl;
+    uint32_t x_net;
+    memcpy(&x_net, &pos.x, sizeof(uint32_t));
+    x_net = htonl(x_net);
+    send(&x_net, sizeof(uint32_t));
 
     // int32_t y = htonl(pos.y);
     // send(&y, sizeof(int32_t));
@@ -93,7 +87,7 @@ void ServerSide::Protocol::sendPosition(const PlayerPosition& pos) {
 
 void ServerSide::Protocol::sendGameState(const std::shared_ptr<GameState>& game_state) {
 
-    this->sendPosition(game_state->player_position);
-    send(&game_state->is_walking, sizeof(bool));
     send(&game_state->facing_right, sizeof(bool));
+    send(&game_state->is_walking, sizeof(bool));
+    this->sendPosition(game_state->player_position);
 }
