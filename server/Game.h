@@ -37,7 +37,7 @@ public:
     bool is_playing();
 
     // temp protocol
-    void player_start_moving(const MoveDir& direction);
+    void player_start_moving(const Direction& direction);
     void player_stop_moving();
 };
 

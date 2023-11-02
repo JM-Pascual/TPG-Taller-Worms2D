@@ -46,7 +46,7 @@ bool Game::is_playing() {
     return (broadcast_list.size() > 0);
 }
 
-void Game::player_start_moving(const MoveDir& direction) {
+void Game::player_start_moving(const Direction& direction) {
     player.facing_right = (bool)direction;
     // ToDo Incremento temporal de la velocidad, cuando haya físicas hay que pulirlo
     player.velocity.x = 0.2 * (std::pow(-1, 1 - player.facing_right) / TICK_RATE) * 200;

@@ -52,7 +52,23 @@ public:
     /*
         Recibe la direccion hacia la cual se debe mover el gusano
     */
-    void recvDirection(MoveDir&);
+    void recvDirection(Direction&);
+    /*
+        Recibe la direccion hacia la cual debe saltar el gusano
+    */
+    void recvJumpDir(JumpDir& dir);
+    /*
+        Recibe la direccion hacia la cual debe inclinar la mira el gusano
+    */
+    void recvADSAngleDir(ADSAngleDir& dir);
+    /*
+        Recibe la cantidad de retraso que tiene un proyectil apto
+    */
+    void recvDelay(DelayAmount& amount);
+    /*
+        Recibe el arma o herramienta que el gusano se debe equipar
+    */
+    void recvGadget(WeaponsAndTools& gadget);
     /*
         Cierra forzosamente el socket del protocolo (en caso de que no se haya hecho)
     */

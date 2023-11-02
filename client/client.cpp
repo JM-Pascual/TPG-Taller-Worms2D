@@ -1,16 +1,17 @@
 #include "client.h"
 
+#include <unordered_map>
+
+#include <SDL2pp/SDL2pp.hh>
 #include <spdlog/spdlog.h>
 
 #include "../common/GameState.h"
 #include "../common/vector2d.h"
 
-#include <SDL2pp/SDL2pp.hh>
-
 #include "Action.h"
-#include "Window.h"
 #include "GameActor.h"
 #include "TexturesPool.h"
+#include "Window.h"
 
 const int frameDuration = 1000 / 60;
 
@@ -62,14 +63,107 @@ void Client::run() {
                         quit = true;
                         break;
 
-                    case SDLK_a:
-                        this->action_queue.push(std::make_shared<StartMoving>(MoveDir::LEFT));
+                    case SDLK_LEFT:
+                        this->action_queue.push(std::make_shared<StartMoving>(Direction::LEFT));
                         break;
 
-                    case SDLK_d:
-                        this->action_queue.push(std::make_shared<StartMoving>(MoveDir::RIGHT));
+                    case SDLK_RIGHT:
+                        this->action_queue.push(std::make_shared<StartMoving>(Direction::RIGHT));
                         break;
 
+                    case SDLK_RETURN:
+                        this->action_queue.push(std::make_shared<Jump>(JumpDir::FRONT));
+                        break;
+
+                    case SDLK_BACKSPACE:
+                        this->action_queue.push(std::make_shared<Jump>(JumpDir::BACK));
+                        break;
+
+
+                    // Fight
+                    case SDLK_UP:
+                        this->action_queue.push(std::make_shared<ADSAngle>(ADSAngleDir::UP));
+                        break;
+
+                    case SDLK_DOWN:
+                        this->action_queue.push(std::make_shared<ADSAngle>(ADSAngleDir::DOWN));
+                        break;
+
+                    case SDLK_SPACE:
+                        this->action_queue.push(std::make_shared<FirePower>());
+                        break;
+
+                    case SDLK_1:
+                        this->action_queue.push(std::make_shared<Delay>(DelayAmount::ONE));
+                        break;
+
+                    case SDLK_2:
+                        this->action_queue.push(std::make_shared<Delay>(DelayAmount::TWO));
+                        break;
+
+                    case SDLK_3:
+                        this->action_queue.push(std::make_shared<Delay>(DelayAmount::THREE));
+                        break;
+
+                    case SDLK_4:
+                        this->action_queue.push(std::make_shared<Delay>(DelayAmount::FOUR));
+                        break;
+
+                    case SDLK_5:
+                        this->action_queue.push(std::make_shared<Delay>(DelayAmount::FIVE));
+                        break;
+
+                    case SDLK_F1:
+                        this->action_queue.push(
+                                std::make_shared<ChangeGadget>(WeaponsAndTools::BAZOOKA));
+                        break;
+
+                    case SDLK_F2:
+                        this->action_queue.push(
+                                std::make_shared<ChangeGadget>(WeaponsAndTools::MORTAR));
+                        break;
+
+                    case SDLK_F3:
+                        this->action_queue.push(
+                                std::make_shared<ChangeGadget>(WeaponsAndTools::GREEN_GRENADE));
+                        break;
+
+                    case SDLK_F4:
+                        this->action_queue.push(
+                                std::make_shared<ChangeGadget>(WeaponsAndTools::RED_GRANADE));
+                        break;
+
+                    case SDLK_F5:
+                        this->action_queue.push(
+                                std::make_shared<ChangeGadget>(WeaponsAndTools::BANANA));
+                        break;
+
+                    case SDLK_F6:
+                        this->action_queue.push(
+                                std::make_shared<ChangeGadget>(WeaponsAndTools::HOLY_GRENADE));
+                        break;
+
+                    case SDLK_F7:
+                        this->action_queue.push(
+                                std::make_shared<ChangeGadget>(WeaponsAndTools::DYNAMITE));
+                        break;
+
+                    case SDLK_F8:
+                        this->action_queue.push(
+                                std::make_shared<ChangeGadget>(WeaponsAndTools::BASEBALL_BAT));
+                        break;
+
+                    case SDLK_F9:
+                        this->action_queue.push(
+                                std::make_shared<ChangeGadget>(WeaponsAndTools::AIR_STRIKE));
+                        break;
+
+                    case SDLK_F10:
+                        this->action_queue.push(
+                                std::make_shared<ChangeGadget>(WeaponsAndTools::TELEPORT));
+                        break;
+
+                    // ---------- LOBBY ------------
                     case SDLK_c:
                         this->action_queue.push(std::make_shared<CreateGame>());
                         break;
@@ -80,11 +174,11 @@ void Client::run() {
 
             } else if (e.type == SDL_KEYUP) {
                 switch (e.key.keysym.sym) {
-                    case SDLK_a:
+                    case SDLK_LEFT:
                         this->action_queue.push(std::make_shared<StopMoving>());
                         break;
 
-                    case SDLK_d:
+                    case SDLK_RIGHT:
                         this->action_queue.push(std::make_shared<StopMoving>());
                         break;
 
