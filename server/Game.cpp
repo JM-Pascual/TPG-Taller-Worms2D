@@ -12,6 +12,7 @@ void Game::update_game_state() {
     player.position.y += player.velocity.y;
 }
 
+
 void Game::add_client_queue(Queue<std::shared_ptr<GameState>>& client_game_state) {
     std::lock_guard<std::mutex> lock(m);
     broadcast_list.push_back(&client_game_state);
@@ -23,13 +24,31 @@ void Game::broadcast_game_state() {
 
     std::lock_guard<std::mutex> lock(m);
     for (auto& client_game_state_queue: broadcast_list) {
-        client_game_state_queue->push(gs);
+        try {
+            client_game_state_queue->push(gs);
+
+        } catch (const ClosedQueue& e) {
+            continue;
+        }
     }
+}
+
+void Game::remove_closed_clients() {
+    std::lock_guard<std::mutex> lock(m);
+    broadcast_list.erase(
+            std::remove_if(broadcast_list.begin(), broadcast_list.end(),
+                           [](Queue<std::shared_ptr<GameState>>* q) { return q->is_closed(); }),
+            broadcast_list.end());
+}
+
+bool Game::is_playing() {
+    std::lock_guard<std::mutex> lock(m);
+    return (broadcast_list.size() > 0);
 }
 
 void Game::player_start_moving(const MoveDir& direction) {
     player.facing_right = (bool)direction;
-    //ToDo Incremento temporal de la velocidad, cuando haya físicas hay que pulirlo
+    // ToDo Incremento temporal de la velocidad, cuando haya físicas hay que pulirlo
     player.velocity.x = 0.2 * (std::pow(-1, 1 - player.facing_right) / TICK_RATE) * 200;
 }
 
