@@ -26,7 +26,6 @@ int main(int argc, char* argv[]) try {
     Logger l(LOGNAME, LOGFILE);
     Client client(HOSTNAME, SERVNAME);
     client.run();
-    spdlog::dump_backtrace();
     return SUCCESS_;
 
 } catch (const LibError& e) {

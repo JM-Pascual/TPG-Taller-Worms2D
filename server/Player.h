@@ -3,7 +3,7 @@
 
 #include "../common/const.h"
 
-#include "vector2d.h"
+#include "../common/vector2d.h"
 
 class Game;
 

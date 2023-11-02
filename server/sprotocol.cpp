@@ -10,6 +10,7 @@
 #include <stdint.h>
 
 #include "../common/GameState.h"
+#include "../common/vector2d.h"
 #include "../common/const.h"
 #include "../common/liberror.h"
 
@@ -70,7 +71,7 @@ void ServerSide::Protocol::recvDirection(MoveDir& d) { d = (MoveDir)this->recvUi
 
 // ------------------------------ SEND -----------------------------------
 
-void ServerSide::Protocol::sendPosition(const Vector2D_GS& pos) {
+void ServerSide::Protocol::sendPosition(const Vector2D& pos) {
 
     uint32_t x_net;
     memcpy(&x_net, &pos.x, sizeof(uint32_t));

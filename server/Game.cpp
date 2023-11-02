@@ -29,7 +29,8 @@ void Game::broadcast_game_state() {
 
 void Game::player_start_moving(const MoveDir& direction) {
     player.facing_right = (bool)direction;
-    player.velocity.x += 0.2 * std::pow(-1, 1 - player.facing_right) / TICK_RATE;
+    //ToDo Incremento temporal de la velocidad, cuando haya físicas hay que pulirlo
+    player.velocity.x = 0.2 * (std::pow(-1, 1 - player.facing_right) / TICK_RATE) * 200;
 }
 
 void Game::player_stop_moving() { player.velocity.x = 0; }

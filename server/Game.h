@@ -11,7 +11,7 @@
 
 #include "Player.h"
 
-#define TICK_RATE 30
+#define TICK_RATE 60
 #define EST_TICK_TIME 1000 / TICK_RATE
 
 class Game {

@@ -9,7 +9,7 @@
 #include "../common/socket.h"
 
 class GameState;
-class Vector2D_GS;
+class Vector2D;
 
 namespace ServerSide {
 class Protocol {
@@ -37,7 +37,7 @@ private:
     */
     uint8_t recvUint8();
 
-    void sendPosition(const Vector2D_GS& pos);
+    void sendPosition(const Vector2D& pos);
 
 public:
     void sendGameState(const std::shared_ptr<GameState>& game_state);

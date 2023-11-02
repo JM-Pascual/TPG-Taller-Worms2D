@@ -22,4 +22,13 @@ enum class Actions {
     JUMP = 0x6
 };
 
+enum class Actors {
+    WORM = 0x0,
+    GRADIENT = 0x1,
+    BRIDGE = 0x2,
+    LONG_BRIDGE = 0x3,
+    BACKGROUND = 0x4,
+    WATER = 0x5
+};
+
 #endif

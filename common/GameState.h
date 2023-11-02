@@ -2,18 +2,11 @@
 #define GAMESTATE_H
 
 #include "const.h"
-
-
-class Vector2D_GS {
-public:
-    const float x;
-    const float y;
-    Vector2D_GS(const float& x, const float& y);
-};
+#include "vector2d.h"
 
 class GameState {
 public:
-    const Vector2D_GS player_position;
+    const Vector2D player_position;
     const bool is_walking;
     const bool facing_right;
 
