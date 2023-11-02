@@ -182,6 +182,18 @@ void Client::run() {
                         this->action_queue.push(std::make_shared<StopMoving>());
                         break;
 
+                    case SDLK_SPACE:
+                        this->action_queue.push(std::make_shared<Shoot>());
+                        break;
+
+                    case SDLK_UP:
+                        this->action_queue.push(std::make_shared<StopADSAngle>());
+                        break;
+
+                    case SDLK_DOWN:
+                        this->action_queue.push(std::make_shared<StopADSAngle>());
+                        break;
+
                     default:
                         break;
                 }
