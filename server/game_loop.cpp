@@ -14,7 +14,8 @@ Queue<std::shared_ptr<PlayerAction>>& GameLoop::get_action_queue() { return this
 
 void GameLoop::add_client_queue(Queue<std::shared_ptr<GameState>>& client_state_queue) {
     this->game.add_client_queue(client_state_queue);
-    this->start();
+    if (not game.is_playing())
+        this->start();
 }
 
 void GameLoop::run() {
