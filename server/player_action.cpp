@@ -28,15 +28,47 @@ void StopMoving::execute(Game& game) { game.player_stop_moving(); }
 
 // ----------------------- JUMP ----------------------
 
-// Jump::Jump(): PlayerAction(id) {}
+Jump::Jump(ServerSide::Protocol& protocol) { protocol.recvJumpDir(this->direction); }
 
+void Jump::execute(Game& game) {}
 
-// ----------------------- DAMAGE ----------------------
+// ---------------------------- ADSAngle ------------------
 
-// Damage::Damage(): PlayerAction(id) {}
+ADSAngle::ADSAngle(ServerSide::Protocol& protocol) { protocol.recvADSAngleDir(this->direction); }
+
+void ADSAngle::execute(Game& game) {}
+
+// -------------------------- STOP ADS ---------------
+
+StopADSAngle::StopADSAngle(): PlayerAction() {}
+
+void StopADSAngle::execute(Game& game) {}
+
+// ---------------------------- FIRE POWER ------------------
+
+FirePower::FirePower(): PlayerAction() {}
+
+void FirePower::execute(Game& game) {}
+
+// ---------------------------- SHOOT ------------------
+
+Shoot::Shoot(): PlayerAction() {}
+
+void Shoot::execute(Game& game) {}
+
+// ---------------------------- DELAY ------------------
+
+Delay::Delay(ServerSide::Protocol& protocol) { protocol.recvDelay(this->amount); }
+
+void Delay::execute(Game& game) {}
+
+// ---------------------------- CHANGE GADGET ------------------
+
+ChangeGadget::ChangeGadget(ServerSide::Protocol& protocol) { protocol.recvGadget(this->gadget); }
+
+void ChangeGadget::execute(Game& game) {}
 
 // ----------------------- JOIN ----------------------
-
 
 Join::Join(GameBrowser& gb, uint8_t& id_to_join, Queue<std::shared_ptr<GameState>>& state_queue,
            std::atomic<bool>& connected_to_room):

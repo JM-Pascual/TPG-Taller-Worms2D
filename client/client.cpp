@@ -1,23 +1,26 @@
 #include "client.h"
 
+#include <unordered_map>
+
+#include <SDL2pp/SDL2pp.hh>
 #include <spdlog/spdlog.h>
 
 #include "../common/GameState.h"
 #include "../common/vector2d.h"
 
-#include <SDL2pp/SDL2pp.hh>
-
 #include "Action.h"
-#include "Window.h"
 #include "GameActor.h"
 #include "TexturesPool.h"
+#include "Window.h"
 
 const int frameDuration = 1000 / 60;
 
 Client::Client(const char* hostname, const char* servname):
+        quit(false),
         protocol(hostname, servname),
         recv(this->protocol, game_state_queue),
-        send(this->protocol, this->action_queue) {
+        send(this->protocol, this->action_queue),
+        kb(this->action_queue, quit) {
     spdlog::get("client")->debug("Iniciando hilo receptor en el cliente");
     recv.start();
     spdlog::get("client")->debug("Iniciando hilo sender en el cliente");
@@ -25,13 +28,15 @@ Client::Client(const char* hostname, const char* servname):
 }
 
 Client::~Client() {
+    kb.join();
+    recv.kill();
+    send.kill();
+
     spdlog::get("client")->debug("Cerrando protocolo del cliente");
     protocol.close();
     spdlog::get("client")->debug("Joineando receptor en el cliente");
-    recv.stop();
     recv.join();
     spdlog::get("client")->debug("Joineando sender en el cliente");
-    send.stop();
     send.join();
 }
 
@@ -45,54 +50,10 @@ void Client::run() {
 
     Animation water_animation(txt_pool.get_texture(Actors::WATER), 12);
 
-    bool quit = false;
+    kb.start();
+
     while (!quit) {
         unsigned int loop_start_ticks = SDL_GetTicks();
-
-        SDL_Event e;
-        // Polling de events para enviar al sv
-        while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) {
-                quit = true;
-
-            } else if (e.key.repeat == 0 && e.type == SDL_KEYDOWN) {
-                switch (e.key.keysym.sym) {
-
-                    case SDLK_ESCAPE:
-                        quit = true;
-                        break;
-
-                    case SDLK_a:
-                        this->action_queue.push(std::make_shared<StartMoving>(MoveDir::LEFT));
-                        break;
-
-                    case SDLK_d:
-                        this->action_queue.push(std::make_shared<StartMoving>(MoveDir::RIGHT));
-                        break;
-
-                    case SDLK_c:
-                        this->action_queue.push(std::make_shared<CreateGame>());
-                        break;
-
-                    default:
-                        break;
-                }
-
-            } else if (e.type == SDL_KEYUP) {
-                switch (e.key.keysym.sym) {
-                    case SDLK_a:
-                        this->action_queue.push(std::make_shared<StopMoving>());
-                        break;
-
-                    case SDLK_d:
-                        this->action_queue.push(std::make_shared<StopMoving>());
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        }
 
         window.clear_textures();
 

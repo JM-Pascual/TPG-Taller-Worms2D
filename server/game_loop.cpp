@@ -14,10 +14,14 @@ Queue<std::shared_ptr<PlayerAction>>& GameLoop::get_action_queue() { return this
 
 void GameLoop::add_client_queue(Queue<std::shared_ptr<GameState>>& client_state_queue) {
     this->game.add_client_queue(client_state_queue);
+    if (not _is_alive) {
+        this->start();
+    }
 }
 
 void GameLoop::run() {
-    while (1) {  // ToDo Aca se podria meter un bool que se cambia con un comando exit
+    while (game.is_playing()) {  // ToDo Aca se podria meter un bool que se cambia con un comando
+                                 // exit
         std::chrono::time_point<std::chrono::system_clock> before =
                 std::chrono::system_clock::now();
 
@@ -28,6 +32,8 @@ void GameLoop::run() {
 
         game.broadcast_game_state();
         // dormir(tiempo del tick del sv - tiempo que tarde en llegar acá)
+
+        game.remove_closed_clients();
 
         std::chrono::time_point<std::chrono::system_clock> after = std::chrono::system_clock::now();
         std::chrono::duration<double> elapsed_seconds =

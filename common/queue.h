@@ -121,12 +121,14 @@ public:
         std::unique_lock<std::mutex> lck(mtx);
 
         if (closed) {
-            throw std::runtime_error("The event_queue is already closed.");
+            return;
         }
 
         closed = true;
         is_not_empty.notify_all();
     }
+
+    bool is_closed() { return closed; }
 
 private:
     Queue(const Queue&) = delete;
@@ -236,6 +238,8 @@ public:
         closed = true;
         is_not_empty.notify_all();
     }
+
+    bool is_closed() { return closed; }
 
 private:
     Queue(const Queue&) = delete;

@@ -34,3 +34,8 @@ void ClientSide::Receiver::run() {
 
     } while (_keep_running);
 }
+
+void ClientSide::Receiver::kill() {
+    this->stop();
+    this->game_stateQ.close();
+}

@@ -9,7 +9,7 @@ void GameBrowser::create_game(uint8_t& game_id_to_create) {
     std::unique_lock<std::mutex> lck(m);
 
     games[game_id_count] = std::make_unique<GameLoop>();
-    games[game_id_count]->start();
+
     game_id_to_create =
             game_id_count++;  // Post Incremento para devolver el valor anterior y luego inc
 

@@ -32,8 +32,12 @@ public:
     // Envia el DTO GameState a todos los clientes conectados
     void broadcast_game_state();
 
+    void remove_closed_clients();
+
+    bool is_playing();
+
     // temp protocol
-    void player_start_moving(const MoveDir& direction);
+    void player_start_moving(const Direction& direction);
     void player_stop_moving();
 };
 

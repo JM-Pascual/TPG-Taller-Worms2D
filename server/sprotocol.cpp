@@ -10,23 +10,9 @@
 #include <stdint.h>
 
 #include "../common/GameState.h"
-#include "../common/vector2d.h"
 #include "../common/const.h"
 #include "../common/liberror.h"
-
-float ReverseFloat(const float inFloat) {
-    float retVal;
-    char* floatToConvert = (char*)&inFloat;
-    char* returnFloat = (char*)&retVal;
-
-    // swap the bytes into a temporary buffer
-    returnFloat[0] = floatToConvert[3];
-    returnFloat[1] = floatToConvert[2];
-    returnFloat[2] = floatToConvert[1];
-    returnFloat[3] = floatToConvert[0];
-
-    return retVal;
-}
+#include "../common/vector2d.h"
 
 ServerSide::Protocol::Protocol(Socket&& peer):
         peer(std::move(peer)), send_was_closed(false), recv_was_closed(false) {}
@@ -67,7 +53,21 @@ uint8_t ServerSide::Protocol::recvUint8() {
 
 void ServerSide::Protocol::recvCommand(Actions& c) { c = (Actions)this->recvUint8(); }
 
-void ServerSide::Protocol::recvDirection(MoveDir& d) { d = (MoveDir)this->recvUint8(); }
+void ServerSide::Protocol::recvDirection(Direction& d) { d = (Direction)this->recvUint8(); }
+
+void ServerSide::Protocol::recvJumpDir(JumpDir& dir) { dir = (JumpDir)this->recvUint8(); }
+
+void ServerSide::Protocol::recvADSAngleDir(ADSAngleDir& dir) {
+    dir = (ADSAngleDir)this->recvUint8();
+}
+
+void ServerSide::Protocol::recvDelay(DelayAmount& amount) {
+    amount = (DelayAmount)this->recvUint8();
+}
+
+void ServerSide::Protocol::recvGadget(WeaponsAndTools& gadget) {
+    gadget = (WeaponsAndTools)this->recvUint8();
+}
 
 // ------------------------------ SEND -----------------------------------
 

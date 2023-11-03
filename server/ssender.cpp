@@ -32,4 +32,6 @@ void ServerSide::Sender::run() {
         }
 
     } while (this->_keep_running);
+
+    game_states.close();
 }

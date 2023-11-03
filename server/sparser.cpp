@@ -16,7 +16,25 @@ std::shared_ptr<PlayerAction> ServerSide::Parser::makePlayerAction(const Actions
             return std::make_shared<StopMoving>();
 
         case Actions::JUMP:
-            return std::make_shared<NullCommand>();
+            return std::make_shared<Jump>(protocol);
+
+        case Actions::ADS_ANGLE:
+            return std::make_shared<ADSAngle>(protocol);
+
+        case Actions::STOP_ADS_ANGLE:
+            return std::make_shared<StopADSAngle>();
+
+        case Actions::FIRE_POWER:
+            return std::make_shared<FirePower>();
+
+        case Actions::SHOOT:
+            return std::make_shared<Shoot>();
+
+        case Actions::DELAY:
+            return std::make_shared<Delay>(protocol);
+
+        case Actions::CHANGE_WEAPON_OR_TOOL:
+            return std::make_shared<ChangeGadget>(protocol);
 
         default:
             return std::make_shared<NullCommand>();

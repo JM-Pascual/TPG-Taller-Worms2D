@@ -26,6 +26,10 @@ public:
     */
     void run() override;
     /*
+    
+    */
+    void kill();
+    /*
         No tiene sentido ni copiar ni mover el sender
     */
     Sender(const Sender&) = delete;

@@ -32,7 +32,7 @@ public:
 
 class StartMoving: public PlayerAction {
 private:
-    MoveDir direction;
+    Direction direction;
 
 public:
     // LLama al constructor de PlayerAction, y recibe a traves del protocolo la direccion a moverse
@@ -49,7 +49,7 @@ public:
 class StopMoving: public PlayerAction {
 public:
     // LLama al constructor de PlayerAction, y recibe a traves del protocolo la direccion a moverse
-    explicit StopMoving();
+    StopMoving();
 
     // Delega al servidor el movimiento del gusano
     void execute(Game& game) override;
@@ -59,23 +59,92 @@ public:
 
 // ----------------------- JUMP ----------------------
 
-// class Jump: public PlayerAction {
-// private:
-//     JumpDir direction;
+class Jump: public PlayerAction {
+private:
+    JumpDir direction;
 
-// public:
-//     explicit Jump(uint8_t);
-// };
+public:
+    explicit Jump(ServerSide::Protocol& protocol);
 
-// ----------------------- DAMAGE ----------------------
+    void execute(Game& game) override;
 
-// class Damage: public PlayerAction {
-// private:
-//     int8_t dmg;
+    ~Jump() override = default;
+};
 
-// public:
-//     explicit Damage(uint8_t);
-// };
+// ---------------------- ADSAngle -----------------------
+
+class ADSAngle: public PlayerAction {
+private:
+    ADSAngleDir direction;
+
+public:
+    explicit ADSAngle(ServerSide::Protocol& protocol);
+
+    void execute(Game& game) override;
+
+    ~ADSAngle() override = default;
+};
+
+// -------------------- STOP ADS --------------------
+
+class StopADSAngle: public PlayerAction {
+public:
+    StopADSAngle();
+
+    void execute(Game& game) override;
+
+    ~StopADSAngle() override = default;
+};
+
+// ------------------------- FIRE POWER -----------------
+
+class FirePower: public PlayerAction {
+public:
+    FirePower();
+
+    void execute(Game& game) override;
+
+    ~FirePower() = default;
+};
+
+// ----------------------- SHOOT --------------------
+
+class Shoot: public PlayerAction {
+public:
+    Shoot();
+
+    void execute(Game& game) override;
+
+    ~Shoot() = default;
+};
+
+// -------------------- DELAY ------------------
+
+class Delay: public PlayerAction {
+private:
+    DelayAmount amount;
+
+public:
+    explicit Delay(ServerSide::Protocol& protocol);
+
+    void execute(Game& game) override;
+
+    ~Delay() = default;
+};
+
+// ------------------- CHANGE GADGET ---------------------------
+
+class ChangeGadget: public PlayerAction {
+private:
+    WeaponsAndTools gadget;
+
+public:
+    explicit ChangeGadget(ServerSide::Protocol& protocol);
+
+    void execute(Game& game) override;
+
+    ~ChangeGadget() = default;
+};
 
 // ------------------------ LOBBY ACTIONS -----------------------
 
