@@ -2,7 +2,8 @@
 #define CLIENT_H
 
 #include <memory>
-
+#include <atomic>
+#include "keyboardHandler.h"
 #include "cprotocol.h"
 #include "creceiver.h"
 #include "csender.h"
@@ -13,9 +14,11 @@ class GameState;
 class Client {
 
 private:
+    std::atomic<bool> quit;
     ClientSide::Protocol protocol;
     ClientSide::Receiver recv;
     ClientSide::Sender send;
+    KBHandler kb;
     Queue<std::shared_ptr<GameState>> game_state_queue;
     Queue<std::shared_ptr<Action>> action_queue;
 
