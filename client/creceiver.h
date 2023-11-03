@@ -21,6 +21,8 @@ public:
                       Queue<std::shared_ptr<GameState>>& game_state_queue);
 
     void run() override;
+
+    void kill();
 };
 }  // namespace ClientSide
 

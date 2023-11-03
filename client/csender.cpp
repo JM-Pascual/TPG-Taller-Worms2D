@@ -33,3 +33,8 @@ void ClientSide::Sender::run() {
 
     } while (this->_keep_running);
 }
+
+void ClientSide::Sender::kill() {
+    this->stop();
+    this->action_queue.close();
+}
