@@ -3,10 +3,11 @@
 
 #include "const.h"
 #include "vector2d.h"
+#include "box2d/b2_math.h"
 
 class GameState {
 public:
-    const Vector2D player_position;
+    const b2Vec2 player_position;
     const bool is_walking;
     const bool facing_right;
 

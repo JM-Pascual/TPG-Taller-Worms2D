@@ -7,7 +7,7 @@
 
 #include "../common/GameState.h"
 #include "../common/const.h"
-#include "../common/vector2d.h"
+#include "box2d/b2_math.h"
 
 #include "Animation.h"
 #include "TexturesPool.h"
@@ -16,7 +16,7 @@
 
 class GameActor {
 protected:
-    Vector2D position;
+    b2Vec2 position;
 public:
     GameActor(const float& x, const float& y) : position(x, y) {}
     virtual void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) = 0;

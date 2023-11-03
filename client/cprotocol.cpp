@@ -60,7 +60,7 @@ void ClientSide::Protocol::close() {
 
 std::shared_ptr<GameState> ClientSide::Protocol::recvGameState() {
     float x = recvFloat();
-    float y = recvFloat();
+    float y = 720 - recvFloat(); //ToDo
     bool is_wa = recvBool();
     bool direction = recvBool();
     return std::make_shared<GameState>(x, y, is_wa, direction);

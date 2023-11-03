@@ -27,6 +27,7 @@ void GameLoop::run() {
         if (action_queue.try_pop(c)) {
             c->execute(game);
         }
+        game.step();
 
         game.broadcast_game_state();
         // dormir(tiempo del tick del sv - tiempo que tarde en llegar acá)

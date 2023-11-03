@@ -7,9 +7,10 @@
 
 #include "../common/const.h"
 #include "../common/socket.h"
+#include "box2d/b2_math.h"
 
 class GameState;
-class Vector2D;
+
 
 namespace ServerSide {
 class Protocol {
@@ -37,7 +38,7 @@ private:
     */
     uint8_t recvUint8();
 
-    void sendPosition(const Vector2D& pos);
+    void sendPosition(const b2Vec2& pos);
 
 public:
     void sendGameState(const std::shared_ptr<GameState>& game_state);

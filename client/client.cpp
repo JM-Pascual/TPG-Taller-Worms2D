@@ -105,6 +105,7 @@ void Client::run() {
             } else {
                 actors.at(0)->update(raw_state, loop_start_ticks);
             }
+
             actors.at(0)->render(window.get_renderer());
         }
 
