@@ -89,18 +89,6 @@ public:
     ~StopADSAngle() = default;
 };
 
-class ADSDir: public Action {
-private:
-    const Direction direction;
-
-public:
-    explicit ADSDir(Direction dir);
-
-    void send(ClientSide::Protocol& protocol) override;
-
-    ~ADSDir() = default;
-};
-
 class FirePower: public Action {
 public:
     FirePower();

@@ -47,11 +47,10 @@ enum class Actions {
     // Fight
     ADS_ANGLE = 0x7,
     STOP_ADS_ANGLE = 0x8,
-    ADS_DIR = 0x9,
-    FIRE_POWER = 0xa,
-    SHOOT = 0xb,  // stop fpower + shoot
-    DELAY = 0xc,
-    CHANGE_WEAPON_OR_TOOL = 0xd
+    FIRE_POWER = 0x9,
+    SHOOT = 0xa,  // stop fpower + shoot
+    DELAY = 0xb,
+    CHANGE_WEAPON_OR_TOOL = 0xc
 
 };
 

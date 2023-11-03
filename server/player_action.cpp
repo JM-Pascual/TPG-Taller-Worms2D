@@ -44,12 +44,6 @@ StopADSAngle::StopADSAngle(): PlayerAction() {}
 
 void StopADSAngle::execute(Game& game) {}
 
-// ---------------------------- ADSDIR ------------------
-
-ADSDir::ADSDir(ServerSide::Protocol& protocol) { protocol.recvDirection(this->direction); }
-
-void ADSDir::execute(Game& game) {}
-
 // ---------------------------- FIRE POWER ------------------
 
 FirePower::FirePower(): PlayerAction() {}

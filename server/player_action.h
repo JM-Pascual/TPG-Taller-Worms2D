@@ -96,20 +96,6 @@ public:
     ~StopADSAngle() override = default;
 };
 
-// ----------------------- ADS DIR ---------------------
-
-class ADSDir: public PlayerAction {
-private:
-    Direction direction;
-
-public:
-    explicit ADSDir(ServerSide::Protocol& protocol);
-
-    void execute(Game& game) override;
-
-    ~ADSDir() = default;
-};
-
 // ------------------------- FIRE POWER -----------------
 
 class FirePower: public PlayerAction {

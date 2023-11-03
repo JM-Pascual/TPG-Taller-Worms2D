@@ -24,9 +24,6 @@ std::shared_ptr<PlayerAction> ServerSide::Parser::makePlayerAction(const Actions
         case Actions::STOP_ADS_ANGLE:
             return std::make_shared<StopADSAngle>();
 
-        case Actions::ADS_DIR:
-            return std::make_shared<ADSDir>(protocol);
-
         case Actions::FIRE_POWER:
             return std::make_shared<FirePower>();
 

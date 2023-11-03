@@ -53,15 +53,6 @@ StopADSAngle::StopADSAngle(): Action(Actions::STOP_ADS_ANGLE) {}
 
 void StopADSAngle::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ADSDir ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-ADSDir::ADSDir(Direction dir): Action(Actions::ADS_DIR), direction(dir) {}
-
-void ADSDir::send(ClientSide::Protocol& protocol) {
-    protocol.send(&c, sizeof(uint8_t));
-    protocol.send(&direction, sizeof(bool));
-}
-
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FirePower ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 FirePower::FirePower(): Action(Actions::FIRE_POWER) {}
