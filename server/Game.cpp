@@ -1,9 +1,7 @@
 #include "Game.h"
-
 #include <spdlog/spdlog.h>
 
-Game::Game():player(battlefield){
-}
+
 
 void Game::get_game_state(std::list<std::shared_ptr<GameState>>& p) const {
     p.clear();
@@ -12,7 +10,7 @@ void Game::get_game_state(std::list<std::shared_ptr<GameState>>& p) const {
                                                   player.facing_right));
     }
 }
-
+/*
 void Game::update_game_state() {
     std::lock_guard<std::mutex> lock(m);
     for (auto& [id, player]: players_stats) {
@@ -20,13 +18,14 @@ void Game::update_game_state() {
         player.position.y += player.velocity.y;
     }
 }
+ */
 
 
 void Game::add_client_queue(const uint8_t& id, Queue<std::shared_ptr<GameState>>& state_queue) {
     std::lock_guard<std::mutex> lock(m);
 
     broadcast_list.push_back(&state_queue);
-    players_stats[id] = Player();
+    players_stats.insert(std::make_pair(id,Player(battlefield)));
 }
 
 void Game::broadcast_game_state() {
@@ -66,26 +65,26 @@ bool Game::is_playing() {
 void Game::set_player_ready(const uint8_t id) {
     std::lock_guard<std::mutex> lock(m);
     if (players_stats.count(id) == 1) {
-        players_stats[id].set_ready();
-        ready_count += std::pow(-1, 1 - players_stats[id].ready);
+        players_stats.at(id).set_ready();
+        ready_count += std::pow(-1, 1 - players_stats.at(id).ready);
     }
 }
 
 void Game::player_start_moving(const Direction& direction, const uint8_t id) {
-    players_stats[id].facing_right = (bool)direction;
-    players_stats[id].is_moving = true;
+    players_stats.at(id).facing_right = (bool)direction;
+    players_stats.at(id).is_moving = true;
     // ToDo Incremento temporal de la velocidad, cuando haya físicas hay que pulirlo
 
-    b2Vec2 vel = players_stats[id].worm->GetLinearVelocity();
-    vel.x = 0.2f* (std::pow(-1, 1 - players_stats[id].facing_right) / TICK_RATE)* 400;
-    players_stats[id].worm->SetLinearVelocity(vel); // Esto tengo que ver si esta bien, se ve cuando lo corra
+    b2Vec2 vel = players_stats.at(id).worm->GetLinearVelocity();
+    vel.x = 0.2f* (std::pow(-1, 1 - players_stats.at(id).facing_right) / TICK_RATE)* 400;
+    players_stats.at(id).worm->SetLinearVelocity(vel); // Esto tengo que ver si esta bien, se ve cuando lo corra
 }
 
 void Game::player_stop_moving(const uint8_t id) {
-    players_stats[id].is_moving = false;
-    b2Vec2 vel = players_stats[id].worm->GetLinearVelocity();
+    players_stats.at(id).is_moving = false;
+    b2Vec2 vel = players_stats.at(id).worm->GetLinearVelocity();
     vel.x = 0;
-    players_stats[id].worm->SetLinearVelocity(vel);
+    players_stats.at(id).worm->SetLinearVelocity(vel);
 }
 
 void Game::step() {

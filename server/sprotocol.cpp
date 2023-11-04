@@ -12,7 +12,7 @@
 #include "../common/GameState.h"
 #include "../common/const.h"
 #include "../common/liberror.h"
-#include "../common/vector2d.h"
+
 
 ServerSide::Protocol::Protocol(Socket&& peer):
         peer(std::move(peer)), send_was_closed(false), recv_was_closed(false) {}

@@ -2,7 +2,7 @@
 
 //ToDo Hardocdeado para que los worms aparezcan en la mitad del mapa
 
-Player::Player(Battlefield& battlefield): facing_right(true), is_moving(false) {
+Player::Player(Battlefield& battlefield): facing_right(true), is_moving(false),ready(false) {
     b2BodyDef wormDef;
     wormDef.type = b2_dynamicBody;
     wormDef.position.Set(0.03f, 21.6f); //Ahora la harcodeo, pero tiene que cambiar

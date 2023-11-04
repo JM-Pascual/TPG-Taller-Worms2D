@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #include "const.h"
-#include "vector2d.h"
+#include "box2d/b2_math.h"
 
 class GameState {
 public:
@@ -27,7 +27,7 @@ public:
 
 class PlayerState: public GameState {
 public:
-    const Vector2D pos;
+    const b2Vec2 pos;
     const bool is_walking;
     const bool facing_right;
 

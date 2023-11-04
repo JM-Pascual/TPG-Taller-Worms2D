@@ -27,10 +27,10 @@ private:
 
     void get_game_state(std::list<std::shared_ptr<GameState>>& p) const;
 
-    void update_game_state();
+    //void update_game_state();
 
 public:
-    Game(): ready_count(0) {}
+    Game(): ready_count(0){}
 
     void add_client_queue(const uint8_t& id, Queue<std::shared_ptr<GameState>>& state_queue);
 
@@ -41,11 +41,11 @@ public:
 
     bool is_playing();
 
-    void set_player_ready(const uint8_t id);
+    void set_player_ready(uint8_t id);
 
     // temp protocol
-    void player_start_moving(const Direction& direction, const uint8_t id);
-    void player_stop_moving(const uint8_t id);
+    void player_start_moving(const Direction& direction, uint8_t id);
+    void player_stop_moving(uint8_t id);
 
     void step();
     void update_physics();
