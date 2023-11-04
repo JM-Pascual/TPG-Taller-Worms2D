@@ -6,14 +6,13 @@
 #include <spdlog/spdlog.h>
 
 #include "../common/GameState.h"
-#include "../common/vector2d.h"
 
 #include "Action.h"
 #include "GameActor.h"
 #include "TexturesPool.h"
 #include "Window.h"
 
-const int frameDuration = 1000 / 60;
+const int frameDuration = 1000 / 30;
 
 Client::Client(const char* hostname, const char* servname):
         quit(false),

@@ -11,8 +11,10 @@
 #include "../common/queue.h"
 
 #include "Player.h"
+#include "battlefield.h"
+#include "box2d/box2d.h"
 
-#define TICK_RATE 60
+#define TICK_RATE 30
 #define EST_TICK_TIME 1000 / TICK_RATE
 
 class Game {
@@ -21,6 +23,7 @@ private:
     std::list<Queue<std::shared_ptr<GameState>>*> broadcast_list;
     std::map<uint8_t, Player> players_stats;
     uint8_t ready_count;
+    Battlefield battlefield;
 
     void get_game_state(std::list<std::shared_ptr<GameState>>& p) const;
 
@@ -43,6 +46,9 @@ public:
     // temp protocol
     void player_start_moving(const Direction& direction, const uint8_t id);
     void player_stop_moving(const uint8_t id);
+
+    void step();
+    void update_physics();
 };
 
 

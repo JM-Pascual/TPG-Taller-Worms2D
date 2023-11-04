@@ -10,6 +10,8 @@
 
 #include "Action.h"
 
+#define PPM 33.33f // pixel per meter ratio.
+
 class GameState;
 
 namespace ClientSide {
@@ -28,13 +30,15 @@ private:
     */
     void recv(void* data, unsigned int sz);
 
-
     uint8_t recvUint8();
 
 
     float recvFloat();
 
     bool recvBool();
+
+    float meter_to_pixel_x(float meter_position);
+    float meter_to_pixel_y(float meter_position);
 
 public:
     // Envia data chequeando si se cierra el socket

@@ -1,9 +1,22 @@
 #include "Player.h"
 
-// ToDo Hardocdeado para que los worms aparezcan en la mitad del mapa
-Player::Player(): position(0, 360), velocity(0, 0), facing_right(true), ready(false) {}
+//ToDo Hardocdeado para que los worms aparezcan en la mitad del mapa
 
-Player::Player(float initial_x, float initial_y):
-        position(initial_x, initial_y), velocity(0, 0), facing_right(true), ready(false) {}
+Player::Player(Battlefield& battlefield): facing_right(true), is_moving(false) {
+    b2BodyDef wormDef;
+    wormDef.type = b2_dynamicBody;
+    wormDef.position.Set(0.03f, 21.6f); //Ahora la harcodeo, pero tiene que cambiar
+    //worm = world->CreateBody(&wormDef);
+    worm = battlefield.add_body(wormDef);
+
+    b2PolygonShape wormBox;
+    wormBox.SetAsBox(WIDTH/2 , HEIGHT/2);
+
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &wormBox;
+    fixtureDef.density = 1.0f;
+
+    worm->CreateFixture(&fixtureDef);
+}
 
 void Player::set_ready() { ready = !ready; }

@@ -7,12 +7,14 @@ find_package(SDL2_image REQUIRED)
 find_package(SDL2_mixer 2.6.3 REQUIRED)
 find_package(SDL2pp REQUIRED)
 find_package(spdlog REQUIRED)
+find_package(box2d REQUIRED)
 
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
 include_directories(${SDL2_MIXER_INCLUDE_DIRS})
 include_directories(${SDL2PP_INCLUDE_DIRS})
-include_directories(${SPDLOG_INCLUDE_DIRS}) 
+include_directories(${SPDLOG_INCLUDE_DIRS})
+include_directories(${BOX2D_INCLUDE_DIRS})
 
 
 set(CMAKE_CXX_STANDARD 17)
@@ -28,7 +30,8 @@ file(GLOB COMMON_SRC common/*.cpp)
 file(GLOB CLIENT_SRC client/*.cpp client/main.cpp)
 file(GLOB SERVER_SRC server/*.cpp server/main.cpp)
 
-add_executable(client_exe ${COMMON_SRC} ${CLIENT_SRC})
+add_executable(client_exe ${COMMON_SRC} ${CLIENT_SRC}
+        client/Window.cpp)
 
 target_include_directories(client_exe PUBLIC ${SDL2_INCLUDE_DIRS})
 target_include_directories(client_exe PUBLIC ${SDL2_IMAGE_INCLUDE_DIRS})
@@ -41,9 +44,11 @@ target_link_libraries(client_exe PUBLIC SDL2_image)
 target_link_libraries(client_exe PUBLIC SDL2_mixer)
 target_link_libraries(client_exe PUBLIC ${SDL2PP_LIBRARIES})
 
+
 add_executable(server_exe ${COMMON_SRC} ${SERVER_SRC})
 
 target_link_libraries(server_exe PRIVATE spdlog::spdlog)
+target_link_libraries(server_exe PUBLIC box2d)
 
 set_target_properties(client_exe server_exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TARGET_DIR})
 set_target_properties(client_exe PROPERTIES OUTPUT_NAME worms2d)

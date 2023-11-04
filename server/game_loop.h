@@ -6,7 +6,6 @@
 
 #include <stdint.h>
 
-#include "../common/GameState.h"
 #include "../common/queue.h"
 #include "../common/thread.h"
 

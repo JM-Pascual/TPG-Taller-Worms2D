@@ -73,10 +73,17 @@ std::shared_ptr<GameState> ClientSide::Protocol::recvGameState() {
             return std::make_shared<PlayerCount>(recvUint8());
 
         default:
-            float x = recvFloat();
-            float y = recvFloat();
+            float x = meter_to_pixel_x(recvFloat());
+            float y = meter_to_pixel_y(recvFloat());
             bool is_wa = recvBool();
             bool direction = recvBool();
             return std::make_shared<PlayerState>(x, y, is_wa, direction);
     }
+}
+float ClientSide::Protocol::meter_to_pixel_x(float meter_position) {
+    return (meter_position * PPM);
+}
+
+float ClientSide::Protocol::meter_to_pixel_y(float meter_position) {
+    return (720 - meter_position * PPM); //ToDo
 }

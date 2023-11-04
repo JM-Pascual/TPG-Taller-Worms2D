@@ -71,7 +71,7 @@ void ServerSide::Protocol::recvGadget(WeaponsAndTools& gadget) {
 
 // ------------------------------ SEND -----------------------------------
 
-void ServerSide::Protocol::sendPosition(const Vector2D& pos) {
+void ServerSide::Protocol::sendPosition(const b2Vec2& pos) {
 
     uint32_t x_net;
     memcpy(&x_net, &pos.x, sizeof(uint32_t));
