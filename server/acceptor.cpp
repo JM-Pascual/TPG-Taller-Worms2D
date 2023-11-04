@@ -15,7 +15,8 @@ void Acceptor::run() {
 
         try {
             spdlog::get("server")->debug("Esperando un cliente para aceptar");
-            clients_connected[id] = std::make_unique<ServerSide::Client>(skt.accept(), gb, id);
+            clients_connected.insert(
+                    {id, std::make_unique<ServerSide::Client>(skt.accept(), gb, id)});
             spdlog::get("server")->info("Cliente {:d} aceptado con exito", id);
             id++;
             reap_dead();
@@ -36,10 +37,10 @@ void Acceptor::kill() {
 }
 
 void Acceptor::reap_dead() {
-    for (const auto& [id, client]: clients_connected) {
-        if (not client->isAlive()) {
-            clients_connected.erase(id);
-            spdlog::get("server")->debug("Liberados los recursos del cliente {:d}", id);
+    for (auto it = clients_connected.rbegin(); it != clients_connected.rend(); ++it) {
+        if (not it->second->isAlive()) {
+            spdlog::get("server")->debug("Liberados los recursos del cliente {:d}", it->first);
+            clients_connected.erase(it->first);
         }
     }
 }
