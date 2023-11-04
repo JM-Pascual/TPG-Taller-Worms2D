@@ -1,5 +1,6 @@
 #include "player_action.h"
 
+#include "Game.h"
 #include "game_browser.h"
 #include "sprotocol.h"
 

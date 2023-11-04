@@ -11,15 +11,15 @@
 
 #include "../common/queue.h"
 
-#include "game_loop.h"
 #include "player_action.h"
 #include "sclient.h"
 
+class Game;
 
 class GameBrowser {
 private:
     std::mutex m;
-    std::map<uint8_t, std::shared_ptr<GameLoop>> games;
+    std::map<uint8_t, std::shared_ptr<Game>> games;
     uint8_t game_id_count;
 
 public:
@@ -55,7 +55,7 @@ public:
     /*
 
     */
-    ~GameBrowser();
+    ~GameBrowser() = default;
     /*
      *  No queremos ni copiar ni mover el monitor
      */
