@@ -7,7 +7,7 @@
 #include "sprotocol.h"
 
 ServerSide::Sender::Sender(ServerSide::Protocol& protocol,
-                           Queue<std::shared_ptr<WormGameState>>& game_states):
+                           Queue<std::shared_ptr<GameState>>& game_states):
         protocol(protocol), game_states(game_states) {}
 
 void ServerSide::Sender::run() {

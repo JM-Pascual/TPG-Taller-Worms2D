@@ -7,7 +7,7 @@
 #include <stdint.h>
 
 #include "../common/queue.h"
-#include "../common/WormGameState.h"
+#include "../common/GameState.h"
 
 #include "sprotocol.h"
 #include "sreceiver.h"
@@ -21,7 +21,7 @@ private:
     ServerSide::Receiver recv;
     ServerSide::Sender send;
     std::atomic<bool> killed;
-    Queue<std::shared_ptr<WormGameState>> state_queue;
+    Queue<std::shared_ptr<GameState>> state_queue;
 public:
     const uint8_t id;
 

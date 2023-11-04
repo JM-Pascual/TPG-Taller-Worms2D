@@ -5,8 +5,8 @@
     Game::Game():player(battlefield){
 }
 
-std::shared_ptr<WormGameState> Game::get_game_state() const {
-    return std::make_shared<WormGameState>(player.worm->GetPosition().x, player.worm->GetPosition().y, player.worm->GetLinearVelocity().x != 0,
+std::shared_ptr<PlayerState> Game::get_game_state() const {
+    return std::make_shared<PlayerState>(player.worm->GetPosition().x, player.worm->GetPosition().y, player.worm->GetLinearVelocity().x != 0,
                                            player.facing_right);
 }
 
@@ -15,14 +15,14 @@ std::shared_ptr<WormGameState> Game::get_game_state() const {
 //}
 
 
-void Game::add_client_queue(Queue<std::shared_ptr<WormGameState>>& client_game_state) {
+void Game::add_client_queue(Queue<std::shared_ptr<GameState>>& client_game_state) {
     std::lock_guard<std::mutex> lock(m);
     broadcast_list.push_back(&client_game_state);
 }
 
 void Game::broadcast_game_state() {
     update_physics();
-    std::shared_ptr<WormGameState> gs = get_game_state();
+    std::shared_ptr<GameState> gs = get_game_state();
 
     std::lock_guard<std::mutex> lock(m);
     for (auto& client_game_state_queue: broadcast_list) {
@@ -39,7 +39,7 @@ void Game::remove_closed_clients() {
     std::lock_guard<std::mutex> lock(m);
     broadcast_list.erase(
             std::remove_if(broadcast_list.begin(), broadcast_list.end(),
-                           [](Queue<std::shared_ptr<WormGameState>>* q) { return q->is_closed(); }),
+                           [](Queue<std::shared_ptr<GameState>>* q) { return q->is_closed(); }),
             broadcast_list.end());
 }
 

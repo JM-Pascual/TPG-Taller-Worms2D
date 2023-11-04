@@ -30,4 +30,9 @@ enum class Actors {
     BACKGROUND = 0x4,
     WATER = 0x5
 };
+
+enum class GameStateTag {
+    BATTLEFIELD, PLAYER, PROYECTILE, PLAYER_COUNT
+};
+
 #endif

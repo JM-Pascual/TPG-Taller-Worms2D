@@ -5,7 +5,7 @@
 #include <memory>
 #include <mutex>
 
-#include "../common/WormGameState.h"
+#include "../common/GameState.h"
 #include "../common/BattlefieldGameState.h"
 #include "../common/const.h"
 #include "../common/queue.h"
@@ -20,18 +20,18 @@
 class Game {
 private:
     std::mutex m;
-    std::list<Queue<std::shared_ptr<WormGameState>>*> broadcast_list;
+    std::list<Queue<std::shared_ptr<GameState>>*> broadcast_list;
     Battlefield battlefield;
     Player player;
 
 
-    [[nodiscard]] std::shared_ptr<WormGameState> get_game_state() const;
+    [[nodiscard]] std::shared_ptr<GameState> get_game_state() const;
     //[[nodiscard]] std::shared_ptr<BattlefieldGameState> get_battlefield() const;
 
 public:
     Game();
 
-    void add_client_queue(Queue<std::shared_ptr<WormGameState>>& client_game_state);
+    void add_client_queue(Queue<std::shared_ptr<GameState>>& client_game_state);
 
     // Envia el DTO WormGameState a todos los clientes conectados
     void broadcast_game_state();

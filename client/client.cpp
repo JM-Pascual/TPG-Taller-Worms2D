@@ -2,8 +2,7 @@
 
 #include <spdlog/spdlog.h>
 
-#include "../common/WormGameState.h"
-#include "../common/vector2d.h"
+#include "../common/GameState.h"
 
 #include <SDL2pp/SDL2pp.hh>
 
@@ -100,7 +99,7 @@ void Client::run() {
 
         window.render_stage(txt_pool);
 
-        std::shared_ptr<WormGameState> raw_state = nullptr;
+        std::shared_ptr<GameState> raw_state = nullptr;
         if (game_state_queue.try_pop(raw_state)) {
             if (actors.empty()) {
                 actors.insert({0, std::make_shared<Worm>(raw_state, loop_start_ticks, txt_pool)});

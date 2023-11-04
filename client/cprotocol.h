@@ -12,7 +12,7 @@
 
 #define PPM 33.33f // pixel per meter ratio.
 
-class WormGameState;
+class GameState;
 
 namespace ClientSide {
 class Protocol {
@@ -29,7 +29,6 @@ private:
         Recibe data chequeando si se cierra el socket
     */
     void recv(void* data, unsigned int sz);
-
 
     uint8_t recvUint8();
 
@@ -55,7 +54,7 @@ public:
     */
     void close();
 
-    std::shared_ptr<WormGameState> recvGameState();
+    std::shared_ptr<GameState> recvGameState();
     /*
         No tiene sentido ni copiar ni mover el protocolo
     */

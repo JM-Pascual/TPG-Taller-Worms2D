@@ -26,7 +26,7 @@ std::shared_ptr<PlayerAction> ServerSide::Parser::makePlayerAction(const Actions
 std::shared_ptr<LobbyAction> ServerSide::Parser::makeLobbyAction(
         const Actions& c, ServerSide::Protocol& protocol, GameBrowser& browser,
         std::atomic<bool>& connected_to_room, uint8_t& game_id,
-        Queue<std::shared_ptr<WormGameState>>& game_state) {
+        Queue<std::shared_ptr<GameState>>& game_state) {
 
     switch (c) {
         case Actions::CREATE:

@@ -9,7 +9,7 @@
 #include "../common/socket.h"
 #include "box2d/b2_math.h"
 
-class WormGameState;
+class GameState;
 
 
 namespace ServerSide {
@@ -41,7 +41,7 @@ private:
     void sendPosition(const b2Vec2& pos);
 
 public:
-    void sendGameState(const std::shared_ptr<WormGameState>& game_state);
+    void sendGameState(const std::shared_ptr<GameState>& game_state);
     /*
         Construye el protocolo y su respectivo socket
     */

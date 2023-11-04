@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "../common/WormGameState.h"
+#include "../common/GameState.h"
 #include "../common/const.h"
 #include "../common/queue.h"
 
@@ -100,11 +100,11 @@ private:
     GameBrowser& gb;
     uint8_t& game_id;
     std::atomic<bool>& joined_game;
-    Queue<std::shared_ptr<WormGameState>>& state_queue;
+    Queue<std::shared_ptr<GameState>>& state_queue;
 
 public:
     explicit Join(GameBrowser& gb, uint8_t& id_to_join,
-                  Queue<std::shared_ptr<WormGameState>>& state_queue,
+                  Queue<std::shared_ptr<GameState>>& state_queue,
                   std::atomic<bool>& connected_to_room);
 
     void execute() override;
@@ -117,7 +117,7 @@ public:
 class Create: public Join {
 public:
     explicit Create(GameBrowser& gb, uint8_t& id_to_create,
-                    Queue<std::shared_ptr<WormGameState>>& state_queue,
+                    Queue<std::shared_ptr<GameState>>& state_queue,
                     std::atomic<bool>& connected_to_room);
 
     ~Create() override = default;

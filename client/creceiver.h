@@ -6,7 +6,7 @@
 #include "../common/queue.h"
 #include "../common/thread.h"
 
-class WormGameState;
+class GameState;
 
 namespace ClientSide {
 class Protocol;
@@ -14,11 +14,11 @@ class Protocol;
 class Receiver: public Thread {
 private:
     ClientSide::Protocol& protocol;
-    Queue<std::shared_ptr<WormGameState>>& game_stateQ;
+    Queue<std::shared_ptr<GameState>>& game_stateQ;
 
 public:
     explicit Receiver(ClientSide::Protocol& protocol,
-                      Queue<std::shared_ptr<WormGameState>>& game_state_queue);
+                      Queue<std::shared_ptr<GameState>>& game_state_queue);
 
     void run() override;
 };
