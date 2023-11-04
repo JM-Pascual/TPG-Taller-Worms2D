@@ -45,7 +45,7 @@ std::shared_ptr<PlayerAction> ServerSide::Parser::makePlayerAction(const Actions
 std::shared_ptr<LobbyAction> ServerSide::Parser::makeLobbyAction(
         const Actions& c, ServerSide::Protocol& protocol, GameBrowser& browser,
         std::atomic<bool>& connected_to_room, uint8_t& game_id, const uint8_t& id,
-        Queue<std::shared_ptr<GameState>>& state_queue, bool& ready) {
+        Queue<std::shared_ptr<GameState>>& state_queue) {
 
     switch (c) {
         case Actions::CREATE:
@@ -56,7 +56,6 @@ std::shared_ptr<LobbyAction> ServerSide::Parser::makeLobbyAction(
             return std::make_shared<Join>(browser, game_id, id, state_queue, connected_to_room);
 
         case Actions::READY:
-            ready = true;
             return std::make_shared<Ready>(browser, id, game_id);
 
         default:

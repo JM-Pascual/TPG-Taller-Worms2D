@@ -25,7 +25,7 @@ public:
     static std::shared_ptr<LobbyAction> makeLobbyAction(
             const Actions& c, ServerSide::Protocol&, GameBrowser& browser,
             std::atomic<bool>& connected_to_room, uint8_t& game_id, const uint8_t& id,
-            Queue<std::shared_ptr<GameState>>& state_queue, bool& ready);
+            Queue<std::shared_ptr<GameState>>& state_queue);
 };
 }  // namespace ServerSide
 

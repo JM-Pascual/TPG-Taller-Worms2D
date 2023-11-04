@@ -25,6 +25,9 @@ void GameBrowser::join_game(const uint8_t& game_id_to_join, const uint8_t& id,
     if (games.count(game_id_to_join) != 1) {
         spdlog::get("server")->debug("No existe la sala {:d}", game_id_to_join);
     } else {
+        if (games[game_id_to_join]->game_started_playing()) {
+            return;
+        }
         games[game_id_to_join]->add_client_queue(id, state_queue);
         spdlog::get("server")->debug("Cliente asignado a la sala {:d}", game_id_to_join);
         succesful_join = true;

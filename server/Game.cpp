@@ -57,13 +57,15 @@ void Game::remove_closed_clients() {
 
 bool Game::is_playing() {
     std::lock_guard<std::mutex> lock(m);
-    return (broadcast_list.size() == ready_count);
+    return (broadcast_list.size() > 0 ? broadcast_list.size() == ready_count : false);
 }
 
 void Game::set_player_ready(const uint8_t id) {
     std::lock_guard<std::mutex> lock(m);
-    players_stats[id].set_ready();
-    ready_count += std::pow(-1, 1 - players_stats[id].ready);
+    if (players_stats.count(id) == 1) {
+        players_stats[id].set_ready();
+        ready_count += std::pow(-1, 1 - players_stats[id].ready);
+    }
 }
 
 void Game::player_start_moving(const Direction& direction, const uint8_t id) {

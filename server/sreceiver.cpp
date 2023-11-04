@@ -15,7 +15,6 @@ ServerSide::Receiver::Receiver(ServerSide::Protocol& protocol, GameBrowser& gb,
         protocol(protocol),
         browser(gb),
         connected_to_room(false),
-        ready(false),
         room_id(255),
         state_queue(state_queue),
         id(id) {}
@@ -27,7 +26,7 @@ void ServerSide::Receiver::run() {
             while (not connected_to_room || not browser.game_started_playing(room_id)) {
                 protocol.recvCommand(c);
                 ServerSide::Parser::makeLobbyAction(c, protocol, browser, connected_to_room,
-                                                    room_id, id, state_queue, ready)
+                                                    room_id, id, state_queue)
                         ->execute();
             }
 
