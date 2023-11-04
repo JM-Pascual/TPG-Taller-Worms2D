@@ -29,7 +29,7 @@ Queue<std::shared_ptr<PlayerAction>>& Game::get_action_queue() {
 void Game::add_client_queue(const uint8_t& id, Queue<std::shared_ptr<GameState>>& state_queue) {
     std::lock_guard<std::mutex> lock(m);
 
-    broadcaster.add_queue(state_queue);
+    broadcaster.add_queue(id, state_queue);
     players_stats.insert(std::make_pair(id, Player(battlefield)));
 }
 
@@ -42,7 +42,9 @@ void Game::broadcast_game_state() {
     broadcaster.broadcast(state_list);
 }
 
-void Game::remove_closed_clients() { broadcaster.remove_closed_clients(ready_count); }
+void Game::remove_closed_clients() {
+    broadcaster.remove_closed_clients(ready_count, players_stats);
+}
 
 bool Game::is_playing() {
     std::lock_guard<std::mutex> lock(m);

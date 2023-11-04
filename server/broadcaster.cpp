@@ -2,14 +2,16 @@
 
 #include <algorithm>
 
-void BroadCaster::add_queue(Queue<std::shared_ptr<GameState>>& state_queue) {
+#include "Player.h"
+
+void BroadCaster::add_queue(const uint8_t& id, Queue<std::shared_ptr<GameState>>& state_queue) {
     std::lock_guard<std::mutex> l(m);
-    broadcast_list.push_back(&state_queue);
+    broadcast_map.insert({id, &state_queue});
 }
 
 void BroadCaster::broadcast(const std::list<std::shared_ptr<GameState>>& game_states) {
     std::lock_guard<std::mutex> lock(m);
-    for (auto& client_game_state_queue: broadcast_list) {
+    for (auto& [id, client_game_state_queue]: broadcast_map) {
         try {
             for (const auto& gs: game_states) {
                 client_game_state_queue->push(gs);
@@ -21,18 +23,22 @@ void BroadCaster::broadcast(const std::list<std::shared_ptr<GameState>>& game_st
     }
 }
 
-void BroadCaster::remove_closed_clients(uint8_t& ready_count) {
+void BroadCaster::remove_closed_clients(uint8_t& ready_count,
+                                        std::map<uint8_t, Player>& players_stats) {
     std::lock_guard<std::mutex> lock(m);
 
-    auto before = broadcast_list.size();
-    broadcast_list.erase(std::remove_if(broadcast_list.begin(), broadcast_list.end(),
-                                        [&](Queue<std::shared_ptr<GameState>>* q) {
-                                            if (q->is_closed()) {
-                                                return true;
-                                            }
-                                            return false;
-                                        }),
-                         broadcast_list.end());
+    for (auto it = broadcast_map.rbegin(); it != broadcast_map.rend();) {
+        if (it->second->is_closed()) {
+            uint8_t id = it->first;
+            broadcast_map.erase(id);
+            players_stats.erase(id);
+            ready_count--;
+        }
 
-    ready_count -= (before - broadcast_list.size());
+        if (broadcast_map.size() == 0) {
+            return;
+        }
+
+        ++it;
+    }
 }
