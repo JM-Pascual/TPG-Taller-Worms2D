@@ -20,9 +20,12 @@ class GameLoop: public Thread {
 private:
     Queue<std::shared_ptr<PlayerAction>> action_queue;
     Game& game;
+    const uint8_t& game_id;
+    Queue<uint8_t>& erase_id_queue;
 
 public:
-    explicit GameLoop(Game& game): game(game) {}
+    explicit GameLoop(Game& game, const uint8_t& game_id, Queue<uint8_t>& erase_id_queue):
+            game(game), game_id(game_id), erase_id_queue(erase_id_queue) {}
 
     Queue<std::shared_ptr<PlayerAction>>& get_action_queue();
 

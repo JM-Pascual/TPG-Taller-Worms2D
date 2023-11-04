@@ -25,6 +25,7 @@ private:
     BroadCaster broadcaster;
     Battlefield battlefield;
     uint8_t ready_count;
+    const uint8_t game_id;
     GameLoop gameloop;
 
     void get_game_state(std::list<std::shared_ptr<GameState>>& states_list);
@@ -32,7 +33,8 @@ private:
     bool not_lock_is_playing();
 
 public:
-    Game(): ready_count(0), gameloop(*this) {}
+    Game(const uint8_t game_id, Queue<uint8_t>& erase_id_queue):
+            ready_count(0), game_id(game_id), gameloop(*this, this->game_id, erase_id_queue) {}
 
     Queue<std::shared_ptr<PlayerAction>>& get_action_queue();
 

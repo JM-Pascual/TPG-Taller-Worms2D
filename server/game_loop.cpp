@@ -32,4 +32,6 @@ void GameLoop::run() {
 
         std::this_thread::sleep_for(elapsed_seconds);
     }
+
+    erase_id_queue.push(this->game_id);
 }
