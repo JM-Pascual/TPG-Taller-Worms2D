@@ -10,7 +10,9 @@
 
 #include "Action.h"
 
-class GameState;
+#define PPM 33.33f // pixel per meter ratio.
+
+class WormGameState;
 
 namespace ClientSide {
 class Protocol {
@@ -36,6 +38,9 @@ private:
 
     bool recvBool();
 
+    float meter_to_pixel_x(float meter_position);
+    float meter_to_pixel_y(float meter_position);
+
 public:
     // Envia data chequeando si se cierra el socket
     void send(const void* data, unsigned int sz);
@@ -50,7 +55,7 @@ public:
     */
     void close();
 
-    std::shared_ptr<GameState> recvGameState();
+    std::shared_ptr<WormGameState> recvGameState();
     /*
         No tiene sentido ni copiar ni mover el protocolo
     */

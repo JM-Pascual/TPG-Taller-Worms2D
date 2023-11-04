@@ -9,7 +9,7 @@
 #include <spdlog/spdlog.h>
 #include <stdint.h>
 
-#include "../common/GameState.h"
+#include "../common/WormGameState.h"
 #include "../common/vector2d.h"
 #include "../common/const.h"
 #include "../common/liberror.h"
@@ -84,7 +84,7 @@ void ServerSide::Protocol::sendPosition(const b2Vec2& pos) {
     send(&y_net, sizeof(uint32_t));
 }
 
-void ServerSide::Protocol::sendGameState(const std::shared_ptr<GameState>& game_state) {
+void ServerSide::Protocol::sendGameState(const std::shared_ptr<WormGameState>& game_state) {
     this->sendPosition(game_state->player_position);
     send(&game_state->is_walking, sizeof(bool));
     send(&game_state->facing_right, sizeof(bool));

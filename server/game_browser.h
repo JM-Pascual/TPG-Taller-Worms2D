@@ -34,7 +34,7 @@ public:
     /*
         Agrega client al GameLoop especificado por game_code
     */
-    void join_game(const uint8_t& game_code, Queue<std::shared_ptr<GameState>>& client_state_queue,
+    void join_game(const uint8_t& game_code, Queue<std::shared_ptr<WormGameState>>& client_state_queue,
                    std::atomic<bool>& succesful_join);
     /*
 

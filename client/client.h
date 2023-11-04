@@ -8,7 +8,7 @@
 #include "csender.h"
 
 class Action;
-class GameState;
+class WormGameState;
 
 class Client {
 
@@ -16,7 +16,7 @@ private:
     ClientSide::Protocol protocol;
     ClientSide::Receiver recv;
     ClientSide::Sender send;
-    Queue<std::shared_ptr<GameState>> game_state_queue;
+    Queue<std::shared_ptr<WormGameState>> game_state_queue;
     Queue<std::shared_ptr<Action>> action_queue;
 
 public:

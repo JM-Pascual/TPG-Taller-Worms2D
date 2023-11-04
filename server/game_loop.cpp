@@ -5,14 +5,14 @@
 #include <spdlog/spdlog.h>
 #include <unistd.h>
 
-#include "../common/GameState.h"
+#include "../common/WormGameState.h"
 
 #include "player_action.h"
 #include "sclient.h"
 
 Queue<std::shared_ptr<PlayerAction>>& GameLoop::get_action_queue() { return this->action_queue; }
 
-void GameLoop::add_client_queue(Queue<std::shared_ptr<GameState>>& client_state_queue) {
+void GameLoop::add_client_queue(Queue<std::shared_ptr<WormGameState>>& client_state_queue) {
     this->game.add_client_queue(client_state_queue);
     this->start();
 }

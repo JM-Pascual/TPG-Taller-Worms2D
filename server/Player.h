@@ -5,10 +5,11 @@
 
 #include "../common/const.h"
 #include "box2d/box2d.h"
+#include "battlefield.h"
 
-#define PPM 33.33f // pixel per meter ratio.
-#define PIXEL_WIDTH 30
-#define PIXEL_HEIGHT 40
+#define WIDTH 0.9f
+#define HEIGHT 1.2f
+
 class Game;
 
 class Player {
@@ -18,7 +19,7 @@ private:
     bool is_moving;
 
 public:
-    explicit Player(std::unique_ptr<b2World>& world);
+    explicit Player(Battlefield& battlefield);
 
     friend class Game;
 };

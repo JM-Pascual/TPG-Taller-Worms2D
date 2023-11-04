@@ -5,7 +5,7 @@
 
 #include <arpa/inet.h>
 
-#include "../common/GameState.h"
+#include "../common/WormGameState.h"
 #include "../common/liberror.h"
 
 void ClientSide::Protocol::send(const void* data, unsigned int sz) {
@@ -58,10 +58,18 @@ void ClientSide::Protocol::close() {
     }
 }
 
-std::shared_ptr<GameState> ClientSide::Protocol::recvGameState() {
-    float x = recvFloat();
-    float y = 720 - recvFloat(); //ToDo
+std::shared_ptr<WormGameState> ClientSide::Protocol::recvGameState() {
+    float x = meter_to_pixel_x(recvFloat());
+    float y = meter_to_pixel_y(recvFloat());
     bool is_wa = recvBool();
     bool direction = recvBool();
-    return std::make_shared<GameState>(x, y, is_wa, direction);
+    return std::make_shared<WormGameState>(x, y, is_wa, direction);
+}
+
+float ClientSide::Protocol::meter_to_pixel_x(float meter_position) {
+    return (meter_position * PPM);
+}
+
+float ClientSide::Protocol::meter_to_pixel_y(float meter_position) {
+    return (720 - meter_position * PPM); //ToDo
 }

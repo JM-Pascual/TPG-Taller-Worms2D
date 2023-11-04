@@ -2,7 +2,7 @@
 
 #include <spdlog/spdlog.h>
 
-#include "../common/GameState.h"
+#include "../common/WormGameState.h"
 #include "../common/vector2d.h"
 
 #include <SDL2pp/SDL2pp.hh>
@@ -12,7 +12,7 @@
 #include "GameActor.h"
 #include "TexturesPool.h"
 
-const int frameDuration = 1000 / 60;
+const int frameDuration = 1000 / 30;
 
 Client::Client(const char* hostname, const char* servname):
         protocol(hostname, servname),
@@ -46,6 +46,8 @@ void Client::run() {
     Animation water_animation(txt_pool.get_texture(Actors::WATER), 12);
 
     bool quit = false;
+    //while(!texturas_guardadas){}
+
     while (!quit) {
         unsigned int loop_start_ticks = SDL_GetTicks();
 
@@ -98,7 +100,7 @@ void Client::run() {
 
         window.render_stage(txt_pool);
 
-        std::shared_ptr<GameState> raw_state = nullptr;
+        std::shared_ptr<WormGameState> raw_state = nullptr;
         if (game_state_queue.try_pop(raw_state)) {
             if (actors.empty()) {
                 actors.insert({0, std::make_shared<Worm>(raw_state, loop_start_ticks, txt_pool)});

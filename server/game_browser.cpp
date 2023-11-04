@@ -17,7 +17,7 @@ void GameBrowser::create_game(uint8_t& game_id_to_create) {
 }
 
 void GameBrowser::join_game(const uint8_t& game_id_to_join,
-                            Queue<std::shared_ptr<GameState>>& client_state_queue,
+                            Queue<std::shared_ptr<WormGameState>>& client_state_queue,
                             std::atomic<bool>& succesful_join) {
 
     std::unique_lock<std::mutex> lck(m);

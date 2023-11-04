@@ -6,7 +6,7 @@
 
 #include <stdint.h>
 
-#include "../common/GameState.h"
+#include "../common/WormGameState.h"
 #include "../common/queue.h"
 #include "../common/thread.h"
 
@@ -26,7 +26,7 @@ public:
 
     void run() override;
 
-    void add_client_queue(Queue<std::shared_ptr<GameState>>& client_state_queue);
+    void add_client_queue(Queue<std::shared_ptr<WormGameState>>& client_state_queue);
 
     // bool deleteDeaths();
 
