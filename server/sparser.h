@@ -18,12 +18,14 @@ class Protocol;
 
 class Parser {
 public:
-    static std::shared_ptr<PlayerAction> makePlayerAction(const Actions& c, ServerSide::Protocol&);
+    static std::shared_ptr<PlayerAction> makePlayerAction(const Actions& c,
+                                                          ServerSide::Protocol& protocol,
+                                                          const uint8_t id);
 
     static std::shared_ptr<LobbyAction> makeLobbyAction(
             const Actions& c, ServerSide::Protocol&, GameBrowser& browser,
-            std::atomic<bool>& connected_to_room, uint8_t& game_id,
-            Queue<std::shared_ptr<GameState>>& game_state);
+            std::atomic<bool>& connected_to_room, uint8_t& game_id, const uint8_t& id,
+            Queue<std::shared_ptr<GameState>>& state_queue, bool& ready);
 };
 }  // namespace ServerSide
 

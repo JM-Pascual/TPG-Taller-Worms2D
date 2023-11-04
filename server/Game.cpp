@@ -2,30 +2,44 @@
 
 #include <spdlog/spdlog.h>
 
-std::shared_ptr<GameState> Game::get_game_state() const {
-    return std::make_shared<GameState>(player.position.x, player.position.y, player.velocity.x != 0,
-                                       player.facing_right);
+void Game::get_game_state(std::list<std::shared_ptr<GameState>>& p) const {
+    p.clear();
+    for (const auto& [id, player]: players_stats) {
+        p.push_back(std::make_shared<PlayerState>(player.position.x, player.position.y,
+                                                  player.velocity.x != 0, player.facing_right));
+    }
 }
 
 void Game::update_game_state() {
-    player.position.x += player.velocity.x;
-    player.position.y += player.velocity.y;
+    std::lock_guard<std::mutex> lock(m);
+    for (auto& [id, player]: players_stats) {
+        player.position.x += player.velocity.x;
+        player.position.y += player.velocity.y;
+    }
 }
 
 
-void Game::add_client_queue(Queue<std::shared_ptr<GameState>>& client_game_state) {
+void Game::add_client_queue(const uint8_t& id, Queue<std::shared_ptr<GameState>>& state_queue) {
     std::lock_guard<std::mutex> lock(m);
-    broadcast_list.push_back(&client_game_state);
+
+    broadcast_list.push_back(&state_queue);
+    players_stats[id] = Player();
 }
 
 void Game::broadcast_game_state() {
     update_game_state();
-    std::shared_ptr<GameState> gs = get_game_state();
+    std::list<std::shared_ptr<GameState>> state_list;
+    get_game_state(state_list);
 
     std::lock_guard<std::mutex> lock(m);
     for (auto& client_game_state_queue: broadcast_list) {
         try {
-            client_game_state_queue->push(gs);
+            if (state_list.size() > 0)
+                client_game_state_queue->push(std::make_shared<PlayerCount>(broadcast_list.size()));
+
+            for (const auto& gs: state_list) {
+                client_game_state_queue->push(gs);
+            }
 
         } catch (const ClosedQueue& e) {
             continue;
@@ -43,13 +57,20 @@ void Game::remove_closed_clients() {
 
 bool Game::is_playing() {
     std::lock_guard<std::mutex> lock(m);
-    return (broadcast_list.size() > 0);
+    return (broadcast_list.size() == ready_count);
 }
 
-void Game::player_start_moving(const Direction& direction) {
-    player.facing_right = (bool)direction;
+void Game::set_player_ready(const uint8_t id) {
+    std::lock_guard<std::mutex> lock(m);
+    players_stats[id].set_ready();
+    ready_count += std::pow(-1, 1 - players_stats[id].ready);
+}
+
+void Game::player_start_moving(const Direction& direction, const uint8_t id) {
+    players_stats[id].facing_right = (bool)direction;
     // ToDo Incremento temporal de la velocidad, cuando haya físicas hay que pulirlo
-    player.velocity.x = 0.2 * (std::pow(-1, 1 - player.facing_right) / TICK_RATE) * 200;
+    players_stats[id].velocity.x =
+            0.2 * (std::pow(-1, 1 - players_stats[id].facing_right) / TICK_RATE) * 200;
 }
 
-void Game::player_stop_moving() { player.velocity.x = 0; }
+void Game::player_stop_moving(const uint8_t id) { players_stats[id].velocity.x = 0; }

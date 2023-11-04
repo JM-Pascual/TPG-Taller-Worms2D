@@ -3,6 +3,8 @@
 
 #include <memory>
 
+#include <stdint.h>
+
 #include "../common/GameState.h"
 #include "../common/const.h"
 #include "../common/queue.h"
@@ -19,7 +21,9 @@ class Protocol;
 
 class PlayerAction {
 public:
-    PlayerAction() = default;
+    const uint8_t id;
+
+    explicit PlayerAction(const uint8_t id): id(id) {}
 
     // Da la interfaz para ejecutar el comando
     virtual void execute(Game& game) = 0;
@@ -36,7 +40,7 @@ private:
 
 public:
     // LLama al constructor de PlayerAction, y recibe a traves del protocolo la direccion a moverse
-    explicit StartMoving(ServerSide::Protocol&);
+    explicit StartMoving(ServerSide::Protocol& protocol, const uint8_t id);
 
     // Delega al servidor el movimiento del gusano
     void execute(Game& game) override;
@@ -49,7 +53,7 @@ public:
 class StopMoving: public PlayerAction {
 public:
     // LLama al constructor de PlayerAction, y recibe a traves del protocolo la direccion a moverse
-    StopMoving();
+    explicit StopMoving(const uint8_t id);
 
     // Delega al servidor el movimiento del gusano
     void execute(Game& game) override;
@@ -64,7 +68,7 @@ private:
     JumpDir direction;
 
 public:
-    explicit Jump(ServerSide::Protocol& protocol);
+    explicit Jump(ServerSide::Protocol& protocol, const uint8_t id);
 
     void execute(Game& game) override;
 
@@ -78,7 +82,7 @@ private:
     ADSAngleDir direction;
 
 public:
-    explicit ADSAngle(ServerSide::Protocol& protocol);
+    explicit ADSAngle(ServerSide::Protocol& protocol, const uint8_t id);
 
     void execute(Game& game) override;
 
@@ -89,7 +93,7 @@ public:
 
 class StopADSAngle: public PlayerAction {
 public:
-    StopADSAngle();
+    explicit StopADSAngle(const uint8_t id);
 
     void execute(Game& game) override;
 
@@ -100,7 +104,7 @@ public:
 
 class FirePower: public PlayerAction {
 public:
-    FirePower();
+    explicit FirePower(const uint8_t id);
 
     void execute(Game& game) override;
 
@@ -111,7 +115,7 @@ public:
 
 class Shoot: public PlayerAction {
 public:
-    Shoot();
+    explicit Shoot(const uint8_t id);
 
     void execute(Game& game) override;
 
@@ -125,7 +129,7 @@ private:
     DelayAmount amount;
 
 public:
-    explicit Delay(ServerSide::Protocol& protocol);
+    explicit Delay(ServerSide::Protocol& protocol, const uint8_t id);
 
     void execute(Game& game) override;
 
@@ -139,7 +143,7 @@ private:
     WeaponsAndTools gadget;
 
 public:
-    explicit ChangeGadget(ServerSide::Protocol& protocol);
+    explicit ChangeGadget(ServerSide::Protocol& protocol, const uint8_t id);
 
     void execute(Game& game) override;
 
@@ -169,10 +173,11 @@ private:
     GameBrowser& gb;
     uint8_t& game_id;
     std::atomic<bool>& joined_game;
+    const uint8_t& id;
     Queue<std::shared_ptr<GameState>>& state_queue;
 
 public:
-    explicit Join(GameBrowser& gb, uint8_t& id_to_join,
+    explicit Join(GameBrowser& gb, uint8_t& id_to_join, const uint8_t& id,
                   Queue<std::shared_ptr<GameState>>& state_queue,
                   std::atomic<bool>& connected_to_room);
 
@@ -185,18 +190,35 @@ public:
 
 class Create: public Join {
 public:
-    explicit Create(GameBrowser& gb, uint8_t& id_to_create,
+    explicit Create(GameBrowser& gb, uint8_t& id_to_create, const uint8_t& id,
                     Queue<std::shared_ptr<GameState>>& state_queue,
                     std::atomic<bool>& connected_to_room);
 
     ~Create() override = default;
 };
 
+// ----------------------- READY ------------------------
+
+class Ready: public LobbyAction {
+private:
+    GameBrowser& gb;
+    const uint8_t id;
+    const uint8_t id_game;
+
+public:
+    explicit Ready(GameBrowser& gb, const uint8_t id, const uint8_t id_game):
+            gb(gb), id(id), id_game(id_game) {}
+
+    void execute() override;
+
+    ~Ready() = default;
+};
+
 // ----------------------- NULL_COMMAND ----------------------
 
 class NullCommand: public PlayerAction, public LobbyAction {
 public:
-    NullCommand() = default;
+    NullCommand(): PlayerAction(0) {}
 
     // Comportamiento nulo
     void execute(Game& game) override;

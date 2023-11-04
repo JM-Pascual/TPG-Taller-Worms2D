@@ -90,4 +90,9 @@ void ChangeGadget::send(ClientSide::Protocol& protocol) {
 void CreateGame::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JOIN GAME ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void JoinGame::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
+void JoinGame::send(ClientSide::Protocol& protocol) {
+    protocol.send(&c, sizeof(uint8_t));
+    protocol.send(&game_id, sizeof(uint8_t));
+}
+
+void Ready::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }

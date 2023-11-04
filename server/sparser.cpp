@@ -7,34 +7,35 @@
 #include "sprotocol.h"
 
 std::shared_ptr<PlayerAction> ServerSide::Parser::makePlayerAction(const Actions& c,
-                                                                   ServerSide::Protocol& protocol) {
+                                                                   ServerSide::Protocol& protocol,
+                                                                   const uint8_t id) {
     switch (c) {
         case Actions::START_MOVING:
-            return std::make_shared<StartMoving>(protocol);
+            return std::make_shared<StartMoving>(protocol, id);
 
         case Actions::STOP_MOVING:
-            return std::make_shared<StopMoving>();
+            return std::make_shared<StopMoving>(id);
 
         case Actions::JUMP:
-            return std::make_shared<Jump>(protocol);
+            return std::make_shared<Jump>(protocol, id);
 
         case Actions::ADS_ANGLE:
-            return std::make_shared<ADSAngle>(protocol);
+            return std::make_shared<ADSAngle>(protocol, id);
 
         case Actions::STOP_ADS_ANGLE:
-            return std::make_shared<StopADSAngle>();
+            return std::make_shared<StopADSAngle>(id);
 
         case Actions::FIRE_POWER:
-            return std::make_shared<FirePower>();
+            return std::make_shared<FirePower>(id);
 
         case Actions::SHOOT:
-            return std::make_shared<Shoot>();
+            return std::make_shared<Shoot>(id);
 
         case Actions::DELAY:
-            return std::make_shared<Delay>(protocol);
+            return std::make_shared<Delay>(protocol, id);
 
         case Actions::CHANGE_WEAPON_OR_TOOL:
-            return std::make_shared<ChangeGadget>(protocol);
+            return std::make_shared<ChangeGadget>(protocol, id);
 
         default:
             return std::make_shared<NullCommand>();
@@ -43,16 +44,20 @@ std::shared_ptr<PlayerAction> ServerSide::Parser::makePlayerAction(const Actions
 
 std::shared_ptr<LobbyAction> ServerSide::Parser::makeLobbyAction(
         const Actions& c, ServerSide::Protocol& protocol, GameBrowser& browser,
-        std::atomic<bool>& connected_to_room, uint8_t& game_id,
-        Queue<std::shared_ptr<GameState>>& game_state) {
+        std::atomic<bool>& connected_to_room, uint8_t& game_id, const uint8_t& id,
+        Queue<std::shared_ptr<GameState>>& state_queue, bool& ready) {
 
     switch (c) {
         case Actions::CREATE:
-            return std::make_shared<Create>(browser, game_id, game_state, connected_to_room);
+            return std::make_shared<Create>(browser, game_id, id, state_queue, connected_to_room);
 
         case Actions::JOIN:
             protocol.recvGameID(game_id);
-            return std::make_shared<Join>(browser, game_id, game_state, connected_to_room);
+            return std::make_shared<Join>(browser, game_id, id, state_queue, connected_to_room);
+
+        case Actions::READY:
+            ready = true;
+            return std::make_shared<Ready>(browser, id, game_id);
 
         default:
             return std::make_shared<NullCommand>();

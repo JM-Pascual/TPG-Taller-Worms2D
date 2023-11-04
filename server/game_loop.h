@@ -26,13 +26,11 @@ public:
 
     void run() override;
 
-    void add_client_queue(Queue<std::shared_ptr<GameState>>& client_state_queue);
+    void add_client_queue(const uint8_t& id, Queue<std::shared_ptr<GameState>>& state_queue);
 
-    // bool deleteDeaths();
+    void set_player_ready(const uint8_t id);
 
-    // Mata todos los clientes conectados
-
-    // void killAll();
+    const bool game_started_playing();
 
     // Libera los recursos de todos los clientes
     ~GameLoop() override;

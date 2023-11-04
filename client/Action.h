@@ -1,8 +1,9 @@
 #ifndef ACTION_H
 #define ACTION_H
 
-#include "../common/const.h"
+#include <stdint.h>
 
+#include "../common/const.h"
 namespace ClientSide {
 class Protocol;
 }
@@ -143,12 +144,24 @@ public:
 };
 
 class JoinGame: public Action {
+private:
+    const uint8_t game_id;
+
 public:
-    JoinGame(): Action(Actions::JOIN) {}
+    explicit JoinGame(uint8_t game_id): Action(Actions::JOIN), game_id(game_id) {}
 
     void send(ClientSide::Protocol& protocol) override;
 
     ~JoinGame() override = default;
+};
+
+class Ready: public Action {
+public:
+    Ready(): Action(Actions::READY) {}
+
+    void send(ClientSide::Protocol& protocol) override;
+
+    ~Ready() = default;
 };
 
 #endif

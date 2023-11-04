@@ -20,12 +20,15 @@ private:
     ServerSide::Protocol& protocol;
     GameBrowser& browser;
     std::atomic<bool> connected_to_room;
+    bool ready;
     uint8_t room_id;
     Queue<std::shared_ptr<GameState>>& state_queue;
 
 public:
+    const uint8_t id;
+
     explicit Receiver(ServerSide::Protocol& protocol, GameBrowser& browser,
-                      Queue<std::shared_ptr<GameState>>& state_queue);
+                      Queue<std::shared_ptr<GameState>>& state_queue, const uint8_t id);
 
     void run() override;
     /*
