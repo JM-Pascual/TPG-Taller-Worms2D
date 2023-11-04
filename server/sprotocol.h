@@ -39,6 +39,10 @@ private:
 
     void sendPosition(const Vector2D& pos);
 
+    void sendPlayerState(const std::shared_ptr<GameState>& ps);
+
+    void sendPlayerCount(const std::shared_ptr<GameState>& pc);
+
 public:
     void sendGameState(const std::shared_ptr<GameState>& game_state);
     /*

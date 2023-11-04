@@ -84,8 +84,38 @@ void ServerSide::Protocol::sendPosition(const Vector2D& pos) {
     send(&y_net, sizeof(uint32_t));
 }
 
+void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<GameState>& ps) {
+    std::shared_ptr<PlayerState> p = std::dynamic_pointer_cast<PlayerState>(ps);
+
+    send(&p->tag, sizeof(uint8_t));
+    this->sendPosition(p->pos);
+    send(&p->is_walking, sizeof(bool));
+    send(&p->facing_right, sizeof(bool));
+}
+
+void ServerSide::Protocol::sendPlayerCount(const std::shared_ptr<GameState>& pc) {
+    std::shared_ptr<PlayerCount> p = std::dynamic_pointer_cast<PlayerCount>(pc);
+    send(&p->tag, sizeof(uint8_t));
+    send(&p->quantity, sizeof(uint8_t));
+}
+
 void ServerSide::Protocol::sendGameState(const std::shared_ptr<GameState>& game_state) {
-    this->sendPosition(game_state->player_position);
-    send(&game_state->is_walking, sizeof(bool));
-    send(&game_state->facing_right, sizeof(bool));
+    switch (game_state->tag) {
+        case GameStateTag::BATTLEFIELD:
+            break;
+
+        case GameStateTag::PLAYER:
+            sendPlayerState(game_state);
+            break;
+
+        case GameStateTag::PROYECTILE:
+            break;
+
+        case GameStateTag::PLAYER_COUNT:
+            sendPlayerCount(game_state);
+            break;
+
+        default:
+            break;
+    }
 }

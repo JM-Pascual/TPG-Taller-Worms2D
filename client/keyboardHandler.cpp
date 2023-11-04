@@ -1,8 +1,13 @@
 #include "keyboardHandler.h"
+
+#include <memory>
+
 #include <SDL2pp/SDL2pp.hh>
+
 #include "Action.h"
 
-KBHandler::KBHandler(Queue<std::shared_ptr<Action>>& actionQ, std::atomic<bool>& quit) : action_queue(actionQ), quit(quit) {}
+KBHandler::KBHandler(Queue<std::shared_ptr<Action>>& actionQ, std::atomic<bool>& quit):
+        action_queue(actionQ), quit(quit) {}
 
 void KBHandler::run() {
     SDL_Event e;
@@ -121,6 +126,15 @@ void KBHandler::run() {
                     // ---------- LOBBY ------------
                     case SDLK_c:
                         this->action_queue.push(std::make_shared<CreateGame>());
+                        break;
+
+                    case SDLK_j:
+                        this->action_queue.push(
+                                std::make_shared<JoinGame>(0));  // PLACE HOLDER DE GAME ID
+                        break;
+
+                    case SDLK_r:
+                        this->action_queue.push(std::make_shared<Ready>());
                         break;
 
                     default:

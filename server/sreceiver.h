@@ -24,8 +24,10 @@ private:
     Queue<std::shared_ptr<GameState>>& state_queue;
 
 public:
+    const uint8_t id;
+
     explicit Receiver(ServerSide::Protocol& protocol, GameBrowser& browser,
-                      Queue<std::shared_ptr<GameState>>& state_queue);
+                      Queue<std::shared_ptr<GameState>>& state_queue, const uint8_t id);
 
     void run() override;
     /*

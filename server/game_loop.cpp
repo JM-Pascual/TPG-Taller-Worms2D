@@ -12,12 +12,18 @@
 
 Queue<std::shared_ptr<PlayerAction>>& GameLoop::get_action_queue() { return this->action_queue; }
 
-void GameLoop::add_client_queue(Queue<std::shared_ptr<GameState>>& client_state_queue) {
-    this->game.add_client_queue(client_state_queue);
-    if (not _is_alive) {
+void GameLoop::add_client_queue(const uint8_t& id, Queue<std::shared_ptr<GameState>>& state_queue) {
+    this->game.add_client_queue(id, state_queue);
+}
+
+void GameLoop::set_player_ready(const uint8_t id) {
+    game.set_player_ready(id);
+    if (not _is_alive && game.is_playing()) {
         this->start();
     }
 }
+
+const bool GameLoop::game_started_playing() { return game.is_playing(); }
 
 void GameLoop::run() {
     while (game.is_playing()) {  // ToDo Aca se podria meter un bool que se cambia con un comando

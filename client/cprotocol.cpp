@@ -6,6 +6,7 @@
 #include <arpa/inet.h>
 
 #include "../common/GameState.h"
+#include "../common/const.h"
 #include "../common/liberror.h"
 
 void ClientSide::Protocol::send(const void* data, unsigned int sz) {
@@ -59,9 +60,23 @@ void ClientSide::Protocol::close() {
 }
 
 std::shared_ptr<GameState> ClientSide::Protocol::recvGameState() {
-    float x = recvFloat();
-    float y = recvFloat();
-    bool is_wa = recvBool();
-    bool direction = recvBool();
-    return std::make_shared<GameState>(x, y, is_wa, direction);
+    GameStateTag tag = (GameStateTag)recvUint8();
+
+    switch (tag) {
+        case GameStateTag::BATTLEFIELD:
+            return std::make_shared<PlayerCount>(recvUint8());
+
+        case GameStateTag::PLAYER_COUNT:
+            return std::make_shared<PlayerCount>(recvUint8());
+
+        case GameStateTag::PROYECTILE:
+            return std::make_shared<PlayerCount>(recvUint8());
+
+        default:
+            float x = recvFloat();
+            float y = recvFloat();
+            bool is_wa = recvBool();
+            bool direction = recvBool();
+            return std::make_shared<PlayerState>(x, y, is_wa, direction);
+    }
 }

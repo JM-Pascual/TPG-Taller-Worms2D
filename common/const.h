@@ -30,27 +30,28 @@ enum class WeaponsAndTools {
 };
 
 enum class Actions {
-    NULL_ = 0x0,  // Null action
+    NULL_,  // Null action
 
     // Lobby actions
-    CREATE = 0x1,
-    JOIN = 0x2,
-    SHOW_GAMES = 0x3,
+    CREATE,
+    JOIN,
+    SHOW_GAMES,
+    READY,
 
     // Game actions
 
     // Movement
-    START_MOVING = 0x4,
-    STOP_MOVING = 0x5,
-    JUMP = 0x6,
+    START_MOVING,
+    STOP_MOVING,
+    JUMP,
 
     // Fight
-    ADS_ANGLE = 0x7,
-    STOP_ADS_ANGLE = 0x8,
-    FIRE_POWER = 0x9,
-    SHOOT = 0xa,  // stop fpower + shoot
-    DELAY = 0xb,
-    CHANGE_WEAPON_OR_TOOL = 0xc
+    ADS_ANGLE,
+    STOP_ADS_ANGLE,
+    FIRE_POWER,
+    SHOOT,  // stop fpower + shoot
+    DELAY,
+    CHANGE_WEAPON_OR_TOOL
 
 };
 
@@ -62,5 +63,7 @@ enum class Actors {
     BACKGROUND = 0x4,
     WATER = 0x5
 };
+
+enum class GameStateTag { BATTLEFIELD, PLAYER, PROYECTILE, PLAYER_COUNT };
 
 #endif

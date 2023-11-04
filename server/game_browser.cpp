@@ -16,8 +16,8 @@ void GameBrowser::create_game(uint8_t& game_id_to_create) {
     spdlog::get("server")->info("Se creo la sala de juego {:d}", (game_id_to_create));
 }
 
-void GameBrowser::join_game(const uint8_t& game_id_to_join,
-                            Queue<std::shared_ptr<GameState>>& client_state_queue,
+void GameBrowser::join_game(const uint8_t& game_id_to_join, const uint8_t& id,
+                            Queue<std::shared_ptr<GameState>>& state_queue,
                             std::atomic<bool>& succesful_join) {
 
     std::unique_lock<std::mutex> lck(m);
@@ -25,7 +25,10 @@ void GameBrowser::join_game(const uint8_t& game_id_to_join,
     if (games.count(game_id_to_join) != 1) {
         spdlog::get("server")->debug("No existe la sala {:d}", game_id_to_join);
     } else {
-        games[game_id_to_join]->add_client_queue(client_state_queue);
+        if (games[game_id_to_join]->game_started_playing()) {
+            return;
+        }
+        games[game_id_to_join]->add_client_queue(id, state_queue);
         spdlog::get("server")->debug("Cliente asignado a la sala {:d}", game_id_to_join);
         succesful_join = true;
     }
@@ -45,6 +48,16 @@ void GameBrowser::infoGames(std::vector<std::string>& info) {
                       std::to_string(id));  // + "players: " + std::to_string(value.playersCount());
         info.push_back(s);
     }
+}
+
+void GameBrowser::set_player_ready(const uint8_t id, const uint8_t id_game) {
+    games[id_game]->set_player_ready(id);
+}
+
+const bool GameBrowser::game_started_playing(const uint8_t game_id) {
+    if (games.count(game_id) == 1)
+        return games[game_id]->game_started_playing();
+    return false;
 }
 
 GameBrowser::~GameBrowser() {

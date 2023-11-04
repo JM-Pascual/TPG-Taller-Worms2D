@@ -9,7 +9,7 @@
 
 ServerSide::Client::Client(Socket&& peer, GameBrowser& browser, const uint8_t id):
         protocol(std::move(peer)),
-        recv(this->protocol, browser, state_queue),
+        recv(this->protocol, browser, state_queue, id),
         send(this->protocol, state_queue),
         killed(false),
         id(id) {

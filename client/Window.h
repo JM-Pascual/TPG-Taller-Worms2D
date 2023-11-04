@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <unordered_map>
+
 #include <SDL2pp/SDL2pp.hh>
 
 #include "../common/const.h"
@@ -14,7 +15,9 @@ private:
     std::shared_ptr<SDL2pp::Window> game_window;
     std::shared_ptr<SDL2pp::Renderer> game_renderer;
 
-    void render_stage_texture(std::shared_ptr<SDL2pp::Texture>& texture, SDL2pp::Rect destination);
+    void render_stage_texture(const std::shared_ptr<SDL2pp::Texture>& texture,
+                              SDL2pp::Rect destination);
+
 public:
     Window(const int& width, const int& height);
 
@@ -30,7 +33,7 @@ public:
 
     ~Window() = default;
 
-friend class TexturesPool;
+    friend class TexturesPool;
 };
 
 

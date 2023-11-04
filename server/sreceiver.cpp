@@ -11,21 +11,22 @@
 #include "sprotocol.h"
 
 ServerSide::Receiver::Receiver(ServerSide::Protocol& protocol, GameBrowser& gb,
-                               Queue<std::shared_ptr<GameState>>& state_queue):
+                               Queue<std::shared_ptr<GameState>>& state_queue, const uint8_t id):
         protocol(protocol),
         browser(gb),
         connected_to_room(false),
         room_id(255),
-        state_queue(state_queue) {}
+        state_queue(state_queue),
+        id(id) {}
 
 void ServerSide::Receiver::run() {
     Actions c;
     do {
         try {
-            while (not connected_to_room) {
+            while (not connected_to_room || not browser.game_started_playing(room_id)) {
                 protocol.recvCommand(c);
                 ServerSide::Parser::makeLobbyAction(c, protocol, browser, connected_to_room,
-                                                    room_id, state_queue)
+                                                    room_id, id, state_queue)
                         ->execute();
             }
 
@@ -33,7 +34,7 @@ void ServerSide::Receiver::run() {
 
             while (connected_to_room) {
                 protocol.recvCommand(c);
-                q.push(ServerSide::Parser::makePlayerAction(c, protocol));
+                q.push(ServerSide::Parser::makePlayerAction(c, protocol, id));
             }
 
         } catch (const ClosedQueue& e) {
