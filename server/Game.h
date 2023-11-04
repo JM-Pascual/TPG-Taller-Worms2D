@@ -13,19 +13,21 @@
 
 #include "Player.h"
 #include "battlefield.h"
+#include "broadcaster.h"
 #include "game_loop.h"
 
 
 class Game {
 private:
     std::mutex m;
-    std::list<Queue<std::shared_ptr<GameState>>*> broadcast_list;
     std::map<uint8_t, Player> players_stats;
+
+    BroadCaster broadcaster;
     Battlefield battlefield;
     uint8_t ready_count;
     GameLoop gameloop;
 
-    void get_game_state(std::list<std::shared_ptr<GameState>>& p);
+    void get_game_state(std::list<std::shared_ptr<GameState>>& states_list);
 
     bool not_lock_is_playing();
 
