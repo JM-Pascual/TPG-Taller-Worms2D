@@ -9,7 +9,7 @@
 #include "../common/const.h"
 #include "../common/queue.h"
 
-#include "Game.h"
+class Game;
 
 class GameBrowser;
 

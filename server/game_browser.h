@@ -1,6 +1,7 @@
 #ifndef WORMS2D_GB_H
 #define WORMS2D_GB_H
 
+#include <atomic>
 #include <condition_variable>
 #include <cstdint>
 #include <iostream>
@@ -10,17 +11,43 @@
 #include <vector>
 
 #include "../common/queue.h"
+#include "../common/thread.h"
 
-#include "game_loop.h"
 #include "player_action.h"
 #include "sclient.h"
+
+class Game;
+
+class GBCleaner: public Thread {
+private:
+    Queue<uint8_t> game_id_to_clean;
+    GameBrowser& gb;
+    std::atomic<bool> killed;
+
+public:
+    explicit GBCleaner(GameBrowser& gb): Thread(), gb(gb), killed(false) {}
+
+    void kill();
+
+    void run() override;
+
+    ~GBCleaner() override = default;
+
+    friend class GameBrowser;
+};
 
 
 class GameBrowser {
 private:
     std::mutex m;
-    std::map<uint8_t, std::shared_ptr<GameLoop>> games;
+    std::map<uint8_t, std::shared_ptr<Game>> games;
     uint8_t game_id_count;
+    GBCleaner cleaner;
+
+    /*
+
+    */
+    void erase_game(const uint8_t& game_id);
 
 public:
     /*
@@ -64,6 +91,8 @@ public:
 
     GameBrowser(GameBrowser&&) = delete;
     GameBrowser& operator=(GameBrowser&&) = delete;
+
+    friend class GBCleaner;
 };
 
 

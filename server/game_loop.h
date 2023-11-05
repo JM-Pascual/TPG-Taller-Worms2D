@@ -9,30 +9,30 @@
 #include "../common/queue.h"
 #include "../common/thread.h"
 
-#include "Game.h"
 #include "player_action.h"
+
+#define TICK_RATE 30
+#define EST_TICK_TIME 1000 / TICK_RATE
+
+class Game;
 
 class GameLoop: public Thread {
 private:
     Queue<std::shared_ptr<PlayerAction>> action_queue;
-    Game game;
+    Game& game;
+    const uint8_t& game_id;
+    Queue<uint8_t>& erase_id_queue;
 
 public:
-    // Crea la lista de clientes vacia
-    GameLoop() = default;
+    explicit GameLoop(Game& game, const uint8_t& game_id, Queue<uint8_t>& erase_id_queue):
+            game(game), game_id(game_id), erase_id_queue(erase_id_queue) {}
 
     Queue<std::shared_ptr<PlayerAction>>& get_action_queue();
 
     void run() override;
 
-    void add_client_queue(const uint8_t& id, Queue<std::shared_ptr<GameState>>& state_queue);
-
-    void set_player_ready(const uint8_t id);
-
-    const bool game_started_playing();
-
     // Libera los recursos de todos los clientes
-    ~GameLoop() override;
+    ~GameLoop() override = default;
 
     // No queremos ni copiar ni mover el monitor
     GameLoop(const GameLoop&) = delete;

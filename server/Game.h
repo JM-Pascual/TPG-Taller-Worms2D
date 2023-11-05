@@ -9,28 +9,34 @@
 #include "../common/GameState.h"
 #include "../common/const.h"
 #include "../common/queue.h"
+#include "box2d/box2d.h"
 
 #include "Player.h"
 #include "battlefield.h"
-#include "box2d/box2d.h"
+#include "broadcaster.h"
+#include "game_loop.h"
 
-#define TICK_RATE 30
-#define EST_TICK_TIME 1000 / TICK_RATE
 
 class Game {
 private:
     std::mutex m;
-    std::list<Queue<std::shared_ptr<GameState>>*> broadcast_list;
     std::map<uint8_t, Player> players_stats;
-    uint8_t ready_count;
+
+    BroadCaster broadcaster;
     Battlefield battlefield;
+    uint8_t ready_count;
+    const uint8_t game_id;
+    GameLoop gameloop;
 
-    void get_game_state(std::list<std::shared_ptr<GameState>>& p) const;
+    void get_game_state(std::list<std::shared_ptr<GameState>>& states_list);
 
-    //void update_game_state();
+    bool not_lock_is_playing();
 
 public:
-    Game(): ready_count(0){}
+    Game(const uint8_t game_id, Queue<uint8_t>& erase_id_queue):
+            ready_count(0), game_id(game_id), gameloop(*this, this->game_id, erase_id_queue) {}
+
+    Queue<std::shared_ptr<PlayerAction>>& get_action_queue();
 
     void add_client_queue(const uint8_t& id, Queue<std::shared_ptr<GameState>>& state_queue);
 
@@ -49,6 +55,8 @@ public:
 
     void step();
     void update_physics();
+
+    ~Game();
 };
 
 
