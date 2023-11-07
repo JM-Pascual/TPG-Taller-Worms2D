@@ -6,9 +6,18 @@
 #include <deque>
 #include <mutex>
 #include <queue>
+#include <string>
 
-struct ClosedQueue: public std::runtime_error {
-    ClosedQueue(): std::runtime_error("The event_queue is closed") {}
+struct QueueError: public std::runtime_error {
+    explicit QueueError(const std::string& error_msg): std::runtime_error(error_msg) {}
+};
+
+struct ClosedQueue: public QueueError {
+    ClosedQueue(): QueueError("The queue was closed!") {}
+};
+
+struct NonExistingQueue: public QueueError {
+    NonExistingQueue(): QueueError("The queue doesnt exist!") {}
 };
 
 /*

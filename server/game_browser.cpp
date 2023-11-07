@@ -18,8 +18,7 @@ void GameBrowser::create_game(uint8_t& game_id_to_create) {
 }
 
 void GameBrowser::join_game(const uint8_t& game_id_to_join, const uint8_t& id,
-                            Queue<std::shared_ptr<GameState>>& state_queue,
-                            std::atomic<bool>& succesful_join) {
+                            Queue<std::shared_ptr<GameState>>& state_queue) {
 
     std::unique_lock<std::mutex> lck(m);
 
@@ -35,12 +34,13 @@ void GameBrowser::join_game(const uint8_t& game_id_to_join, const uint8_t& id,
 
     games.at(game_id_to_join)->add_client_queue(id, state_queue);
     spdlog::get("server")->debug("Cliente asignado a la sala {:d}", game_id_to_join);
-    succesful_join = true;
 }
 
 Queue<std::shared_ptr<PlayerAction>>& GameBrowser::getQueue(const uint8_t& game_id) {
     std::unique_lock<std::mutex> lck(m);
-    return games.at(game_id)->get_action_queue();
+    if (games.count(game_id) == 1 ? games.at(game_id)->is_playing() : false)
+        return games.at(game_id)->get_action_queue();
+    throw NonExistingQueue();
 }
 
 void GameBrowser::infoGames(std::vector<std::string>& info) {

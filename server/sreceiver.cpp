@@ -12,27 +12,21 @@
 
 ServerSide::Receiver::Receiver(ServerSide::Protocol& protocol, GameBrowser& gb,
                                Queue<std::shared_ptr<GameState>>& state_queue, const uint8_t id):
-        protocol(protocol),
-        browser(gb),
-        connected_to_room(false),
-        room_id(255),
-        state_queue(state_queue),
-        id(id) {}
+        protocol(protocol), browser(gb), room_id(255), state_queue(state_queue), id(id) {}
 
 void ServerSide::Receiver::run() {
     Actions c;
     do {
         try {
-            while (not connected_to_room || not browser.game_started_playing(room_id)) {
+            while (not browser.game_started_playing(room_id)) {
                 protocol.recvCommand(c);
-                ServerSide::Parser::makeLobbyAction(c, protocol, browser, connected_to_room,
-                                                    room_id, id, state_queue)
+                ServerSide::Parser::makeLobbyAction(c, protocol, browser, room_id, id, state_queue)
                         ->execute();
             }
 
             Queue<std::shared_ptr<PlayerAction>>& q = browser.getQueue(room_id);
 
-            while (connected_to_room) {
+            while (browser.game_started_playing(room_id)) {
                 protocol.recvCommand(c);
                 q.push(ServerSide::Parser::makePlayerAction(c, protocol, id));
             }

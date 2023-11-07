@@ -1,7 +1,6 @@
 #ifndef SERVER_RECEIVER_H
 #define SERVER_RECEIVER_H
 
-#include <atomic>
 #include <memory>
 
 #include <stdint.h>
@@ -19,7 +18,6 @@ class Receiver: public Thread {
 private:
     ServerSide::Protocol& protocol;
     GameBrowser& browser;
-    std::atomic<bool> connected_to_room;
     uint8_t room_id;
     Queue<std::shared_ptr<GameState>>& state_queue;
 

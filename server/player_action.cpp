@@ -80,21 +80,16 @@ void ChangeGadget::execute(Game& game) {}
 // ----------------------- JOIN ----------------------
 
 Join::Join(GameBrowser& gb, uint8_t& id_to_join, const uint8_t& id,
-           Queue<std::shared_ptr<GameState>>& state_queue, std::atomic<bool>& connected_to_room):
-        gb(gb),
-        game_id(id_to_join),
-        joined_game(connected_to_room),
-        id(id),
-        state_queue(state_queue) {}
+           Queue<std::shared_ptr<GameState>>& state_queue):
+        gb(gb), game_id(id_to_join), id(id), state_queue(state_queue) {}
 
-void Join::execute() { gb.join_game(game_id, id, state_queue, joined_game); }
+void Join::execute() { gb.join_game(game_id, id, state_queue); }
 
 // ----------------------- CREATE ----------------------
 
 Create::Create(GameBrowser& gb, uint8_t& id_to_create, const uint8_t& id,
-               Queue<std::shared_ptr<GameState>>& state_queue,
-               std::atomic<bool>& connected_to_room):
-        Join(gb, id_to_create, id, state_queue, connected_to_room) {
+               Queue<std::shared_ptr<GameState>>& state_queue):
+        Join(gb, id_to_create, id, state_queue) {
     gb.create_game(id_to_create);
 }
 

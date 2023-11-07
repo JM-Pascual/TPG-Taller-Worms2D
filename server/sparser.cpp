@@ -43,17 +43,16 @@ std::shared_ptr<PlayerAction> ServerSide::Parser::makePlayerAction(const Actions
 }
 
 std::shared_ptr<LobbyAction> ServerSide::Parser::makeLobbyAction(
-        const Actions& c, ServerSide::Protocol& protocol, GameBrowser& browser,
-        std::atomic<bool>& connected_to_room, uint8_t& game_id, const uint8_t& id,
-        Queue<std::shared_ptr<GameState>>& state_queue) {
+        const Actions& c, ServerSide::Protocol& protocol, GameBrowser& browser, uint8_t& game_id,
+        const uint8_t& id, Queue<std::shared_ptr<GameState>>& state_queue) {
 
     switch (c) {
         case Actions::CREATE:
-            return std::make_shared<Create>(browser, game_id, id, state_queue, connected_to_room);
+            return std::make_shared<Create>(browser, game_id, id, state_queue);
 
         case Actions::JOIN:
             protocol.recvGameID(game_id);
-            return std::make_shared<Join>(browser, game_id, id, state_queue, connected_to_room);
+            return std::make_shared<Join>(browser, game_id, id, state_queue);
 
         case Actions::READY:
             return std::make_shared<Ready>(browser, id, game_id);
