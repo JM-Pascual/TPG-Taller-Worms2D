@@ -30,9 +30,9 @@ public:
     const b2Vec2 pos;
     const bool is_walking;
     const bool facing_right;
+    //const bool is_jumping;
 
-    explicit PlayerState(const float x, const float y, const bool is_walking,
-                         const bool facing_right);
+    explicit PlayerState(const float x, const float y, const bool is_walking, const bool facing_right);
 
     ~PlayerState() = default;
 };

@@ -68,33 +68,36 @@ void Game::set_player_ready(const uint8_t id) {
 
 void Game::player_start_moving(const Direction& direction, const uint8_t id) {
     std::lock_guard<std::mutex> lock(m);
-    players_stats.at(id).facing_right = (bool)direction;
     players_stats.at(id).is_moving = true;
-
-    b2Vec2 vel = players_stats.at(id).worm->GetLinearVelocity();
-    vel.x = 0.2f * (std::pow(-1, 1 - players_stats.at(id).facing_right) / TICK_RATE) * 400;
-    players_stats.at(id).worm->SetLinearVelocity(
-            vel);  // Esto tengo que ver si esta bien, se ve cuando lo corra
+    players_stats.at(id).facing_right = (bool)direction;
+    players_stats.at(id).move();
 }
 
 void Game::player_stop_moving(const uint8_t id) {
     std::lock_guard<std::mutex> lock(m);
     players_stats.at(id).is_moving = false;
-    b2Vec2 vel = players_stats.at(id).worm->GetLinearVelocity();
-    vel.x = 0;
-    players_stats.at(id).worm->SetLinearVelocity(vel);
+    players_stats.at(id).stop();
 }
 
-void Game::step() { battlefield.step(); }
+void Game::player_jump(const JumpDir& direction, const uint8_t id) {
+    std::lock_guard<std::mutex> lock(m);
+    players_stats.at(id).is_jumping = true;
+    players_stats.at(id).jump(direction);
+}
+
+void Game::step() {
+    battlefield.step();
+}
 
 void Game::update_physics() {
     std::lock_guard<std::mutex> lock(m);
     for (auto& [id, player]: players_stats) {
-        b2Vec2 vel = player.worm->GetLinearVelocity();
-        vel.x = player.is_moving *
-                (0.2f * (std::pow(-1, 1 - player.facing_right) / TICK_RATE) * 400);
-        // 0 si el jugador no se mueve, el resto de la ecuacion si se esta moviendo
-        player.worm->SetLinearVelocity(vel);
+        player.check_jumping();
+        if(!player.is_moving && !player.is_jumping){
+            player.stop();
+        }else if(player.is_moving) {
+            player.move();
+        }
     }
 }
 
@@ -102,3 +105,9 @@ Game::~Game() {
     spdlog::get("server")->debug("Joineando gameloop");
     gameloop.join();
 }
+
+void Game::player_position(const uint8_t id) {
+    std::cout << players_stats.at(id).worm->GetPosition().x << " " << players_stats.at(id).worm->GetPosition().y << std::endl;
+}
+
+

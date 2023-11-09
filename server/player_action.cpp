@@ -33,7 +33,7 @@ Jump::Jump(ServerSide::Protocol& protocol, const uint8_t id): PlayerAction(id) {
     protocol.recvJumpDir(this->direction);
 }
 
-void Jump::execute(Game& game) {}
+void Jump::execute(Game& game) {game.player_jump(direction,id);}
 
 // ---------------------------- ADSAngle ------------------
 
