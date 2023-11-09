@@ -12,7 +12,7 @@ KBHandler::KBHandler(Queue<std::shared_ptr<Action>>& actionQ, std::atomic<bool>&
 void KBHandler::run() {
     SDL_Event e;
     while (not quit) {
-        while (SDL_WaitEvent(&e)) {
+        while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) {
                 quit = true;
 
