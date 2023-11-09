@@ -9,7 +9,7 @@
 #include <spdlog/spdlog.h>
 #include <stdint.h>
 
-#include "../common/GameState.h"
+#include "../common/States.h"
 #include "../common/const.h"
 #include "../common/liberror.h"
 
@@ -84,7 +84,7 @@ void ServerSide::Protocol::sendPosition(const b2Vec2& pos) {
     send(&y_net, sizeof(uint32_t));
 }
 
-void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<GameState>& ps) {
+void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<States>& ps) {
     std::shared_ptr<PlayerState> p = std::dynamic_pointer_cast<PlayerState>(ps);
 
     send(&p->tag, sizeof(uint8_t));
@@ -93,25 +93,25 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<GameState>& ps)
     send(&p->facing_right, sizeof(bool));
 }
 
-void ServerSide::Protocol::sendPlayerCount(const std::shared_ptr<GameState>& pc) {
+void ServerSide::Protocol::sendPlayerCount(const std::shared_ptr<States>& pc) {
     std::shared_ptr<PlayerCount> p = std::dynamic_pointer_cast<PlayerCount>(pc);
     send(&p->tag, sizeof(uint8_t));
     send(&p->quantity, sizeof(uint8_t));
 }
 
-void ServerSide::Protocol::sendGameState(const std::shared_ptr<GameState>& game_state) {
+void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& game_state) {
     switch (game_state->tag) {
-        case GameStateTag::BATTLEFIELD:
+        case StatesTag::BATTLEFIELD_G:
             break;
 
-        case GameStateTag::PLAYER:
+        case StatesTag::PLAYER_G:
             sendPlayerState(game_state);
             break;
 
-        case GameStateTag::PROYECTILE:
+        case StatesTag::PROYECTILE_G:
             break;
 
-        case GameStateTag::PLAYER_COUNT:
+        case StatesTag::PLAYER_COUNT_G:
             sendPlayerCount(game_state);
             break;
 

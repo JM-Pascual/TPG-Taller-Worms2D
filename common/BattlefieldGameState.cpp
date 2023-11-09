@@ -1,5 +1,3 @@
 #include "BattlefieldGameState.h"
 
-BattlefieldGameState::BattlefieldGameState(const b2Vec3& bar): bar(bar){
-
-}
+BattlefieldStates::BattlefieldStates(const b2Vec3& bar): bar(bar) {}

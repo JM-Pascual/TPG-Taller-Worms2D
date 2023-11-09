@@ -10,9 +10,9 @@
 
 #include "Action.h"
 
-#define PPM 33.33f // pixel per meter ratio.
+#define PPM 33.33f  // pixel per meter ratio.
 
-class GameState;
+class States;
 
 namespace ClientSide {
 class Protocol {
@@ -54,7 +54,7 @@ public:
     */
     void close();
 
-    std::shared_ptr<GameState> recvGameState();
+    std::shared_ptr<States> recvStates();
     /*
         No tiene sentido ni copiar ni mover el protocolo
     */

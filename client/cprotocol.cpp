@@ -5,7 +5,7 @@
 
 #include <arpa/inet.h>
 
-#include "../common/GameState.h"
+#include "../common/States.h"
 #include "../common/const.h"
 #include "../common/liberror.h"
 
@@ -59,17 +59,17 @@ void ClientSide::Protocol::close() {
     }
 }
 
-std::shared_ptr<GameState> ClientSide::Protocol::recvGameState() {
-    GameStateTag tag = (GameStateTag)recvUint8();
+std::shared_ptr<States> ClientSide::Protocol::recvStates() {
+    StatesTag tag = (StatesTag)recvUint8();
 
     switch (tag) {
-        case GameStateTag::BATTLEFIELD:
+        case StatesTag::BATTLEFIELD_G:
             return std::make_shared<PlayerCount>(recvUint8());
 
-        case GameStateTag::PLAYER_COUNT:
+        case StatesTag::PLAYER_COUNT_G:
             return std::make_shared<PlayerCount>(recvUint8());
 
-        case GameStateTag::PROYECTILE:
+        case StatesTag::PROYECTILE_G:
             return std::make_shared<PlayerCount>(recvUint8());
 
         default:
@@ -85,5 +85,5 @@ float ClientSide::Protocol::meter_to_pixel_x(float meter_position) {
 }
 
 float ClientSide::Protocol::meter_to_pixel_y(float meter_position) {
-    return (720 - meter_position * PPM); //ToDo
+    return (720 - meter_position * PPM);  // ToDo
 }

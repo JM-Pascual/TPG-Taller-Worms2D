@@ -6,7 +6,7 @@
 
 #include "game_loop.h"
 
-void Game::get_game_state(std::list<std::shared_ptr<GameState>>& states_list) {
+void Game::get_game_state(std::list<std::shared_ptr<States>>& states_list) {
     std::lock_guard<std::mutex> l(m);
 
     states_list.push_back(std::make_shared<PlayerCount>(players_stats.size()));
@@ -26,7 +26,7 @@ Queue<std::shared_ptr<PlayerAction>>& Game::get_action_queue() {
     return this->gameloop.get_action_queue();
 }
 
-void Game::add_client_queue(const uint8_t& id, Queue<std::shared_ptr<GameState>>& state_queue) {
+void Game::add_client_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue) {
     std::lock_guard<std::mutex> lock(m);
 
     broadcaster.add_queue(id, state_queue);
@@ -36,7 +36,7 @@ void Game::add_client_queue(const uint8_t& id, Queue<std::shared_ptr<GameState>>
 void Game::broadcast_game_state() {
     update_physics();
 
-    std::list<std::shared_ptr<GameState>> state_list;
+    std::list<std::shared_ptr<States>> state_list;
     get_game_state(state_list);
 
     broadcaster.broadcast(state_list);

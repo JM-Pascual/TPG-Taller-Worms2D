@@ -6,7 +6,7 @@
 #include <memory>
 #include <mutex>
 
-#include "../common/GameState.h"
+#include "../common/States.h"
 #include "../common/const.h"
 #include "../common/queue.h"
 #include "box2d/box2d.h"
@@ -28,7 +28,7 @@ private:
     const uint8_t game_id;
     GameLoop gameloop;
 
-    void get_game_state(std::list<std::shared_ptr<GameState>>& states_list);
+    void get_game_state(std::list<std::shared_ptr<States>>& states_list);
 
     bool not_lock_is_playing();
 
@@ -38,9 +38,9 @@ public:
 
     Queue<std::shared_ptr<PlayerAction>>& get_action_queue();
 
-    void add_client_queue(const uint8_t& id, Queue<std::shared_ptr<GameState>>& state_queue);
+    void add_client_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue);
 
-    // Envia el DTO GameState a todos los clientes conectados
+    // Envia el DTO States a todos los clientes conectados
     void broadcast_game_state();
 
     void remove_closed_clients();

@@ -4,7 +4,7 @@
 #include <atomic>
 #include <memory>
 
-#include "../common/GameState.h"
+#include "../common/States.h"
 #include "../common/queue.h"
 
 class PlayerAction;
@@ -24,7 +24,7 @@ public:
 
     static std::shared_ptr<LobbyAction> makeLobbyAction(
             const Actions& c, ServerSide::Protocol&, GameBrowser& browser, uint8_t& game_id,
-            const uint8_t& id, Queue<std::shared_ptr<GameState>>& state_queue);
+            const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue);
 };
 }  // namespace ServerSide
 

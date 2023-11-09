@@ -18,7 +18,7 @@ void GameBrowser::create_game(uint8_t& game_id_to_create) {
 }
 
 void GameBrowser::join_game(const uint8_t& game_id_to_join, const uint8_t& id,
-                            Queue<std::shared_ptr<GameState>>& state_queue) {
+                            Queue<std::shared_ptr<States>>& state_queue) {
 
     std::unique_lock<std::mutex> lck(m);
 

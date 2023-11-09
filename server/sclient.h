@@ -6,13 +6,13 @@
 
 #include <stdint.h>
 
+#include "../common/States.h"
 #include "../common/queue.h"
-#include "../common/GameState.h"
 
+#include "game_loop.h"
 #include "sprotocol.h"
 #include "sreceiver.h"
 #include "ssender.h"
-#include "game_loop.h"
 
 namespace ServerSide {
 class Client {
@@ -21,7 +21,8 @@ private:
     ServerSide::Receiver recv;
     ServerSide::Sender send;
     std::atomic<bool> killed;
-    Queue<std::shared_ptr<GameState>> state_queue;
+    Queue<std::shared_ptr<States>> state_queue;
+
 public:
     const uint8_t id;
 

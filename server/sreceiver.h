@@ -5,7 +5,7 @@
 
 #include <stdint.h>
 
-#include "../common/GameState.h"
+#include "../common/States.h"
 #include "../common/queue.h"
 #include "../common/thread.h"
 
@@ -19,13 +19,13 @@ private:
     ServerSide::Protocol& protocol;
     GameBrowser& browser;
     uint8_t room_id;
-    Queue<std::shared_ptr<GameState>>& state_queue;
+    Queue<std::shared_ptr<States>>& state_queue;
 
 public:
     const uint8_t id;
 
     explicit Receiver(ServerSide::Protocol& protocol, GameBrowser& browser,
-                      Queue<std::shared_ptr<GameState>>& state_queue, const uint8_t id);
+                      Queue<std::shared_ptr<States>>& state_queue, const uint8_t id);
 
     void run() override;
     /*

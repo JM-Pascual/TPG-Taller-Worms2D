@@ -62,7 +62,7 @@ public:
         Agrega client al GameLoop especificado por game_code
     */
     void join_game(const uint8_t& game_code, const uint8_t& id,
-                   Queue<std::shared_ptr<GameState>>& state_queue);
+                   Queue<std::shared_ptr<States>>& state_queue);
     /*
 
     */

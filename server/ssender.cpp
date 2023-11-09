@@ -7,14 +7,14 @@
 #include "sprotocol.h"
 
 ServerSide::Sender::Sender(ServerSide::Protocol& protocol,
-                           Queue<std::shared_ptr<GameState>>& game_states):
+                           Queue<std::shared_ptr<States>>& game_states):
         protocol(protocol), game_states(game_states) {}
 
 void ServerSide::Sender::run() {
     do {
 
         try {
-            this->protocol.sendGameState(game_states.pop());
+            this->protocol.sendStates(game_states.pop());
 
         } catch (const ClosedQueue& e) {
             if (_keep_running) {

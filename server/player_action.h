@@ -5,7 +5,7 @@
 
 #include <stdint.h>
 
-#include "../common/GameState.h"
+#include "../common/States.h"
 #include "../common/const.h"
 #include "../common/queue.h"
 
@@ -173,11 +173,11 @@ private:
     GameBrowser& gb;
     uint8_t& game_id;
     const uint8_t& id;
-    Queue<std::shared_ptr<GameState>>& state_queue;
+    Queue<std::shared_ptr<States>>& state_queue;
 
 public:
     explicit Join(GameBrowser& gb, uint8_t& id_to_join, const uint8_t& id,
-                  Queue<std::shared_ptr<GameState>>& state_queue);
+                  Queue<std::shared_ptr<States>>& state_queue);
 
     void execute() override;
 
@@ -189,7 +189,7 @@ public:
 class Create: public Join {
 public:
     explicit Create(GameBrowser& gb, uint8_t& id_to_create, const uint8_t& id,
-                    Queue<std::shared_ptr<GameState>>& state_queue);
+                    Queue<std::shared_ptr<States>>& state_queue);
 
     ~Create() override = default;
 };

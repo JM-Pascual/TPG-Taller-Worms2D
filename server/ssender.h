@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "../common/GameState.h"
+#include "../common/States.h"
 #include "../common/queue.h"
 #include "../common/thread.h"
 
@@ -15,10 +15,10 @@ class Protocol;
 class Sender: public Thread {
 private:
     ServerSide::Protocol& protocol;
-    Queue<std::shared_ptr<GameState>>& game_states;
+    Queue<std::shared_ptr<States>>& game_states;
 
 public:
-    explicit Sender(ServerSide::Protocol& protocol, Queue<std::shared_ptr<GameState>>& game_states);
+    explicit Sender(ServerSide::Protocol& protocol, Queue<std::shared_ptr<States>>& game_states);
     // Corre el sender esperando que la event_queue tenga un elemento para poder enviar
     //  a traves del protocolo
     void run() override;
