@@ -92,7 +92,7 @@ void Game::update_physics() {
     std::lock_guard<std::mutex> lock(m);
     for (auto& [id, player]: players_stats) {
         player.check_jumping();
-        if(!player.is_walking && !player.is_jumping){
+        if(!player.is_walking && !player.is_jumping && !player.is_backflipping){
             player.stop();
         }else if(player.is_walking) {
             player.move();

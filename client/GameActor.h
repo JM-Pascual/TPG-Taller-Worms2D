@@ -44,8 +44,8 @@ public:
             is_backflipping(std::dynamic_pointer_cast<PlayerState>(initial_state)->is_backflipping),
             facing_right(std::dynamic_pointer_cast<PlayerState>(initial_state)->facing_right),
             walking(pool.get_texture(Actors::WORM), 15),
-            jumping(pool.get_texture(Actors::JUMPING_WORM), 10, 80),
-            backflipping(pool.get_texture(Actors::BACKFLIP_WORM), 22, 60){}
+            jumping(pool.get_texture(Actors::JUMPING_WORM), 7, 140),
+            backflipping(pool.get_texture(Actors::BACKFLIP_WORM), 22, 40){}
 
     void update(const std::shared_ptr<GameState>& actor_state, unsigned int ms) override {
         position = std::dynamic_pointer_cast<PlayerState>(actor_state)->pos;

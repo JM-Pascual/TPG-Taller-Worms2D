@@ -35,7 +35,6 @@ void Player::stop() {
     b2Vec2 vel = worm->GetLinearVelocity();
     vel.x = 0;
     worm->SetLinearVelocity(vel);
-
 }
 
 void Player::jump(const JumpDir& direction) {
@@ -45,7 +44,7 @@ void Player::jump(const JumpDir& direction) {
             is_jumping = true;
             break;
         case (JumpDir::BACK):
-            worm->ApplyLinearImpulseToCenter(b2Vec2(std::pow(-1, facing_right) * 5,25), true);
+            worm->ApplyLinearImpulseToCenter(b2Vec2(std::pow(-1, facing_right) * 20,25), true);
             is_backflipping = true;
             break;
     }
