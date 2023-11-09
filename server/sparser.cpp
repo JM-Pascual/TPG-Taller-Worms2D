@@ -48,7 +48,7 @@ std::shared_ptr<LobbyAction> ServerSide::Parser::makeLobbyAction(
 
     switch (c) {
         case Actions::CREATE:
-            return std::make_shared<Create>(browser, game_id, id, state_queue);
+            return std::make_shared<Create>(browser, game_id, id, state_queue, protocol);
 
         case Actions::JOIN:
             protocol.recvGameID(game_id);
@@ -56,6 +56,9 @@ std::shared_ptr<LobbyAction> ServerSide::Parser::makeLobbyAction(
 
         case Actions::READY:
             return std::make_shared<Ready>(browser, id, game_id);
+
+        case Actions::SHOW_GAMES:
+            return std::make_shared<ShowGames>(browser, state_queue);
 
         default:
             return std::make_shared<NullCommand>();

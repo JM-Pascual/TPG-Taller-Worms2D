@@ -65,7 +65,8 @@ enum class Actors {
 };
 
 enum class StatesTag {
-    INFO_GAMES_L,
+    GAMES_COUNT_L,
+    INFO_GAME_L,
     PLAYER_COUNT_L,
     PLAYER_L,
     BATTLEFIELD_G,

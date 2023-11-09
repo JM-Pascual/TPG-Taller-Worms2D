@@ -2,6 +2,8 @@
 #define COMMAND_H
 
 #include <memory>
+#include <string>
+#include <vector>
 
 #include <stdint.h>
 
@@ -187,9 +189,13 @@ public:
 // ----------------------- CREATE ----------------------
 
 class Create: public Join {
+private:
+    std::string desc;
+    std::string map;
+
 public:
     explicit Create(GameBrowser& gb, uint8_t& id_to_create, const uint8_t& id,
-                    Queue<std::shared_ptr<States>>& state_queue);
+                    Queue<std::shared_ptr<States>>& state_queue, ServerSide::Protocol& protocol);
 
     ~Create() override = default;
 };
@@ -209,6 +215,21 @@ public:
     void execute() override;
 
     ~Ready() = default;
+};
+
+class ShowGames: public LobbyAction {
+private:
+    std::vector<std::shared_ptr<GameInfoL>> info;
+    GameBrowser& gb;
+    Queue<std::shared_ptr<States>>& state_queue;
+
+public:
+    ShowGames(GameBrowser& gb, Queue<std::shared_ptr<States>>& stateQ):
+            gb(gb), state_queue(stateQ) {}
+
+    void execute() override;
+
+    ~ShowGames() = default;
 };
 
 // ----------------------- NULL_COMMAND ----------------------

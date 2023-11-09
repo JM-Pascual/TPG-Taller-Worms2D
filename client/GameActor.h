@@ -35,16 +35,16 @@ private:
 
 public:
     Worm(const std::shared_ptr<States>& initial_state, float ms, TexturesPool& pool):
-            GameActor(std::dynamic_pointer_cast<PlayerState>(initial_state)->pos.x,
-                      std::dynamic_pointer_cast<PlayerState>(initial_state)->pos.y),
-            is_walking(std::dynamic_pointer_cast<PlayerState>(initial_state)->is_walking),
-            facing_right(std::dynamic_pointer_cast<PlayerState>(initial_state)->facing_right),
+            GameActor(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->pos.x,
+                      std::dynamic_pointer_cast<PlayerStateG>(initial_state)->pos.y),
+            is_walking(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->is_walking),
+            facing_right(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->facing_right),
             worm_animation(pool.get_texture(Actors::WORM), 15) {}
 
     void update(const std::shared_ptr<States>& actor_state, unsigned int ms) override {
-        position = std::dynamic_pointer_cast<PlayerState>(actor_state)->pos;
-        is_walking = std::dynamic_pointer_cast<PlayerState>(actor_state)->is_walking;
-        facing_right = std::dynamic_pointer_cast<PlayerState>(actor_state)->facing_right;
+        position = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->pos;
+        is_walking = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->is_walking;
+        facing_right = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->facing_right;
         worm_animation.update(ms, !is_walking);
     }
 

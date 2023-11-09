@@ -5,6 +5,7 @@
 #include <map>
 #include <memory>
 #include <mutex>
+#include <string>
 
 #include "../common/States.h"
 #include "../common/const.h"
@@ -25,16 +26,24 @@ private:
     BroadCaster broadcaster;
     Battlefield battlefield;
     uint8_t ready_count;
+    const std::string description;
+    const std::string map_name;
     const uint8_t game_id;
     GameLoop gameloop;
+
 
     void get_game_state(std::list<std::shared_ptr<States>>& states_list);
 
     bool not_lock_is_playing();
 
 public:
-    Game(const uint8_t game_id, Queue<uint8_t>& erase_id_queue):
-            ready_count(0), game_id(game_id), gameloop(*this, this->game_id, erase_id_queue) {}
+    Game(const std::string& desc, const std::string& map, const uint8_t& game_id,
+         Queue<uint8_t>& erase_id_queue):
+            ready_count(0),
+            description(desc),
+            map_name(map),
+            game_id(game_id),
+            gameloop(*this, this->game_id, erase_id_queue) {}
 
     Queue<std::shared_ptr<PlayerAction>>& get_action_queue();
 
@@ -55,6 +64,8 @@ public:
 
     void step();
     void update_physics();
+
+    std::shared_ptr<GameInfoL> getInfo();
 
     ~Game();
 };

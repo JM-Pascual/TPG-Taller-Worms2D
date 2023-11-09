@@ -88,9 +88,22 @@ void Join::execute() { gb.join_game(game_id, id, state_queue); }
 // ----------------------- CREATE ----------------------
 
 Create::Create(GameBrowser& gb, uint8_t& id_to_create, const uint8_t& id,
-               Queue<std::shared_ptr<States>>& state_queue):
+               Queue<std::shared_ptr<States>>& state_queue, ServerSide::Protocol& protocol):
         Join(gb, id_to_create, id, state_queue) {
-    gb.create_game(id_to_create);
+    protocol.recvString64(desc);
+    protocol.recvString64(map);
+    gb.create_game(desc, map, id_to_create);
+}
+
+// -------------------- SHOW GAMES -----------------
+
+void ShowGames::execute() {
+    gb.infoGames(info);
+    state_queue.push(std::make_shared<GamesCountL>(info.size()));
+
+    for (size_t i = 0; i < info.size(); i++) {
+        state_queue.push(info[i]);
+    }
 }
 
 // ----------------------- READY --------------------

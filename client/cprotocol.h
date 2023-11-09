@@ -2,6 +2,7 @@
 #define CLIENT_PROTOCOL_H
 
 #include <memory>
+#include <string>
 
 #include <stdint.h>
 
@@ -13,6 +14,7 @@
 #define PPM 33.33f  // pixel per meter ratio.
 
 class States;
+class GameInfoL;
 
 namespace ClientSide {
 class Protocol {
@@ -39,6 +41,10 @@ private:
 
     float meter_to_pixel_x(float meter_position);
     float meter_to_pixel_y(float meter_position);
+
+    void recvString64(std::string& str);
+
+    std::shared_ptr<GameInfoL> recvGameInfo();
 
 public:
     // Envia data chequeando si se cierra el socket

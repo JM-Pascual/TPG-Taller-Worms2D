@@ -155,6 +155,15 @@ public:
     ~JoinGame() override = default;
 };
 
+class ShowGames: public Action {
+public:
+    ShowGames(): Action(Actions::SHOW_GAMES) {}
+
+    void send(ClientSide::Protocol& protocol) override;
+
+    ~ShowGames() = default;
+};
+
 class Ready: public Action {
 public:
     Ready(): Action(Actions::READY) {}

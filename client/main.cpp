@@ -1,3 +1,4 @@
+#include <QApplication>
 #include <iostream>
 
 #include <spdlog/spdlog.h>
@@ -7,6 +8,7 @@
 #include "../common/logger.h"
 
 #include "client.h"
+#include "mainwindow.h"
 
 #define HOSTNAME argv[1]
 #define SERVNAME argv[2]
@@ -21,12 +23,13 @@ int main(int argc, char* argv[]) try {
                   << " <ip/hostname server> <port/servicename>\n";
         return ERROR_;
     }
-    // Cuando haya multiples clientes se podria cambiar la inicializacion del log a cuando se le
-    // pasa la id al cliente para que no se interfieran multiples logs en un archivo
+
     Logger l(LOGNAME, LOGFILE);
-    Client client(HOSTNAME, SERVNAME);
-    client.run();
-    return SUCCESS_;
+    QApplication a(argc, argv);
+    MainWindow w(HOSTNAME, SERVNAME);
+    w.show();
+
+    return a.exec();
 
 } catch (const LibError& e) {
     spdlog::get("client")->error("{:s}", e.what());

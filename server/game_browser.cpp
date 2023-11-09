@@ -6,11 +6,12 @@
 
 GameBrowser::GameBrowser(): game_id_count(0), cleaner(*this) { cleaner.start(); }
 
-void GameBrowser::create_game(uint8_t& game_id_to_create) {
-    // Por el momento no tiene args, despues tendra nombre, mapa, etc
+void GameBrowser::create_game(const std::string& desc, const std::string& map,
+                              uint8_t& game_id_to_create) {
     std::unique_lock<std::mutex> lck(m);
 
-    games.insert({game_id_count, std::make_unique<Game>(game_id_count, cleaner.game_id_to_clean)});
+    games.insert({game_id_count,
+                  std::make_unique<Game>(desc, map, game_id_count, cleaner.game_id_to_clean)});
     game_id_to_create = game_id_count++;
     // Post Incremento para devolver el valor anterior y luego inc
 
@@ -43,14 +44,13 @@ Queue<std::shared_ptr<PlayerAction>>& GameBrowser::getQueue(const uint8_t& game_
     throw NonExistingQueue();
 }
 
-void GameBrowser::infoGames(std::vector<std::string>& info) {
+void GameBrowser::infoGames(std::vector<std::shared_ptr<GameInfoL>>& info) {
     std::unique_lock<std::mutex> lck(m);
 
     spdlog::get("server")->debug("Recolectando informacion de los juegos en ejecucion");
+    info.resize(games.size());
     for (const auto& [id, game]: games) {
-        std::string s("GameLoop id: " +
-                      std::to_string(id));  // + "players: " + std::to_string(value.playersCount());
-        info.push_back(s);
+        info.push_back(game->getInfo());
     }
 }
 

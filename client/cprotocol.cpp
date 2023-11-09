@@ -2,6 +2,7 @@
 
 #include <cerrno>
 #include <cstring>
+#include <vector>
 
 #include <arpa/inet.h>
 
@@ -63,21 +64,27 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
     StatesTag tag = (StatesTag)recvUint8();
 
     switch (tag) {
+        case StatesTag::GAMES_COUNT_L:
+            return std::make_shared<GamesCountL>(recvUint8());
+
+        case StatesTag::INFO_GAME_L:
+            return recvGameInfo();
+
         case StatesTag::BATTLEFIELD_G:
-            return std::make_shared<PlayerCount>(recvUint8());
+            return std::make_shared<PlayerCountG>(recvUint8());
 
         case StatesTag::PLAYER_COUNT_G:
-            return std::make_shared<PlayerCount>(recvUint8());
+            return std::make_shared<PlayerCountG>(recvUint8());
 
         case StatesTag::PROYECTILE_G:
-            return std::make_shared<PlayerCount>(recvUint8());
+            return std::make_shared<PlayerCountG>(recvUint8());
 
         default:
             float x = meter_to_pixel_x(recvFloat());
             float y = meter_to_pixel_y(recvFloat());
             bool is_wa = recvBool();
             bool direction = recvBool();
-            return std::make_shared<PlayerState>(x, y, is_wa, direction);
+            return std::make_shared<PlayerStateG>(x, y, is_wa, direction);
     }
 }
 float ClientSide::Protocol::meter_to_pixel_x(float meter_position) {
@@ -86,4 +93,23 @@ float ClientSide::Protocol::meter_to_pixel_x(float meter_position) {
 
 float ClientSide::Protocol::meter_to_pixel_y(float meter_position) {
     return (720 - meter_position * PPM);  // ToDo
+}
+
+void ClientSide::Protocol::recvString64(std::string& str) {
+    uint8_t length;
+    this->recv(&length, sizeof(uint8_t));
+
+    std::vector<char> str_net;
+    str_net.resize(length + 1);  // length + '\0'
+    this->recv(str_net.data(), length);
+    str = std::string(str_net.data());
+}
+
+std::shared_ptr<GameInfoL> ClientSide::Protocol::recvGameInfo() {
+    std::string desc, map_name;
+
+    recvString64(desc);
+    recvString64(map_name);
+
+    return std::make_shared<GameInfoL>(desc, map_name, recvUint8(), recvUint8());
 }

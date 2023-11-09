@@ -57,7 +57,7 @@ public:
     /*
 
     */
-    void create_game(uint8_t& game_id_to_create);
+    void create_game(const std::string& desc, const std::string& map, uint8_t& game_id_to_create);
     /*
         Agrega client al GameLoop especificado por game_code
     */
@@ -69,7 +69,7 @@ public:
 
     Queue<std::shared_ptr<PlayerAction>>& getQueue(const uint8_t& game_id);
 
-    void infoGames(std::vector<std::string>&);
+    void infoGames(std::vector<std::shared_ptr<GameInfoL>>&);
     /*
 
     */

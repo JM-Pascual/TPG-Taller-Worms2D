@@ -9,10 +9,10 @@
 void Game::get_game_state(std::list<std::shared_ptr<States>>& states_list) {
     std::lock_guard<std::mutex> l(m);
 
-    states_list.push_back(std::make_shared<PlayerCount>(players_stats.size()));
+    states_list.push_back(std::make_shared<PlayerCountG>(players_stats.size()));
 
     for (const auto& [id, player]: players_stats) {
-        states_list.push_back(std::make_shared<PlayerState>(
+        states_list.push_back(std::make_shared<PlayerStateG>(
                 player.worm->GetPosition().x, player.worm->GetPosition().y,
                 player.worm->GetLinearVelocity().x != 0, player.facing_right));
     }
@@ -96,6 +96,11 @@ void Game::update_physics() {
         // 0 si el jugador no se mueve, el resto de la ecuacion si se esta moviendo
         player.worm->SetLinearVelocity(vel);
     }
+}
+
+std::shared_ptr<GameInfoL> Game::getInfo() {
+    std::lock_guard<std::mutex> lock(m);
+    return std::make_shared<GameInfoL>(description, map_name, players_stats.size(), game_id);
 }
 
 Game::~Game() {

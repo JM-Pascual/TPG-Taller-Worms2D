@@ -2,6 +2,7 @@
 #define SERVER_PROTOCOL_H
 
 #include <memory>
+#include <string>
 
 #include <stdint.h>
 
@@ -42,7 +43,9 @@ private:
 
     void sendPlayerState(const std::shared_ptr<States>& ps);
 
-    void sendPlayerCount(const std::shared_ptr<States>& pc);
+    void sendGameInfo(const std::shared_ptr<States>& count);
+
+    void sendCount(const std::shared_ptr<States>& count);
 
 public:
     void sendStates(const std::shared_ptr<States>& game_state);
@@ -78,6 +81,10 @@ public:
         Cierra forzosamente el socket del protocolo (en caso de que no se haya hecho)
     */
     void close();
+    /*
+        Recibe un string de maximo 64 caracteres
+    */
+    void recvString64(std::string& desc);
     /*
         Recibe la id del game al que se quiere conectar el cliente
     */
