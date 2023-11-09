@@ -17,13 +17,15 @@ class Player {
 private:
     b2Body* worm; //En este caso lo que quiero tener es toda la información del worm cargada y los dos vectores de abajo vuelan
     bool facing_right;
-    bool is_moving;
+    bool is_walking;
     bool ready;
     bool is_jumping;
+    bool is_backflipping;
 
     void move();
     void stop();
     void jump(const JumpDir& direction);
+    void keep_jumping();
 
 public:
     explicit Player(Battlefield& battlefield);

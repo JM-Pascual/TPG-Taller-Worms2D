@@ -61,7 +61,9 @@ enum class Actors {
     BRIDGE = 0x2,
     LONG_BRIDGE = 0x3,
     BACKGROUND = 0x4,
-    WATER = 0x5
+    WATER = 0x5,
+    JUMPING_WORM = 0x6,
+    BACKFLIP_WORM = 0X7
 };
 
 enum class GameStateTag { BATTLEFIELD, PLAYER, PROYECTILE, PLAYER_COUNT };

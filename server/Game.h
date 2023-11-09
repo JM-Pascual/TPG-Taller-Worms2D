@@ -28,9 +28,9 @@ private:
     const uint8_t game_id;
     GameLoop gameloop;
 
-    void get_game_state(std::list<std::shared_ptr<GameState>>& states_list);
+    void build_game_state(std::list<std::shared_ptr<GameState>>& states_list);
 
-    bool not_lock_is_playing();
+    bool non_locking_is_playing();
 
 public:
     Game(const uint8_t game_id, Queue<uint8_t>& erase_id_queue):

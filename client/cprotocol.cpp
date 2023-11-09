@@ -76,9 +76,11 @@ std::shared_ptr<GameState> ClientSide::Protocol::recvGameState() {
             float x = meter_to_pixel_x(recvFloat());
             float y = meter_to_pixel_y(recvFloat());
             bool is_wa = recvBool();
+            bool is_jumping = recvBool();
+            bool is_backflipping = recvBool();
             bool direction = recvBool();
-            //bool is_jumping = recvBool();
-            return std::make_shared<PlayerState>(x, y, is_wa, direction/*,is_jumping*/);
+            return std::make_shared<PlayerState>(x, y, is_wa, is_jumping,
+                                                 is_backflipping, direction);
     }
 }
 float ClientSide::Protocol::meter_to_pixel_x(float meter_position) {

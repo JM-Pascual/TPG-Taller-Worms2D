@@ -4,14 +4,22 @@ TexturesPool::TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer) :
         renderer(game_renderer) {
     load_level_textures();
     load_water_textures();
-    load_worm_texture();
+    load_worm_textures();
 }
 
-void TexturesPool::load_worm_texture() {
+void TexturesPool::load_worm_textures() {
     /// Loads all the worm textures and enables alpha blending
     textures.insert({Actors::WORM, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/worms/worm-left.png")
                                                                                                                  .SetColorKey(true, 0x000000))});
     textures[Actors::WORM]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    textures.insert({Actors::JUMPING_WORM, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/worms/worm-jump-up.png")
+                                                                                          .SetColorKey(true, 0x000000))});
+    textures[Actors::JUMPING_WORM]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    textures.insert({Actors::BACKFLIP_WORM, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/worms/worm-backflip.png")
+                                                                                                  .SetColorKey(true, 0x000000))});
+    textures[Actors::BACKFLIP_WORM]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
 void TexturesPool::load_level_textures() {

@@ -10,7 +10,7 @@
 
 class TexturesPool {
 private:
-    void load_worm_texture();
+    void load_worm_textures();
     void load_level_textures();
     void load_water_textures();
 

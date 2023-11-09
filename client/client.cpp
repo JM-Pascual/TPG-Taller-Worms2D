@@ -7,7 +7,6 @@
 
 #include "../common/GameState.h"
 
-#include "Action.h"
 #include "GameActor.h"
 #include "TexturesPool.h"
 #include "Window.h"
@@ -65,10 +64,9 @@ void Client::run() {
                         std::dynamic_pointer_cast<PlayerCount>(raw_state)->quantity;
                 for (size_t i = 0; i < players_quantity; i++) {
                     while (not game_state_queue.try_pop(raw_state)) {}
-
                     if (actors.count(i) == 0) {
                         actors.insert(
-                                {i, std::make_shared<Worm>(raw_state, loop_start_ticks, txt_pool)});
+                                {i, std::make_shared<Worm>(raw_state, txt_pool)});
                     } else {
                         actors.at(i)->update(raw_state, loop_start_ticks);
                     }

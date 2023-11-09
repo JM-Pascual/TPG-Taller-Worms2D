@@ -29,13 +29,15 @@ private:
 public:
     explicit Animation(std::shared_ptr<SDL2pp::Texture> &texture,
                        unsigned int frames_in_texture, unsigned int delay_in_animation = 0);
-    ~Animation() = default;
-    void update(unsigned int dt, bool iddle);
+
+    void update(unsigned int dt, bool iddle = false);
 
     void render(SDL2pp::Renderer &renderer, SDL2pp::Rect dest,
                 int non_squared_width = 0, int non_squared_height = 0,
                 SDL_RendererFlip flipType = SDL_FLIP_HORIZONTAL,
                 double angle = 0.0);
+
+    ~Animation() = default;
 };
 
 #endif  // ANIMATION_H_

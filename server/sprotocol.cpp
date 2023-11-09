@@ -90,6 +90,8 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<GameState>& ps)
     send(&p->tag, sizeof(uint8_t));
     this->sendPosition(p->pos);
     send(&p->is_walking, sizeof(bool));
+    send(&p->is_jumping, sizeof(bool));
+    send(&p->is_backflipping, sizeof(bool));
     send(&p->facing_right, sizeof(bool));
 }
 
