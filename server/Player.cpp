@@ -40,6 +40,7 @@ void Player::jump(const JumpDir& direction) {
 
         case JumpDir::FRONT:
             worm->ApplyLinearImpulseToCenter(b2Vec2(std::pow(-1, 1 - facing_right) * 20,20), true);
+            //worm->ApplyForceToCenter(b2Vec2(std::pow(-1, 1 - facing_right) * 20,100),true);
             break;
         case JumpDir::BACK:
             worm->ApplyLinearImpulseToCenter(b2Vec2(std::pow(-1, facing_right) * 5,25), true);
@@ -49,11 +50,18 @@ void Player::jump(const JumpDir& direction) {
 
 void Player:: check_jumping() {
     float vel_y = (worm->GetLinearVelocity().y);
-        if((vel_y >= 0 && vel_y < 0.002f ) || (vel_y <= 0 && vel_y > -0.002f)){
+        if((vel_y >= 0 && vel_y < 0.02f ) || (vel_y <= 0 && vel_y > -0.02f)){
         is_jumping = false;
     }else{
         is_jumping = true;
         is_moving = false;
         std::cout << "x: " <<worm->GetPosition().x << "y: " << worm->GetPosition().y << std::endl;
+    }
+}
+
+void Player::keep_jumping() {
+    float vel_y = worm->GetLinearVelocity().y;
+    if (vel_y < -0.2) {
+        worm->ApplyForceToCenter(b2Vec2(0, -70), true);
     }
 }

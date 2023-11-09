@@ -30,6 +30,7 @@ public:
 
     void set_ready();
     void check_jumping();
+    void keep_jumping();
 
 
     friend class Game;
