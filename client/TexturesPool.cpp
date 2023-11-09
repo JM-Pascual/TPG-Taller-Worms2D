@@ -31,7 +31,7 @@ void TexturesPool::load_level_textures() {
 
 void TexturesPool::load_water_textures(){
     /// Loads all the water textures and enables alpha blending
-    textures.insert({Actors::WATER, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/blue-water-sprites/blue_concat3.bmp")
+    textures.insert({Actors::WATER, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/blue-water-sprites/new_blue_concat2.png")
                                                                                            .SetColorKey(true, 0x000000))});
     textures[Actors::WATER]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }

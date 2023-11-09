@@ -47,7 +47,7 @@ void Client::run() {
 
     std::unordered_map<size_t, std::shared_ptr<GameActor>> actors;
 
-    Animation water_animation(txt_pool.get_texture(Actors::WATER), 12);
+    Animation water_animation(txt_pool.get_texture(Actors::WATER), 11, 30);
 
     kb.start();
 
@@ -78,7 +78,10 @@ void Client::run() {
         }
 
         water_animation.update(loop_start_ticks, false);
-        water_animation.render((*window.get_renderer()), SDL2pp::Rect(0, 600, 1280, 40), 1256, 1);
+
+        for (int i = 0; i < 5; i++){
+            water_animation.render((*window.get_renderer()), SDL2pp::Rect(0, 600+i*22, 1280, 40), 1240, 0);
+        }
 
         // Show rendered frame
         window.present_textures();

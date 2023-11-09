@@ -8,12 +8,14 @@
 
 #include "Animation.h"
 
-Animation::Animation(std::shared_ptr<SDL2pp::Texture> &texture, unsigned int frames_in_texture) :
+Animation::Animation(std::shared_ptr<SDL2pp::Texture> &texture,
+                     unsigned int frames_in_texture, unsigned int delay_in_animation) :
                                                   texture(texture), numFrames(frames_in_texture),
                                                   size(this->texture->GetHeight() / numFrames), elapsed(0.0f),
-                                                  currentFrame(0) {
+                                                  currentFrame(0), delay(delay_in_animation) {
     assert(this->numFrames > 0);
     assert(this->size > 0);
+
 }
 
 void Animation::update(unsigned int dt, bool iddle) {
@@ -22,7 +24,7 @@ void Animation::update(unsigned int dt, bool iddle) {
     } else{
         this->elapsed = dt;
         /* checks if the frame should be updated based on the time elapsed since the last update */
-        currentFrame = (elapsed/ DRAW_FACTOR) % numFrames;
+        currentFrame = (elapsed/ (DRAW_FACTOR + delay)) % numFrames;
     }
 }
 

@@ -10,14 +10,14 @@ KBHandler::KBHandler(Queue<std::shared_ptr<Action>>& actionQ, std::atomic<bool>&
         action_queue(actionQ), quit(quit) {}
 
 void KBHandler::run() {
-    SDL_Event e;
+    SDL_Event event;
     while (not quit) {
-        while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) {
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
                 quit = true;
 
-            } else if (e.type == SDL_KEYDOWN && e.key.repeat == 0) {
-                switch (e.key.keysym.sym) {
+            } else if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
+                switch (event.key.keysym.sym) {
 
                     case SDLK_ESCAPE:
                         quit = true;
@@ -141,8 +141,8 @@ void KBHandler::run() {
                         break;
                 }
 
-            } else if (e.type == SDL_KEYUP) {
-                switch (e.key.keysym.sym) {
+            } else if (event.type == SDL_KEYUP) {
+                switch (event.key.keysym.sym) {
                     case SDLK_LEFT:
                         this->action_queue.push(std::make_shared<StopMoving>());
                         break;

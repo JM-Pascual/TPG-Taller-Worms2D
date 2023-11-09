@@ -24,10 +24,11 @@ private:
     unsigned int elapsed;
     /** Current animation frame. */
     unsigned int currentFrame;
-    /** True if the animation is iddle. */
-    bool iddle_animation;
+    /** Delay between frames. */
+    unsigned int delay;
 public:
-    explicit Animation(std::shared_ptr<SDL2pp::Texture> &texture, unsigned int frames_in_texture);
+    explicit Animation(std::shared_ptr<SDL2pp::Texture> &texture,
+                       unsigned int frames_in_texture, unsigned int delay_in_animation = 0);
     ~Animation() = default;
     void update(unsigned int dt, bool iddle);
 
