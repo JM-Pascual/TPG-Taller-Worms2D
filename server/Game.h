@@ -52,6 +52,8 @@ public:
     // temp protocol
     void player_start_moving(const Direction& direction, uint8_t id);
     void player_stop_moving(uint8_t id);
+    void player_jump(const JumpDir& direction, uint8_t id);
+    void player_position(const uint8_t id);
 
     void step();
     void update_physics();

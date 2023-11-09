@@ -7,6 +7,7 @@
 #include "box2d/box2d.h"
 #include "battlefield.h"
 
+#define TICK_RATE 30 //Todo Me parece que no tiene que estar acá
 #define WIDTH 0.9f
 #define HEIGHT 1.2f
 
@@ -18,11 +19,18 @@ private:
     bool facing_right;
     bool is_moving;
     bool ready;
+    bool is_jumping;
+
+    void move();
+    void stop();
+    void jump(const JumpDir& direction);
 
 public:
     explicit Player(Battlefield& battlefield);
 
     void set_ready();
+    void check_jumping();
+
 
     friend class Game;
 };
