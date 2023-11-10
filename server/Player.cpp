@@ -56,15 +56,6 @@ void Player::check_jumping() {
         if((vel_y >= 0 && vel_y < 0.002f ) || (vel_y <= 0 && vel_y > -0.002f)){
             is_jumping = false;
             is_backflipping = false;
-        } else{
-            keep_jumping();
         }
-    }
-}
-
-void Player::keep_jumping() {
-    float vel_y = worm->GetLinearVelocity().y;
-    if (vel_y < -0.2) {
-        worm->ApplyForceToCenter(b2Vec2(0, -70), true);
     }
 }

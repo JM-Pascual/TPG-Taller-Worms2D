@@ -46,13 +46,13 @@ void Client::run() {
 
     std::unordered_map<size_t, std::shared_ptr<GameActor>> actors;
 
-    Animation water_animation(txt_pool.get_texture(Actors::WATER), 11, 30);
+    Animation water_animation(txt_pool.get_texture(Actors::WATER), 11, 3);
 
     kb.start();
 
-    while (!quit) {
-        unsigned int loop_start_ticks = SDL_GetTicks();
+    int t1 = SDL_GetTicks();
 
+    while (!quit) {
         window.clear_textures();
 
         window.render_stage(txt_pool);
@@ -68,14 +68,14 @@ void Client::run() {
                         actors.insert(
                                 {i, std::make_shared<Worm>(raw_state, txt_pool)});
                     } else {
-                        actors.at(i)->update(raw_state, loop_start_ticks);
+                        actors.at(i)->update(raw_state, t1);
                     }
                     actors.at(i)->render(window.get_renderer());
                 }
             }
         }
 
-        water_animation.update(loop_start_ticks, false);
+        water_animation.update();
 
         for (int i = 0; i < 5; i++){
             water_animation.render((*window.get_renderer()), SDL2pp::Rect(0, 600+i*22, 1280, 40), 1240, 0);
@@ -84,11 +84,17 @@ void Client::run() {
         // Show rendered frame
         window.present_textures();
 
-        unsigned int loop_finish_ticks = SDL_GetTicks();
-        unsigned int elapsed_ticks = loop_finish_ticks - loop_start_ticks;
+        int t2 = SDL_GetTicks();
+        int rest = frameDuration - (t2 - t1);
 
-        if (elapsed_ticks < frameDuration) {
-            SDL_Delay(frameDuration - elapsed_ticks);
+        if (rest < 0) {
+            int behind = -rest;
+            rest = frameDuration - behind % frameDuration;
+            int lost = behind + rest;
+            t1 += lost;
         }
+
+        SDL_Delay(rest);
+        t1 += frameDuration;
     }
 }

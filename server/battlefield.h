@@ -6,7 +6,7 @@
 #include "box2d/box2d.h"
 
 #define X_GRAVITY 0.0f
-#define Y_GRAVITY (-10.0f)
+#define Y_GRAVITY (-16.5f)
 
 #define TIME_STEP (1.0f / 60.0f)
 #define VELOCITY_ITERATIONS  (int32) 6

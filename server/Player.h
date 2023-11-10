@@ -25,8 +25,6 @@ private:
     void move();
     void stop();
     void jump(const JumpDir& direction);
-    void keep_jumping();
-
 public:
     explicit Player(Battlefield& battlefield);
 

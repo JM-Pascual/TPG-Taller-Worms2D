@@ -43,9 +43,9 @@ public:
             is_jumping(std::dynamic_pointer_cast<PlayerState>(initial_state)->is_jumping),
             is_backflipping(std::dynamic_pointer_cast<PlayerState>(initial_state)->is_backflipping),
             facing_right(std::dynamic_pointer_cast<PlayerState>(initial_state)->facing_right),
-            walking(pool.get_texture(Actors::WORM), 15),
-            jumping(pool.get_texture(Actors::JUMPING_WORM), 7, 140),
-            backflipping(pool.get_texture(Actors::BACKFLIP_WORM), 22, 40){}
+            walking(pool.get_texture(Actors::WORM), 15, 1),
+            jumping(pool.get_texture(Actors::JUMPING_WORM), 5, 5, false),
+            backflipping(pool.get_texture(Actors::BACKFLIP_WORM), 22, 2, false){}
 
     void update(const std::shared_ptr<GameState>& actor_state, unsigned int ms) override {
         position = std::dynamic_pointer_cast<PlayerState>(actor_state)->pos;
@@ -53,9 +53,9 @@ public:
         is_jumping = std::dynamic_pointer_cast<PlayerState>(actor_state)->is_jumping;
         is_backflipping = std::dynamic_pointer_cast<PlayerState>(actor_state)->is_backflipping;
         facing_right = std::dynamic_pointer_cast<PlayerState>(actor_state)->facing_right;
-        walking.update(ms, !is_walking);
-        jumping.update(ms);
-        backflipping.update(ms);
+        walking.update(!is_walking);
+        jumping.update(!is_jumping);
+        backflipping.update(!is_backflipping);
     }
 
     void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
