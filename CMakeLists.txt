@@ -30,8 +30,7 @@ file(GLOB COMMON_SRC common/*.cpp)
 file(GLOB CLIENT_SRC client/*.cpp client/main.cpp)
 file(GLOB SERVER_SRC server/*.cpp server/main.cpp)
 
-add_executable(client_exe ${COMMON_SRC} ${CLIENT_SRC}
-        client/Window.cpp)
+add_executable(client_exe ${COMMON_SRC} ${CLIENT_SRC})
 
 target_include_directories(client_exe PUBLIC ${SDL2_INCLUDE_DIRS})
 target_include_directories(client_exe PUBLIC ${SDL2_IMAGE_INCLUDE_DIRS})
