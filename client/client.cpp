@@ -26,6 +26,7 @@ Client::Client(const char* hostname, const char* servname):
     recv.start();
     spdlog::get("client")->debug("Iniciando hilo sender en el cliente");
     send.start();
+    getID();
 }
 
 void Client::getID() {

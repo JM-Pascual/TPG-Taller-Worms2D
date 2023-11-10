@@ -99,10 +99,10 @@ Create::Create(GameBrowser& gb, uint8_t& id_to_create, const uint8_t& id,
 
 void ShowGames::execute() {
     gb.infoGames(info);
-    state_queue.push(std::make_shared<GamesCountL>(info.capacity()));
+    state_queue.push(std::make_shared<GamesCountL>(info.size()));
 
-    for (size_t i = 0; i < info.capacity(); i++) {
-        state_queue.push(info[i]);
+    for (const auto& i: info) {
+        state_queue.push(i);
     }
 }
 

@@ -7,17 +7,17 @@
 #include "game_loop.h"
 
 
-ServerSide::Client::Client(Socket&& peer, GameBrowser& browser, const uint8_t id):
+ServerSide::Client::Client(Socket&& peer, GameBrowser& browser, const uint8_t& id):
+        id(id),
         protocol(std::move(peer)),
-        recv(this->protocol, browser, state_queue, id),
+        recv(this->protocol, browser, state_queue, this->id),
         send(this->protocol, state_queue),
-        killed(false),
-        id(id) {
-    spdlog::get("server")->debug("Iniciando receptor en cliente {:d}", id);
+        killed(false) {
+    state_queue.push(std::make_shared<MyID>(this->id));
+    spdlog::get("server")->debug("Iniciando receptor en cliente {:d}", this->id);
     recv.start();
-    spdlog::get("server")->debug("Iniciando sender en cliente {:d}", id);
+    spdlog::get("server")->debug("Iniciando sender en cliente {:d}", this->id);
     send.start();
-    state_queue.push(std::make_shared<MyID>(id));
 }
 
 bool ServerSide::Client::isAlive() { return (recv.is_alive() && send.is_alive()); }

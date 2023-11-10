@@ -76,6 +76,9 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
         case StatesTag::INFO_GAME_L:
             return recvGameInfo();
 
+        case StatesTag::MY_ID:
+            return std::make_shared<MyID>(recvUint8());
+
         case StatesTag::BATTLEFIELD_G:
             return std::make_shared<PlayerCountG>(recvUint8());
 

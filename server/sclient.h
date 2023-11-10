@@ -16,6 +16,9 @@
 
 namespace ServerSide {
 class Client {
+public:
+    const uint8_t id;
+
 private:
     ServerSide::Protocol protocol;
     ServerSide::Receiver recv;
@@ -24,9 +27,7 @@ private:
     Queue<std::shared_ptr<States>> state_queue;
 
 public:
-    const uint8_t id;
-
-    explicit Client(Socket&& peer, GameBrowser& browser, uint8_t id);
+    explicit Client(Socket&& peer, GameBrowser& browser, const uint8_t& id);
     /*
         Retorna si ambos hilos estan 'vivos'
     */

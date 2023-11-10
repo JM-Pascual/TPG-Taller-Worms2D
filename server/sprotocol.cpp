@@ -153,6 +153,7 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
 
         case StatesTag::MY_ID:
             sendID(state);
+            break;
 
         case StatesTag::PLAYER_L:
             sendPlayerLobby(state);

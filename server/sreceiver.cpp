@@ -11,7 +11,7 @@
 #include "sprotocol.h"
 
 ServerSide::Receiver::Receiver(ServerSide::Protocol& protocol, GameBrowser& gb,
-                               Queue<std::shared_ptr<States>>& state_queue, const uint8_t id):
+                               Queue<std::shared_ptr<States>>& state_queue, const uint8_t& id):
         protocol(protocol), browser(gb), room_id(255), state_queue(state_queue), id(id) {}
 
 void ServerSide::Receiver::run() {
