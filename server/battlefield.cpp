@@ -34,3 +34,7 @@ b2Body* Battlefield::add_body(b2BodyDef bodyDef) {
 void Battlefield::step() {
     world->Step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 }
+
+void Battlefield::add_proyectile(std::shared_ptr<Proyectile> proyectile_) {
+    proyectile.push_back(proyectile_);
+}

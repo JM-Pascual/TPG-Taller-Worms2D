@@ -25,6 +25,16 @@ public:
     ~PlayerCount() override = default;
 };
 
+class ProyectileCount: public GameState {
+public:
+    const uint8_t quantity;
+
+    explicit ProyectileCount(const uint8_t quantity):
+            GameState(GameStateTag::PROYECTILE_COUNT), quantity(quantity) {}
+
+    ~ProyectileCount() = default;
+};
+
 class PlayerState: public GameState {
 public:
     const b2Vec2 pos;
@@ -39,8 +49,19 @@ public:
     ~PlayerState() override = default;
 };
 
-class BattlefieldState: public GameState {};
+class BattlefieldState: public GameState {
 
-class ProyectileState: public GameState {};
+};
+
+class ProyectileState: public GameState {
+public:
+    const b2Vec2 pos;
+    const WeaponsAndTools type;
+    const bool impacted;
+
+    explicit ProyectileState(const float x, const float y, const WeaponsAndTools type,const bool impacted);
+
+    ~ProyectileState() = default;
+};
 
 #endif  // GAMESTATE_H

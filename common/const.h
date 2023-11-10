@@ -66,6 +66,6 @@ enum class Actors {
     BACKFLIP_WORM = 0X7
 };
 
-enum class GameStateTag { BATTLEFIELD, PLAYER, PROYECTILE, PLAYER_COUNT };
+enum class GameStateTag { BATTLEFIELD, PLAYER, PROYECTILE, PLAYER_COUNT, PROYECTILE_COUNT };
 
 #endif
