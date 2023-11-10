@@ -11,7 +11,7 @@
 #include "TexturesPool.h"
 #include "Window.h"
 
-const int frameDuration = 1000 / 30;
+const int DURATION = 1000 / 30;
 
 Client::Client(const char* hostname, const char* servname):
         quit(false),
@@ -50,7 +50,7 @@ void Client::run() {
 
     kb.start();
 
-    int t1 = SDL_GetTicks();
+    int loop_start_time = SDL_GetTicks();
 
     while (!quit) {
         window.clear_textures();
@@ -68,7 +68,7 @@ void Client::run() {
                         actors.insert(
                                 {i, std::make_shared<Worm>(raw_state, txt_pool)});
                     } else {
-                        actors.at(i)->update(raw_state, t1);
+                        actors.at(i)->update(raw_state, loop_start_time);
                     }
                     actors.at(i)->render(window.get_renderer());
                 }
@@ -81,20 +81,19 @@ void Client::run() {
             water_animation.render((*window.get_renderer()), SDL2pp::Rect(0, 600+i*22, 1280, 40), 1240, 0);
         }
 
-        // Show rendered frame
         window.present_textures();
 
-        int t2 = SDL_GetTicks();
-        int rest = frameDuration - (t2 - t1);
+        int loop_end_time = SDL_GetTicks();
+        int rest_time = DURATION - (loop_end_time - loop_start_time);
 
-        if (rest < 0) {
-            int behind = -rest;
-            rest = frameDuration - behind % frameDuration;
-            int lost = behind + rest;
-            t1 += lost;
+        if (rest_time < 0) {
+            int time_behind = -rest_time;
+            rest_time = DURATION - time_behind % DURATION;
+            int lost = time_behind + rest_time;
+            loop_start_time += lost;
         }
 
-        SDL_Delay(rest);
-        t1 += frameDuration;
+        SDL_Delay(rest_time);
+        loop_start_time += DURATION;
     }
 }
