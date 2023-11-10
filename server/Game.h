@@ -21,7 +21,6 @@ class Game {
 private:
     std::mutex m;
     std::map<uint8_t, Player> players_stats;
-
     BroadCaster broadcaster;
     Battlefield battlefield;
     uint8_t ready_count;

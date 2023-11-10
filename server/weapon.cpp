@@ -3,13 +3,13 @@
 
 Weapon::Weapon(uint8_t ammo): ammo(ammo) {}
 
-b2Body* Weapon::prepare_ammo(Battlefield& battlefield, b2Vec2 bullet_position) {
-    b2BodyDef bullet_body;
-    bullet_body.type = b2_dynamicBody;
-    bullet_body.bullet = true; //Todo ver bien para que sirve
-    bullet_body.position = b2Vec2(bullet_position.x ,bullet_position.y);
+b2Body* Weapon::prepare_ammo(Battlefield& battlefield, b2Vec2 proyectile_position, WeaponsAndTools type) {
+    b2BodyDef proyectile_body;
+    proyectile_body.type = b2_dynamicBody;
+    proyectile_body.bullet = true; //Todo ver bien para que sirve
+    proyectile_body.position = b2Vec2(proyectile_position.x , proyectile_position.y);
 
-    b2Body* bullet = battlefield.add_body(bullet_body);
+    b2Body* world_proyectile = battlefield.add_body(proyectile_body);
 
 
     b2CircleShape shape;
@@ -18,21 +18,23 @@ b2Body* Weapon::prepare_ammo(Battlefield& battlefield, b2Vec2 bullet_position) {
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &shape;
     fixtureDef.density = 1.0f;
-    bullet->CreateFixture(&fixtureDef);
+    world_proyectile->CreateFixture(&fixtureDef);
 
-    return bullet;
+    std::shared_ptr<Proyectile> proyectile = std::make_shared<Proyectile> (world_proyectile,type) ;
+    battlefield.add_proyectile(proyectile);
+
+    return world_proyectile;
 }
 
 
 Bazooka::Bazooka() : Weapon(BAZOOKA_AMMO){}
 
-
 void Bazooka::execute(Battlefield& battlefield, Player& player) {
 
-    b2Vec2 bullet_position = player.set_bullet_direction();
-    b2Body* bullet = prepare_ammo(battlefield,bullet_position);
+    b2Vec2 proyectile_position = player.set_bullet_direction();
+    b2Body* proyectile = prepare_ammo(battlefield,proyectile_position,WeaponsAndTools::BAZOOKA);
 
-    player.shoot_aim_weapon(bullet);
+    player.shoot_aim_weapon(proyectile);
 }
 
 

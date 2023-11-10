@@ -16,6 +16,13 @@ void Game::get_game_state(std::list<std::shared_ptr<GameState>>& states_list) {
                 player.worm->GetPosition().x, player.worm->GetPosition().y,
                 player.worm->GetLinearVelocity().x != 0, player.facing_right));
     }
+
+    states_list.push_back(std::make_shared<ProyectileCount>(battlefield.proyectile.size()));
+
+    for (const auto& proyectile: battlefield.proyectile) {
+        states_list.push_back(proyectile->upload_state());
+    }
+
 }
 
 bool Game::not_lock_is_playing() {

@@ -64,6 +64,6 @@ enum class Actors {
     WATER = 0x5
 };
 
-enum class GameStateTag { BATTLEFIELD, PLAYER, PROYECTILE, PLAYER_COUNT };
+enum class GameStateTag { BATTLEFIELD, PLAYER, PROYECTILE, PLAYER_COUNT, PROYECTILE_COUNT };
 
 #endif

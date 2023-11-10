@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <map>
+#include <list>
 
 #include "../common/const.h"
 #include "box2d/box2d.h"
@@ -29,6 +30,7 @@ private:
     b2Body* worm;
     //std::map<WeaponsAndTools,Weapon >Weapons;
     Weapon* weapon;
+
     bool facing_right;
     bool is_moving;
     bool ready;
