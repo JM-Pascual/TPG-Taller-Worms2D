@@ -104,8 +104,6 @@ void Game::update_physics() {
             player.stop();
         }else if(player.is_walking) {
             player.move();
-        }else if(player.is_jumping){
-            player.keep_jumping();
         }
     }
 }

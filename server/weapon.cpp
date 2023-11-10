@@ -1,8 +1,5 @@
 #include "weapon.h"
 
-
-Weapon::Weapon(uint8_t ammo): ammo(ammo) {}
-
 b2Body* Weapon::prepare_ammo(Battlefield& battlefield, b2Vec2 proyectile_position, WeaponsAndTools type) {
     b2BodyDef proyectile_body;
     proyectile_body.type = b2_dynamicBody;
@@ -26,9 +23,6 @@ b2Body* Weapon::prepare_ammo(Battlefield& battlefield, b2Vec2 proyectile_positio
     return world_proyectile;
 }
 
-
-Bazooka::Bazooka() : Weapon(BAZOOKA_AMMO){}
-
 void Bazooka::execute(Battlefield& battlefield, Player& player) {
 
     b2Vec2 proyectile_position = player.set_bullet_direction();
@@ -36,5 +30,3 @@ void Bazooka::execute(Battlefield& battlefield, Player& player) {
 
     player.shoot_aim_weapon(proyectile);
 }
-
-
