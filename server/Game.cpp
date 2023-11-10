@@ -35,6 +35,7 @@ void Game::add_client_queue(const uint8_t& id, Queue<std::shared_ptr<GameState>>
 
 void Game::broadcast_game_state() {
     update_physics();
+    update_weapon();
 
     std::list<std::shared_ptr<GameState>> state_list;
     get_game_state(state_list);
@@ -108,8 +109,41 @@ Game::~Game() {
     gameloop.join();
 }
 
-void Game::player_position(const uint8_t id) {
-    std::cout << players_stats.at(id).worm->GetPosition().x << " " << players_stats.at(id).worm->GetPosition().y << std::endl;
+void Game::player_start_aiming(const ADSAngleDir& direction,const uint8_t id) {
+    std::lock_guard<std::mutex> lock(m);
+    players_stats.at(id).aiming = true;
+    players_stats.at(id).aim_direction = direction;
 }
 
+void Game::player_stop_aiming(const uint8_t id) {
+    std::lock_guard<std::mutex> lock(m);
+    players_stats.at(id).aiming = false;
+}
+
+void Game::update_weapon() {
+    std::lock_guard<std::mutex> lock(m);
+    for (auto& [id, player]: players_stats) {
+        if(player.aiming){
+            player.change_aim_direction();
+        }
+        if(player.charging_shoot){
+            player.change_fire_power();
+        }
+    }
+}
+
+void Game::player_start_charging(const uint8_t id) {
+    std::lock_guard<std::mutex> lock(m);
+    players_stats.at(id).charging_shoot = true;
+}
+
+void Game::player_shoot(const uint8_t id) {
+    std::lock_guard<std::mutex> lock(m);
+    players_stats.at(id).aiming = false;
+    players_stats.at(id).charging_shoot = false;
+
+    players_stats.at(id).shoot(battlefield);
+
+    players_stats.at(id).weapon_power = 0;
+}
 

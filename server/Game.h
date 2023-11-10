@@ -53,10 +53,18 @@ public:
     void player_start_moving(const Direction& direction, uint8_t id);
     void player_stop_moving(uint8_t id);
     void player_jump(const JumpDir& direction, uint8_t id);
-    void player_position(const uint8_t id);
 
     void step();
     void update_physics();
+    void update_weapon();
+
+
+
+    void player_start_aiming(const ADSAngleDir& direction, uint8_t id);
+    void player_stop_aiming(const uint8_t id);
+
+    void player_start_charging(const uint8_t id);
+    void player_shoot(const uint8_t id);
 
     ~Game();
 };

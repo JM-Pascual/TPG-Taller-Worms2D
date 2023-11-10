@@ -41,25 +41,25 @@ ADSAngle::ADSAngle(ServerSide::Protocol& protocol, const uint8_t id): PlayerActi
     protocol.recvADSAngleDir(this->direction);
 }
 
-void ADSAngle::execute(Game& game) {}
+void ADSAngle::execute(Game& game) {game.player_start_aiming(direction, id);}
 
 // -------------------------- STOP ADS ---------------
 
 StopADSAngle::StopADSAngle(const uint8_t id): PlayerAction(id) {}
 
-void StopADSAngle::execute(Game& game) {}
+void StopADSAngle::execute(Game& game) {game.player_stop_aiming(id);}
 
 // ---------------------------- FIRE POWER ------------------
 
 FirePower::FirePower(const uint8_t id): PlayerAction(id) {}
 
-void FirePower::execute(Game& game) {}
+void FirePower::execute(Game& game) {game.player_start_charging(id);}
 
 // ---------------------------- SHOOT ------------------
 
 Shoot::Shoot(const uint8_t id): PlayerAction(id) {}
 
-void Shoot::execute(Game& game) {}
+void Shoot::execute(Game& game) {game.player_shoot(id);}
 
 // ---------------------------- DELAY ------------------
 
