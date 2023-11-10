@@ -91,11 +91,8 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
         case StatesTag::PLAYER_L:
             return std::make_shared<PlayerStateL>(recvBool(), recvUint8());
 
-        case StatesTag::GAME_FULL:
-            return std::make_shared<GameFull>();
-
-        case StatesTag::GAME_STARTED:
-            return std::make_shared<GameStarted>();
+        case StatesTag::GAME_NOT_JOINABLE:
+            return std::make_shared<GameNotJoinable>();
 
         default:
             float x = meter_to_pixel_x(recvFloat());
@@ -129,5 +126,8 @@ std::shared_ptr<GameInfoL> ClientSide::Protocol::recvGameInfo() {
     recvString64(desc);
     recvString64(map_name);
 
-    return std::make_shared<GameInfoL>(desc, map_name, recvUint8(), recvUint8());
+    uint8_t p_count = recvUint8();
+    uint8_t game_id = recvUint8();
+
+    return std::make_shared<GameInfoL>(desc, map_name, p_count, game_id);
 }
