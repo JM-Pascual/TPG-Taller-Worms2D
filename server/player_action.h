@@ -232,6 +232,21 @@ public:
     ~ShowGames() = default;
 };
 
+class ExitGame: public LobbyAction {
+private:
+    GameBrowser& gb;
+    const uint8_t& player_id;
+    const uint8_t& game_id;
+
+public:
+    ExitGame(GameBrowser& gb, const uint8_t& player_id, const uint8_t& game_id):
+            gb(gb), player_id(player_id), game_id(game_id) {}
+
+    void execute() override;
+
+    ~ExitGame() = default;
+};
+
 // ----------------------- NULL_COMMAND ----------------------
 
 class NullCommand: public PlayerAction, public LobbyAction {

@@ -25,6 +25,8 @@ public:
 
     void remove_closed_clients(uint8_t& ready_count, std::map<uint8_t, Player>& players_stats);
 
+    void removePlayer(const uint8_t& player_id);
+
     ~BroadCaster() = default;
 };
 

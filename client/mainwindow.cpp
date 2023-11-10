@@ -35,15 +35,11 @@ MainWindow::MainWindow(const char* hostname, const char* servname, QWidget* pare
     this->setMaximumSize(1280, 720);
     this->setMinimumSize(1280, 720);
 
-    lobby_widgets.push_back({ui->character1_label, ui->ready1_button, ui->player1id_label});
-    lobby_widgets.push_back({ui->character2_label, ui->ready2_button, ui->player2id_label});
-    lobby_widgets.push_back({ui->character3_label, ui->ready3_button, ui->player3id_label});
-    lobby_widgets.push_back({ui->character4_label, ui->ready4_button, ui->player4id_label});
-
     this->loadIntro();
     this->loadMenu();
     this->loadGameSearch();
     this->loadHelp();
+    this->loadLobby();
     this->showIntro();
 }
 
@@ -190,6 +186,7 @@ void MainWindow::loadGameSearch() {
     connect(ui->createGame_button_2, &QPushButton::clicked, this, [this]() {
         this->validateCreateGame();
         games.clear();
+        showLobby();
     });
 }
 
@@ -210,8 +207,6 @@ void MainWindow::validateCreateGame() {
     this->client.action_queue.push(
             std::make_shared<CreateGame>(this->ui->desc_txtbox->text().toStdString(),
                                          ui->map_cbox->currentText().toStdString()));
-
-    this->client.run();
 }
 
 void MainWindow::showGameSearch() {
@@ -224,6 +219,7 @@ void MainWindow::showGameSearch() {
 }
 
 void MainWindow::refreshGameSearch() {
+    games.clear();
     client.action_queue.push(std::make_shared<ShowGames>());
 
     uint8_t games_q = ClientSide::Parser::getGameFramesQuantity(client.lobby_state_queue);
@@ -254,22 +250,26 @@ void MainWindow::showHelp() {
 }
 
 void MainWindow::loadLobby() {
-
-    players[0]->show();
-    players[1]->show();
-    players[2]->show();
-    players[3]->show();
+    lobby_widgets.push_back({ui->character1_label, ui->ready1_button, ui->player1id_label});
+    lobby_widgets.push_back({ui->character2_label, ui->ready2_button, ui->player2id_label});
+    lobby_widgets.push_back({ui->character3_label, ui->ready3_button, ui->player3id_label});
+    lobby_widgets.push_back({ui->character4_label, ui->ready4_button, ui->player4id_label});
 
     connect(ui->setReady_button, &QPushButton::pressed, this, [this]() { players[0]->ready(); });
 
     connect(ui->goMenu_button_3, &QPushButton::clicked, this, [this]() {
-        ui->menuScreens->setCurrentIndex((int)SWIndex::GAME_SEARCH);
         this->players.clear();
-        this->loadGameSearch();
+        client.action_queue.push(std::make_shared<ExitGame>());
+        this->showGameSearch();
     });
 }
 
-void MainWindow::showLobby() {}
+void MainWindow::showLobby() {
+    ui->menuScreens->setCurrentIndex((int)SWIndex::LOBBY);
+    for (auto& [id, player]: players) {
+        player->show();
+    }
+}
 
 void MainWindow::joinGame(const uint8_t& id) {
     client.action_queue.push(std::make_unique<JoinGame>(id));
@@ -295,6 +295,11 @@ void MainWindow::setPlayerFrames() {
         std::tie(character, readyButton, player_id) = lobby_widgets[i];
         it->second->setFrame(character, readyButton, player_id);
     }
+}
+
+void MainWindow::closeEvent(QCloseEvent* event) {
+    client.action_queue.push(std::make_shared<ExitGame>());
+    event->accept();
 }
 
 

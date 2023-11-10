@@ -60,6 +60,9 @@ std::shared_ptr<LobbyAction> ServerSide::Parser::makeLobbyAction(
         case Actions::SHOW_GAMES:
             return std::make_shared<ShowGames>(browser, state_queue);
 
+        case Actions::EXIT_GAME:
+            return std::make_shared<ExitGame>(browser, id, game_id);
+
         default:
             return std::make_shared<NullCommand>();
     }

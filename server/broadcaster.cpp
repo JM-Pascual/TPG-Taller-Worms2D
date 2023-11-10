@@ -42,3 +42,8 @@ void BroadCaster::remove_closed_clients(uint8_t& ready_count,
         ++it;
     }
 }
+
+void BroadCaster::removePlayer(const uint8_t& player_id) {
+    std::lock_guard<std::mutex> lock(m);
+    broadcast_map.erase(player_id);
+}

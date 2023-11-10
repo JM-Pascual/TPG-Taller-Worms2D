@@ -171,6 +171,15 @@ public:
     ~ShowGames() = default;
 };
 
+class ExitGame: public Action {
+public:
+    ExitGame(): Action(Actions::EXIT_GAME) {}
+
+    void send(ClientSide::Protocol& protocol) override;
+
+    ~ExitGame() = default;
+};
+
 class Ready: public Action {
 public:
     Ready(): Action(Actions::READY) {}

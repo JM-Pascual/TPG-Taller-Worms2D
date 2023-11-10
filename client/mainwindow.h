@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QCloseEvent>
 #include <QLabel>
 #include <QLayout>
 #include <QMainWindow>
@@ -80,6 +81,8 @@ private:
     std::vector<std::tuple<QLabel*, QPushButton*, QLabel*>> lobby_widgets;
 
     void validateCreateGame();
+
+    void closeEvent(QCloseEvent* event);
 };
 
 class GameFrame {

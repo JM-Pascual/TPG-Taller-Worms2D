@@ -59,6 +59,10 @@ public:
 
     void remove_closed_clients();
 
+    void removePlayer(const uint8_t& player_id);
+
+    bool isEmpty();
+
     bool is_playing();
 
     void set_player_ready(uint8_t id);

@@ -106,6 +106,10 @@ void ShowGames::execute() {
     }
 }
 
+// -------------------- EXIT GAME ----------------------
+
+void ExitGame::execute() { gb.removePlayer(player_id, game_id); }
+
 // ----------------------- READY --------------------
 
 void Ready::execute() { gb.set_player_ready(id, id_game); }

@@ -32,8 +32,8 @@ void Game::notifyLobbyState() {
     //             std::make_shared<PlayerStateL>(player.second.ready, player.first));
     // }
 
-    std::transform(players_stats.begin(), players_stats.end(), lobby_state_list.begin(),
-                   [](auto player) {
+    std::transform(players_stats.begin(), players_stats.end(), std::back_inserter(lobby_state_list),
+                   [&](std::pair<uint8_t, Player> player) {
                        return std::make_shared<PlayerStateL>(player.second.ready, player.first);
                    });
 
@@ -50,12 +50,12 @@ void Game::add_client_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& s
     std::lock_guard<std::mutex> lock(m);
 
     if (not_lock_is_playing()) {
-        state_queue.push(std::make_shared<GameStarted>());
+        state_queue.push(std::make_shared<GameNotJoinable>());
         return;
     }
 
     if (players_stats.size() >= MAX_PLAYERS) {
-        state_queue.push(std::make_shared<GameFull>());
+        state_queue.push(std::make_shared<GameNotJoinable>());
         return;
     }
 
@@ -76,10 +76,15 @@ void Game::broadcast_game_state() {
 void Game::remove_closed_clients() {
     std::lock_guard<std::mutex> lock(m);
     broadcaster.remove_closed_clients(ready_count, players_stats);
-    if (not not_lock_is_playing()) {
-        notifyLobbyState();
-    }
 }
+
+void Game::removePlayer(const uint8_t& player_id) {
+    std::lock_guard<std::mutex> lock(m);
+    players_stats.erase(player_id);
+    broadcaster.removePlayer(player_id);
+}
+
+bool Game::isEmpty() { return players_stats.size() == 0; }
 
 bool Game::is_playing() {
     std::lock_guard<std::mutex> lock(m);

@@ -102,3 +102,5 @@ void JoinGame::send(ClientSide::Protocol& protocol) {
 void Ready::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
 
 void ShowGames::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
+
+void ExitGame::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
