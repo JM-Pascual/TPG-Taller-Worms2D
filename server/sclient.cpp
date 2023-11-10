@@ -17,6 +17,7 @@ ServerSide::Client::Client(Socket&& peer, GameBrowser& browser, const uint8_t id
     recv.start();
     spdlog::get("server")->debug("Iniciando sender en cliente {:d}", id);
     send.start();
+    state_queue.push(std::make_shared<MyID>(id));
 }
 
 bool ServerSide::Client::isAlive() { return (recv.is_alive() && send.is_alive()); }

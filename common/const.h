@@ -36,6 +36,7 @@ enum class Actions {
     CREATE,
     JOIN,
     SHOW_GAMES,
+    EXIT_GAME,
     READY,
 
     // Game actions
@@ -65,8 +66,8 @@ enum class Actors {
 };
 
 enum class StatesTag {
-    GAME_FULL,
-    GAME_STARTED,
+    MY_ID,
+    GAME_NOT_JOINABLE,
     GAMES_COUNT_L,
     INFO_GAME_L,
     PLAYER_COUNT_L,

@@ -18,6 +18,12 @@ public:
     virtual ~States() = default;
 };
 
+class MyID: public States {
+public:
+    const uint8_t& id;
+
+    explicit MyID(const uint8_t& id): States(StatesTag::MY_ID), id(id) {}
+};
 
 class GameInfoL: public States {
 public:
@@ -98,19 +104,13 @@ public:
     ~PlayerCountG() = default;
 };
 
-/*
-    Por que 0??, Estos states se envian al intentar unirse. Al momento de unirse debe haber como
-   minimo una persona, en caso contrario el juego seria limpiado
-*/
-
-class GameFull: public CountState {
+class GameNotJoinable: public CountState {
 public:
-    GameFull(): CountState(StatesTag::GAME_FULL, 0) {}
-};
-
-class GameStarted: public CountState {
-public:
-    GameStarted(): CountState(StatesTag::GAME_STARTED, 0) {}
+    /*
+        Por que 0??, Estos states se envian al intentar unirse. Al momento de unirse debe haber como
+        minimo una persona, en caso contrario el juego seria limpiado
+    */
+    GameNotJoinable(): CountState(StatesTag::GAME_NOT_JOINABLE, 0) {}
 };
 
 #endif  // STATES_H

@@ -15,6 +15,7 @@ class States;
 class Client {
 
 private:
+    uint8_t id;
     std::atomic<bool> quit;
     std::atomic<bool> runned;
     ClientSide::Protocol protocol;
@@ -24,6 +25,8 @@ private:
     Queue<std::shared_ptr<States>> game_state_queue;
     Queue<std::shared_ptr<States>> lobby_state_queue;
     Queue<std::shared_ptr<Action>> action_queue;
+
+    void getID();
 
 public:
     /*

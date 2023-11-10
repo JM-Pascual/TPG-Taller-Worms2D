@@ -14,6 +14,7 @@
 
 const int frameDuration = 1000 / 30;
 
+
 Client::Client(const char* hostname, const char* servname):
         quit(false),
         runned(false),
@@ -25,6 +26,18 @@ Client::Client(const char* hostname, const char* servname):
     recv.start();
     spdlog::get("client")->debug("Iniciando hilo sender en el cliente");
     send.start();
+}
+
+void Client::getID() {
+    std::shared_ptr<States> raw_state = nullptr;
+
+    do {
+        while (not lobby_state_queue.try_pop(raw_state)) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(frameDuration));
+        }
+    } while (raw_state->tag != StatesTag::MY_ID);
+
+    id = std::dynamic_pointer_cast<MyID>(raw_state)->id;
 }
 
 Client::~Client() {

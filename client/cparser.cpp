@@ -13,6 +13,7 @@ void ClientSide::Parser::filterStates(Queue<std::shared_ptr<States>>& game_state
         case StatesTag::INFO_GAME_L:
         case StatesTag::PLAYER_COUNT_L:
         case StatesTag::PLAYER_L:
+        case StatesTag::MY_ID:
             lobby_states.push(state);
             break;
         default:
@@ -59,8 +60,11 @@ uint8_t ClientSide::Parser::getPlayersInLobbyQuantity(
         while (not lobby_states.try_pop(raw_state)) {
             std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 30));
         }
-    } while (raw_state->tag != StatesTag::PLAYER_COUNT_L &&
-             raw_state->tag != StatesTag::GAME_FULL && raw_state->tag != StatesTag::GAME_STARTED);
+        if (raw_state->tag == StatesTag::GAME_NOT_JOINABLE) {
+            break;
+        }
+
+    } while (raw_state->tag != StatesTag::PLAYER_COUNT_L);
 
     return std::dynamic_pointer_cast<CountState>(raw_state)->quantity;
 }
