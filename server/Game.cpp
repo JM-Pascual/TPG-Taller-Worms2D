@@ -82,6 +82,7 @@ void Game::removePlayer(const uint8_t& player_id) {
     std::lock_guard<std::mutex> lock(m);
     players_stats.erase(player_id);
     broadcaster.removePlayer(player_id);
+    notifyLobbyState();
 }
 
 bool Game::isEmpty() { return players_stats.size() == 0; }

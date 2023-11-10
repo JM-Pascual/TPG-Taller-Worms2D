@@ -185,8 +185,7 @@ void MainWindow::loadGameSearch() {
 
     connect(ui->createGame_button_2, &QPushButton::clicked, this, [this]() {
         this->validateCreateGame();
-        games.clear();
-        showLobby();
+        ui->createMenu->lower();
     });
 }
 
@@ -204,9 +203,17 @@ void MainWindow::validateCreateGame() {
         return;
     }
 
+    if (this->ui->desc_txtbox->text().toStdString().length() == 0) {
+        ui->create_desc_label->setStyleSheet("color: red;");
+        return;
+    }
+
     this->client.action_queue.push(
             std::make_shared<CreateGame>(this->ui->desc_txtbox->text().toStdString(),
                                          ui->map_cbox->currentText().toStdString()));
+
+    games.clear();
+    showLobby();
 }
 
 void MainWindow::showGameSearch() {
@@ -255,7 +262,10 @@ void MainWindow::loadLobby() {
     lobby_widgets.push_back({ui->character3_label, ui->ready3_button, ui->player3id_label});
     lobby_widgets.push_back({ui->character4_label, ui->ready4_button, ui->player4id_label});
 
-    connect(ui->setReady_button, &QPushButton::pressed, this, [this]() { players[0]->ready(); });
+    connect(ui->setReady_button, &QPushButton::pressed, this, [this]() {
+        this->sendReady();
+        players.at(client.id)->ready();
+    });
 
     connect(ui->goMenu_button_3, &QPushButton::clicked, this, [this]() {
         this->players.clear();
@@ -265,24 +275,37 @@ void MainWindow::loadLobby() {
 }
 
 void MainWindow::showLobby() {
+    lobbyHideAll();
+
+    players.clear();
+    uint8_t players_q = ClientSide::Parser::getPlayersInLobbyQuantity(client.lobby_state_queue);
+    if (players_q == 0) {
+        return;
+    }
+
     ui->menuScreens->setCurrentIndex((int)SWIndex::LOBBY);
+
+    ClientSide::Parser::setPlayers(players, client.lobby_state_queue, players_q);
+    setPlayerFrames();
+
     for (auto& [id, player]: players) {
         player->show();
     }
 }
 
+void MainWindow::lobbyHideAll() {
+    QLabel *character, *player_id;
+    QPushButton* readyButton;
+    for (const auto& widgets: lobby_widgets) {
+        std::tie(character, readyButton, player_id) = widgets;
+        character->hide();
+        player_id->hide();
+        readyButton->hide();
+    }
+}
+
 void MainWindow::joinGame(const uint8_t& id) {
     client.action_queue.push(std::make_unique<JoinGame>(id));
-    uint8_t q = ClientSide::Parser::getPlayersInLobbyQuantity(client.lobby_state_queue);
-
-    if (q == 0) {
-        // showlbl error
-        return;
-    }
-
-    ClientSide::Parser::setPlayers(players, client.lobby_state_queue, q);
-
-    setPlayerFrames();
 }
 
 void MainWindow::setPlayerFrames() {
@@ -296,6 +319,8 @@ void MainWindow::setPlayerFrames() {
         it->second->setFrame(character, readyButton, player_id);
     }
 }
+
+void MainWindow::sendReady() { client.action_queue.push(std::make_shared<Ready>()); }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
     client.action_queue.push(std::make_shared<ExitGame>());
@@ -362,10 +387,9 @@ void GameFrame::setFrame(const std::string& descrip, const std::string& map_name
 
 void GameFrame::setHandler(MainWindow& w) {
     MainWindow::connect(joinGame, &QPushButton::clicked, &w, [&w, this]() {
-        w.joinGame(this->game_id);
-        w.ui->menuScreens->setCurrentIndex((int)SWIndex::LOBBY);
         w.games.clear();
-        w.loadLobby();
+        w.joinGame(this->game_id);
+        w.showLobby();
     });
 }
 
@@ -400,7 +424,7 @@ PlayerFrame::PlayerFrame(const uint8_t& player_id):
 void PlayerFrame::hide() {
     character_label->hide();
     ready_button->hide();
-    this->ready_button->setStyleSheet("border-image: url(/home/maxi/test/notReady.png)");
+    this->ready_button->setStyleSheet("border-image: url(./client/resources/images/notReady.png)");
 }
 
 void PlayerFrame::setFrame(QLabel* label, QPushButton* button, QLabel* id_label) {
@@ -422,10 +446,11 @@ void PlayerFrame::show() {
 }
 
 void PlayerFrame::ready() {
-    if (this->ready_button->styleSheet() == "border-image: url(/home/maxi/test/notReady.png)") {
-        this->ready_button->setStyleSheet("border-image: url(/home/maxi/test/ready.png)");
+    if (this->ready_button->styleSheet() ==
+        "border-image: url(./client/resources/images/notReady.png)") {
+        this->ready_button->setStyleSheet("border-image: url(./client/resources/images/ready.png)");
         return;
     }
 
-    this->ready_button->setStyleSheet("border-image: url(/home/maxi/test/notReady.png)");
+    this->ready_button->setStyleSheet("border-image: url(./client/resources/images/notReady.png)");
 }

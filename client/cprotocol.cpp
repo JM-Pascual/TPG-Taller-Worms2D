@@ -95,7 +95,7 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
             return std::make_shared<PlayerStateL>(recvBool(), recvUint8());
 
         case StatesTag::GAME_NOT_JOINABLE:
-            return std::make_shared<GameNotJoinable>();
+            return std::make_shared<GameNotJoinable>(recvUint8());
 
         default:
             float x = meter_to_pixel_x(recvFloat());

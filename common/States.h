@@ -111,6 +111,7 @@ public:
         minimo una persona, en caso contrario el juego seria limpiado
     */
     GameNotJoinable(): CountState(StatesTag::GAME_NOT_JOINABLE, 0) {}
+    explicit GameNotJoinable(const uint8_t q): CountState(StatesTag::GAME_NOT_JOINABLE, q) {}
 };
 
 #endif  // STATES_H

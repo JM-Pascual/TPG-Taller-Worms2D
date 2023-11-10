@@ -23,6 +23,7 @@ void GameBrowser::join_game(const uint8_t& game_id_to_join, const uint8_t& id,
     std::unique_lock<std::mutex> lck(m);
 
     if (games.count(game_id_to_join) != 1) {
+        state_queue.push(std::make_shared<GameNotJoinable>());
         spdlog::get("server")->error("No existe el juego {:d}", game_id_to_join);
         return;
     }
