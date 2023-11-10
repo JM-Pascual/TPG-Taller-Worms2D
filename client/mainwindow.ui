@@ -486,6 +486,152 @@
          </item>
         </layout>
        </widget>
+       <widget class="QFrame" name="createMenu">
+        <property name="geometry">
+         <rect>
+          <x>425</x>
+          <y>249</y>
+          <width>432</width>
+          <height>222</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QFrame #createMenu {
+	border-image: url(./client/resources/images/createMenu.bmp);
+}</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4" stretch="1,1,1,1,1,20">
+         <item>
+          <widget class="QLabel" name="createMenu_label">
+           <property name="font">
+            <font>
+             <family>Sans Serif</family>
+             <pointsize>15</pointsize>
+             <bold>true</bold>
+             <underline>true</underline>
+             <strikeout>false</strikeout>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QLabel{}</string>
+           </property>
+           <property name="text">
+            <string>Create menu</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="create_desc_label">
+           <property name="font">
+            <font>
+             <family>Sans Serif</family>
+             <pointsize>12</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(0, 0, 0)</string>
+           </property>
+           <property name="text">
+            <string>Enter a description [Max 64 characters]</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="desc_txtbox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border: 0px;
+background-color: rgba(89, 89, 89, 180);</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="create_map_label">
+           <property name="font">
+            <font>
+             <family>Sans Serif</family>
+             <pointsize>12</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(0, 0, 0)</string>
+           </property>
+           <property name="text">
+            <string>Choose a map</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="map_cbox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border: 0px;
+background-color: rgba(89, 89, 89, 180);</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="createMenu_hlayout">
+           <item>
+            <widget class="QPushButton" name="createGame_button_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">border-image: url(./client/resources/images/create.bmp);</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="goback_button_3">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">border-image: url(./client/resources/images/goBack.bmp);</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
       </widget>
       <widget class="QWidget" name="help">
        <widget class="QWidget" name="verticalLayoutWidget">

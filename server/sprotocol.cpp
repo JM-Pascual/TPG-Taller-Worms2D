@@ -127,17 +127,30 @@ void ServerSide::Protocol::sendCount(const std::shared_ptr<States>& count) {
     send(&p->quantity, sizeof(uint8_t));
 }
 
+void ServerSide::Protocol::sendPlayerLobby(const std::shared_ptr<States>& count) {
+    std::shared_ptr<PlayerStateL> p = std::dynamic_pointer_cast<PlayerStateL>(count);
+    send(&p->tag, sizeof(uint8_t));
+    send(&p->id, sizeof(uint8_t));
+    send(&p->ready, sizeof(uint8_t));
+}
 
-void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& game_state) {
-    switch (game_state->tag) {
+
+void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
+    switch (state->tag) {
         case StatesTag::GAMES_COUNT_L:
         case StatesTag::PLAYER_COUNT_L:
         case StatesTag::PLAYER_COUNT_G:
-            sendCount(game_state);
+        case StatesTag::GAME_FULL:
+        case StatesTag::GAME_STARTED:
+            sendCount(state);
+            break;
+
+        case StatesTag::PLAYER_L:
+            sendPlayerLobby(state);
             break;
 
         case StatesTag::INFO_GAME_L:
-            sendGameInfo(game_state);
+            sendGameInfo(state);
             break;
 
 
@@ -145,7 +158,7 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& game_state)
             break;
 
         case StatesTag::PLAYER_G:
-            sendPlayerState(game_state);
+            sendPlayerState(state);
             break;
 
         case StatesTag::PROYECTILE_G:

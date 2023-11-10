@@ -17,6 +17,7 @@
 #include "broadcaster.h"
 #include "game_loop.h"
 
+#define MAX_PLAYERS 4
 
 class Game {
 private:
@@ -30,11 +31,14 @@ private:
     const std::string map_name;
     const uint8_t game_id;
     GameLoop gameloop;
+    bool need_to_join_loop;
 
 
     void get_game_state(std::list<std::shared_ptr<States>>& states_list);
 
     bool not_lock_is_playing();
+
+    void notifyLobbyState();
 
 public:
     Game(const std::string& desc, const std::string& map, const uint8_t& game_id,
@@ -43,7 +47,8 @@ public:
             description(desc),
             map_name(map),
             game_id(game_id),
-            gameloop(*this, this->game_id, erase_id_queue) {}
+            gameloop(*this, this->game_id, erase_id_queue),
+            need_to_join_loop(false) {}
 
     Queue<std::shared_ptr<PlayerAction>>& get_action_queue();
 

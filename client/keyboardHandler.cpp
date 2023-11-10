@@ -123,20 +123,6 @@ void KBHandler::run() {
                                 std::make_shared<ChangeGadget>(WeaponsAndTools::TELEPORT));
                         break;
 
-                    // ---------- LOBBY ------------
-                    case SDLK_c:
-                        this->action_queue.push(std::make_shared<CreateGame>());
-                        break;
-
-                    case SDLK_j:
-                        this->action_queue.push(
-                                std::make_shared<JoinGame>(0));  // PLACE HOLDER DE GAME ID
-                        break;
-
-                    case SDLK_r:
-                        this->action_queue.push(std::make_shared<Ready>());
-                        break;
-
                     default:
                         break;
                 }

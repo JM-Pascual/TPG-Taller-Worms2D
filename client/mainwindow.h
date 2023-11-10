@@ -9,14 +9,15 @@
 #include <QTimer>
 #include <QWidget>
 #include <atomic>
+#include <map>
 #include <memory>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include <stdint.h>
 
 #include "client.h"
-#include "cparser.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -58,6 +59,10 @@ public:
 
     void showLobby();
 
+    void joinGame(const uint8_t& id);
+
+    void setPlayerFrames();
+
 
     friend class GameFrame;
     friend class PlayerFrame;
@@ -69,8 +74,12 @@ private:
     QMovie* movie;
     QMovie* movie_aux;
     QTimer* timer;
-    std::vector<std::unique_ptr<PlayerFrame>> players;
+    std::map<uint8_t, std::unique_ptr<PlayerFrame>> players;
     std::vector<std::unique_ptr<GameFrame>> games;
+
+    std::vector<std::tuple<QLabel*, QPushButton*, QLabel*>> lobby_widgets;
+
+    void validateCreateGame();
 };
 
 class GameFrame {
@@ -85,6 +94,8 @@ private:
     QPushButton* joinGame;
 
 public:
+    uint8_t game_id;
+
     explicit GameFrame(QWidget* parent = 0);
 
     void setFrame(const std::string& descrip, const std::string& map_name,
@@ -105,19 +116,14 @@ private:
     QLabel* character_label;
     QPushButton* ready_button;
     QLabel* player_id;
+    const uint8_t id;
 
 public:
-    explicit PlayerFrame(QLabel* label, QPushButton* button, QLabel* id_label,
-                         const uint8_t& player_id):
-            character_label(label), ready_button(button), player_id(id_label) {
-        this->hide();
-        // cppcheck-suppress danglingTemporaryLifetime
-        QString lblTxt = std::string("Player ID: " + std::to_string(player_id)).data();
-        // cppcheck-suppress danglingTemporaryLifetime
-        id_label->setText(lblTxt);
-    }
+    explicit PlayerFrame(const uint8_t& player_id);
 
     void hide();
+
+    void setFrame(QLabel* label, QPushButton* button, QLabel* id_label);
 
     void ready();
 

@@ -1,5 +1,6 @@
 #include "Game.h"
 
+#include <algorithm>
 #include <utility>
 
 #include <spdlog/spdlog.h>
@@ -22,15 +23,45 @@ bool Game::not_lock_is_playing() {
     return (players_stats.size() > 0 ? players_stats.size() == ready_count : false);
 }
 
+void Game::notifyLobbyState() {
+    std::list<std::shared_ptr<States>> lobby_state_list;
+    lobby_state_list.push_back(std::make_shared<PlayerCountL>(players_stats.size()));
+
+    // for (auto& player: players_stats) {
+    //     lobby_state_list.push_back(
+    //             std::make_shared<PlayerStateL>(player.second.ready, player.first));
+    // }
+
+    std::transform(players_stats.begin(), players_stats.end(), lobby_state_list.begin(),
+                   [](auto player) {
+                       return std::make_shared<PlayerStateL>(player.second.ready, player.first);
+                   });
+
+    broadcaster.broadcast(lobby_state_list);
+}
+
 Queue<std::shared_ptr<PlayerAction>>& Game::get_action_queue() {
     return this->gameloop.get_action_queue();
 }
 
 void Game::add_client_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue) {
+    remove_closed_clients();
+
     std::lock_guard<std::mutex> lock(m);
+
+    if (not_lock_is_playing()) {
+        state_queue.push(std::make_shared<GameStarted>());
+        return;
+    }
+
+    if (players_stats.size() >= MAX_PLAYERS) {
+        state_queue.push(std::make_shared<GameFull>());
+        return;
+    }
 
     broadcaster.add_queue(id, state_queue);
     players_stats.insert(std::make_pair(id, Player(battlefield)));
+    notifyLobbyState();
 }
 
 void Game::broadcast_game_state() {
@@ -43,7 +74,11 @@ void Game::broadcast_game_state() {
 }
 
 void Game::remove_closed_clients() {
+    std::lock_guard<std::mutex> lock(m);
     broadcaster.remove_closed_clients(ready_count, players_stats);
+    if (not not_lock_is_playing()) {
+        notifyLobbyState();
+    }
 }
 
 bool Game::is_playing() {
@@ -60,9 +95,12 @@ void Game::set_player_ready(const uint8_t id) {
         ready_count += std::pow(-1, 1 - players_stats.at(id).ready);
     }
 
+    notifyLobbyState();
+
     // Inicio el gl si estan todos listos y no esta iniciado ya
     if (not gameloop.is_alive() && this->not_lock_is_playing()) {
         gameloop.start();
+        need_to_join_loop = true;
     }
 }
 
@@ -105,5 +143,7 @@ std::shared_ptr<GameInfoL> Game::getInfo() {
 
 Game::~Game() {
     spdlog::get("server")->debug("Joineando gameloop");
-    gameloop.join();
+    if (need_to_join_loop) {
+        gameloop.join();
+    }
 }

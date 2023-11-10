@@ -29,20 +29,24 @@ int main(int argc, char* argv[]) try {
     MainWindow w(HOSTNAME, SERVNAME);
     w.show();
 
+    QCoreApplication::quit();
     return a.exec();
 
 } catch (const LibError& e) {
     spdlog::get("client")->error("{:s}", e.what());
     spdlog::dump_backtrace();
+    QCoreApplication::quit();
     return ERROR_;
 
 } catch (const std::exception& e) {
     spdlog::get("client")->error("{:s}", e.what());
     spdlog::dump_backtrace();
+    QCoreApplication::quit();
     return ERROR_;
 
 } catch (...) {
     spdlog::get("client")->error("Error desconocido");
     spdlog::dump_backtrace();
+    QCoreApplication::quit();
     return ERROR_;
 }

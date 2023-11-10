@@ -47,8 +47,10 @@ private:
 
     void sendCount(const std::shared_ptr<States>& count);
 
+    void sendPlayerLobby(const std::shared_ptr<States>& count);
+
 public:
-    void sendStates(const std::shared_ptr<States>& game_state);
+    void sendStates(const std::shared_ptr<States>& state);
     /*
         Construye el protocolo y su respectivo socket
     */

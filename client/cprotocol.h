@@ -50,6 +50,8 @@ public:
     // Envia data chequeando si se cierra el socket
     void send(const void* data, unsigned int sz);
 
+    void sendString64(const std::string& str);
+
     void recvCommand(Actions& c);
     /*
         Construye el protocolo y su respectivo socket

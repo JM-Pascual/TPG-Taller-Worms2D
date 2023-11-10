@@ -38,6 +38,7 @@ public:
     ~Client();
 
     friend class MainWindow;
+    friend class GameFrame;
 };
 
 

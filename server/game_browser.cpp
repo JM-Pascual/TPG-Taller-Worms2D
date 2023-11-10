@@ -14,7 +14,6 @@ void GameBrowser::create_game(const std::string& desc, const std::string& map,
                   std::make_unique<Game>(desc, map, game_id_count, cleaner.game_id_to_clean)});
     game_id_to_create = game_id_count++;
     // Post Incremento para devolver el valor anterior y luego inc
-
     spdlog::get("server")->info("Se creo la sala de juego {:d}", game_id_to_create);
 }
 
@@ -28,12 +27,8 @@ void GameBrowser::join_game(const uint8_t& game_id_to_join, const uint8_t& id,
         return;
     }
 
-    if (games.at(game_id_to_join)->is_playing()) {
-        spdlog::get("server")->warn("El juego {:d} ya empezo!", game_id_to_join);
-        return;
-    }
-
     games.at(game_id_to_join)->add_client_queue(id, state_queue);
+
     spdlog::get("server")->debug("Cliente asignado a la sala {:d}", game_id_to_join);
 }
 
@@ -48,8 +43,7 @@ void GameBrowser::infoGames(std::vector<std::shared_ptr<GameInfoL>>& info) {
     std::unique_lock<std::mutex> lck(m);
 
     spdlog::get("server")->debug("Recolectando informacion de los juegos en ejecucion");
-    info.resize(games.size());
-    for (const auto& [id, game]: games) {
+    for (auto& [id, game]: games) {
         info.push_back(game->getInfo());
     }
 }
@@ -83,6 +77,9 @@ GameBrowser::~GameBrowser() {
 // -------------- GB CLEANER -------------------
 
 void GBCleaner::kill() {
+    if (killed) {
+        return;
+    }
     killed = true;
     this->stop();
     this->game_id_to_clean.close();

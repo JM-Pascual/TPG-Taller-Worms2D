@@ -18,6 +18,12 @@ void ClientSide::Protocol::send(const void* data, unsigned int sz) {
     }
 }
 
+void ClientSide::Protocol::sendString64(const std::string& str) {
+    uint8_t length = str.length();
+    this->send(&length, sizeof(uint8_t));
+    this->send(str.data(), length);
+}
+
 void ClientSide::Protocol::recv(void* data, unsigned int sz) {
     unsigned int sz_recv = skt.recvall(data, sz, &recv_was_closed);
 
@@ -78,6 +84,18 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
 
         case StatesTag::PROYECTILE_G:
             return std::make_shared<PlayerCountG>(recvUint8());
+
+        case StatesTag::PLAYER_COUNT_L:
+            return std::make_shared<PlayerCountL>(recvUint8());
+
+        case StatesTag::PLAYER_L:
+            return std::make_shared<PlayerStateL>(recvBool(), recvUint8());
+
+        case StatesTag::GAME_FULL:
+            return std::make_shared<GameFull>();
+
+        case StatesTag::GAME_STARTED:
+            return std::make_shared<GameStarted>();
 
         default:
             float x = meter_to_pixel_x(recvFloat());
