@@ -18,7 +18,8 @@ public:
     explicit Weapon() = default;
 
     virtual void execute(Battlefield& battlefield, Player& player_) = 0;
-    virtual b2Body* prepare_ammo(Battlefield& battlefield, b2Vec2 proyectile_position, WeaponsAndTools type);
+    virtual std::shared_ptr<Projectile> prepare_ammo(Battlefield& battlefield, b2Vec2 projectile_position, float angle, WeaponsAndTools type);
+
 };
 
 class Bazooka : public Weapon{

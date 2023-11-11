@@ -6,16 +6,21 @@
 #include <memory>
 #include "../common/const.h"
 #include "../common/GameState.h"
+#include "battlefield.h"
 
-class Proyectile {
+class Battlefield;
+
+class Projectile {
 private:
-    b2Body* proyectile;
+    b2Body* projectile;
     WeaponsAndTools type;
     bool impacted;
 
 public:
-    Proyectile(b2Body* proyectile,WeaponsAndTools type);
+    //explicit Projectile (Battlefield& battlefield, b2Vec2 position, float angle, WeaponsAndTools type);
+    Projectile (Battlefield& battlefield, b2Vec2 position, float angle, WeaponsAndTools type);
 
+    void set_power(b2Vec2 power);
     std::shared_ptr<ProyectileState> upload_state();
 };
 

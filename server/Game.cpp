@@ -17,9 +17,9 @@ void Game::build_game_state(std::list<std::shared_ptr<GameState>>& states_list) 
                 player.is_walking, player.is_jumping, player.is_backflipping, player.facing_right));
     }
 
-    states_list.push_back(std::make_shared<ProyectileCount>(battlefield.proyectile.size()));
+    states_list.push_back(std::make_shared<ProyectileCount>(battlefield.projectiles.size()));
 
-    for (const auto& proyectile: battlefield.proyectile) {
+    for (const auto& proyectile: battlefield.projectiles) {
         states_list.push_back(proyectile->upload_state());
     }
 

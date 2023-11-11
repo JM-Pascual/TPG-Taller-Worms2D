@@ -58,8 +58,9 @@ public:
     const b2Vec2 pos;
     const WeaponsAndTools type;
     const bool impacted;
+    const float angle;
 
-    explicit ProyectileState(const float x, const float y, const WeaponsAndTools type,const bool impacted);
+    explicit ProyectileState(const float x, const float y, const WeaponsAndTools type,const bool impacted, const float angle);
 
     ~ProyectileState() = default;
 };

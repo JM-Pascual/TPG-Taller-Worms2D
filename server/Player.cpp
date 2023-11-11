@@ -1,6 +1,7 @@
 #include "Player.h"
 #include <iostream>
 
+
 //ToDo Hardocdeado para que los worms aparezcan en la mitad del mapa
 
 Player::Player(Battlefield& battlefield): facing_right(true), is_walking(false),ready(false),
@@ -72,9 +73,11 @@ void Player::change_aim_direction() {
 
         case ADSAngleDir::UP:
             aim_inclination_degrees += ANGLE_VARIATION;
+            std::cout << aim_inclination_degrees << std::endl;
             break;
         case ADSAngleDir::DOWN:
             aim_inclination_degrees -= ANGLE_VARIATION;
+            std::cout << aim_inclination_degrees << std::endl;
             break;
     }
 }
@@ -82,6 +85,7 @@ void Player::change_aim_direction() {
 void Player::change_fire_power() {
     if(charging_shoot){
         weapon_power += POWER_RAISE;
+        std::cout << weapon_power << std::endl;
     }
 }
 
@@ -94,8 +98,8 @@ b2Vec2 Player::set_bullet_power() {
     // f_x = fuerza_total * cos(ang_rad * pi/180)
     // f_y = fuerza_total * sen(ang_rad * pi/180)
     b2Vec2 bullet_position;
-    bullet_position.x = (weapon_power * cos(aim_inclination_degrees * (b2_pi / 180)));
-    bullet_position.y = (weapon_power * sin(aim_inclination_degrees * (b2_pi / 180)));
+    bullet_position.x = (weapon_power * cos(aim_inclination_degrees /* * (b2_pi / 180)*/));
+    bullet_position.y = (weapon_power * sin(aim_inclination_degrees /* * (b2_pi / 180))*/));
     return bullet_position;
 }
 
@@ -104,14 +108,20 @@ b2Vec2 Player::set_bullet_direction(){
     // x = (worm.x + hip * cos(ang_rad * pi/18  0)
     // y = (worm.y + hip * sen(ang_rad * pi/180)
     b2Vec2 bullet_position;
-    bullet_position.x = ((worm->GetPosition().x + ARM_LENGHT) * cos(aim_inclination_degrees * (b2_pi / 180)));
-    bullet_position.y = ((worm->GetPosition().y + ARM_LENGHT) * sin(aim_inclination_degrees * (b2_pi / 180)));
+    bullet_position.x = ((worm->GetPosition().x + ARM_LENGHT) * cosf(aim_inclination_degrees ));
+    bullet_position.y = ((worm->GetPosition().y + ARM_LENGHT) * sinf(aim_inclination_degrees ));
     return bullet_position;
+
 }
 
-void Player::shoot_aim_weapon(b2Body* bullet) {
-    bullet->ApplyLinearImpulseToCenter(set_bullet_power(),true);
+float Player::set_bullet_angle() {
+    return b2Atan2(set_bullet_power().y,set_bullet_power().x);
 }
+
+void Player::shoot_aim_weapon(std::shared_ptr<Projectile> projectile) {
+    projectile->set_power(set_bullet_power());
+}
+
 
 
 

@@ -35,6 +35,6 @@ void Battlefield::step() {
     world->Step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 }
 
-void Battlefield::add_proyectile(std::shared_ptr<Proyectile> proyectile_) {
-    proyectile.push_back(proyectile_);
+void Battlefield::add_proyectile(std::shared_ptr<Projectile> proyectile_) {
+    projectiles.push_back(proyectile_);
 }
