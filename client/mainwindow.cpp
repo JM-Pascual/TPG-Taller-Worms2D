@@ -210,6 +210,8 @@ void MainWindow::validateCreateGame() {
                                          ui->map_cbox->currentText().toStdString()));
 
     ui->createMenu->lower();
+    ui->desc_txtbox->clear();
+    ui->map_cbox->setCurrentIndex(-1);
     showLobby();
 }
 
