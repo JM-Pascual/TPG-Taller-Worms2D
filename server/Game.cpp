@@ -80,8 +80,13 @@ void Game::remove_closed_clients() {
 
 void Game::removePlayer(const uint8_t& player_id) {
     std::lock_guard<std::mutex> lock(m);
+
+    if (players_stats.at(player_id).ready) {
+        ready_count--;
+    }
     players_stats.erase(player_id);
     broadcaster.removePlayer(player_id);
+
     notifyLobbyState();
 }
 
