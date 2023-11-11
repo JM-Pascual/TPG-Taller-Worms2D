@@ -78,7 +78,6 @@ private:
     QMovie* movie;
     QMovie* movie_aux;
     QTimer* timer;
-    QTimer* lobby_timer;
     std::map<uint8_t, std::unique_ptr<PlayerFrame>> players;
     std::vector<std::unique_ptr<GameFrame>> games;
 

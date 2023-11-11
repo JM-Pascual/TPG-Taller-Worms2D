@@ -23,8 +23,7 @@ MainWindow::MainWindow(const char* hostname, const char* servname, QWidget* pare
         ui(new Ui::MainWindow),
         movie(new QMovie("./client/resources/images/intro.gif")),
         movie_aux(new QMovie("./client/resources/images/explosion.gif")),
-        timer(new QTimer()),
-        lobby_timer(new QTimer()) {
+        timer(new QTimer()) {
     ui->setupUi(this);
     // Cambiar icono ventana
     QIcon icon("./client/resources/images/icon.png");
@@ -207,10 +206,8 @@ void MainWindow::validateCreateGame() {
             std::make_shared<CreateGame>(this->ui->desc_txtbox->text().toStdString(),
                                          ui->map_cbox->currentText().toStdString()));
 
-    games.clear();
     ui->createMenu->lower();
     showLobby();
-    this->lobby_timer->start();
 }
 
 void MainWindow::showGameSearch() {
@@ -262,28 +259,35 @@ void MainWindow::loadLobby() {
     connect(ui->setReady_button, &QPushButton::pressed, this, [this]() { this->sendReady(); });
 
     connect(ui->goMenu_button_3, &QPushButton::clicked, this, [this]() {
-        this->lobby_timer->stop();
+        // stop timer
+        this->client.lobby_state_queue.push(std::make_shared<GameNotJoinable>());
         this->players.clear();
         client.action_queue.push(std::make_shared<ExitGame>());
         this->showGameSearch();
     });
-
-    timer->setInterval(1000);
-
-    connect(lobby_timer, &QTimer::timeout, this, [this]() { showLobby(); });
 }
 
 void MainWindow::showLobby() {
     uint8_t p_quantity = LobbyListener::getPlayersInLobbyQuantity(client.lobby_state_queue);
 
+    /*
+        La idea es recibir NONE jugadores cuando no se pudo unir al juego, o se desea salir del
+       lobby
+    */
     if (p_quantity == NONE) {
         return;
     }
+    /*
+        Utilizo un singleshot timer statico ya que es mejor en cuanto a performance, con un QTimer
+       instanciado se usaba entre 3 a 5 veces mas CPU
+    */
+    QTimer::singleShot(33, this, [this] { this->showLobby(); });
 
     if (p_quantity == NOT_POPPED_COUNT) {
         return;
     }
 
+    games.clear();
     lobbyHideAll();
     players.clear();
 
@@ -391,10 +395,8 @@ void GameFrame::setFrame(const std::string& descrip, const std::string& map_name
 
 void GameFrame::setHandler(MainWindow& w) {
     MainWindow::connect(joinGame, &QPushButton::clicked, &w, [&w, this]() {
-        w.games.clear();
         w.joinGame(this->game_id);
         w.showLobby();
-        w.lobby_timer->start();
     });
 }
 
