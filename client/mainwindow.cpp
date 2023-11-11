@@ -11,14 +11,10 @@
 
 #include <qmovie.h>
 
+#include "../common/const.h"
 #include "./ui_mainwindow.h"
 
 #include "cparser.h"
-
-enum class SWIndex { INTRO, MENU, GAME_SEARCH, HELP, LOBBY };
-
-#define MAX_DESCR_CHARS 64
-#define MAX_PLAYERS 4
 
 
 MainWindow::MainWindow(const char* hostname, const char* servname, QWidget* parent):
@@ -26,7 +22,9 @@ MainWindow::MainWindow(const char* hostname, const char* servname, QWidget* pare
         client(hostname, servname),
         ui(new Ui::MainWindow),
         movie(new QMovie("./client/resources/images/intro.gif")),
-        movie_aux(new QMovie("./client/resources/images/explosion.gif")) {
+        movie_aux(new QMovie("./client/resources/images/explosion.gif")),
+        timer(new QTimer()),
+        lobby_timer(new QTimer()) {
     ui->setupUi(this);
     // Cambiar icono ventana
     QIcon icon("./client/resources/images/icon.png");
@@ -44,8 +42,6 @@ MainWindow::MainWindow(const char* hostname, const char* servname, QWidget* pare
 }
 
 void MainWindow::loadIntro() {
-    timer = new QTimer();
-
     ui->titleIntro_label->hide();
 
     ui->movieIntro->setScaledContents(true);
@@ -183,10 +179,9 @@ void MainWindow::loadGameSearch() {
         ui->create_desc_label->setStyleSheet("color: black;");
     });
 
-    connect(ui->createGame_button_2, &QPushButton::clicked, this, [this]() {
-        this->validateCreateGame();
-        ui->createMenu->lower();
-    });
+    connect(
+            ui->createGame_button_2, &QPushButton::clicked, this,
+            [this]() { this->validateCreateGame(); }, Qt::QueuedConnection);
 }
 
 void MainWindow::validateCreateGame() {
@@ -213,7 +208,9 @@ void MainWindow::validateCreateGame() {
                                          ui->map_cbox->currentText().toStdString()));
 
     games.clear();
+    ui->createMenu->lower();
     showLobby();
+    this->lobby_timer->start();
 }
 
 void MainWindow::showGameSearch() {
@@ -229,7 +226,7 @@ void MainWindow::refreshGameSearch() {
     games.clear();
     client.action_queue.push(std::make_shared<ShowGames>());
 
-    uint8_t games_q = ClientSide::Parser::getGameFramesQuantity(client.lobby_state_queue);
+    uint8_t games_q = LobbyListener::getGameFramesQuantity(client.lobby_state_queue);
 
     for (size_t i = 0; i < games_q; i++) {
         games.push_back(std::make_unique<GameFrame>(ui->gamesAvailable));
@@ -237,7 +234,7 @@ void MainWindow::refreshGameSearch() {
         games[i]->setHandler(*this);
     }
 
-    ClientSide::Parser::setGameFrames(games, client.lobby_state_queue, games_q);
+    LobbyListener::setGameFrames(games, client.lobby_state_queue, games_q);
 }
 
 void MainWindow::loadHelp() {
@@ -262,34 +259,40 @@ void MainWindow::loadLobby() {
     lobby_widgets.push_back({ui->character3_label, ui->ready3_button, ui->player3id_label});
     lobby_widgets.push_back({ui->character4_label, ui->ready4_button, ui->player4id_label});
 
-    connect(ui->setReady_button, &QPushButton::pressed, this, [this]() {
-        this->sendReady();
-        players.at(client.id)->ready();
-    });
+    connect(ui->setReady_button, &QPushButton::pressed, this, [this]() { this->sendReady(); });
 
     connect(ui->goMenu_button_3, &QPushButton::clicked, this, [this]() {
+        this->lobby_timer->stop();
         this->players.clear();
         client.action_queue.push(std::make_shared<ExitGame>());
         this->showGameSearch();
     });
+
+    timer->setInterval(500);
+
+    connect(lobby_timer, &QTimer::timeout, this, [this]() { showLobby(); });
 }
 
 void MainWindow::showLobby() {
-    lobbyHideAll();
+    uint8_t p_quantity = LobbyListener::getPlayersInLobbyQuantity(client.lobby_state_queue);
 
-    players.clear();
-    uint8_t players_q = ClientSide::Parser::getPlayersInLobbyQuantity(client.lobby_state_queue);
-    if (players_q == 0) {
+    if (p_quantity == NONE) {
         return;
     }
 
-    ui->menuScreens->setCurrentIndex((int)SWIndex::LOBBY);
+    if (p_quantity != NOT_POPPED_COUNT) {
 
-    ClientSide::Parser::setPlayers(players, client.lobby_state_queue, players_q);
-    setPlayerFrames();
+        lobbyHideAll();
+        players.clear();
 
-    for (auto& [id, player]: players) {
-        player->show();
+        ui->menuScreens->setCurrentIndex((int)SWIndex::LOBBY);
+
+        LobbyListener::setPlayers(players, client.lobby_state_queue, p_quantity);
+        setPlayerFrames();
+
+        for (auto& [id, player]: players) {
+            player->show();
+        }
     }
 }
 
@@ -390,6 +393,7 @@ void GameFrame::setHandler(MainWindow& w) {
         w.games.clear();
         w.joinGame(this->game_id);
         w.showLobby();
+        w.lobby_timer->start();
     });
 }
 
@@ -418,8 +422,12 @@ GameFrame::~GameFrame() {
 
 // ---------------------------- PLAYER FRAME ------------------------------
 
-PlayerFrame::PlayerFrame(const uint8_t& player_id):
-        character_label(nullptr), ready_button(nullptr), player_id(nullptr), id(player_id) {}
+PlayerFrame::PlayerFrame(const uint8_t& player_id, const bool& ready):
+        character_label(nullptr),
+        ready_button(nullptr),
+        player_id(nullptr),
+        id(player_id),
+        ready_state(ready) {}
 
 void PlayerFrame::hide() {
     character_label->hide();
@@ -436,6 +444,7 @@ void PlayerFrame::setFrame(QLabel* label, QPushButton* button, QLabel* id_label)
     QString lblTxt = std::string("Player ID: " + std::to_string(id)).data();
     // cppcheck-suppress danglingTemporaryLifetime
     id_label->setText(lblTxt);
+    this->ready();
 }
 
 
@@ -446,11 +455,8 @@ void PlayerFrame::show() {
 }
 
 void PlayerFrame::ready() {
-    if (this->ready_button->styleSheet() ==
-        "border-image: url(./client/resources/images/notReady.png)") {
-        this->ready_button->setStyleSheet("border-image: url(./client/resources/images/ready.png)");
-        return;
-    }
-
     this->ready_button->setStyleSheet("border-image: url(./client/resources/images/notReady.png)");
+    if (ready_state) {
+        this->ready_button->setStyleSheet("border-image: url(./client/resources/images/ready.png)");
+    }
 }

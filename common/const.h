@@ -4,7 +4,15 @@
 #define SUCCESS_ 0
 #define ERROR_ 1
 
+#define NONE 0
+#define NOT_POPPED_COUNT 255
+
 #define NULL_ARG ""
+
+#define MAX_DESCR_CHARS 64
+#define MAX_PLAYERS 4
+
+enum class SWIndex { INTRO, MENU, GAME_SEARCH, HELP, LOBBY };
 
 enum class Direction { LEFT = 0, RIGHT = 1 };
 

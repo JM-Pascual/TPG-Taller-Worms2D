@@ -9,7 +9,6 @@
 #include <QString>
 #include <QTimer>
 #include <QWidget>
-#include <atomic>
 #include <map>
 #include <memory>
 #include <string>
@@ -19,6 +18,7 @@
 #include <stdint.h>
 
 #include "client.h"
+#include "lobbyListener.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -74,15 +74,16 @@ public:
 
 private:
     Client client;
-
     Ui::MainWindow* ui;
     QMovie* movie;
     QMovie* movie_aux;
     QTimer* timer;
+    QTimer* lobby_timer;
     std::map<uint8_t, std::unique_ptr<PlayerFrame>> players;
     std::vector<std::unique_ptr<GameFrame>> games;
 
     std::vector<std::tuple<QLabel*, QPushButton*, QLabel*>> lobby_widgets;
+
 
     void validateCreateGame();
 
@@ -124,9 +125,10 @@ private:
     QPushButton* ready_button;
     QLabel* player_id;
     const uint8_t id;
+    const bool ready_state;
 
 public:
-    explicit PlayerFrame(const uint8_t& player_id);
+    explicit PlayerFrame(const uint8_t& player_id, const bool& ready);
 
     void hide();
 
