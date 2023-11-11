@@ -54,8 +54,8 @@ void LobbyListener::setPlayers(std::map<uint8_t, std::unique_ptr<PlayerFrame>>& 
     std::shared_ptr<States> raw_state = nullptr;
     std::shared_ptr<PlayerStateL> player_info = nullptr;
     for (uint8_t i = 0; i < players_q; i++) {
-        if (not lobby_states.try_pop(raw_state)) {
-            continue;
+        while (not lobby_states.try_pop(raw_state)) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 30));
         }
 
         if (raw_state->tag == StatesTag::PLAYER_L) {

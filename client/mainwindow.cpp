@@ -268,7 +268,7 @@ void MainWindow::loadLobby() {
         this->showGameSearch();
     });
 
-    timer->setInterval(500);
+    timer->setInterval(1000);
 
     connect(lobby_timer, &QTimer::timeout, this, [this]() { showLobby(); });
 }
@@ -280,19 +280,20 @@ void MainWindow::showLobby() {
         return;
     }
 
-    if (p_quantity != NOT_POPPED_COUNT) {
+    if (p_quantity == NOT_POPPED_COUNT) {
+        return;
+    }
 
-        lobbyHideAll();
-        players.clear();
+    lobbyHideAll();
+    players.clear();
 
-        ui->menuScreens->setCurrentIndex((int)SWIndex::LOBBY);
+    ui->menuScreens->setCurrentIndex((int)SWIndex::LOBBY);
 
-        LobbyListener::setPlayers(players, client.lobby_state_queue, p_quantity);
-        setPlayerFrames();
+    LobbyListener::setPlayers(players, client.lobby_state_queue, p_quantity);
+    setPlayerFrames();
 
-        for (auto& [id, player]: players) {
-            player->show();
-        }
+    for (auto& [id, player]: players) {
+        player->show();
     }
 }
 
