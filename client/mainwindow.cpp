@@ -126,6 +126,8 @@ void MainWindow::loadMenu() {
     connect(ui->browseButton, &QPushButton::clicked, this, [this]() { showGameSearch(); });
 
     connect(ui->helpButton, &QPushButton::clicked, this, [this]() { this->showHelp(); });
+
+    connect(ui->exitButton, &QPushButton::clicked, this, [this]() { this->close(); });
 }
 
 void MainWindow::showMenu() {
