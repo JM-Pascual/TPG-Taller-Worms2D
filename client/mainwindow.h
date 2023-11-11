@@ -62,11 +62,7 @@ public:
 
     void lobbyHideAll();
 
-    void joinGame(const uint8_t& id);
-
     void setPlayerFrames();
-
-    void sendReady();
 
 
     friend class GameFrame;

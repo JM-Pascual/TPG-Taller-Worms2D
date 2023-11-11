@@ -256,7 +256,8 @@ void MainWindow::loadLobby() {
     lobby_widgets.push_back({ui->character3_label, ui->ready3_button, ui->player3id_label});
     lobby_widgets.push_back({ui->character4_label, ui->ready4_button, ui->player4id_label});
 
-    connect(ui->setReady_button, &QPushButton::pressed, this, [this]() { this->sendReady(); });
+    connect(ui->setReady_button, &QPushButton::pressed, this,
+            [this]() { this->client.action_queue.push(std::make_shared<Ready>()); });
 
     connect(ui->goMenu_button_3, &QPushButton::clicked, this, [this]() {
         // stop timer
@@ -312,10 +313,6 @@ void MainWindow::lobbyHideAll() {
     }
 }
 
-void MainWindow::joinGame(const uint8_t& id) {
-    client.action_queue.push(std::make_unique<JoinGame>(id));
-}
-
 void MainWindow::setPlayerFrames() {
     QLabel *character, *player_id;
     QPushButton* readyButton;
@@ -327,8 +324,6 @@ void MainWindow::setPlayerFrames() {
         it->second->setFrame(character, readyButton, player_id);
     }
 }
-
-void MainWindow::sendReady() { client.action_queue.push(std::make_shared<Ready>()); }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
     client.action_queue.push(std::make_shared<ExitGame>());
@@ -395,7 +390,7 @@ void GameFrame::setFrame(const std::string& descrip, const std::string& map_name
 
 void GameFrame::setHandler(MainWindow& w) {
     MainWindow::connect(joinGame, &QPushButton::clicked, &w, [&w, this]() {
-        w.joinGame(this->game_id);
+        w.client.action_queue.push(std::make_unique<JoinGame>(this->game_id));
         w.showLobby();
     });
 }
