@@ -17,7 +17,7 @@ enum class ADSAngleDir { UP = 0, DOWN = 1 };
 enum class DelayAmount { ONE = 1, TWO = 2, THREE = 3, FOUR = 4, FIVE = 5 };
 
 enum class WeaponsAndTools {
-    BAZOOKA = 1,
+    BAZOOKA = 0x01,
     MORTAR,
     GREEN_GRENADE,
     RED_GRANADE,

@@ -98,7 +98,11 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<GameState>& ps)
     send(&p->is_jumping, sizeof(bool));
     send(&p->is_backflipping, sizeof(bool));
     send(&p->facing_right, sizeof(bool));
-    send(&p->aim_inclination_degrees, sizeof(float));
+
+    uint32_t inclination_net;
+    memcpy(&inclination_net, &p->aim_inclination_degrees, sizeof(uint32_t));
+    inclination_net = htonl(inclination_net);
+    send(&inclination_net, sizeof(uint32_t));
 }
 
 void ServerSide::Protocol::sendProyectileCount(const std::shared_ptr<GameState>& count) {
