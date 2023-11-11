@@ -23,7 +23,8 @@ MainWindow::MainWindow(const char* hostname, const char* servname, QWidget* pare
         ui(new Ui::MainWindow),
         movie(new QMovie("./client/resources/images/intro.gif")),
         movie_aux(new QMovie("./client/resources/images/explosion.gif")),
-        timer(new QTimer()) {
+        timer(new QTimer()),
+        preHelpIndex((int)SWIndex::MENU) {
     ui->setupUi(this);
     // Cambiar icono ventana
     QIcon icon("./client/resources/images/icon.png");
@@ -241,10 +242,17 @@ void MainWindow::loadHelp() {
     ui->helpMovie->setGeometry(0, 0, this->width(), this->height());
     ui->helpMovie->lower();
 
-    connect(ui->goMenu_button_2, &QPushButton::clicked, this, [this]() { this->showMenu(); });
+    connect(ui->goMenu_button_2, &QPushButton::clicked, this, [this]() {
+        if (this->preHelpIndex == (int)SWIndex::MENU) {
+            this->showMenu();
+        } else {
+            this->showGameSearch();
+        }
+    });
 }
 
 void MainWindow::showHelp() {
+    this->preHelpIndex = ui->menuScreens->currentIndex();
     ui->menuScreens->setCurrentIndex((int)SWIndex::HELP);
     movie->start();
     ui->helpMovie->setMovie(movie);

@@ -74,6 +74,7 @@ private:
     QMovie* movie;
     QMovie* movie_aux;
     QTimer* timer;
+    int preHelpIndex;
     std::map<uint8_t, std::unique_ptr<PlayerFrame>> players;
     std::vector<std::unique_ptr<GameFrame>> games;
 
