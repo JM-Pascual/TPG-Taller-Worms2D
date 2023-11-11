@@ -1,17 +1,9 @@
-#include <QApplication>
-#include <iostream>
-
 #include <spdlog/spdlog.h>
 
 #include "../common/const.h"
 #include "../common/liberror.h"
-#include "../common/logger.h"
 
-#include "client.h"
-#include "mainwindow.h"
-
-#define HOSTNAME argv[1]
-#define SERVNAME argv[2]
+#include "game.h"
 
 #define LOGNAME "client"
 #define LOGFILE "logs/client.txt"
@@ -23,14 +15,9 @@ int main(int argc, char* argv[]) try {
                   << " <ip/hostname server> <port/servicename>\n";
         return ERROR_;
     }
-
     Logger l(LOGNAME, LOGFILE);
-    QApplication a(argc, argv);
-    MainWindow w(HOSTNAME, SERVNAME);
-    w.show();
-
-    QCoreApplication::quit();
-    return a.exec();
+    Game game(argc, argv);
+    return game.run();
 
 } catch (const LibError& e) {
     spdlog::get("client")->error("{:s}", e.what());

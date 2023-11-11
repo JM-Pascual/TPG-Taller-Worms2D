@@ -34,7 +34,7 @@ class MainWindow: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(const char* hostname, const char* servname, QWidget* parent = nullptr);
+    explicit MainWindow(Client& client, bool& initGame, QWidget* parent = nullptr);
 
     ~MainWindow();
 
@@ -70,13 +70,13 @@ public:
     friend class PlayerFrame;
 
 private:
-    Client client;
+    Client& client;
     Ui::MainWindow* ui;
     QMovie* movie;
     QMovie* movie_aux;
     QTimer* timer;
     int preHelpIndex;
-    bool initGame;
+    bool& initGame;
     std::map<uint8_t, std::unique_ptr<PlayerFrame>> players;
     std::vector<std::unique_ptr<GameFrame>> games;
 

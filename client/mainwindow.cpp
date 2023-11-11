@@ -17,15 +17,15 @@
 #include "cparser.h"
 
 
-MainWindow::MainWindow(const char* hostname, const char* servname, QWidget* parent):
+MainWindow::MainWindow(Client& client, bool& initGame, QWidget* parent):
         QMainWindow(parent),
-        client(hostname, servname),
+        client(client),
         ui(new Ui::MainWindow),
         movie(new QMovie("./client/resources/images/intro.gif")),
         movie_aux(new QMovie("./client/resources/images/explosion.gif")),
         timer(new QTimer()),
         preHelpIndex((int)SWIndex::MENU),
-        initGame(false) {
+        initGame(initGame) {
     ui->setupUi(this);
     // Cambiar icono ventana
     QIcon icon("./client/resources/images/icon.png");
@@ -369,9 +369,6 @@ MainWindow::~MainWindow() {
         delete movie_aux;
     if (timer)
         delete timer;
-    if (initGame) {
-        client.run();
-    }
 }
 
 // ---------------- GAME FRAME ---------------------------
