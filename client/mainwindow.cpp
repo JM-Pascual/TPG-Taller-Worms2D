@@ -24,7 +24,8 @@ MainWindow::MainWindow(const char* hostname, const char* servname, QWidget* pare
         movie(new QMovie("./client/resources/images/intro.gif")),
         movie_aux(new QMovie("./client/resources/images/explosion.gif")),
         timer(new QTimer()),
-        preHelpIndex((int)SWIndex::MENU) {
+        preHelpIndex((int)SWIndex::MENU),
+        initGame(false) {
     ui->setupUi(this);
     // Cambiar icono ventana
     QIcon icon("./client/resources/images/icon.png");
@@ -312,6 +313,8 @@ void MainWindow::showLobby() {
     for (auto& [id, player]: players) {
         player->show();
     }
+
+    startGame();
 }
 
 void MainWindow::lobbyHideAll() {
@@ -323,6 +326,20 @@ void MainWindow::lobbyHideAll() {
         player_id->hide();
         readyButton->hide();
     }
+}
+
+void MainWindow::startGame() {
+    for (auto& [id, player]: players) {
+        if (not player->ready_state) {
+            return;
+        }
+    }
+
+    initGame = true;
+
+    // stop timer
+    this->client.lobby_state_queue.push(std::make_shared<GameNotJoinable>());
+    this->close();
 }
 
 void MainWindow::setPlayerFrames() {
@@ -352,6 +369,9 @@ MainWindow::~MainWindow() {
         delete movie_aux;
     if (timer)
         delete timer;
+    if (initGame) {
+        client.run();
+    }
 }
 
 // ---------------- GAME FRAME ---------------------------

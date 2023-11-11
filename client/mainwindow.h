@@ -62,8 +62,9 @@ public:
 
     void lobbyHideAll();
 
-    void setPlayerFrames();
+    void startGame();
 
+    void setPlayerFrames();
 
     friend class GameFrame;
     friend class PlayerFrame;
@@ -75,6 +76,7 @@ private:
     QMovie* movie_aux;
     QTimer* timer;
     int preHelpIndex;
+    bool initGame;
     std::map<uint8_t, std::unique_ptr<PlayerFrame>> players;
     std::vector<std::unique_ptr<GameFrame>> games;
 
@@ -120,10 +122,11 @@ private:
     QLabel* character_label;
     QPushButton* ready_button;
     QLabel* player_id;
+
+public:
     const uint8_t id;
     const bool ready_state;
 
-public:
     explicit PlayerFrame(const uint8_t& player_id, const bool& ready);
 
     void hide();
