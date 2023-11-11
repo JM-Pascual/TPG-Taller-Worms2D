@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.0)
 
 project(worms2d VERSION 0.0.1)
 
+set(AUTOUIC ON)
+
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_mixer 2.6.3 REQUIRED)
