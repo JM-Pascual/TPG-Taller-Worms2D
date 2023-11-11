@@ -82,7 +82,7 @@ private:
     ADSAngleDir direction;
 
 public:
-    explicit ADSAngle(ServerSide::Protocol& protocol, const uint8_t id);
+    explicit ADSAngle(ServerSide::Protocol& protocol, uint8_t id);
 
     void execute(Game& game) override;
 
@@ -93,7 +93,7 @@ public:
 
 class StopADSAngle: public PlayerAction {
 public:
-    explicit StopADSAngle(const uint8_t id);
+    explicit StopADSAngle(uint8_t id);
 
     void execute(Game& game) override;
 

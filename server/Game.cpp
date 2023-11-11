@@ -14,15 +14,15 @@ void Game::build_game_state(std::list<std::shared_ptr<GameState>>& states_list) 
     for (const auto& [id, player]: players_stats) {
         states_list.push_back(std::make_shared<PlayerState>(
                 player.worm->GetPosition().x, player.worm->GetPosition().y,
-                player.is_walking, player.is_jumping, player.is_backflipping, player.facing_right));
+                player.is_walking, player.is_jumping, player.is_backflipping, player.facing_right,
+                player.aim_inclination_degrees));
     }
 
     states_list.push_back(std::make_shared<ProyectileCount>(battlefield.proyectile.size()));
 
     for (const auto& proyectile: battlefield.proyectile) {
-        states_list.push_back(proyectile->upload_state());
+        states_list.push_back(proyectile->get_proyectile_state());
     }
-
 }
 
 bool Game::non_locking_is_playing() {

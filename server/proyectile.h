@@ -16,7 +16,7 @@ private:
 public:
     Proyectile(b2Body* proyectile,WeaponsAndTools type);
 
-    std::shared_ptr<ProyectileState> upload_state();
+    std::shared_ptr<ProyectileState> get_proyectile_state();
 };
 
 

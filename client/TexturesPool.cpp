@@ -5,6 +5,7 @@ TexturesPool::TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer) :
     load_level_textures();
     load_water_textures();
     load_worm_textures();
+    load_weapon_textures();
 }
 
 void TexturesPool::load_worm_textures() {
@@ -20,6 +21,13 @@ void TexturesPool::load_worm_textures() {
     textures.insert({Actors::BACKFLIP_WORM, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/worms/worm-backflip.png")
                                                                                                   .SetColorKey(true, 0x000000))});
     textures[Actors::BACKFLIP_WORM]->SetBlendMode(SDL_BLENDMODE_BLEND);
+}
+
+void TexturesPool::load_weapon_textures() {
+    textures.insert({Actors::BAZOOKA_PROYECTILE, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/bazooka-missile.png")
+                                                                                                        .SetColorKey(true, 0x000000))});
+
+    textures[Actors::BAZOOKA_PROYECTILE]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
 void TexturesPool::load_level_textures() {
@@ -43,7 +51,6 @@ void TexturesPool::load_water_textures(){
                                                                                            .SetColorKey(true, 0x000000))});
     textures[Actors::WATER]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
-
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_texture(Actors actor_to_fetch) {
     return (textures[actor_to_fetch]);
 }

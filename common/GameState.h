@@ -42,9 +42,10 @@ public:
     const bool is_jumping;
     const bool is_backflipping;
     const bool facing_right;
+    float aim_inclination_degrees;
 
     explicit PlayerState(float x, float y, bool is_walking, bool is_jumping,
-                         bool is_backflipping, bool facing_right);
+                         bool is_backflipping, bool facing_right, float aim_inclination_degrees);
 
     ~PlayerState() override = default;
 };
@@ -59,9 +60,9 @@ public:
     const WeaponsAndTools type;
     const bool impacted;
 
-    explicit ProyectileState(const float x, const float y, const WeaponsAndTools type,const bool impacted);
+    explicit ProyectileState(float x, float y, WeaponsAndTools type, bool impacted);
 
-    ~ProyectileState() = default;
+    ~ProyectileState() override = default;
 };
 
 #endif  // GAMESTATE_H

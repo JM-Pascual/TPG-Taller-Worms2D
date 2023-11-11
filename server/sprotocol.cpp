@@ -72,7 +72,6 @@ void ServerSide::Protocol::recvGadget(WeaponsAndTools& gadget) {
 // ------------------------------ SEND -----------------------------------
 
 void ServerSide::Protocol::sendPosition(const b2Vec2& pos) {
-
     uint32_t x_net;
     memcpy(&x_net, &pos.x, sizeof(uint32_t));
     x_net = htonl(x_net);
@@ -84,6 +83,12 @@ void ServerSide::Protocol::sendPosition(const b2Vec2& pos) {
     send(&y_net, sizeof(uint32_t));
 }
 
+void ServerSide::Protocol::sendPlayerCount(const std::shared_ptr<GameState>& count) {
+    std::shared_ptr<PlayerCount> p = std::dynamic_pointer_cast<PlayerCount>(count);
+    send(&p->tag, sizeof(uint8_t));
+    send(&p->quantity, sizeof(uint8_t));
+}
+
 void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<GameState>& ps) {
     std::shared_ptr<PlayerState> p = std::dynamic_pointer_cast<PlayerState>(ps);
 
@@ -93,12 +98,21 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<GameState>& ps)
     send(&p->is_jumping, sizeof(bool));
     send(&p->is_backflipping, sizeof(bool));
     send(&p->facing_right, sizeof(bool));
+    send(&p->aim_inclination_degrees, sizeof(float));
 }
 
-void ServerSide::Protocol::sendPlayerCount(const std::shared_ptr<GameState>& pc) {
-    std::shared_ptr<PlayerCount> p = std::dynamic_pointer_cast<PlayerCount>(pc);
+void ServerSide::Protocol::sendProyectileCount(const std::shared_ptr<GameState>& count) {
+    std::shared_ptr<ProyectileCount> p = std::dynamic_pointer_cast<ProyectileCount>(count);
     send(&p->tag, sizeof(uint8_t));
     send(&p->quantity, sizeof(uint8_t));
+}
+
+void ServerSide::Protocol::sendProyectileState(const std::shared_ptr<GameState>& ps) {
+    std::shared_ptr<ProyectileState> p = std::dynamic_pointer_cast<ProyectileState>(ps);
+    send(&p->tag, sizeof(uint8_t));
+    this->sendPosition(p->pos);
+    send(&p->type, sizeof(uint8_t));
+    send(&p->impacted, sizeof(bool));
 }
 
 void ServerSide::Protocol::sendGameState(const std::shared_ptr<GameState>& game_state) {
@@ -106,15 +120,21 @@ void ServerSide::Protocol::sendGameState(const std::shared_ptr<GameState>& game_
         case GameStateTag::BATTLEFIELD:
             break;
 
+        case GameStateTag::PLAYER_COUNT:
+            sendPlayerCount(game_state);
+            break;
+
         case GameStateTag::PLAYER:
             sendPlayerState(game_state);
             break;
 
-        case GameStateTag::PROYECTILE:
+
+        case GameStateTag::PROYECTILE_COUNT:
+            sendProyectileCount(game_state);
             break;
 
-        case GameStateTag::PLAYER_COUNT:
-            sendPlayerCount(game_state);
+        case GameStateTag::PROYECTILE:
+            sendProyectileState(game_state);
             break;
 
         default:

@@ -25,19 +25,6 @@ Client::Client(const char* hostname, const char* servname):
     send.start();
 }
 
-Client::~Client() {
-    kb.join();
-    recv.kill();
-    send.kill();
-
-    spdlog::get("client")->debug("Cerrando protocolo del cliente");
-    protocol.close();
-    spdlog::get("client")->debug("Joineando receptor en el cliente");
-    recv.join();
-    spdlog::get("client")->debug("Joineando sender en el cliente");
-    send.join();
-}
-
 void Client::run() {
 
     SDL2pp::SDL sdl(SDL_INIT_VIDEO);
@@ -65,13 +52,26 @@ void Client::run() {
                 for (size_t i = 0; i < players_quantity; i++) {
                     while (not game_state_queue.try_pop(raw_state)) {}
                     if (actors.count(i) == 0) {
-                        actors.insert(
-                                {i, std::make_shared<Worm>(raw_state, txt_pool)});
+                        actors.insert({i, std::make_shared<Worm>(raw_state, txt_pool)});
                     } else {
                         actors.at(i)->update(raw_state, loop_start_time);
                     }
                     actors.at(i)->render(window.get_renderer());
                 }
+                //Recibo el gamestate de los proyectiles y los guardo para renderizarlos
+            } else if (raw_state->tag == GameStateTag::PROYECTILE_COUNT) {
+                uint8_t proyectiles_quantity =
+                        std::dynamic_pointer_cast<ProyectileCount>(raw_state)->quantity;
+                for (size_t i = 0; i < proyectiles_quantity; i++) {
+                    while (not game_state_queue.try_pop(raw_state)) {}
+                    if (actors.count(i + 4) == 0) {
+                        actors.insert({i + 4, std::make_shared<BazookaProyectile>(raw_state, txt_pool)});
+                    } else {
+                        actors.at(i + 4)->update(raw_state, loop_start_time);
+                    }
+                    actors.at(i + 4)->render(window.get_renderer());
+                }
+
             }
         }
 
@@ -96,4 +96,17 @@ void Client::run() {
         SDL_Delay(rest_time);
         loop_start_time += DURATION;
     }
+}
+
+Client::~Client() {
+    kb.join();
+    recv.kill();
+    send.kill();
+
+    spdlog::get("client")->debug("Cerrando protocolo del cliente");
+    protocol.close();
+    spdlog::get("client")->debug("Joineando receptor en el cliente");
+    recv.join();
+    spdlog::get("client")->debug("Joineando sender en el cliente");
+    send.join();
 }

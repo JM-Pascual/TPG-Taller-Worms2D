@@ -4,7 +4,7 @@
 //ToDo Hardocdeado para que los worms aparezcan en la mitad del mapa
 
 Player::Player(Battlefield& battlefield): facing_right(true), is_walking(false),ready(false),
-        is_jumping(false), is_backflipping(false), aiming(false), aim_inclination_degrees(false), aim_direction(ADSAngleDir::UP),
+        is_jumping(false), is_backflipping(false), aiming(false), aim_inclination_degrees(0), aim_direction(ADSAngleDir::UP),
         charging_shoot(false), weapon_power(0){
     b2BodyDef wormDef;
     wormDef.type = b2_dynamicBody;

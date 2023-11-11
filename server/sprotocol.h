@@ -42,8 +42,11 @@ private:
 
     void sendPlayerState(const std::shared_ptr<GameState>& ps);
 
-    void sendPlayerCount(const std::shared_ptr<GameState>& pc);
+    void sendPlayerCount(const std::shared_ptr<GameState>& count);
 
+    void sendProyectileState(const std::shared_ptr<GameState>& ps);
+
+    void sendProyectileCount(const std::shared_ptr<GameState>& count);
 public:
     void sendGameState(const std::shared_ptr<GameState>& game_state);
     /*

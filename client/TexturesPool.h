@@ -13,6 +13,7 @@ private:
     void load_worm_textures();
     void load_level_textures();
     void load_water_textures();
+    void load_weapon_textures();
 
     std::unordered_map<Actors, std::shared_ptr<SDL2pp::Texture>> textures;
     std::shared_ptr<SDL2pp::Renderer>& renderer;

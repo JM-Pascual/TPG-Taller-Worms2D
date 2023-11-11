@@ -1,5 +1,5 @@
-#ifndef GAMEENTITY_H
-#define GAMEENTITY_H
+#ifndef GAMEACTOR_H
+#define GAMEACTOR_H
 
 #include <memory>
 
@@ -7,6 +7,7 @@
 
 #include "../common/GameState.h"
 #include "../common/const.h"
+
 #include "box2d/b2_math.h"
 
 #include "Animation.h"
@@ -32,6 +33,9 @@ private:
     bool is_jumping;
     bool is_backflipping;
     bool facing_right;
+
+    float aim_inclination_degrees;
+
     Animation walking;
     Animation jumping;
     Animation backflipping;
@@ -43,6 +47,7 @@ public:
             is_jumping(std::dynamic_pointer_cast<PlayerState>(initial_state)->is_jumping),
             is_backflipping(std::dynamic_pointer_cast<PlayerState>(initial_state)->is_backflipping),
             facing_right(std::dynamic_pointer_cast<PlayerState>(initial_state)->facing_right),
+            aim_inclination_degrees(std::dynamic_pointer_cast<PlayerState>(initial_state)->aim_inclination_degrees),
             walking(pool.get_texture(Actors::WORM), 15, 1),
             jumping(pool.get_texture(Actors::JUMPING_WORM), 5, 5, false),
             backflipping(pool.get_texture(Actors::BACKFLIP_WORM), 22, 1, false){}
@@ -53,6 +58,7 @@ public:
         is_jumping = std::dynamic_pointer_cast<PlayerState>(actor_state)->is_jumping;
         is_backflipping = std::dynamic_pointer_cast<PlayerState>(actor_state)->is_backflipping;
         facing_right = std::dynamic_pointer_cast<PlayerState>(actor_state)->facing_right;
+        aim_inclination_degrees = std::dynamic_pointer_cast<PlayerState>(actor_state)->aim_inclination_degrees;
         walking.update(!is_walking);
         jumping.update(!is_jumping);
         backflipping.update(!is_backflipping);
@@ -74,4 +80,48 @@ public:
     ~Worm() override = default;
 };
 
-#endif  // GAMEENTITY_H
+
+// ----------------------- PROYECTILE INTERFACE ----------------------
+
+class Proyectile: public GameActor {
+protected:
+    bool impacted;
+public:
+    Proyectile(const std::shared_ptr<GameState>& initial_state, TexturesPool& pool):
+            GameActor(std::dynamic_pointer_cast<PlayerState>(initial_state)->pos.x,
+                      std::dynamic_pointer_cast<PlayerState>(initial_state)->pos.y),
+            impacted(false){}
+};
+
+
+// ----------------------- BAZOOKA PROYECTILE ----------------------
+
+class BazookaProyectile: public Proyectile {
+private:
+    Animation on_air;
+    Animation impact;
+public:
+    BazookaProyectile(const std::shared_ptr<GameState>& initial_state, TexturesPool& pool):
+            Proyectile(initial_state, pool),
+            on_air(pool.get_texture(Actors::BAZOOKA_PROYECTILE), 32, 1),
+            impact(pool.get_texture(Actors::BAZOOKA_EXPLOSION), 1, 1, false){}
+
+    void update(const std::shared_ptr<GameState>& actor_state, unsigned int ms) override {
+        position = std::dynamic_pointer_cast<ProyectileState>(actor_state)->pos;
+        impacted = std::dynamic_pointer_cast<ProyectileState>(actor_state)->impacted;
+        on_air.update(!impacted);
+        impact.update(impacted);
+    }
+
+    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        if (impacted) {
+            impact.render((*game_renderer), SDL2pp::Rect(position.x, position.y, 60, 60));
+        } else {
+            on_air.render((*game_renderer), SDL2pp::Rect(position.x, position.y, 60, 60));
+        }
+    }
+};
+
+
+
+#endif  // GAMEACTOR_H

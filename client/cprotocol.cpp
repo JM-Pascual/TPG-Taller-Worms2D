@@ -60,7 +60,7 @@ void ClientSide::Protocol::close() {
 }
 
 std::shared_ptr<GameState> ClientSide::Protocol::recvGameState() {
-    GameStateTag tag = (GameStateTag)recvUint8();
+    auto tag = (GameStateTag)recvUint8();
 
     switch (tag) {
         case GameStateTag::BATTLEFIELD:
@@ -69,20 +69,34 @@ std::shared_ptr<GameState> ClientSide::Protocol::recvGameState() {
         case GameStateTag::PLAYER_COUNT:
             return std::make_shared<PlayerCount>(recvUint8());
 
-        case GameStateTag::PROYECTILE:
-            return std::make_shared<PlayerCount>(recvUint8());
-
-        default:
+        case GameStateTag::PLAYER: {
             float x = meter_to_pixel_x(recvFloat());
             float y = meter_to_pixel_y(recvFloat());
             bool is_wa = recvBool();
             bool is_jumping = recvBool();
             bool is_backflipping = recvBool();
             bool direction = recvBool();
-            return std::make_shared<PlayerState>(x, y, is_wa, is_jumping,
-                                                 is_backflipping, direction);
+            float aim_inclination = (recvFloat());
+            return std::make_shared<PlayerState>(x, y, is_wa, is_jumping, is_backflipping,
+                                                 direction, aim_inclination);
+        }
+
+        case GameStateTag::PROYECTILE_COUNT:
+            return std::make_shared<ProyectileCount>(recvUint8());
+
+        case GameStateTag::PROYECTILE: {
+            float x = meter_to_pixel_x(recvFloat());
+            float y = meter_to_pixel_y(recvFloat());
+            auto proyectile_type = (WeaponsAndTools)recvUint8();
+            bool impacted = recvBool();
+            return std::make_shared<ProyectileState>(x, y, proyectile_type, impacted);
+        }
+
+        default:
+            return std::make_shared<PlayerCount>(recvUint8()); // ToDo placeholder para un default
     }
 }
+
 float ClientSide::Protocol::meter_to_pixel_x(float meter_position) {
     return (meter_position * PPM);
 }

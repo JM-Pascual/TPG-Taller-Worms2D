@@ -57,13 +57,15 @@ enum class Actions {
 
 enum class Actors {
     WORM = 0x0,
-    GRADIENT = 0x1,
-    BRIDGE = 0x2,
-    LONG_BRIDGE = 0x3,
-    BACKGROUND = 0x4,
-    WATER = 0x5,
-    JUMPING_WORM = 0x6,
-    BACKFLIP_WORM = 0X7
+    GRADIENT,
+    BRIDGE,
+    LONG_BRIDGE,
+    BACKGROUND,
+    WATER,
+    JUMPING_WORM,
+    BACKFLIP_WORM,
+    BAZOOKA_PROYECTILE,
+    BAZOOKA_EXPLOSION
 };
 
 enum class GameStateTag { BATTLEFIELD, PLAYER, PROYECTILE, PLAYER_COUNT, PROYECTILE_COUNT };
