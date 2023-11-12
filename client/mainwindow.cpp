@@ -26,8 +26,12 @@
 #define INTRO_EXPLOSION_DURATION 1500
 #define LOBBY_REFRESH_RATE 33
 
+#define EFFECTS_VOLUME 0.4f
+#define BACKGROUND_MUSIC_VOLUME 0.2f
+
 MainWindow::MainWindow(Client& client, bool& initGame, QWidget* parent):
         QMainWindow(parent),
+        muted(false),
         client(client),
         ui(new Ui::MainWindow),
         movie(new QMovie(":/images/intro.gif")),
@@ -42,6 +46,14 @@ MainWindow::MainWindow(Client& client, bool& initGame, QWidget* parent):
     // Tamanio ventana
     this->setMaximumSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     this->setMinimumSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+    sound_aux.setVolume(EFFECTS_VOLUME);
+    sound_aux.setLoopCount(1);
+
+    sound.setVolume(BACKGROUND_MUSIC_VOLUME);
+    sound.setLoopCount(QSoundEffect::Infinite);
+
+    this->loadMuteButton();
 
     this->loadIntro();
     this->loadMenu();
@@ -72,8 +84,6 @@ void MainWindow::loadIntro() {
     ui->explosionMovie->hide();
 
     sound_aux.setSource(QUrl::fromLocalFile(":/sounds/intro.wav"));
-    sound_aux.setLoopCount(1);
-    sound_aux.setVolume(0.3f);
 
     ui->titleIntro_label->setGeometry((this->width() - 499) / 2, (this->height() - 266) / 2, 499,
                                       266);
@@ -88,7 +98,6 @@ void MainWindow::loadIntro() {
     connect(timer, &QTimer::timeout, this, [this]() {
         ui->explosionMovie->show();
         sound_aux.setSource(QUrl::fromLocalFile(":/sounds/explosion.wav"));
-        sound_aux.setVolume(1.0f);
         sound_aux.play();
         movie_aux->start();
         timer->stop();
@@ -100,7 +109,6 @@ void MainWindow::loadIntro() {
         sound_aux.stop();
         timer->stop();
         sound_aux.setSource(QUrl::fromLocalFile(":/sounds/button.wav"));
-        sound_aux.setVolume(1.0f);
         showMenu();
         sound.play();
     });
@@ -113,7 +121,6 @@ void MainWindow::loadIntro() {
             }
             ui->titleIntro_label->show();
             sound_aux.stop();
-            sound_aux.setVolume(1.0f);
             sound_aux.setSource(QUrl::fromLocalFile(":/sounds/bye.wav"));
             sound_aux.play();
             timer->start();
@@ -127,7 +134,6 @@ void MainWindow::loadIntro() {
                 emit movie_aux->finished();
             }
             sound_aux.setSource(QUrl::fromLocalFile(":/sounds/button.wav"));
-            sound_aux.setVolume(0.5f);
             showMenu();
             sound.play();
         }
@@ -154,8 +160,6 @@ void MainWindow::loadMenu() {
     ui->movieLabel->show();
 
     sound.setSource(QUrl::fromLocalFile(":/sounds/menuBackground.wav"));
-    sound.setVolume(0.1f);
-    sound.setLoopCount(QSoundEffect::Infinite);
 
     connect(ui->browseButton, &QPushButton::clicked, this, [this]() {
         sound_aux.play();
@@ -411,6 +415,23 @@ void MainWindow::setPlayerFrames() {
         std::tie(character, readyButton, player_id) = lobby_widgets[i];
         it->second->setFrame(character, readyButton, player_id);
     }
+}
+
+void MainWindow::loadMuteButton() {
+    ui->muteAudio->show();
+    ui->muteAudio->raise();
+
+    connect(ui->muteAudio, &QPushButton::clicked, this, [this]() {
+        this->sound.setVolume(muted * 0.2f);
+        this->sound_aux.setVolume(muted * 0.4f);
+        this->muted = !this->muted;
+
+        if (not this->muted) {
+            ui->muteAudio->setStyleSheet("border-image: url(:/images/nonMute.png)");
+            return;
+        }
+        ui->muteAudio->setStyleSheet("border-image: url(:/images/mute.png)");
+    });
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {

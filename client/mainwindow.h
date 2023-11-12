@@ -67,10 +67,13 @@ public:
 
     void setPlayerFrames();
 
+    void loadMuteButton();
+
     friend class GameFrame;
     friend class PlayerFrame;
 
 private:
+    bool muted;
     Client& client;
     Ui::MainWindow* ui;
     QMovie* movie;

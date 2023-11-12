@@ -24,5 +24,7 @@
         <file alias="setReady.png">./images/setReady.png</file>
         <file alias="star.gif">./images/star.gif</file>
         <file alias="title.png">./images/title.png</file>
+        <file alias="mute.png">./images/mute.png</file>
+        <file alias="nonMute.png">./images/nonMute.png</file>
     </qresource>
 </RCC>
