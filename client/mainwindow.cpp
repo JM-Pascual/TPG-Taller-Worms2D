@@ -71,13 +71,9 @@ void MainWindow::loadIntro() {
     ui->explosionMovie->setBackgroundRole(QPalette::Window);
     ui->explosionMovie->hide();
 
-    sound.setSource(QUrl::fromLocalFile(":/sounds/intro.wav"));
-    sound.setLoopCount(1);
-    sound.setVolume(0.6f);
-
-    sound_aux.setSource(QUrl::fromLocalFile(":/sounds/explosion.wav"));
+    sound_aux.setSource(QUrl::fromLocalFile(":/sounds/intro.wav"));
     sound_aux.setLoopCount(1);
-    sound_aux.setVolume(1.0f);
+    sound_aux.setVolume(0.3f);
 
     ui->titleIntro_label->setGeometry((this->width() - 499) / 2, (this->height() - 266) / 2, 499,
                                       266);
@@ -91,6 +87,8 @@ void MainWindow::loadIntro() {
 
     connect(timer, &QTimer::timeout, this, [this]() {
         ui->explosionMovie->show();
+        sound_aux.setSource(QUrl::fromLocalFile(":/sounds/explosion.wav"));
+        sound_aux.setVolume(1.0f);
         sound_aux.play();
         movie_aux->start();
         timer->stop();
@@ -99,10 +97,12 @@ void MainWindow::loadIntro() {
     connect(ui->skipbutton, &QPushButton::clicked, this, [this]() {
         movie->stop();
         movie_aux->stop();
-        sound.stop();
         sound_aux.stop();
         timer->stop();
+        sound_aux.setSource(QUrl::fromLocalFile(":/sounds/button.wav"));
+        sound_aux.setVolume(1.0f);
         showMenu();
+        sound.play();
     });
 
     connect(movie, &QMovie::frameChanged, this, [this]() {
@@ -112,10 +112,10 @@ void MainWindow::loadIntro() {
                 emit movie->finished();
             }
             ui->titleIntro_label->show();
-            sound.stop();
-            sound.setVolume(1.0f);
-            sound.setSource(QUrl::fromLocalFile(":/sounds/bye.wav"));
-            sound.play();
+            sound_aux.stop();
+            sound_aux.setVolume(1.0f);
+            sound_aux.setSource(QUrl::fromLocalFile(":/sounds/bye.wav"));
+            sound_aux.play();
             timer->start();
         }
     });
@@ -126,7 +126,10 @@ void MainWindow::loadIntro() {
             if (movie_aux->state() == QMovie::NotRunning) {
                 emit movie_aux->finished();
             }
+            sound_aux.setSource(QUrl::fromLocalFile(":/sounds/button.wav"));
+            sound_aux.setVolume(0.5f);
             showMenu();
+            sound.play();
         }
     });
 }
@@ -138,7 +141,7 @@ void MainWindow::showIntro() {
     movie->start();
 
     ui->explosionMovie->setMovie(movie_aux);
-    sound.play();
+    sound_aux.play();
 }
 
 void MainWindow::loadMenu() {
@@ -150,11 +153,24 @@ void MainWindow::loadMenu() {
     ui->movieLabel->setBackgroundRole(QPalette::Window);
     ui->movieLabel->show();
 
-    connect(ui->browseButton, &QPushButton::clicked, this, [this]() { showGameSearch(); });
+    sound.setSource(QUrl::fromLocalFile(":/sounds/menuBackground.wav"));
+    sound.setVolume(0.1f);
+    sound.setLoopCount(QSoundEffect::Infinite);
 
-    connect(ui->helpButton, &QPushButton::clicked, this, [this]() { this->showHelp(); });
+    connect(ui->browseButton, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
+        showGameSearch();
+    });
 
-    connect(ui->exitButton, &QPushButton::clicked, this, [this]() { this->close(); });
+    connect(ui->helpButton, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
+        this->showHelp();
+    });
+
+    connect(ui->exitButton, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
+        this->close();
+    });
 }
 
 void MainWindow::showMenu() {
@@ -177,14 +193,20 @@ void MainWindow::loadGameSearch() {
     ui->searchMovie->show();
 
     connect(ui->goMenu_button, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
         games.clear();
         this->showMenu();
     });
 
-    connect(ui->help_button, &QPushButton::clicked, this, [this]() { this->showHelp(); });
+    connect(ui->help_button, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
+        this->showHelp();
+    });
 
-    connect(ui->refresh_button, &QPushButton::clicked, this,
-            [this]() { this->refreshGameSearch(); });
+    connect(ui->refresh_button, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
+        this->refreshGameSearch();
+    });
 
     // Create menu
 
@@ -197,10 +219,13 @@ void MainWindow::loadGameSearch() {
     ui->map_cbox->addItems(list);
     ui->map_cbox->setCurrentIndex(-1);
 
-    connect(ui->create_button, &QPushButton::clicked, this,
-            [this]() { this->ui->createMenu->raise(); });
+    connect(ui->create_button, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
+        this->ui->createMenu->raise();
+    });
 
     connect(ui->goback_button_3, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
         this->ui->createMenu->lower();
         ui->desc_txtbox->clear();
         ui->map_cbox->setCurrentIndex(-1);
@@ -210,7 +235,11 @@ void MainWindow::loadGameSearch() {
 
     connect(
             ui->createGame_button_2, &QPushButton::clicked, this,
-            [this]() { this->validateCreateGame(); }, Qt::QueuedConnection);
+            [this]() {
+                sound_aux.play();
+                this->validateCreateGame();
+            },
+            Qt::QueuedConnection);
 }
 
 void MainWindow::validateCreateGame() {
@@ -274,6 +303,7 @@ void MainWindow::loadHelp() {
     ui->helpMovie->lower();
 
     connect(ui->goMenu_button_2, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
         if (this->preHelpIndex == (int)SWIndex::MENU) {
             this->showMenu();
         } else {
@@ -295,10 +325,13 @@ void MainWindow::loadLobby() {
     lobby_widgets.push_back({ui->character3_label, ui->ready3_button, ui->player3id_label});
     lobby_widgets.push_back({ui->character4_label, ui->ready4_button, ui->player4id_label});
 
-    connect(ui->setReady_button, &QPushButton::pressed, this,
-            [this]() { this->client.action_queue.push(std::make_shared<Ready>()); });
+    connect(ui->setReady_button, &QPushButton::pressed, this, [this]() {
+        sound_aux.play();
+        this->client.action_queue.push(std::make_shared<Ready>());
+    });
 
     connect(ui->goMenu_button_3, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
         // stop timer
         this->client.lobby_state_queue.push(std::make_shared<GameNotJoinable>());
         this->players.clear();
@@ -381,7 +414,9 @@ void MainWindow::setPlayerFrames() {
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
-    client.action_queue.push(std::make_shared<ExitGame>());
+    if (not initGame) {
+        client.action_queue.push(std::make_shared<ExitGame>());
+    }
     event->accept();
 }
 
