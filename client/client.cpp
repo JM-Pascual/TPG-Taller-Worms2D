@@ -29,7 +29,7 @@ Client::Client(const char* hostname, const char* servname):
 
 
 void Client::run() {
-
+    runned = true;
     SDL2pp::SDL sdl(SDL_INIT_VIDEO);
     Window window(1280, 720);
     TexturesPool txt_pool(window.get_renderer());
