@@ -45,33 +45,36 @@ void Client::run() {
         window.render_stage(txt_pool);
 
         std::shared_ptr<GameState> raw_state = nullptr;
-        if (game_state_queue.try_pop(raw_state)) {
-            if (raw_state->tag == GameStateTag::PLAYER_COUNT) {
-                uint8_t players_quantity =
-                        std::dynamic_pointer_cast<PlayerCount>(raw_state)->quantity;
-                for (size_t i = 0; i < players_quantity; i++) {
-                    while (not game_state_queue.try_pop(raw_state)) {}
-                    if (actors.count(i) == 0) {
-                        actors.insert({i, std::make_shared<Worm>(raw_state, txt_pool)});
-                    } else {
-                        actors.at(i)->update(raw_state, loop_start_time);
-                    }
-                    actors.at(i)->render(window.get_renderer());
-                }
-                //Recibo el gamestate de los proyectiles y los guardo para renderizarlos
-            } else if (raw_state->tag == GameStateTag::PROYECTILE_COUNT) {
-                uint8_t proyectiles_quantity =
-                        std::dynamic_pointer_cast<ProyectileCount>(raw_state)->quantity;
-                for (size_t i = 0; i < proyectiles_quantity; i++) {
-                    while (not game_state_queue.try_pop(raw_state)) {}
-                    if (actors.count(i + 4) == 0) {
-                        actors.insert({i + 4, std::make_shared<BazookaProyectile>(raw_state, txt_pool)});
-                    } else {
-                        actors.at(i + 4)->update(raw_state, loop_start_time);
-                    }
-                    actors.at(i + 4)->render(window.get_renderer());
-                }
 
+        for (int j = 0; j < 5; j++){
+            if (game_state_queue.try_pop(raw_state)) {
+                if (raw_state->tag == GameStateTag::PLAYER_COUNT) {
+                    uint8_t players_quantity =
+                            std::dynamic_pointer_cast<PlayerCount>(raw_state)->quantity;
+                    for (size_t i = 0; i < players_quantity; i++) {
+                        while (not game_state_queue.try_pop(raw_state)) {}
+                        if (actors.count(i) == 0) {
+                            actors.insert({i, std::make_shared<Worm>(raw_state, txt_pool)});
+                        } else {
+                            actors.at(i)->update(raw_state, loop_start_time);
+                        }
+                        actors.at(i)->render(window.get_renderer());
+                    }
+                    //Recibo el gamestate de los proyectiles y los guardo para renderizarlos
+                } else if (raw_state->tag == GameStateTag::PROYECTILE_COUNT) {
+                    uint8_t proyectiles_quantity =
+                            std::dynamic_pointer_cast<ProyectileCount>(raw_state)->quantity;
+                    for (size_t i = 0; i < proyectiles_quantity; i++) {
+                        while (not game_state_queue.try_pop(raw_state)) {}
+                        if (actors.count(i + 4) == 0) {
+                            actors.insert({i + 4, std::make_shared<BazookaProyectile>(raw_state, txt_pool)});
+                        } else {
+                            actors.at(i + 4)->update(raw_state, loop_start_time);
+                        }
+                        actors.at(i + 4)->render(window.get_renderer());
+                    }
+
+                }
             }
         }
 
