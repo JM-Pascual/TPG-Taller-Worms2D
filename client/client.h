@@ -15,7 +15,6 @@ class States;
 class Client {
 
 private:
-    uint8_t id;
     std::atomic<bool> quit;
     std::atomic<bool> runned;
     ClientSide::Protocol protocol;

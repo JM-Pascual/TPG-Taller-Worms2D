@@ -149,13 +149,6 @@ void ServerSide::Protocol::sendPlayerLobby(const std::shared_ptr<States>& count)
     send(&p->ready, sizeof(uint8_t));
 }
 
-void ServerSide::Protocol::sendID(const std::shared_ptr<States>& state) {
-    std::shared_ptr<MyID> p = std::dynamic_pointer_cast<MyID>(state);
-
-    send(&p->tag, sizeof(uint8_t));
-    send(&p->id, sizeof(uint8_t));
-}
-
 
 void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
     switch (state->tag) {
@@ -165,10 +158,6 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
         case StatesTag::GAME_NOT_JOINABLE:
         case StatesTag::PROJECTILE_COUNT_G:
             sendCount(state);
-            break;
-
-        case StatesTag::MY_ID:
-            sendID(state);
             break;
 
         case StatesTag::PLAYER_L:

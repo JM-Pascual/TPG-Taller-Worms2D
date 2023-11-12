@@ -70,9 +70,6 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
     StatesTag tag = (StatesTag)recvUint8();
 
     switch (tag) {
-        case StatesTag::MY_ID:
-            return std::make_shared<MyID>(recvUint8());
-
         case StatesTag::GAME_NOT_JOINABLE:
             return std::make_shared<GameNotJoinable>(recvUint8());
 

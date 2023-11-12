@@ -18,13 +18,6 @@ public:
     virtual ~States() = default;
 };
 
-class MyID: public States {
-public:
-    const uint8_t& id;
-
-    explicit MyID(const uint8_t& id): States(StatesTag::MY_ID), id(id) {}
-};
-
 class GameInfoL: public States {
 public:
     const std::string description;

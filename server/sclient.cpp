@@ -13,7 +13,6 @@ ServerSide::Client::Client(Socket&& peer, GameBrowser& browser, const uint8_t& i
         recv(this->protocol, browser, state_queue, this->id),
         send(this->protocol, state_queue),
         killed(false) {
-    state_queue.push(std::make_shared<MyID>(this->id));
     spdlog::get("server")->debug("Iniciando receptor en cliente {:d}", this->id);
     recv.start();
     spdlog::get("server")->debug("Iniciando sender en cliente {:d}", this->id);

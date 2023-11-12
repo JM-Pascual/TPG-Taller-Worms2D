@@ -91,7 +91,6 @@ enum class GameEntity {
 };
 
 enum class StatesTag {
-    MY_ID,
     GAME_NOT_JOINABLE,
     GAMES_COUNT_L,
     INFO_GAME_L,
