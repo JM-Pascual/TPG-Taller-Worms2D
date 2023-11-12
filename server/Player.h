@@ -11,10 +11,10 @@
 #include "weapon.h"
 
 #define TICK_RATE 30
-#define WIDTH 0.9f
-#define HEIGHT 1.2f
+#define WIDTH 0.35f
+#define HEIGHT 0.75f
 
-#define ARM_LENGHT ((HEIGHT/2) + 1)
+#define ARM_LENGHT ((HEIGHT/2) + 0.2)
 
 #define POWER_RAISE 10
 #define ANGLE_VARIATION (b2_pi/32)

@@ -103,7 +103,7 @@ private:
 public:
     BazookaProyectile(const std::shared_ptr<GameState>& initial_state, TexturesPool& pool):
             Proyectile(initial_state, pool),
-            on_air(pool.get_texture(Actors::BAZOOKA_PROYECTILE), 32, 1),
+            on_air(pool.get_texture(Actors::BAZOOKA_PROYECTILE), 1, 1),
             impact(pool.get_texture(Actors::BAZOOKA_EXPLOSION), 7, 1, false){}
 
     void update(const std::shared_ptr<GameState>& actor_state, unsigned int ms) override {
