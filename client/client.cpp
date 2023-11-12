@@ -32,6 +32,7 @@ void Client::run() {
     TexturesPool txt_pool(window.get_renderer());
 
     std::unordered_map<size_t, std::shared_ptr<GameActor>> actors;
+    std::unordered_map<size_t, std::shared_ptr<GameActor>> proyectiles;
 
     Animation water_animation(txt_pool.get_texture(Actors::WATER), 11, 3);
 
@@ -58,7 +59,7 @@ void Client::run() {
                         } else {
                             actors.at(i)->update(raw_state, loop_start_time);
                         }
-                        actors.at(i)->render(window.get_renderer());
+                        //actors.at(i)->render(window.get_renderer());
                     }
                     //Recibo el gamestate de los proyectiles y los guardo para renderizarlos
                 } else if (raw_state->tag == GameStateTag::PROYECTILE_COUNT) {
@@ -66,16 +67,23 @@ void Client::run() {
                             std::dynamic_pointer_cast<ProyectileCount>(raw_state)->quantity;
                     for (size_t i = 0; i < proyectiles_quantity; i++) {
                         while (not game_state_queue.try_pop(raw_state)) {}
-                        if (actors.count(i + 4) == 0) {
-                            actors.insert({i + 4, std::make_shared<BazookaProyectile>(raw_state, txt_pool)});
+                        if (proyectiles.count(i) == 0) {
+                            proyectiles.insert({i, std::make_shared<BazookaProyectile>(raw_state, txt_pool)});
                         } else {
-                            actors.at(i + 4)->update(raw_state, loop_start_time);
+                            proyectiles.at(i)->update(raw_state, loop_start_time);
                         }
-                        actors.at(i + 4)->render(window.get_renderer());
                     }
 
                 }
             }
+        }
+
+        for (auto & actor : actors){
+            actor.second->render(window.get_renderer());
+        }
+
+        for (auto & proyectile : proyectiles){
+            proyectile.second->render(window.get_renderer());
         }
 
         water_animation.update();

@@ -88,8 +88,8 @@ protected:
     bool impacted;
 public:
     Proyectile(const std::shared_ptr<GameState>& initial_state, TexturesPool& pool):
-            GameActor(std::dynamic_pointer_cast<PlayerState>(initial_state)->pos.x,
-                      std::dynamic_pointer_cast<PlayerState>(initial_state)->pos.y),
+            GameActor(std::dynamic_pointer_cast<ProyectileState>(initial_state)->pos.x,
+                      std::dynamic_pointer_cast<ProyectileState>(initial_state)->pos.y),
             impacted(false){}
 };
 
@@ -104,7 +104,7 @@ public:
     BazookaProyectile(const std::shared_ptr<GameState>& initial_state, TexturesPool& pool):
             Proyectile(initial_state, pool),
             on_air(pool.get_texture(Actors::BAZOOKA_PROYECTILE), 32, 1),
-            impact(pool.get_texture(Actors::BAZOOKA_EXPLOSION), 1, 1, false){}
+            impact(pool.get_texture(Actors::BAZOOKA_EXPLOSION), 7, 1, false){}
 
     void update(const std::shared_ptr<GameState>& actor_state, unsigned int ms) override {
         position = std::dynamic_pointer_cast<ProyectileState>(actor_state)->pos;

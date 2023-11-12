@@ -28,6 +28,11 @@ void TexturesPool::load_weapon_textures() {
                                                                                                         .SetColorKey(true, 0x000000))});
 
     textures[Actors::BAZOOKA_PROYECTILE]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    textures.insert({Actors::BAZOOKA_EXPLOSION, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/bazooka-explosion.png")
+                                                                                                        .SetColorKey(true, 0x000000))});
+
+    textures[Actors::BAZOOKA_EXPLOSION]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
 void TexturesPool::load_level_textures() {
