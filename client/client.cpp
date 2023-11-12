@@ -41,6 +41,7 @@ void Client::getID() {
 }
 
 void Client::run() {
+    runned = true;
 
     SDL2pp::SDL sdl(SDL_INIT_VIDEO);
     Window window(1280, 720);
