@@ -1,0 +1,28 @@
+<RCC>
+    <qresource prefix="/images"/>
+        <file>images/aim.png</file>
+        <file>images/changeGadget.png</file>
+        <file>images/countdown.png</file>
+        <file>images/create.bmp</file>
+        <file>images/createMenu.bmp</file>
+        <file>images/exitGame.png</file>
+        <file>images/explosion.gif</file>
+        <file>images/goBack.bmp</file>
+        <file>images/help.png</file>
+        <file>images/help2.bmp</file>
+        <file>images/icon.png</file>
+        <file>images/intro.gif</file>
+        <file>images/joinGame.bmp</file>
+        <file>images/jump.png</file>
+        <file>images/lobby.png</file>
+        <file>images/lobbyWorm.png</file>
+        <file>images/move.png</file>
+        <file>images/notReady.png</file>
+        <file>images/play.png</file>
+        <file>images/ready.png</file>
+        <file>images/refresh.bmp</file>
+        <file>images/setReady.png</file>
+        <file>images/star.gif</file>
+        <file>images/title.png</file>
+    </qresource>
+</RCC>

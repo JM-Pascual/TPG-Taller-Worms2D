@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.0)
 project(worms2d VERSION 0.0.1)
 
 set(AUTOUIC ON)
+set(AUTOMOC ON)
+set(AUTORCC ON)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
@@ -11,7 +13,6 @@ find_package(SDL2pp REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(box2d REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui)
-qt_standard_project_setup()
 
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
@@ -24,6 +25,7 @@ include_directories(${BOX2D_INCLUDE_DIRS})
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -pedantic -pedantic-errors -O0 -ggdb -DDEBUG -fno-inline -D _POSIX_C_SOURCE=200809L")
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(TARGET_DIR ../target)
 
@@ -32,9 +34,16 @@ include_directories(${SDL2PP_INCLUDE_DIRS})
 
 file(GLOB COMMON_SRC common/*.cpp)
 file(GLOB CLIENT_SRC client/*.cpp client/main.cpp)
+file(GLOB CLIENT_H client/*.h)
 file(GLOB SERVER_SRC server/*.cpp server/main.cpp)
+file(GLOB UI_SRC client/*.ui)
 
-add_executable(client_exe ${COMMON_SRC} ${CLIENT_SRC}
+set(QT_CLIENT_SRC ${CLIENT_SRC})
+qt_wrap_ui(QT_CLIENT_SRC ${UI_SRC})
+qt_wrap_cpp(QT_CLIENT_SRC ${CLIENT_H})
+
+
+add_executable(client_exe ${COMMON_SRC} ${QT_CLIENT_SRC} ${CLIENT_RES}
         client/Window.cpp)
 
 target_include_directories(client_exe PUBLIC ${SDL2_INCLUDE_DIRS})
