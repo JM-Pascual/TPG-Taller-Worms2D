@@ -81,15 +81,16 @@ std::shared_ptr<GameState> ClientSide::Protocol::recvGameState() {
                                                  direction, aim_inclination);
         }
 
-        case GameStateTag::PROYECTILE_COUNT:
+        case GameStateTag::PROJECTILE_COUNT:
             return std::make_shared<ProyectileCount>(recvUint8());
 
-        case GameStateTag::PROYECTILE: {
+        case GameStateTag::PROJECTILE: {
             float x = meter_to_pixel_x(recvFloat());
             float y = meter_to_pixel_y(recvFloat());
+            float angle = recvFloat();
             auto proyectile_type = (WeaponsAndTools)recvUint8();
             bool impacted = recvBool();
-            return std::make_shared<ProyectileState>(x, y, proyectile_type, impacted);
+            return std::make_shared<ProyectileState>(x, y, proyectile_type, impacted, angle);
         }
 
         default:

@@ -115,6 +115,7 @@ void ServerSide::Protocol::sendProyectileState(const std::shared_ptr<GameState>&
     std::shared_ptr<ProyectileState> p = std::dynamic_pointer_cast<ProyectileState>(ps);
     send(&p->tag, sizeof(uint8_t));
     this->sendPosition(p->pos);
+    this->send(&p->angle, sizeof(float));
     send(&p->type, sizeof(uint8_t));
     send(&p->impacted, sizeof(bool));
 }

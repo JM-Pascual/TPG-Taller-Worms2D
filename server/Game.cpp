@@ -21,7 +21,7 @@ void Game::build_game_state(std::list<std::shared_ptr<GameState>>& states_list) 
     states_list.push_back(std::make_shared<ProyectileCount>(battlefield.projectiles.size()));
 
     for (const auto& proyectile: battlefield.projectiles) {
-        states_list.push_back(proyectile->get_proyectile_state()());
+        states_list.push_back(proyectile->get_proyectile_state());
     }
 }
 

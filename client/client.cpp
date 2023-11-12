@@ -62,7 +62,7 @@ void Client::run() {
                         //actors.at(i)->render(window.get_renderer());
                     }
                     //Recibo el gamestate de los proyectiles y los guardo para renderizarlos
-                } else if (raw_state->tag == GameStateTag::PROYECTILE_COUNT) {
+                } else if (raw_state->tag == GameStateTag::PROJECTILE_COUNT) {
                     uint8_t proyectiles_quantity =
                             std::dynamic_pointer_cast<ProyectileCount>(raw_state)->quantity;
                     for (size_t i = 0; i < proyectiles_quantity; i++) {
