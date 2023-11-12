@@ -133,11 +133,11 @@ void ServerSide::Protocol::sendGameState(const std::shared_ptr<GameState>& game_
             break;
 
 
-        case GameStateTag::PROYECTILE_COUNT:
+        case GameStateTag::PROJECTILE_COUNT:
             sendProyectileCount(game_state);
             break;
 
-        case GameStateTag::PROYECTILE:
+        case GameStateTag::PROJECTILE:
             sendProyectileState(game_state);
             break;
 

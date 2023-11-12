@@ -15,17 +15,20 @@ class Weapon {
 protected:
     uint8_t ammo;
 public:
-    explicit Weapon() = default;
+
+    explicit Weapon(uint8_t ammo);
 
     virtual void execute(Battlefield& battlefield, Player& player_) = 0;
-    virtual b2Body* prepare_ammo(Battlefield& battlefield, b2Vec2 proyectile_position, WeaponsAndTools type);
+    virtual std::shared_ptr<Projectile>
+    prepare_ammo(Battlefield &battlefield, b2Vec2 projectile_position, WeaponsAndTools type, GameEntity entity);
+
 };
 
 class Bazooka : public Weapon{
-    uint8_t ammo = BAZOOKA_AMMO;
 public:
-    Bazooka() = default;
+    Bazooka();
     void execute(Battlefield& battlefield, Player& player) override;
+
 };
 
 

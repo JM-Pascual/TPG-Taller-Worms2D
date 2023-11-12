@@ -30,7 +30,7 @@ public:
     const uint8_t quantity;
 
     explicit ProyectileCount(const uint8_t quantity):
-            GameState(GameStateTag::PROYECTILE_COUNT), quantity(quantity) {}
+            GameState(GameStateTag::PROJECTILE_COUNT), quantity(quantity) {}
 
     ~ProyectileCount() = default;
 };
@@ -59,8 +59,9 @@ public:
     const b2Vec2 pos;
     const WeaponsAndTools type;
     const bool impacted;
+    const float angle;
 
-    explicit ProyectileState(float x, float y, WeaponsAndTools type, bool impacted);
+    explicit ProyectileState(const float x, const float y, const WeaponsAndTools type,const bool impacted, const float angle);
 
     ~ProyectileState() override = default;
 };

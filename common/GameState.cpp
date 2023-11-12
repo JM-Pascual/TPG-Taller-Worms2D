@@ -12,7 +12,5 @@ PlayerState::PlayerState(const float x, const float y, const bool is_walking, co
         aim_inclination_degrees(aim_inclination_degrees){}
 
 
-ProyectileState::ProyectileState(const float x, const float y,
-                                 const WeaponsAndTools type,const bool impacted) :
-                    GameState(GameStateTag::PROYECTILE),pos(x, y), type(type), impacted(impacted){}
-
+ProyectileState::ProyectileState(const float x, const float y,const WeaponsAndTools type,const bool impacted, const float angle) : GameState(GameStateTag::PROJECTILE), pos(x, y)
+                                                                                            , type(type), impacted(impacted), angle(angle){}

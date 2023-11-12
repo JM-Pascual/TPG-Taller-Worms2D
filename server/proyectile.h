@@ -6,16 +6,22 @@
 #include <memory>
 #include "../common/const.h"
 #include "../common/GameState.h"
+#include "battlefield.h"
 
-class Proyectile {
+class Battlefield;
+
+class Projectile {
 private:
-    b2Body* proyectile;
+    b2Body* projectile;
     WeaponsAndTools type;
     bool impacted;
 
 public:
-    Proyectile(b2Body* proyectile,WeaponsAndTools type);
+    const GameEntity entity;
 
+    explicit Projectile(Battlefield &battlefield, b2Vec2 position, WeaponsAndTools type, GameEntity entity);
+
+    void set_power(b2Vec2 power);
     std::shared_ptr<ProyectileState> get_proyectile_state();
 };
 

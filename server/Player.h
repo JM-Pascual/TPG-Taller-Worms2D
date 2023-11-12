@@ -27,6 +27,7 @@ class Weapon;
 
 class Player {
 private:
+
     b2Body* worm;
     //std::map<WeaponsAndTools,Weapon >Weapons;
     Weapon* weapon;
@@ -45,6 +46,10 @@ private:
     float weapon_power;
 
 public:
+    const GameEntity entity;
+
+
+public:
     explicit Player(Battlefield& battlefield);
 
     void move();
@@ -61,8 +66,9 @@ public:
 
     b2Vec2 set_bullet_direction();
     b2Vec2 set_bullet_power();
+    float set_bullet_angle();
 
-    void shoot_aim_weapon(b2Body* bullet);
+    void shoot_aim_weapon(std::shared_ptr<Projectile> projectile);
     void use_throwable();
     void use_clickeable_gadget();
 
