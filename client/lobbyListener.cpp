@@ -1,8 +1,11 @@
 #include "lobbyListener.h"
 
+#include <thread>
+
 #include "../common/const.h"
 
-#include "mainwindow.h"
+#include "game_frame.h"
+#include "player_frame.h"
 
 void LobbyListener::setGameFrames(std::vector<std::unique_ptr<GameFrame>>& games,
                                   Queue<std::shared_ptr<States>>& lobby_states,

@@ -15,7 +15,14 @@
 #include "./ui_mainwindow.h"
 
 #include "cparser.h"
+#include "game_frame.h"
+#include "player_frame.h"
 
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
+
+#define INTRO_EXPLOSION_DURATION 1500
+#define LOBBY_REFRESH_RATE 33
 
 MainWindow::MainWindow(Client& client, bool& initGame, QWidget* parent):
         QMainWindow(parent),
@@ -31,8 +38,8 @@ MainWindow::MainWindow(Client& client, bool& initGame, QWidget* parent):
     QIcon icon(":/images/icon.png");
     this->setWindowIcon(icon);
     // Tamanio ventana
-    this->setMaximumSize(1280, 720);
-    this->setMinimumSize(1280, 720);
+    this->setMaximumSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    this->setMinimumSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
     this->loadIntro();
     this->loadMenu();
@@ -56,6 +63,7 @@ void MainWindow::loadIntro() {
     ui->explosionMovie->setScaledContents(true);
     ui->explosionMovie->setLineWidth(0);
     ui->explosionMovie->setMargin(0);
+    // Hardcodeo la posicion de la explosion de la intro para que quede bien
     ui->explosionMovie->setGeometry(-700, -500, this->width() * 2, this->height() * 2);
     ui->explosionMovie->raise();
     ui->explosionMovie->setBackgroundRole(QPalette::Window);
@@ -69,7 +77,7 @@ void MainWindow::loadIntro() {
 
     ui->skipLabel->setGeometry((this->width() - 700) / 2, 580, 700, 100);
 
-    timer->setInterval(1500);
+    timer->setInterval(INTRO_EXPLOSION_DURATION);
 
     connect(timer, &QTimer::timeout, this, [this]() {
         ui->explosionMovie->show();
@@ -295,7 +303,7 @@ void MainWindow::showLobby() {
         Utilizo un singleshot timer statico ya que es mejor en cuanto a performance, con un QTimer
        instanciado se usaba entre 3 a 5 veces mas CPU
     */
-    QTimer::singleShot(33, this, [this] { this->showLobby(); });
+    QTimer::singleShot(LOBBY_REFRESH_RATE, this, [this] { this->showLobby(); });
 
     if (p_quantity == NOT_POPPED_COUNT) {
         return;
@@ -369,121 +377,4 @@ MainWindow::~MainWindow() {
         delete movie_aux;
     if (timer)
         delete timer;
-}
-
-// ---------------- GAME FRAME ---------------------------
-
-GameFrame::GameFrame(QWidget* parent):
-        frame(new QWidget(parent)),
-        layout(new QHBoxLayout(frame)),
-        description(new QLabel(frame)),
-        map(new QLabel(frame)),
-        players(new QLabel(frame)),
-        joinGame(new QPushButton(frame)),
-        game_id(0)
-
-{}
-
-void GameFrame::setFrame(const std::string& descrip, const std::string& map_name,
-                         const uint8_t& p_quantity, const uint8_t& game_id) {
-    this->game_id = game_id;
-
-    std::string quantity(std::to_string(p_quantity));
-    quantity = quantity.append(" / 4");
-
-    QString desc = descrip.data();
-    QString name_map = map_name.data();
-    QString p_quant = quantity.data();
-
-    frame->setLayout(layout);
-    frame->setMinimumHeight(70);
-    frame->setMaximumHeight(70);
-
-    layout->addWidget(description, 55, Qt::AlignCenter);
-    layout->addWidget(map, 15, Qt::AlignCenter);
-    layout->addWidget(players, 10, Qt::AlignCenter);
-    layout->addWidget(joinGame, 10, Qt::AlignCenter);
-    // cppcheck-suppress danglingTemporaryLifetime
-    description->setText(desc);
-    // cppcheck-suppress danglingTemporaryLifetime
-    map->setText(name_map);
-    map->setStyleSheet("font-size: 16px;");
-    // cppcheck-suppress danglingTemporaryLifetime
-    players->setText(p_quant);
-    players->setStyleSheet("font-size: 16px;");
-
-    joinGame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    joinGame->setStyleSheet("border-image: url(:/images/joinGame.bmp);");
-    joinGame->setMinimumSize(130, 70);
-}
-
-void GameFrame::setHandler(MainWindow& w) {
-    MainWindow::connect(joinGame, &QPushButton::clicked, &w, [&w, this]() {
-        w.client.action_queue.push(std::make_unique<JoinGame>(this->game_id));
-        w.showLobby();
-    });
-}
-
-void GameFrame::show() {
-    frame->show();
-    description->show();
-    map->show();
-    players->show();
-    joinGame->show();
-
-    frame->raise();
-    description->raise();
-    map->raise();
-    players->raise();
-    joinGame->raise();
-}
-
-GameFrame::~GameFrame() {
-    delete joinGame;
-    delete players;
-    delete map;
-    delete description;
-    delete layout;
-    delete frame;
-}
-
-// ---------------------------- PLAYER FRAME ------------------------------
-
-PlayerFrame::PlayerFrame(const uint8_t& player_id, const bool& ready):
-        character_label(nullptr),
-        ready_button(nullptr),
-        player_id(nullptr),
-        id(player_id),
-        ready_state(ready) {}
-
-void PlayerFrame::hide() {
-    character_label->hide();
-    ready_button->hide();
-    this->ready_button->setStyleSheet("border-image: url(:/images/notReady.png)");
-}
-
-void PlayerFrame::setFrame(QLabel* label, QPushButton* button, QLabel* id_label) {
-    this->character_label = label;
-    this->ready_button = button;
-    this->player_id = id_label;
-    this->hide();
-    // cppcheck-suppress danglingTemporaryLifetime
-    QString lblTxt = std::string("Player ID: " + std::to_string(id)).data();
-    // cppcheck-suppress danglingTemporaryLifetime
-    id_label->setText(lblTxt);
-    this->ready();
-}
-
-
-void PlayerFrame::show() {
-    character_label->show();
-    ready_button->show();
-    player_id->show();
-}
-
-void PlayerFrame::ready() {
-    this->ready_button->setStyleSheet("border-image: url(:/images/notReady.png)");
-    if (ready_state) {
-        this->ready_button->setStyleSheet("border-image: url(:/images/ready.png)");
-    }
 }
