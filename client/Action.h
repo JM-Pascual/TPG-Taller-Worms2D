@@ -1,6 +1,8 @@
 #ifndef ACTION_H
 #define ACTION_H
 
+#include <string>
+
 #include <stdint.h>
 
 #include "../common/const.h"
@@ -135,8 +137,13 @@ public:
 // ----------------------------------- LOBBY ACTIONS -------------------------
 
 class CreateGame: public Action {
+private:
+    const std::string description;
+    const std::string map;
+
 public:
-    CreateGame(): Action(Actions::CREATE) {}
+    CreateGame(const std::string& desc, const std::string& map):
+            Action(Actions::CREATE), description(desc), map(map) {}
 
     void send(ClientSide::Protocol& protocol) override;
 
@@ -153,6 +160,24 @@ public:
     void send(ClientSide::Protocol& protocol) override;
 
     ~JoinGame() override = default;
+};
+
+class ShowGames: public Action {
+public:
+    ShowGames(): Action(Actions::SHOW_GAMES) {}
+
+    void send(ClientSide::Protocol& protocol) override;
+
+    ~ShowGames() = default;
+};
+
+class ExitGame: public Action {
+public:
+    ExitGame(): Action(Actions::EXIT_GAME) {}
+
+    void send(ClientSide::Protocol& protocol) override;
+
+    ~ExitGame() = default;
 };
 
 class Ready: public Action {

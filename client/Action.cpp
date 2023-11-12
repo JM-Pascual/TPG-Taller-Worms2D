@@ -87,7 +87,11 @@ void ChangeGadget::send(ClientSide::Protocol& protocol) {
 // ------------------------------- LOBBY COMMANDS --------------------------
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CREATE GAME ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void CreateGame::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
+void CreateGame::send(ClientSide::Protocol& protocol) {
+    protocol.send(&c, sizeof(uint8_t));
+    protocol.sendString64(description);
+    protocol.sendString64(map);
+}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JOIN GAME ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void JoinGame::send(ClientSide::Protocol& protocol) {
@@ -96,3 +100,7 @@ void JoinGame::send(ClientSide::Protocol& protocol) {
 }
 
 void Ready::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
+
+void ShowGames::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
+
+void ExitGame::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }

@@ -2,10 +2,12 @@
 #define COMMAND_H
 
 #include <memory>
+#include <string>
+#include <vector>
 
 #include <stdint.h>
 
-#include "../common/GameState.h"
+#include "../common/States.h"
 #include "../common/const.h"
 #include "../common/queue.h"
 
@@ -173,11 +175,11 @@ private:
     GameBrowser& gb;
     uint8_t& game_id;
     const uint8_t& id;
-    Queue<std::shared_ptr<GameState>>& state_queue;
+    Queue<std::shared_ptr<States>>& state_queue;
 
 public:
     explicit Join(GameBrowser& gb, uint8_t& id_to_join, const uint8_t& id,
-                  Queue<std::shared_ptr<GameState>>& state_queue);
+                  Queue<std::shared_ptr<States>>& state_queue);
 
     void execute() override;
 
@@ -187,9 +189,13 @@ public:
 // ----------------------- CREATE ----------------------
 
 class Create: public Join {
+private:
+    std::string desc;
+    std::string map;
+
 public:
     explicit Create(GameBrowser& gb, uint8_t& id_to_create, const uint8_t& id,
-                    Queue<std::shared_ptr<GameState>>& state_queue);
+                    Queue<std::shared_ptr<States>>& state_queue, ServerSide::Protocol& protocol);
 
     ~Create() override = default;
 };
@@ -209,6 +215,36 @@ public:
     void execute() override;
 
     ~Ready() = default;
+};
+
+class ShowGames: public LobbyAction {
+private:
+    std::vector<std::shared_ptr<GameInfoL>> info;
+    GameBrowser& gb;
+    Queue<std::shared_ptr<States>>& state_queue;
+
+public:
+    ShowGames(GameBrowser& gb, Queue<std::shared_ptr<States>>& stateQ):
+            gb(gb), state_queue(stateQ) {}
+
+    void execute() override;
+
+    ~ShowGames() = default;
+};
+
+class ExitGame: public LobbyAction {
+private:
+    GameBrowser& gb;
+    const uint8_t& player_id;
+    const uint8_t& game_id;
+
+public:
+    ExitGame(GameBrowser& gb, const uint8_t& player_id, const uint8_t& game_id):
+            gb(gb), player_id(player_id), game_id(game_id) {}
+
+    void execute() override;
+
+    ~ExitGame() = default;
 };
 
 // ----------------------- NULL_COMMAND ----------------------

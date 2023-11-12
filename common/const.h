@@ -4,7 +4,15 @@
 #define SUCCESS_ 0
 #define ERROR_ 1
 
+#define NONE 0
+#define NOT_POPPED_COUNT 255
+
 #define NULL_ARG ""
+
+#define MAX_DESCR_CHARS 64
+#define MAX_PLAYERS 4
+
+enum class SWIndex { INTRO, MENU, GAME_SEARCH, HELP, LOBBY };
 
 enum class Direction { LEFT = 0, RIGHT = 1 };
 
@@ -36,6 +44,7 @@ enum class Actions {
     CREATE,
     JOIN,
     SHOW_GAMES,
+    EXIT_GAME,
     READY,
 
     // Game actions
@@ -68,8 +77,31 @@ enum class Actors {
     BAZOOKA_EXPLOSION
 };
 
-enum class GameStateTag { BATTLEFIELD, PLAYER, PROJECTILE, PLAYER_COUNT, PROJECTILE_COUNT };
+enum class GameEntity {
+    WORM,
+    BAZOOKA,
+    MORTAR,
+    GREEN_GRENADE,
+    RED_GRENADE,
+    HOLY_GRENADE,
+    BANANA,
+    DYNAMITE,
+    BASEBALL_BAT,
+    AIR_ATTACK
+};
 
-enum class GameEntity {WORM, BAZOOKA, MORTAR, GREEN_GRENADE, RED_GRENADE, HOLY_GRENADE, BANANA, DYNAMITE, BASEBALL_BAT, AIR_ATTACK};
+enum class StatesTag {
+    MY_ID,
+    GAME_NOT_JOINABLE,
+    GAMES_COUNT_L,
+    INFO_GAME_L,
+    PLAYER_COUNT_L,
+    PLAYER_L,
+    BATTLEFIELD_G,
+    PLAYER_G,
+    PROJECTILE_G,
+    PROJECTILE_COUNT_G,
+    PLAYER_COUNT_G
+};
 
 #endif

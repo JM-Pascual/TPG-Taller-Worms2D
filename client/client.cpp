@@ -5,7 +5,7 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <spdlog/spdlog.h>
 
-#include "../common/GameState.h"
+#include "../common/States.h"
 
 #include "GameActor.h"
 #include "TexturesPool.h"
@@ -13,16 +13,31 @@
 
 const int DURATION = 1000 / 30;
 
+
 Client::Client(const char* hostname, const char* servname):
         quit(false),
+        runned(false),
         protocol(hostname, servname),
-        recv(this->protocol, game_state_queue),
+        recv(this->protocol, game_state_queue, lobby_state_queue),
         send(this->protocol, this->action_queue),
         kb(this->action_queue, quit) {
     spdlog::get("client")->debug("Iniciando hilo receptor en el cliente");
     recv.start();
     spdlog::get("client")->debug("Iniciando hilo sender en el cliente");
     send.start();
+    getID();
+}
+
+void Client::getID() {
+    std::shared_ptr<States> raw_state = nullptr;
+
+    do {
+        while (not lobby_state_queue.try_pop(raw_state)) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(DURATION));
+        }
+    } while (raw_state->tag != StatesTag::MY_ID);
+
+    id = std::dynamic_pointer_cast<MyID>(raw_state)->id;
 }
 
 void Client::run() {
@@ -45,13 +60,13 @@ void Client::run() {
 
         window.render_stage(txt_pool);
 
-        std::shared_ptr<GameState> raw_state = nullptr;
+        std::shared_ptr<States> raw_state = nullptr;
 
-        for (int j = 0; j < 5; j++){
+        for (int j = 0; j < 5; j++) {
             if (game_state_queue.try_pop(raw_state)) {
-                if (raw_state->tag == GameStateTag::PLAYER_COUNT) {
+                if (raw_state->tag == StatesTag::PLAYER_COUNT_G) {
                     uint8_t players_quantity =
-                            std::dynamic_pointer_cast<PlayerCount>(raw_state)->quantity;
+                            std::dynamic_pointer_cast<PlayerCountG>(raw_state)->quantity;
                     for (size_t i = 0; i < players_quantity; i++) {
                         while (not game_state_queue.try_pop(raw_state)) {}
                         if (actors.count(i) == 0) {
@@ -59,37 +74,38 @@ void Client::run() {
                         } else {
                             actors.at(i)->update(raw_state, loop_start_time);
                         }
-                        //actors.at(i)->render(window.get_renderer());
+                        // actors.at(i)->render(window.get_renderer());
                     }
-                    //Recibo el gamestate de los proyectiles y los guardo para renderizarlos
-                } else if (raw_state->tag == GameStateTag::PROJECTILE_COUNT) {
+                    // Recibo el States de los proyectiles y los guardo para renderizarlos
+                } else if (raw_state->tag == StatesTag::PROJECTILE_COUNT_G) {
                     uint8_t proyectiles_quantity =
-                            std::dynamic_pointer_cast<ProyectileCount>(raw_state)->quantity;
+                            std::dynamic_pointer_cast<ProjectileCountG>(raw_state)->quantity;
                     for (size_t i = 0; i < proyectiles_quantity; i++) {
                         while (not game_state_queue.try_pop(raw_state)) {}
                         if (proyectiles.count(i) == 0) {
-                            proyectiles.insert({i, std::make_shared<BazookaProyectile>(raw_state, txt_pool)});
+                            proyectiles.insert(
+                                    {i, std::make_shared<BazookaProyectile>(raw_state, txt_pool)});
                         } else {
                             proyectiles.at(i)->update(raw_state, loop_start_time);
                         }
                     }
-
                 }
             }
         }
 
-        for (auto & actor : actors){
+        for (auto& actor: actors) {
             actor.second->render(window.get_renderer());
         }
 
-        for (auto & proyectile : proyectiles){
+        for (auto& proyectile: proyectiles) {
             proyectile.second->render(window.get_renderer());
         }
 
         water_animation.update();
 
-        for (int i = 0; i < 5; i++){
-            water_animation.render((*window.get_renderer()), SDL2pp::Rect(0, 600+i*22, 1280, 40), 1240, 0);
+        for (int i = 0; i < 5; i++) {
+            water_animation.render((*window.get_renderer()),
+                                   SDL2pp::Rect(0, 600 + i * 22, 1280, 40), 1240, 0);
         }
 
         window.present_textures();
@@ -110,7 +126,10 @@ void Client::run() {
 }
 
 Client::~Client() {
-    kb.join();
+    if (runned) {
+        kb.join();
+    }
+
     recv.kill();
     send.kill();
 

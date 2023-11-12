@@ -4,12 +4,12 @@
 
 #include "Player.h"
 
-void BroadCaster::add_queue(const uint8_t& id, Queue<std::shared_ptr<GameState>>& state_queue) {
+void BroadCaster::add_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue) {
     std::lock_guard<std::mutex> l(m);
     broadcast_map.insert({id, &state_queue});
 }
 
-void BroadCaster::broadcast(const std::list<std::shared_ptr<GameState>>& game_states) {
+void BroadCaster::broadcast(const std::list<std::shared_ptr<States>>& game_states) {
     std::lock_guard<std::mutex> lock(m);
     for (auto& [id, client_game_state_queue]: broadcast_map) {
         try {
@@ -41,4 +41,9 @@ void BroadCaster::remove_closed_clients(uint8_t& ready_count,
 
         ++it;
     }
+}
+
+void BroadCaster::removePlayer(const uint8_t& player_id) {
+    std::lock_guard<std::mutex> lock(m);
+    broadcast_map.erase(player_id);
 }

@@ -6,26 +6,28 @@
 
 #include <stdint.h>
 
+#include "../common/States.h"
 #include "../common/queue.h"
-#include "../common/GameState.h"
 
+#include "game_loop.h"
 #include "sprotocol.h"
 #include "sreceiver.h"
 #include "ssender.h"
-#include "game_loop.h"
 
 namespace ServerSide {
 class Client {
+public:
+    const uint8_t id;
+
 private:
     ServerSide::Protocol protocol;
     ServerSide::Receiver recv;
     ServerSide::Sender send;
     std::atomic<bool> killed;
-    Queue<std::shared_ptr<GameState>> state_queue;
-public:
-    const uint8_t id;
+    Queue<std::shared_ptr<States>> state_queue;
 
-    explicit Client(Socket&& peer, GameBrowser& browser, uint8_t id);
+public:
+    explicit Client(Socket&& peer, GameBrowser& browser, const uint8_t& id);
     /*
         Retorna si ambos hilos estan 'vivos'
     */

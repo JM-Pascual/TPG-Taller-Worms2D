@@ -8,22 +8,24 @@
 
 #include "../common/queue.h"
 
-class GameState;
+class States;
 class Player;
 
 class BroadCaster {
 private:
     std::mutex m;
-    std::map<uint8_t, Queue<std::shared_ptr<GameState>>*> broadcast_map;
+    std::map<uint8_t, Queue<std::shared_ptr<States>>*> broadcast_map;
 
 public:
     BroadCaster() = default;
 
-    void add_queue(const uint8_t& id, Queue<std::shared_ptr<GameState>>& state_queue);
+    void add_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue);
 
-    void broadcast(const std::list<std::shared_ptr<GameState>>& game_states);
+    void broadcast(const std::list<std::shared_ptr<States>>& game_states);
 
     void remove_closed_clients(uint8_t& ready_count, std::map<uint8_t, Player>& players_stats);
+
+    void removePlayer(const uint8_t& player_id);
 
     ~BroadCaster() = default;
 };

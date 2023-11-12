@@ -57,23 +57,26 @@ public:
     /*
 
     */
-    void create_game(uint8_t& game_id_to_create);
+    void create_game(const std::string& desc, const std::string& map, uint8_t& game_id_to_create);
     /*
         Agrega client al GameLoop especificado por game_code
     */
     void join_game(const uint8_t& game_code, const uint8_t& id,
-                   Queue<std::shared_ptr<GameState>>& state_queue);
+                   Queue<std::shared_ptr<States>>& state_queue);
+
+    void removePlayer(const uint8_t& player_id, const uint8_t& game_id);
+    /*
+
+    */
+    void set_player_ready(const uint8_t id, const uint8_t id_game);
     /*
 
     */
 
     Queue<std::shared_ptr<PlayerAction>>& getQueue(const uint8_t& game_id);
 
-    void infoGames(std::vector<std::string>&);
-    /*
 
-    */
-    void set_player_ready(const uint8_t id, const uint8_t id_game);
+    void infoGames(std::vector<std::shared_ptr<GameInfoL>>&);
     /*
 
     */

@@ -2,6 +2,7 @@
 #define SERVER_PROTOCOL_H
 
 #include <memory>
+#include <string>
 
 #include <stdint.h>
 
@@ -9,7 +10,7 @@
 #include "../common/socket.h"
 #include "box2d/b2_math.h"
 
-class GameState;
+class States;
 
 
 namespace ServerSide {
@@ -40,15 +41,20 @@ private:
 
     void sendPosition(const b2Vec2& pos);
 
-    void sendPlayerState(const std::shared_ptr<GameState>& ps);
+    void sendPlayerState(const std::shared_ptr<States>& ps);
 
-    void sendPlayerCount(const std::shared_ptr<GameState>& count);
+    void sendGameInfo(const std::shared_ptr<States>& count);
 
-    void sendProyectileState(const std::shared_ptr<GameState>& ps);
+    void sendCount(const std::shared_ptr<States>& count);
 
-    void sendProyectileCount(const std::shared_ptr<GameState>& count);
+    void sendPlayerLobby(const std::shared_ptr<States>& count);
+
+    void sendID(const std::shared_ptr<States>& state);
+
+    void sendProjectileState(const std::shared_ptr<States>& ps);
+
 public:
-    void sendGameState(const std::shared_ptr<GameState>& game_state);
+    void sendStates(const std::shared_ptr<States>& state);
     /*
         Construye el protocolo y su respectivo socket
     */
@@ -81,6 +87,10 @@ public:
         Cierra forzosamente el socket del protocolo (en caso de que no se haya hecho)
     */
     void close();
+    /*
+        Recibe un string de maximo 64 caracteres
+    */
+    void recvString64(std::string& desc);
     /*
         Recibe la id del game al que se quiere conectar el cliente
     */

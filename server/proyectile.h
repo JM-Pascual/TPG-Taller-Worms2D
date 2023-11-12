@@ -2,10 +2,13 @@
 #define WORMS2D_PROYECTILE_H
 
 
-#include <box2d/b2_body.h>
 #include <memory>
+
+#include <box2d/b2_body.h>
+
+#include "../common/States.h"
 #include "../common/const.h"
-#include "../common/GameState.h"
+
 #include "battlefield.h"
 
 class Battlefield;
@@ -19,11 +22,12 @@ private:
 public:
     const GameEntity entity;
 
-    explicit Projectile(Battlefield &battlefield, b2Vec2 position, WeaponsAndTools type, GameEntity entity);
+    explicit Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTools type,
+                        GameEntity entity);
 
     void set_power(b2Vec2 power);
-    std::shared_ptr<ProyectileState> get_proyectile_state();
+    std::shared_ptr<ProjectileStateG> get_proyectile_state();
 };
 
 
-#endif //WORMS2D_PROYECTILE_H
+#endif  // WORMS2D_PROYECTILE_H

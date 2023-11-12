@@ -2,6 +2,7 @@
 #define CLIENT_PROTOCOL_H
 
 #include <memory>
+#include <string>
 
 #include <stdint.h>
 
@@ -10,9 +11,12 @@
 
 #include "Action.h"
 
-#define PPM 33.33f // pixel per meter ratio.
+#define PPM 33.33f  // pixel per meter ratio.
 
-class GameState;
+class States;
+class GameInfoL;
+class ProjectileStateG;
+class PlayerStateG;
 
 namespace ClientSide {
 class Protocol {
@@ -40,9 +44,19 @@ private:
     float meter_to_pixel_x(float meter_position);
     float meter_to_pixel_y(float meter_position);
 
+    void recvString64(std::string& str);
+
+    std::shared_ptr<GameInfoL> recvGameInfo();
+
+    std::shared_ptr<PlayerStateG> recvPlayerGame();
+
+    std::shared_ptr<ProjectileStateG> recvProjectileGame();
+
 public:
     // Envia data chequeando si se cierra el socket
     void send(const void* data, unsigned int sz);
+
+    void sendString64(const std::string& str);
 
     void recvCommand(Actions& c);
     /*
@@ -54,7 +68,7 @@ public:
     */
     void close();
 
-    std::shared_ptr<GameState> recvGameState();
+    std::shared_ptr<States> recvStates();
     /*
         No tiene sentido ni copiar ni mover el protocolo
     */

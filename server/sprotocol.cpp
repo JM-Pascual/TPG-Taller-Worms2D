@@ -9,7 +9,7 @@
 #include <spdlog/spdlog.h>
 #include <stdint.h>
 
-#include "../common/GameState.h"
+#include "../common/States.h"
 #include "../common/const.h"
 #include "../common/liberror.h"
 
@@ -69,6 +69,16 @@ void ServerSide::Protocol::recvGadget(WeaponsAndTools& gadget) {
     gadget = (WeaponsAndTools)this->recvUint8();
 }
 
+void ServerSide::Protocol::recvString64(std::string& desc) {
+    uint8_t length;
+    this->recv(&length, sizeof(uint8_t));
+
+    std::vector<char> str_net;
+    str_net.resize(length + 1);  // length + '\0'
+    this->recv(str_net.data(), length);
+    desc = std::string(str_net.data());
+}
+
 // ------------------------------ SEND -----------------------------------
 
 void ServerSide::Protocol::sendPosition(const b2Vec2& pos) {
@@ -83,14 +93,8 @@ void ServerSide::Protocol::sendPosition(const b2Vec2& pos) {
     send(&y_net, sizeof(uint32_t));
 }
 
-void ServerSide::Protocol::sendPlayerCount(const std::shared_ptr<GameState>& count) {
-    std::shared_ptr<PlayerCount> p = std::dynamic_pointer_cast<PlayerCount>(count);
-    send(&p->tag, sizeof(uint8_t));
-    send(&p->quantity, sizeof(uint8_t));
-}
-
-void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<GameState>& ps) {
-    std::shared_ptr<PlayerState> p = std::dynamic_pointer_cast<PlayerState>(ps);
+void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<States>& ps) {
+    std::shared_ptr<PlayerStateG> p = std::dynamic_pointer_cast<PlayerStateG>(ps);
 
     send(&p->tag, sizeof(uint8_t));
     this->sendPosition(p->pos);
@@ -105,14 +109,32 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<GameState>& ps)
     send(&inclination_net, sizeof(uint32_t));
 }
 
-void ServerSide::Protocol::sendProyectileCount(const std::shared_ptr<GameState>& count) {
-    std::shared_ptr<ProyectileCount> p = std::dynamic_pointer_cast<ProyectileCount>(count);
+void ServerSide::Protocol::sendGameInfo(const std::shared_ptr<States>& count) {
+    std::shared_ptr<GameInfoL> p = std::dynamic_pointer_cast<GameInfoL>(count);
+
+    send(&p->tag, sizeof(uint8_t));
+
+    uint8_t length = p->description.length();
+    this->send(&length, sizeof(uint8_t));
+    this->send(p->description.data(), length);
+
+    length = p->map.length();
+    this->send(&length, sizeof(uint8_t));
+    this->send(p->map.data(), length);
+
+    send(&p->player_count, sizeof(uint8_t));
+    send(&p->game_id, sizeof(uint8_t));
+}
+
+void ServerSide::Protocol::sendCount(const std::shared_ptr<States>& count) {
+    std::shared_ptr<CountState> p = std::dynamic_pointer_cast<CountState>(count);
+
     send(&p->tag, sizeof(uint8_t));
     send(&p->quantity, sizeof(uint8_t));
 }
 
-void ServerSide::Protocol::sendProyectileState(const std::shared_ptr<GameState>& ps) {
-    std::shared_ptr<ProyectileState> p = std::dynamic_pointer_cast<ProyectileState>(ps);
+void ServerSide::Protocol::sendProjectileState(const std::shared_ptr<States>& ps) {
+    std::shared_ptr<ProjectileStateG> p = std::dynamic_pointer_cast<ProjectileStateG>(ps);
     send(&p->tag, sizeof(uint8_t));
     this->sendPosition(p->pos);
     this->send(&p->angle, sizeof(float));
@@ -120,26 +142,53 @@ void ServerSide::Protocol::sendProyectileState(const std::shared_ptr<GameState>&
     send(&p->impacted, sizeof(bool));
 }
 
-void ServerSide::Protocol::sendGameState(const std::shared_ptr<GameState>& game_state) {
-    switch (game_state->tag) {
-        case GameStateTag::BATTLEFIELD:
+void ServerSide::Protocol::sendPlayerLobby(const std::shared_ptr<States>& count) {
+    std::shared_ptr<PlayerStateL> p = std::dynamic_pointer_cast<PlayerStateL>(count);
+    send(&p->tag, sizeof(uint8_t));
+    send(&p->id, sizeof(uint8_t));
+    send(&p->ready, sizeof(uint8_t));
+}
+
+void ServerSide::Protocol::sendID(const std::shared_ptr<States>& state) {
+    std::shared_ptr<MyID> p = std::dynamic_pointer_cast<MyID>(state);
+
+    send(&p->tag, sizeof(uint8_t));
+    send(&p->id, sizeof(uint8_t));
+}
+
+
+void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
+    switch (state->tag) {
+        case StatesTag::GAMES_COUNT_L:
+        case StatesTag::PLAYER_COUNT_L:
+        case StatesTag::PLAYER_COUNT_G:
+        case StatesTag::GAME_NOT_JOINABLE:
+        case StatesTag::PROJECTILE_COUNT_G:
+            sendCount(state);
             break;
 
-        case GameStateTag::PLAYER_COUNT:
-            sendPlayerCount(game_state);
+        case StatesTag::MY_ID:
+            sendID(state);
             break;
 
-        case GameStateTag::PLAYER:
-            sendPlayerState(game_state);
+        case StatesTag::PLAYER_L:
+            sendPlayerLobby(state);
+            break;
+
+        case StatesTag::INFO_GAME_L:
+            sendGameInfo(state);
             break;
 
 
-        case GameStateTag::PROJECTILE_COUNT:
-            sendProyectileCount(game_state);
+        case StatesTag::BATTLEFIELD_G:
             break;
 
-        case GameStateTag::PROJECTILE:
-            sendProyectileState(game_state);
+        case StatesTag::PLAYER_G:
+            sendPlayerState(state);
+            break;
+
+        case StatesTag::PROJECTILE_G:
+            sendProjectileState(state);
             break;
 
         default:
