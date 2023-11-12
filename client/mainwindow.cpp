@@ -8,6 +8,8 @@
 #include <QPushButton>
 #include <QSizePolicy>
 #include <QTimer>
+#include <QUrl>
+#include <QtMultimedia>
 
 #include <qmovie.h>
 
@@ -69,6 +71,14 @@ void MainWindow::loadIntro() {
     ui->explosionMovie->setBackgroundRole(QPalette::Window);
     ui->explosionMovie->hide();
 
+    sound.setSource(QUrl::fromLocalFile(":/sounds/intro.wav"));
+    sound.setLoopCount(1);
+    sound.setVolume(0.6f);
+
+    sound_aux.setSource(QUrl::fromLocalFile(":/sounds/explosion.wav"));
+    sound_aux.setLoopCount(1);
+    sound_aux.setVolume(1.0f);
+
     ui->titleIntro_label->setGeometry((this->width() - 499) / 2, (this->height() - 266) / 2, 499,
                                       266);
 
@@ -81,6 +91,7 @@ void MainWindow::loadIntro() {
 
     connect(timer, &QTimer::timeout, this, [this]() {
         ui->explosionMovie->show();
+        sound_aux.play();
         movie_aux->start();
         timer->stop();
     });
@@ -88,6 +99,8 @@ void MainWindow::loadIntro() {
     connect(ui->skipbutton, &QPushButton::clicked, this, [this]() {
         movie->stop();
         movie_aux->stop();
+        sound.stop();
+        sound_aux.stop();
         timer->stop();
         showMenu();
     });
@@ -99,6 +112,10 @@ void MainWindow::loadIntro() {
                 emit movie->finished();
             }
             ui->titleIntro_label->show();
+            sound.stop();
+            sound.setVolume(1.0f);
+            sound.setSource(QUrl::fromLocalFile(":/sounds/bye.wav"));
+            sound.play();
             timer->start();
         }
     });
@@ -121,6 +138,7 @@ void MainWindow::showIntro() {
     movie->start();
 
     ui->explosionMovie->setMovie(movie_aux);
+    sound.play();
 }
 
 void MainWindow::loadMenu() {

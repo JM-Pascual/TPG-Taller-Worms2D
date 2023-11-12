@@ -6,6 +6,7 @@
 #include <QLayout>
 #include <QMainWindow>
 #include <QPushButton>
+#include <QSoundEffect>
 #include <QString>
 #include <QTimer>
 #include <QWidget>
@@ -77,6 +78,8 @@ private:
     QTimer* timer;
     int preHelpIndex;
     bool& initGame;
+    QSoundEffect sound;
+    QSoundEffect sound_aux;
     std::map<uint8_t, std::unique_ptr<PlayerFrame>> players;
     std::vector<std::unique_ptr<GameFrame>> games;
 
