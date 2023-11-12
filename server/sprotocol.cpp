@@ -110,7 +110,7 @@ void ServerSide::Protocol::sendGameState(const std::shared_ptr<GameState>& game_
             sendPlayerState(game_state);
             break;
 
-        case GameStateTag::PROYECTILE:
+        case GameStateTag::PROJECTILE:
             break;
 
         case GameStateTag::PLAYER_COUNT:

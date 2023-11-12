@@ -1,18 +1,17 @@
 #include "proyectile.h"
 #include <iostream>
-//Projectile::Projectile(b2Body* projectiles, const WeaponsAndTools type): projectiles(projectiles), type(type), impacted(false) {}
 
+Projectile::Projectile(Battlefield &battlefield, b2Vec2 position, WeaponsAndTools type, const GameEntity entity)
+        : type(type), impacted(false), entity(entity) {
 
-Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, float angle, WeaponsAndTools type) : type(type), impacted(false) {
+    b2BodyDef projectile_body;
+    projectile_body.type = b2_dynamicBody;
+    projectile_body.bullet = true; //Todo ver bien para que sirve
+    projectile_body.position = b2Vec2(position.x , position.y);
+    //projectile_body.userData.pointer = static_cast<uintptr_t>(entity); //Es necesario si o si por la biblioteca que pase un puntero
+    projectile_body.userData.pointer = reinterpret_cast<uintptr_t>((&entity));
+    projectile = battlefield.add_body(projectile_body);
 
-    b2BodyDef proyectile_body;
-    proyectile_body.type = b2_dynamicBody;
-    proyectile_body.bullet = true; //Todo ver bien para que sirve
-    proyectile_body.position = b2Vec2(position.x , position.y);
-    proyectile_body.angle = angle;
-    //proyectile_body.angularDamping = 0.01f;
-
-    projectile = battlefield.add_body(proyectile_body);
 
 
     b2CircleShape shape;

@@ -27,6 +27,7 @@ class Weapon;
 
 class Player {
 private:
+
     b2Body* worm;
     //std::map<WeaponsAndTools,Weapon >Weapons;
     Weapon* weapon;
@@ -43,6 +44,10 @@ private:
 
     bool charging_shoot;
     float weapon_power;
+
+public:
+    const GameEntity entity;
+
 
 public:
     explicit Player(Battlefield& battlefield);

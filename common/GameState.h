@@ -30,7 +30,7 @@ public:
     const uint8_t quantity;
 
     explicit ProyectileCount(const uint8_t quantity):
-            GameState(GameStateTag::PROYECTILE_COUNT), quantity(quantity) {}
+            GameState(GameStateTag::PROJECTILE_COUNT), quantity(quantity) {}
 
     ~ProyectileCount() = default;
 };

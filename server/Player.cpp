@@ -6,10 +6,13 @@
 
 Player::Player(Battlefield& battlefield): facing_right(true), is_walking(false),ready(false),
         is_jumping(false), is_backflipping(false), aiming(false), aim_inclination_degrees(false), aim_direction(ADSAngleDir::UP),
-        charging_shoot(false), weapon_power(0){
+        charging_shoot(false), weapon_power(0),entity(GameEntity::WORM){
     b2BodyDef wormDef;
     wormDef.type = b2_dynamicBody;
     wormDef.position.Set(5.0f, 21.6f); //Ahora la harcodeo, pero tiene que cambiar
+    wormDef.allowSleep = true;
+    wormDef.userData.pointer = static_cast<uintptr_t>(entity);
+
     worm = battlefield.add_body(wormDef);
 
     b2PolygonShape wormBox;
@@ -18,6 +21,8 @@ Player::Player(Battlefield& battlefield): facing_right(true), is_walking(false),
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &wormBox;
     fixtureDef.density = 3.0f;
+    fixtureDef.restitution = 0;
+
     //fixtureDef.filter.groupIndex = -1; //Todo tengo que ver como seteo cada una de las balas para que pueda colisionar con los gusanos
 
     worm->CreateFixture(&fixtureDef);

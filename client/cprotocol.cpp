@@ -69,7 +69,7 @@ std::shared_ptr<GameState> ClientSide::Protocol::recvGameState() {
         case GameStateTag::PLAYER_COUNT:
             return std::make_shared<PlayerCount>(recvUint8());
 
-        case GameStateTag::PROYECTILE:
+        case GameStateTag::PROJECTILE:
             return std::make_shared<PlayerCount>(recvUint8());
 
         default:

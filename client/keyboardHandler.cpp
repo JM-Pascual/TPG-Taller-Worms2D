@@ -90,7 +90,7 @@ void KBHandler::run() {
 
                     case SDLK_F4:
                         this->action_queue.push(
-                                std::make_shared<ChangeGadget>(WeaponsAndTools::RED_GRANADE));
+                                std::make_shared<ChangeGadget>(WeaponsAndTools::RED_GRENADE));
                         break;
 
                     case SDLK_F5:

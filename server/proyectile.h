@@ -17,8 +17,9 @@ private:
     bool impacted;
 
 public:
-    //explicit Projectile (Battlefield& battlefield, b2Vec2 position, float angle, WeaponsAndTools type);
-    Projectile (Battlefield& battlefield, b2Vec2 position, float angle, WeaponsAndTools type);
+    const GameEntity entity;
+
+    explicit Projectile(Battlefield &battlefield, b2Vec2 position, WeaponsAndTools type, GameEntity entity);
 
     void set_power(b2Vec2 power);
     std::shared_ptr<ProyectileState> upload_state();
