@@ -25,7 +25,7 @@ void Game::build_game_state(std::list<std::shared_ptr<States>>& states_list) {
 
     std::transform(battlefield.projectiles.begin(), battlefield.projectiles.end(),
                    std::back_inserter(states_list),
-                   [](auto& projectile) { return projectile->get_proyectile_state() });
+                   [&](auto projectile) { return projectile->get_proyectile_state(); });
 }
 
 bool Game::non_locking_is_playing() {
