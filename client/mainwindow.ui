@@ -117,7 +117,7 @@
         <property name="font">
          <font>
           <family>Sans Serif</family>
-          <pointsize>74</pointsize>
+          <pointsize>54</pointsize>
           <bold>true</bold>
          </font>
         </property>
