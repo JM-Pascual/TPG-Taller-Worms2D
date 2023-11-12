@@ -70,7 +70,7 @@
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">border-image: url(./client/resources/images/title.png);</string>
+         <string notr="true">border-image: url(:/images/title.png);</string>
         </property>
         <property name="text">
          <string/>
@@ -179,7 +179,7 @@
            <item>
             <widget class="QLabel" name="title_label">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/title.png);
+              <string notr="true">border-image: url(:/images/title.png);
 </string>
              </property>
              <property name="text">
@@ -196,7 +196,7 @@
               </sizepolicy>
              </property>
              <property name="styleSheet">
-              <string notr="true">border-image: url(&quot;./client/resources/images/play.png&quot;);
+              <string notr="true">border-image: url(&quot;:/images/play.png&quot;);
 </string>
              </property>
              <property name="text">
@@ -225,7 +225,7 @@
               </sizepolicy>
              </property>
              <property name="styleSheet">
-              <string notr="true">    border-image: url(&quot;./client/resources/images/help.png&quot;);</string>
+              <string notr="true">    border-image: url(&quot;:/images/help.png&quot;);</string>
              </property>
              <property name="text">
               <string/>
@@ -273,7 +273,7 @@
                 </sizepolicy>
                </property>
                <property name="styleSheet">
-                <string notr="true">border-image: url(./client/resources/images/goBack.bmp)</string>
+                <string notr="true">border-image: url(:/images/goBack.bmp)</string>
                </property>
                <property name="text">
                 <string/>
@@ -462,7 +462,7 @@ background-color: rgba(0, 0, 0, 80)</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">border-image: url(./client/resources/images/create.bmp);</string>
+            <string notr="true">border-image: url(:/images/create.bmp);</string>
            </property>
            <property name="text">
             <string/>
@@ -484,7 +484,7 @@ background-color: rgba(0, 0, 0, 80)</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">border-image: url(./client/resources/images/refresh.bmp)</string>
+            <string notr="true">border-image: url(:/images/refresh.bmp)</string>
            </property>
            <property name="text">
             <string/>
@@ -506,7 +506,7 @@ background-color: rgba(0, 0, 0, 80)</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">border-image: url(./client/resources/images/help2.bmp);</string>
+            <string notr="true">border-image: url(:/images/help2.bmp);</string>
            </property>
            <property name="text">
             <string/>
@@ -528,7 +528,7 @@ background-color: rgba(0, 0, 0, 80)</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">border-image: url(./client/resources/images/goBack.bmp);</string>
+            <string notr="true">border-image: url(:/images/goBack.bmp);</string>
            </property>
            <property name="text">
             <string/>
@@ -548,7 +548,7 @@ background-color: rgba(0, 0, 0, 80)</string>
         </property>
         <property name="styleSheet">
          <string notr="true">QFrame #createMenu {
-	border-image: url(./client/resources/images/createMenu.bmp);
+	border-image: url(:/images/createMenu.bmp);
 }</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_4" stretch="1,1,1,1,1,20">
@@ -656,7 +656,7 @@ background-color: rgba(89, 89, 89, 180);</string>
               </sizepolicy>
              </property>
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/create.bmp);</string>
+              <string notr="true">border-image: url(:/images/create.bmp);</string>
              </property>
              <property name="text">
               <string/>
@@ -672,7 +672,7 @@ background-color: rgba(89, 89, 89, 180);</string>
               </sizepolicy>
              </property>
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/goBack.bmp);</string>
+              <string notr="true">border-image: url(:/images/goBack.bmp);</string>
              </property>
              <property name="text">
               <string/>
@@ -700,7 +700,7 @@ background-color: rgba(89, 89, 89, 180);</string>
            <item>
             <widget class="QLabel" name="play_image">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/play.png)</string>
+              <string notr="true">border-image: url(:/images/play.png)</string>
              </property>
              <property name="text">
               <string/>
@@ -759,7 +759,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            <item>
             <widget class="QLabel" name="joingame_image">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/joinGame.bmp)</string>
+              <string notr="true">border-image: url(:/images/joinGame.bmp)</string>
              </property>
              <property name="text">
               <string/>
@@ -809,7 +809,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            <item>
             <widget class="QLabel" name="refresh_image">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/refresh.bmp)</string>
+              <string notr="true">border-image: url(:/images/refresh.bmp)</string>
              </property>
              <property name="text">
               <string/>
@@ -868,7 +868,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            <item>
             <widget class="QLabel" name="quit_image">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/goBack.bmp)</string>
+              <string notr="true">border-image: url(:/images/goBack.bmp)</string>
              </property>
              <property name="text">
               <string/>
@@ -918,7 +918,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            <item>
             <widget class="QLabel" name="create_image">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/create.bmp)</string>
+              <string notr="true">border-image: url(:/images/create.bmp)</string>
              </property>
              <property name="text">
               <string/>
@@ -979,7 +979,7 @@ background-color: rgba(0, 0, 0, 220)</string>
              <item>
               <widget class="QLabel" name="setready_image">
                <property name="styleSheet">
-                <string notr="true">border-image: url(./client/resources/images/setReady.png)</string>
+                <string notr="true">border-image: url(:/images/setReady.png)</string>
                </property>
                <property name="text">
                 <string/>
@@ -989,7 +989,7 @@ background-color: rgba(0, 0, 0, 220)</string>
              <item>
               <widget class="QLabel" name="notready_image">
                <property name="styleSheet">
-                <string notr="true">border-image: url(./client/resources/images/notReady.png)</string>
+                <string notr="true">border-image: url(:/images/notReady.png)</string>
                </property>
                <property name="text">
                 <string/>
@@ -999,7 +999,7 @@ background-color: rgba(0, 0, 0, 220)</string>
              <item>
               <widget class="QLabel" name="ready_image">
                <property name="styleSheet">
-                <string notr="true">border-image: url(./client/resources/images/ready.png)</string>
+                <string notr="true">border-image: url(:/images/ready.png)</string>
                </property>
                <property name="text">
                 <string/>
@@ -1051,7 +1051,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            <item>
             <widget class="QLabel" name="move_image">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/move.png)</string>
+              <string notr="true">border-image: url(:/images/move.png)</string>
              </property>
              <property name="text">
               <string/>
@@ -1110,7 +1110,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            <item>
             <widget class="QLabel" name="jump_image">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/jump.png)</string>
+              <string notr="true">border-image: url(:/images/jump.png)</string>
              </property>
              <property name="text">
               <string/>
@@ -1160,7 +1160,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            <item>
             <widget class="QLabel" name="gadget_image">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/changeGadget.png)</string>
+              <string notr="true">border-image: url(:/images/changeGadget.png)</string>
              </property>
              <property name="text">
               <string/>
@@ -1219,7 +1219,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            <item>
             <widget class="QLabel" name="aim_image">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/aim.png)</string>
+              <string notr="true">border-image: url(:/images/aim.png)</string>
              </property>
              <property name="text">
               <string/>
@@ -1269,7 +1269,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            <item>
             <widget class="QLabel" name="delay_image">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/countdown.png)</string>
+              <string notr="true">border-image: url(:/images/countdown.png)</string>
              </property>
              <property name="text">
               <string/>
@@ -1328,7 +1328,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            <item>
             <widget class="QLabel" name="surrender_image">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/exitGame.png)</string>
+              <string notr="true">border-image: url(:/images/exitGame.png)</string>
              </property>
              <property name="text">
               <string/>
@@ -1397,7 +1397,7 @@ background-color: rgba(0, 0, 0, 220)</string>
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">border-image: url(./client/resources/images/goBack.bmp);</string>
+         <string notr="true">border-image: url(:/images/goBack.bmp);</string>
         </property>
         <property name="text">
          <string/>
@@ -1434,7 +1434,7 @@ background-color: rgba(0, 0, 0, 220)</string>
          </rect>
         </property>
         <property name="styleSheet">
-         <string notr="true">border-image: url(./client/resources/images/lobby.png)</string>
+         <string notr="true">border-image: url(:/images/lobby.png)</string>
         </property>
         <property name="text">
          <string/>
@@ -1475,7 +1475,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            <item>
             <widget class="QLabel" name="character1_label">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/lobbyWorm.png);</string>
+              <string notr="true">border-image: url(:/images/lobbyWorm.png);</string>
              </property>
              <property name="text">
               <string/>
@@ -1538,7 +1538,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            <item>
             <widget class="QLabel" name="character2_label">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/lobbyWorm.png);</string>
+              <string notr="true">border-image: url(:/images/lobbyWorm.png);</string>
              </property>
              <property name="text">
               <string/>
@@ -1602,7 +1602,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            <item>
             <widget class="QLabel" name="character3_label">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/lobbyWorm.png);</string>
+              <string notr="true">border-image: url(:/images/lobbyWorm.png);</string>
              </property>
              <property name="text">
               <string/>
@@ -1666,7 +1666,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            <item>
             <widget class="QLabel" name="character4_label">
              <property name="styleSheet">
-              <string notr="true">border-image: url(./client/resources/images/lobbyWorm.png);</string>
+              <string notr="true">border-image: url(:/images/lobbyWorm.png);</string>
              </property>
              <property name="text">
               <string/>
@@ -1715,7 +1715,7 @@ background-color: rgba(0, 0, 0, 220)</string>
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">border-image: url(./client/resources/images/goBack.bmp);</string>
+         <string notr="true">border-image: url(:/images/goBack.bmp);</string>
         </property>
         <property name="text">
          <string/>
@@ -1747,7 +1747,7 @@ background-color: rgba(0, 0, 0, 220)</string>
          <bool>false</bool>
         </property>
         <property name="styleSheet">
-         <string notr="true">border-image: url(./client/resources/images/setReady.png)</string>
+         <string notr="true">border-image: url(:/images/setReady.png)</string>
         </property>
         <property name="text">
          <string/>

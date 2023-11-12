@@ -4,7 +4,6 @@ project(worms2d VERSION 0.0.1)
 
 set(AUTOUIC ON)
 set(AUTOMOC ON)
-set(AUTORCC ON)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
@@ -28,6 +27,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -pedantic -pedantic-errors
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(TARGET_DIR ../target)
+set(QT_RES client/resources/images.qrc)
 
 add_definitions(-DDATA_PATH="${PROJECT_SOURCE_DIR}/sprites")
 include_directories(${SDL2PP_INCLUDE_DIRS})
@@ -41,9 +41,9 @@ file(GLOB UI_SRC client/*.ui)
 set(QT_CLIENT_SRC ${CLIENT_SRC})
 qt_wrap_ui(QT_CLIENT_SRC ${UI_SRC})
 qt_wrap_cpp(QT_CLIENT_SRC ${CLIENT_H})
+qt_add_resources(QT_RES client/resources/images.qrc)
 
-
-add_executable(client_exe ${COMMON_SRC} ${QT_CLIENT_SRC} ${CLIENT_RES}
+add_executable(client_exe ${COMMON_SRC} ${QT_CLIENT_SRC} ${QT_RES}
         client/Window.cpp)
 
 target_include_directories(client_exe PUBLIC ${SDL2_INCLUDE_DIRS})

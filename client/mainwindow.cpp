@@ -21,14 +21,14 @@ MainWindow::MainWindow(Client& client, bool& initGame, QWidget* parent):
         QMainWindow(parent),
         client(client),
         ui(new Ui::MainWindow),
-        movie(new QMovie("./client/resources/images/intro.gif")),
-        movie_aux(new QMovie("./client/resources/images/explosion.gif")),
+        movie(new QMovie(":/images/intro.gif")),
+        movie_aux(new QMovie(":/images/explosion.gif")),
         timer(new QTimer()),
         preHelpIndex((int)SWIndex::MENU),
         initGame(initGame) {
     ui->setupUi(this);
     // Cambiar icono ventana
-    QIcon icon("./client/resources/images/icon.png");
+    QIcon icon(":/images/icon.png");
     this->setWindowIcon(icon);
     // Tamanio ventana
     this->setMaximumSize(1280, 720);
@@ -136,7 +136,7 @@ void MainWindow::showMenu() {
     if (movie) {
         delete movie;
     }
-    movie = new QMovie("./client/resources/images/star.gif");
+    movie = new QMovie(":/images/star.gif");
     ui->movieLabel->setMovie(movie);
     movie->start();
 }
@@ -413,7 +413,7 @@ void GameFrame::setFrame(const std::string& descrip, const std::string& map_name
     players->setStyleSheet("font-size: 16px;");
 
     joinGame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    joinGame->setStyleSheet("border-image: url(./client/resources/images/joinGame.bmp);");
+    joinGame->setStyleSheet("border-image: url(:/images/joinGame.bmp);");
     joinGame->setMinimumSize(130, 70);
 }
 
@@ -459,7 +459,7 @@ PlayerFrame::PlayerFrame(const uint8_t& player_id, const bool& ready):
 void PlayerFrame::hide() {
     character_label->hide();
     ready_button->hide();
-    this->ready_button->setStyleSheet("border-image: url(./client/resources/images/notReady.png)");
+    this->ready_button->setStyleSheet("border-image: url(:/images/notReady.png)");
 }
 
 void PlayerFrame::setFrame(QLabel* label, QPushButton* button, QLabel* id_label) {
@@ -482,8 +482,8 @@ void PlayerFrame::show() {
 }
 
 void PlayerFrame::ready() {
-    this->ready_button->setStyleSheet("border-image: url(./client/resources/images/notReady.png)");
+    this->ready_button->setStyleSheet("border-image: url(:/images/notReady.png)");
     if (ready_state) {
-        this->ready_button->setStyleSheet("border-image: url(./client/resources/images/ready.png)");
+        this->ready_button->setStyleSheet("border-image: url(:/images/ready.png)");
     }
 }
