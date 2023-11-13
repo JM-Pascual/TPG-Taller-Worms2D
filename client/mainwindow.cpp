@@ -8,8 +8,11 @@
 #include <QPushButton>
 #include <QSizePolicy>
 #include <QTimer>
+#include <QUrl>
+#include <QtMultimedia>
 
 #include <qmovie.h>
+#include <spdlog/spdlog.h>
 
 #include "../common/const.h"
 #include "./ui_mainwindow.h"
@@ -24,8 +27,12 @@
 #define INTRO_EXPLOSION_DURATION 1500
 #define LOBBY_REFRESH_RATE 33
 
+#define EFFECTS_VOLUME 0.4f
+#define BACKGROUND_MUSIC_VOLUME 0.2f
+
 MainWindow::MainWindow(Client& client, bool& initGame, QWidget* parent):
         QMainWindow(parent),
+        muted(false),
         client(client),
         ui(new Ui::MainWindow),
         movie(new QMovie(":/images/intro.gif")),
@@ -40,6 +47,14 @@ MainWindow::MainWindow(Client& client, bool& initGame, QWidget* parent):
     // Tamanio ventana
     this->setMaximumSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     this->setMinimumSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+    sound_aux.setVolume(EFFECTS_VOLUME);
+    sound_aux.setLoopCount(1);
+
+    sound.setVolume(BACKGROUND_MUSIC_VOLUME);
+    sound.setLoopCount(QSoundEffect::Infinite);
+
+    this->loadMuteButton();
 
     this->loadIntro();
     this->loadMenu();
@@ -69,6 +84,8 @@ void MainWindow::loadIntro() {
     ui->explosionMovie->setBackgroundRole(QPalette::Window);
     ui->explosionMovie->hide();
 
+    sound_aux.setSource(QUrl::fromLocalFile(":/sounds/intro.wav"));
+
     ui->titleIntro_label->setGeometry((this->width() - 499) / 2, (this->height() - 266) / 2, 499,
                                       266);
 
@@ -81,6 +98,8 @@ void MainWindow::loadIntro() {
 
     connect(timer, &QTimer::timeout, this, [this]() {
         ui->explosionMovie->show();
+        sound_aux.setSource(QUrl::fromLocalFile(":/sounds/explosion.wav"));
+        sound_aux.play();
         movie_aux->start();
         timer->stop();
     });
@@ -88,8 +107,11 @@ void MainWindow::loadIntro() {
     connect(ui->skipbutton, &QPushButton::clicked, this, [this]() {
         movie->stop();
         movie_aux->stop();
+        sound_aux.stop();
         timer->stop();
+        sound_aux.setSource(QUrl::fromLocalFile(":/sounds/button.wav"));
         showMenu();
+        sound.play();
     });
 
     connect(movie, &QMovie::frameChanged, this, [this]() {
@@ -99,6 +121,9 @@ void MainWindow::loadIntro() {
                 emit movie->finished();
             }
             ui->titleIntro_label->show();
+            sound_aux.stop();
+            sound_aux.setSource(QUrl::fromLocalFile(":/sounds/bye.wav"));
+            sound_aux.play();
             timer->start();
         }
     });
@@ -109,7 +134,9 @@ void MainWindow::loadIntro() {
             if (movie_aux->state() == QMovie::NotRunning) {
                 emit movie_aux->finished();
             }
+            sound_aux.setSource(QUrl::fromLocalFile(":/sounds/button.wav"));
             showMenu();
+            sound.play();
         }
     });
 }
@@ -121,6 +148,7 @@ void MainWindow::showIntro() {
     movie->start();
 
     ui->explosionMovie->setMovie(movie_aux);
+    sound_aux.play();
 }
 
 void MainWindow::loadMenu() {
@@ -132,11 +160,22 @@ void MainWindow::loadMenu() {
     ui->movieLabel->setBackgroundRole(QPalette::Window);
     ui->movieLabel->show();
 
-    connect(ui->browseButton, &QPushButton::clicked, this, [this]() { showGameSearch(); });
+    sound.setSource(QUrl::fromLocalFile(":/sounds/menuBackground.wav"));
 
-    connect(ui->helpButton, &QPushButton::clicked, this, [this]() { this->showHelp(); });
+    connect(ui->browseButton, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
+        showGameSearch();
+    });
 
-    connect(ui->exitButton, &QPushButton::clicked, this, [this]() { this->close(); });
+    connect(ui->helpButton, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
+        this->showHelp();
+    });
+
+    connect(ui->exitButton, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
+        this->close();
+    });
 }
 
 void MainWindow::showMenu() {
@@ -159,14 +198,20 @@ void MainWindow::loadGameSearch() {
     ui->searchMovie->show();
 
     connect(ui->goMenu_button, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
         games.clear();
         this->showMenu();
     });
 
-    connect(ui->help_button, &QPushButton::clicked, this, [this]() { this->showHelp(); });
+    connect(ui->help_button, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
+        this->showHelp();
+    });
 
-    connect(ui->refresh_button, &QPushButton::clicked, this,
-            [this]() { this->refreshGameSearch(); });
+    connect(ui->refresh_button, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
+        this->refreshGameSearch();
+    });
 
     // Create menu
 
@@ -179,10 +224,13 @@ void MainWindow::loadGameSearch() {
     ui->map_cbox->addItems(list);
     ui->map_cbox->setCurrentIndex(-1);
 
-    connect(ui->create_button, &QPushButton::clicked, this,
-            [this]() { this->ui->createMenu->raise(); });
+    connect(ui->create_button, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
+        this->ui->createMenu->raise();
+    });
 
     connect(ui->goback_button_3, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
         this->ui->createMenu->lower();
         ui->desc_txtbox->clear();
         ui->map_cbox->setCurrentIndex(-1);
@@ -192,7 +240,11 @@ void MainWindow::loadGameSearch() {
 
     connect(
             ui->createGame_button_2, &QPushButton::clicked, this,
-            [this]() { this->validateCreateGame(); }, Qt::QueuedConnection);
+            [this]() {
+                sound_aux.play();
+                this->validateCreateGame();
+            },
+            Qt::QueuedConnection);
 }
 
 void MainWindow::validateCreateGame() {
@@ -234,10 +286,24 @@ void MainWindow::showGameSearch() {
 }
 
 void MainWindow::refreshGameSearch() {
+    spdlog::get("client")->info("Recolectando informacion de los juegos en lobby");
     games.clear();
     client.action_queue.push(std::make_shared<ShowGames>());
 
     uint8_t games_q = LobbyListener::getGameFramesQuantity(client.lobby_state_queue);
+
+    /*
+        La idea es handlear la posibilidad de que se cierre el servidor o se corte la conexion,
+       entonces si eso sucede cuando se intente conectan con el servidor para refreshear el lobby o
+       los juegos disponibles se va a pushear en la queue un state dummy <ConnectionError> el cual
+       tiene "cantidad de jugadores" CONNECTION_ERROR habilitando la salida de la app
+    */
+
+    if (games_q == CONNECTION_ERROR) {
+        spdlog::get("client")->error("Se cerro la conexion con el servidor!");
+        this->close();
+        return;
+    }
 
     for (size_t i = 0; i < games_q; i++) {
         games.push_back(std::make_unique<GameFrame>(ui->gamesAvailable));
@@ -256,6 +322,7 @@ void MainWindow::loadHelp() {
     ui->helpMovie->lower();
 
     connect(ui->goMenu_button_2, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
         if (this->preHelpIndex == (int)SWIndex::MENU) {
             this->showMenu();
         } else {
@@ -277,10 +344,13 @@ void MainWindow::loadLobby() {
     lobby_widgets.push_back({ui->character3_label, ui->ready3_button, ui->player3id_label});
     lobby_widgets.push_back({ui->character4_label, ui->ready4_button, ui->player4id_label});
 
-    connect(ui->setReady_button, &QPushButton::pressed, this,
-            [this]() { this->client.action_queue.push(std::make_shared<Ready>()); });
+    connect(ui->setReady_button, &QPushButton::pressed, this, [this]() {
+        sound_aux.play();
+        this->client.action_queue.push(std::make_shared<Ready>());
+    });
 
     connect(ui->goMenu_button_3, &QPushButton::clicked, this, [this]() {
+        sound_aux.play();
         // stop timer
         this->client.lobby_state_queue.push(std::make_shared<GameNotJoinable>());
         this->players.clear();
@@ -293,10 +363,23 @@ void MainWindow::showLobby() {
     uint8_t p_quantity = LobbyListener::getPlayersInLobbyQuantity(client.lobby_state_queue);
 
     /*
-        La idea es recibir NONE jugadores cuando no se pudo unir al juego, o se desea salir del
-       lobby
+        La idea es handlear la posibilidad de que se cierre el servidor o se corte la conexion,
+       entonces si eso sucede cuando se intente conectan con el servidor para refreshear el lobby o
+       los juegos disponibles se va a pushear en la queue un state dummy <ConnectionError> el cual
+       tiene "cantidad de jugadores" CONNECTION_ERROR habilitando la salida de la app
     */
-    if (p_quantity == NONE) {
+
+    if (p_quantity == CONNECTION_ERROR) {
+        spdlog::get("client")->error("Se cerro la conexion con el servidor!");
+        this->close();
+        return;
+    }
+
+    /*
+        La idea es recibir NOT_JOINABLE jugadores cuando no se pudo unir al juego, o se desea salir
+       del lobby
+    */
+    if (p_quantity == NOT_JOINABLE) {
         return;
     }
     /*
@@ -362,8 +445,27 @@ void MainWindow::setPlayerFrames() {
     }
 }
 
+void MainWindow::loadMuteButton() {
+    ui->muteAudio->show();
+    ui->muteAudio->raise();
+
+    connect(ui->muteAudio, &QPushButton::clicked, this, [this]() {
+        this->sound.setVolume(muted * 0.2f);
+        this->sound_aux.setVolume(muted * 0.4f);
+        this->muted = !this->muted;
+
+        if (not this->muted) {
+            ui->muteAudio->setStyleSheet("border-image: url(:/images/nonMute.png)");
+            return;
+        }
+        ui->muteAudio->setStyleSheet("border-image: url(:/images/mute.png)");
+    });
+}
+
 void MainWindow::closeEvent(QCloseEvent* event) {
-    client.action_queue.push(std::make_shared<ExitGame>());
+    if (not initGame) {
+        client.action_queue.push(std::make_shared<ExitGame>());
+    }
     event->accept();
 }
 

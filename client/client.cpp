@@ -18,27 +18,15 @@ Client::Client(const char* hostname, const char* servname):
         quit(false),
         runned(false),
         protocol(hostname, servname),
-        recv(this->protocol, game_state_queue, lobby_state_queue),
+        recv(this->protocol, game_state_queue, lobby_state_queue, runned),
         send(this->protocol, this->action_queue),
         kb(this->action_queue, quit) {
     spdlog::get("client")->debug("Iniciando hilo receptor en el cliente");
     recv.start();
     spdlog::get("client")->debug("Iniciando hilo sender en el cliente");
     send.start();
-    getID();
 }
 
-void Client::getID() {
-    std::shared_ptr<States> raw_state = nullptr;
-
-    do {
-        while (not lobby_state_queue.try_pop(raw_state)) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(DURATION));
-        }
-    } while (raw_state->tag != StatesTag::MY_ID);
-
-    id = std::dynamic_pointer_cast<MyID>(raw_state)->id;
-}
 
 void Client::run() {
     runned = true;

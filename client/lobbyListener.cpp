@@ -32,6 +32,11 @@ uint8_t LobbyListener::getGameFramesQuantity(Queue<std::shared_ptr<States>>& lob
         while (not lobby_states.try_pop(raw_state)) {
             std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 30));
         }
+
+        if (raw_state->tag == StatesTag::CONNECTION_ERROR_STATE) {
+            return CONNECTION_ERROR;
+        }
+
     } while (raw_state->tag != StatesTag::GAMES_COUNT_L);
 
     return std::dynamic_pointer_cast<GamesCountL>(raw_state)->quantity;
@@ -42,6 +47,14 @@ uint8_t LobbyListener::getPlayersInLobbyQuantity(Queue<std::shared_ptr<States>>&
 
     if (not lobby_states.try_pop(raw_state)) {
         return NOT_POPPED_COUNT;
+    }
+
+    if (raw_state->tag == StatesTag::CONNECTION_ERROR_STATE) {
+        return CONNECTION_ERROR;
+    }
+
+    if (raw_state->tag == StatesTag::GAME_NOT_JOINABLE) {
+        return NOT_JOINABLE;
     }
 
     if (raw_state->tag != StatesTag::PLAYER_COUNT_L) {

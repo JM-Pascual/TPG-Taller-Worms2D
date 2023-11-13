@@ -14,7 +14,6 @@ void ClientSide::Parser::filterStates(Queue<std::shared_ptr<States>>& game_state
         case StatesTag::INFO_GAME_L:
         case StatesTag::PLAYER_COUNT_L:
         case StatesTag::PLAYER_L:
-        case StatesTag::MY_ID:
             lobby_states.push(state);
             break;
         default:
