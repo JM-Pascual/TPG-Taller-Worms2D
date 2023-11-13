@@ -102,6 +102,7 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<States>& ps) {
     send(&p->is_jumping, sizeof(bool));
     send(&p->is_backflipping, sizeof(bool));
     send(&p->facing_right, sizeof(bool));
+    send(&p->was_hit,sizeof(bool));
 
     uint32_t inclination_net;
     memcpy(&inclination_net, &p->aim_inclination_degrees, sizeof(uint32_t));

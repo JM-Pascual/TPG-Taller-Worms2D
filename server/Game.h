@@ -16,15 +16,21 @@
 #include "battlefield.h"
 #include "broadcaster.h"
 #include "game_loop.h"
+#include "level_holder.h"
 
 #define MAX_PLAYERS 4
+
+
 
 class Game {
 private:
     std::mutex m;
     std::map<uint8_t, Player> players_stats;
-    BroadCaster broadcaster;
+    std::vector<std::shared_ptr<Projectile>> projectiles;
+
     Battlefield battlefield;
+    Level_holder level_holder;
+    BroadCaster broadcaster;
     uint8_t ready_count;
     const std::string description;
     const std::string map_name;
@@ -42,12 +48,13 @@ private:
 public:
     Game(const std::string& desc, const std::string& map, const uint8_t& game_id,
          Queue<uint8_t>& erase_id_queue):
+            level_holder(battlefield),
             ready_count(0),
             description(desc),
             map_name(map),
             game_id(game_id),
             gameloop(*this, this->game_id, erase_id_queue),
-            need_to_join_loop(false) {}
+            need_to_join_loop(false){}
 
     Queue<std::shared_ptr<PlayerAction>>& get_action_queue();
 
@@ -81,6 +88,8 @@ public:
 
     void player_start_charging(const uint8_t id);
     void player_shoot(const uint8_t id);
+
+    void add_projectile(std::shared_ptr<Projectile> proyectile);
 
     std::shared_ptr<GameInfoL> getInfo();
 

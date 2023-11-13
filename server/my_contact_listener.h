@@ -2,6 +2,9 @@
 #define WORMS2D_MY_CONTACT_LISTENER_H
 
 #include "box2d/box2d.h"
+#include "entity.h"
+#include "Player.h"
+
 
 class My_contact_listener :  public b2ContactListener  {
 public:

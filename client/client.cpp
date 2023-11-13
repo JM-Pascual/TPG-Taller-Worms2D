@@ -31,6 +31,7 @@ Client::Client(const char* hostname, const char* servname):
 void Client::getID() {
     std::shared_ptr<States> raw_state = nullptr;
 
+
     do {
         while (not lobby_state_queue.try_pop(raw_state)) {
             std::this_thread::sleep_for(std::chrono::milliseconds(DURATION));
@@ -41,7 +42,7 @@ void Client::getID() {
 }
 
 void Client::run() {
-
+    runned = true;
     SDL2pp::SDL sdl(SDL_INIT_VIDEO);
     Window window(1280, 720);
     TexturesPool txt_pool(window.get_renderer());
@@ -73,8 +74,8 @@ void Client::run() {
                             actors.insert({i, std::make_shared<Worm>(raw_state, txt_pool)});
                         } else {
                             actors.at(i)->update(raw_state, loop_start_time);
+
                         }
-                        // actors.at(i)->render(window.get_renderer());
                     }
                     // Recibo el States de los proyectiles y los guardo para renderizarlos
                 } else if (raw_state->tag == StatesTag::PROJECTILE_COUNT_G) {

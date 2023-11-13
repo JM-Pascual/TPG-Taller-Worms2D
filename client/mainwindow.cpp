@@ -363,8 +363,11 @@ void MainWindow::setPlayerFrames() {
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
-    client.action_queue.push(std::make_shared<ExitGame>());
+    if (not initGame) {
+        client.action_queue.push(std::make_shared<ExitGame>());
+    }
     event->accept();
+
 }
 
 

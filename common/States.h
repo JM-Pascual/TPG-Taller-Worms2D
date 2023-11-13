@@ -59,10 +59,12 @@ public:
     const bool is_jumping;
     const bool is_backflipping;
     const bool facing_right;
+    const bool was_hit; //
     float aim_inclination_degrees;
 
+
     explicit PlayerStateG(float x, float y, bool is_walking, bool is_jumping, bool is_backflipping,
-                          bool facing_right, float aim_inclination_degrees);
+                          bool facing_right, bool was_hit, float aim_inclination_degrees);
 
     ~PlayerStateG() override = default;
 };
