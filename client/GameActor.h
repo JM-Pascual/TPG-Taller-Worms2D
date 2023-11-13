@@ -33,6 +33,7 @@ private:
     bool is_jumping;
     bool is_backflipping;
     bool facing_right;
+    bool was_hit;
 
     float aim_inclination_degrees;
 
@@ -49,11 +50,12 @@ public:
             is_backflipping(
                     std::dynamic_pointer_cast<PlayerStateG>(initial_state)->is_backflipping),
             facing_right(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->facing_right),
+            was_hit(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->was_hit),
             aim_inclination_degrees(std::dynamic_pointer_cast<PlayerStateG>(initial_state)
                                             ->aim_inclination_degrees),
             walking(pool.get_texture(Actors::WORM), 15, 1),
             jumping(pool.get_texture(Actors::JUMPING_WORM), 5, 5, false),
-            backflipping(pool.get_texture(Actors::BACKFLIP_WORM), 22, 1, false) {}
+            backflipping(pool.get_texture(Actors::BACKFLIP_WORM), 22, 1, false){}
 
     void update(const std::shared_ptr<States>& actor_state, unsigned int ms) override {
         position = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->pos;
@@ -61,8 +63,10 @@ public:
         is_jumping = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->is_jumping;
         is_backflipping = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->is_backflipping;
         facing_right = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->facing_right;
+        was_hit = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->was_hit;
         aim_inclination_degrees =
                 std::dynamic_pointer_cast<PlayerStateG>(actor_state)->aim_inclination_degrees;
+
         walking.update(!is_walking);
         jumping.update(!is_jumping);
         backflipping.update(!is_backflipping);

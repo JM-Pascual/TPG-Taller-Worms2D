@@ -1,6 +1,7 @@
 #include "broadcaster.h"
 
 #include <algorithm>
+#include <spdlog/spdlog.h>
 
 #include "Player.h"
 

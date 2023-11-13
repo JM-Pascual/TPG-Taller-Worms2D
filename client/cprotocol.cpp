@@ -143,8 +143,10 @@ std::shared_ptr<PlayerStateG> ClientSide::Protocol::recvPlayerGame() {
     bool is_jumping = recvBool();
     bool is_backflipping = recvBool();
     bool direction = recvBool();
-    float aim_inclination = (recvFloat());
-    return std::make_shared<PlayerStateG>(x, y, is_wa, is_jumping, is_backflipping, direction,
+    bool was_hit = recvBool();
+    float aim_inclination = recvFloat();
+
+    return std::make_shared<PlayerStateG>(x, y, is_wa, is_jumping, is_backflipping, direction, was_hit,
                                           aim_inclination);
 }
 
