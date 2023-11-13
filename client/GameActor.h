@@ -114,13 +114,12 @@ public:
     BazookaProyectile(const std::shared_ptr<States>& initial_state, TexturesPool& pool):
             Proyectile(initial_state, pool),
             on_air(pool.get_texture(Actors::BAZOOKA_PROYECTILE), 1, 1),
-            impact(pool.get_texture(Actors::BAZOOKA_EXPLOSION), 7, 1, false) {}
+            impact(pool.get_texture(Actors::BAZOOKA_EXPLOSION), 8, 3, false) {}
 
     void update(const std::shared_ptr<States>& actor_state, unsigned int ms) override {
         position = std::dynamic_pointer_cast<ProjectileStateG>(actor_state)->pos;
         impacted = std::dynamic_pointer_cast<ProjectileStateG>(actor_state)->impacted;
-        on_air.update(!impacted);
-        impact.update(impacted);
+        impact.update(!impacted);
     }
 
     void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
