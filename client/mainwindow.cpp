@@ -12,6 +12,7 @@
 #include <QtMultimedia>
 
 #include <qmovie.h>
+#include <spdlog/spdlog.h>
 
 #include "../common/const.h"
 #include "./ui_mainwindow.h"
@@ -285,10 +286,24 @@ void MainWindow::showGameSearch() {
 }
 
 void MainWindow::refreshGameSearch() {
+    spdlog::get("client")->info("Recolectando informacion de los juegos en lobby");
     games.clear();
     client.action_queue.push(std::make_shared<ShowGames>());
 
     uint8_t games_q = LobbyListener::getGameFramesQuantity(client.lobby_state_queue);
+
+    /*
+        La idea es handlear la posibilidad de que se cierre el servidor o se corte la conexion,
+       entonces si eso sucede cuando se intente conectan con el servidor para refreshear el lobby o
+       los juegos disponibles se va a pushear en la queue un state dummy <ConnectionError> el cual
+       tiene "cantidad de jugadores" CONNECTION_ERROR habilitando la salida de la app
+    */
+
+    if (games_q == CONNECTION_ERROR) {
+        spdlog::get("client")->error("Se cerro la conexion con el servidor!");
+        this->close();
+        return;
+    }
 
     for (size_t i = 0; i < games_q; i++) {
         games.push_back(std::make_unique<GameFrame>(ui->gamesAvailable));
@@ -348,10 +363,23 @@ void MainWindow::showLobby() {
     uint8_t p_quantity = LobbyListener::getPlayersInLobbyQuantity(client.lobby_state_queue);
 
     /*
-        La idea es recibir NONE jugadores cuando no se pudo unir al juego, o se desea salir del
-       lobby
+        La idea es handlear la posibilidad de que se cierre el servidor o se corte la conexion,
+       entonces si eso sucede cuando se intente conectan con el servidor para refreshear el lobby o
+       los juegos disponibles se va a pushear en la queue un state dummy <ConnectionError> el cual
+       tiene "cantidad de jugadores" CONNECTION_ERROR habilitando la salida de la app
     */
-    if (p_quantity == NONE) {
+
+    if (p_quantity == CONNECTION_ERROR) {
+        spdlog::get("client")->error("Se cerro la conexion con el servidor!");
+        this->close();
+        return;
+    }
+
+    /*
+        La idea es recibir NOT_JOINABLE jugadores cuando no se pudo unir al juego, o se desea salir
+       del lobby
+    */
+    if (p_quantity == NOT_JOINABLE) {
         return;
     }
     /*

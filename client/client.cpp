@@ -18,7 +18,7 @@ Client::Client(const char* hostname, const char* servname):
         quit(false),
         runned(false),
         protocol(hostname, servname),
-        recv(this->protocol, game_state_queue, lobby_state_queue),
+        recv(this->protocol, game_state_queue, lobby_state_queue, runned),
         send(this->protocol, this->action_queue),
         kb(this->action_queue, quit) {
     spdlog::get("client")->debug("Iniciando hilo receptor en el cliente");

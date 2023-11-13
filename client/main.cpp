@@ -2,6 +2,7 @@
 
 #include "../common/const.h"
 #include "../common/liberror.h"
+#include "../common/queue.h"
 
 #include "game.h"
 
@@ -18,6 +19,11 @@ int main(int argc, char* argv[]) try {
     Logger l(LOGNAME, LOGFILE);
     Game game(argc, argv);
     return game.run();
+
+} catch (const ClosedQueue& e) {
+    spdlog::get("client")->error("{:s}", e.what());
+    spdlog::dump_backtrace();
+    return ERROR_;
 
 } catch (const LibError& e) {
     spdlog::get("client")->error("{:s}", e.what());

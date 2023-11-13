@@ -4,8 +4,9 @@
 #define SUCCESS_ 0
 #define ERROR_ 1
 
-#define NONE 0
-#define NOT_POPPED_COUNT 255
+#define NOT_JOINABLE 0
+#define NOT_POPPED_COUNT 254
+#define CONNECTION_ERROR 255
 
 #define NULL_ARG ""
 
@@ -92,6 +93,7 @@ enum class GameEntity {
 
 enum class StatesTag {
     GAME_NOT_JOINABLE,
+    CONNECTION_ERROR_STATE,
     GAMES_COUNT_L,
     INFO_GAME_L,
     PLAYER_COUNT_L,

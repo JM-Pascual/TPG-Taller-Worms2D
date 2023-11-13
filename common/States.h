@@ -129,4 +129,9 @@ public:
     explicit GameNotJoinable(const uint8_t q): CountState(StatesTag::GAME_NOT_JOINABLE, q) {}
 };
 
+class ConnectionError: public CountState {
+public:
+    ConnectionError(): CountState(StatesTag::CONNECTION_ERROR_STATE, CONNECTION_ERROR) {}
+};
+
 #endif  // STATES_H
