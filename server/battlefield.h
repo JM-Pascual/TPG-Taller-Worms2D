@@ -4,8 +4,9 @@
 
 #include <memory>
 #include <vector>
+#include <iostream>
 #include "box2d/box2d.h"
-#include "proyectile.h"
+#include "my_contact_listener.h"
 
 #define X_GRAVITY 0.0f
 #define Y_GRAVITY (-16.5f)
@@ -16,19 +17,17 @@
 
 class Projectile;
 
-class Battlefield {
+class Battlefield{
 private:
     b2Vec2 gravity;
     std::unique_ptr<b2World> world;
-    b2Body* bar;
-    std::vector<std::shared_ptr<Projectile>> projectiles;
+    My_contact_listener* listener;
 
     void create_battlefield();
 
 public:
     Battlefield();
     b2Body* add_body(b2BodyDef bodyDef);
-    void add_proyectile(std::shared_ptr<Projectile> proyectile_);
     void step();
 
     friend class Game;
