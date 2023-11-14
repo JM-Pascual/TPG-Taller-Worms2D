@@ -60,7 +60,7 @@ void Client::run() {
                         if (actors.count(i) == 0) {
                             actors.insert({i, std::make_shared<Worm>(raw_state, txt_pool)});
                         } else {
-                            actors.at(i)->update(raw_state, loop_start_time);
+                            actors.at(i)->update(raw_state);
 
                         }
                     }
@@ -74,7 +74,7 @@ void Client::run() {
                             proyectiles.insert(
                                     {i, std::make_shared<BazookaProyectile>(raw_state, txt_pool)});
                         } else {
-                            proyectiles.at(i)->update(raw_state, loop_start_time);
+                            proyectiles.at(i)->update(raw_state);
                         }
                     }
                 }

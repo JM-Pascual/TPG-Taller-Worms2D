@@ -22,7 +22,7 @@ protected:
 public:
     GameActor(const float& x, const float& y): position(x, y) {}
     virtual void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) = 0;
-    virtual void update(const std::shared_ptr<States>& actor_state, unsigned int ms) = 0;
+    virtual void update(const std::shared_ptr<States>& actor_state) = 0;
     virtual ~GameActor() = default;
 };
 
@@ -62,7 +62,7 @@ public:
             backflipping(pool.get_texture(Actors::BACKFLIP_WORM), 22, 1, false),
             weapon_animation(pool){}
 
-    void update(const std::shared_ptr<States>& actor_state, unsigned int ms) override {
+    void update(const std::shared_ptr<States>& actor_state) override {
         position = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->pos;
         is_walking = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->is_walking;
         is_jumping = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->is_jumping;
@@ -130,7 +130,7 @@ public:
             on_air(pool.get_texture(Actors::BAZOOKA_PROYECTILE), 1, 1),
             impact(pool.get_texture(Actors::BAZOOKA_EXPLOSION), 8, 3, false) {}
 
-    void update(const std::shared_ptr<States>& actor_state, unsigned int ms) override {
+    void update(const std::shared_ptr<States>& actor_state) override {
         position = std::dynamic_pointer_cast<ProjectileStateG>(actor_state)->pos;
         impacted = std::dynamic_pointer_cast<ProjectileStateG>(actor_state)->impacted;
         impact.update(!impacted);
