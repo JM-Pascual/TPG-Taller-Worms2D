@@ -125,7 +125,7 @@ public:
     }
 
     void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
-        SDL2pp::Rect rect(position.x - camera.x(), position.y - camera.y(), 60, 60);
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         if (impacted) {
             impact.render((*game_renderer), rect);
         } else {
