@@ -1,9 +1,8 @@
 #include "proyectile.h"
 #include "battlefield.h"
 
-Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTools type,
-                       const GameEntity entity):
-        type(type), entity(entity) {
+Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTools type):
+        type(type){
 
     b2BodyDef projectile_body;
     projectile_body.type = b2_dynamicBody;
@@ -32,3 +31,16 @@ std::shared_ptr<ProjectileStateG> Projectile::get_proyectile_state() {
 }
 
 void Projectile::set_power(b2Vec2 power) { projectile->ApplyLinearImpulseToCenter(power, true); }
+
+void Projectile::remove() {
+
+}
+
+bool Projectile::life_end() {
+    if(type == WeaponsAndTools::BAZOOKA){
+        if(collide){
+            end_life = true;
+        }
+    }
+    return  end_life;
+}

@@ -81,16 +81,17 @@ void ServerSide::Protocol::recvString64(std::string& desc) {
 
 // ------------------------------ SEND -----------------------------------
 
-void ServerSide::Protocol::sendPosition(const b2Vec2& pos) {
-    uint32_t x_net;
-    memcpy(&x_net, &pos.x, sizeof(uint32_t));
-    x_net = htonl(x_net);
-    send(&x_net, sizeof(uint32_t));
+void ServerSide::Protocol::sendFloat(float number){
+    uint32_t number_net;
+    memcpy(&number_net, &number, sizeof(uint32_t));
+    number_net = htonl(number_net);
+    send(&number_net, sizeof(uint32_t));
+}
 
-    uint32_t y_net;
-    memcpy(&y_net, &pos.y, sizeof(uint32_t));
-    y_net = htonl(y_net);
-    send(&y_net, sizeof(uint32_t));
+
+void ServerSide::Protocol::sendPosition(const b2Vec2& pos) {
+    sendFloat(pos.x);
+    sendFloat(pos.y);
 }
 
 void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<States>& ps) {
@@ -103,11 +104,8 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<States>& ps) {
     send(&p->is_backflipping, sizeof(bool));
     send(&p->facing_right, sizeof(bool));
     send(&p->was_hit,sizeof(bool));
-
-    uint32_t inclination_net;
-    memcpy(&inclination_net, &p->aim_inclination_degrees, sizeof(uint32_t));
-    inclination_net = htonl(inclination_net);
-    send(&inclination_net, sizeof(uint32_t));
+    this->sendFloat(p->aim_inclination_degrees);
+    this->sendFloat(p->life);
 }
 
 void ServerSide::Protocol::sendGameInfo(const std::shared_ptr<States>& count) {

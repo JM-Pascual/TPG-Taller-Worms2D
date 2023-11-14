@@ -14,3 +14,11 @@ Bar::Bar(Battlefield& battlefield) {
 
     bar->CreateFixture(&barBox, 0.0f);
 }
+
+void Bar::remove() {
+
+}
+
+bool Bar::life_end() {
+    return false;
+}

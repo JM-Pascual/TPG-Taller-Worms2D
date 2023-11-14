@@ -22,7 +22,7 @@ public:
 
     virtual void execute(Game& game, Battlefield& battlefield, Player& player_) = 0;
     virtual std::shared_ptr<Projectile>
-    prepare_ammo(Game& game,Battlefield &battlefield, b2Vec2 projectile_position, WeaponsAndTools type, GameEntity entity);
+    prepare_ammo(Game& game,Battlefield &battlefield, b2Vec2 projectile_position, WeaponsAndTools type);
 
 };
 

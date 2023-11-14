@@ -10,6 +10,8 @@
 #include "weapon.h"
 #include "entity.h"
 
+#define INITIAL_LIFE 100
+
 #define TICK_RATE 30
 #define WIDTH 0.9f
 #define HEIGHT 1.2f
@@ -34,9 +36,12 @@ class Projectile;
 class Player : public Entity{
 private:
 
+
     b2Body* worm;
+    float life;
     //std::map<WeaponsAndTools,Weapon >Weapons;
     Weapon* weapon;
+
 
     bool facing_right;
     bool is_walking;
@@ -52,10 +57,6 @@ private:
     float weapon_power;
 
     int facing_factor();
-
-public:
-    const GameEntity entity;
-
 
 public:
     explicit Player(Battlefield& battlefield);
@@ -81,6 +82,9 @@ public:
     void shoot_aim_weapon(std::shared_ptr<Projectile> projectile);
     void use_throwable();
     void use_clickeable_gadget();
+
+    void remove() override;
+    bool life_end() override;
 
     friend class Game;
 };

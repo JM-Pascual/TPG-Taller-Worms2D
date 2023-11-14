@@ -53,6 +53,8 @@ private:
 
     void sendProjectileState(const std::shared_ptr<States>& ps);
 
+    void sendFloat(float number);
+
 public:
     void sendStates(const std::shared_ptr<States>& state);
     /*

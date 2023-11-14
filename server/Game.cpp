@@ -18,7 +18,7 @@ void Game::build_game_state(std::list<std::shared_ptr<States>>& states_list) {
                                player.second.worm->GetPosition().x,
                                player.second.worm->GetPosition().y, player.second.is_walking,
                                player.second.is_jumping, player.second.is_backflipping,
-                               player.second.facing_right, player.second.collide, player.second.aim_inclination_degrees);
+                               player.second.facing_right, player.second.collide, player.second.aim_inclination_degrees,player.second.life);
                    });
 
     states_list.push_back(std::make_shared<ProjectileCountG>(projectiles.size()));

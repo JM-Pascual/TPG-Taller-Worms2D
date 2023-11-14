@@ -1,6 +1,6 @@
 #include "entity.h"
 
-Entity::Entity() : collide(false)  {}
+Entity::Entity() : collide(false), end_life(false) {}
 
 void Entity::start_contact() {collide = true;}
 

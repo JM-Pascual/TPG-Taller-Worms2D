@@ -18,13 +18,13 @@ private:
     WeaponsAndTools type;
 
 public:
-    const GameEntity entity;
 
-    explicit Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTools type,
-                        GameEntity entity);
+    explicit Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTools type);
 
     void set_power(b2Vec2 power);
     std::shared_ptr<ProjectileStateG> get_proyectile_state();
+    void remove() override;
+    bool life_end() override;
     ~Projectile() = default;
 };
 

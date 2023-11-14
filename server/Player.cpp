@@ -4,9 +4,9 @@
 
 //ToDo Hardocdeado para que los worms aparezcan en la mitad del mapa
 
-Player::Player(Battlefield& battlefield): facing_right(true), is_walking(false),ready(false),
+Player::Player(Battlefield& battlefield): life(INITIAL_LIFE),facing_right(true), is_walking(false),ready(false),
         is_jumping(false), is_backflipping(false), aiming(false), aim_inclination_degrees(0), aim_direction(ADSAngleDir::UP),
-        charging_shoot(false), weapon_power(0), entity(GameEntity::WORM) {
+        charging_shoot(false), weapon_power(0) {
     b2BodyDef wormDef;
     wormDef.type = b2_dynamicBody;
     wormDef.position.Set(5.0f, 21.6f); //Ahora la harcodeo, pero tiene que cambiar
@@ -135,6 +135,17 @@ void Player::shoot_aim_weapon(std::shared_ptr<Projectile> projectile) {
 
 int Player::facing_factor() {
     return (std::pow(-1, 1 - facing_right));
+}
+
+void Player::remove() {
+
+}
+
+bool Player::life_end() {
+    if(life <= 0){
+        end_life = true;
+    }
+    return end_life;
 }
 
 
