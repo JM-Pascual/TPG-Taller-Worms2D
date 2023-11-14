@@ -1,28 +1,63 @@
 #include "camera.h"
 
-void Camera::setNewPosition(const float& x, const float& y, const float& w, const float& h) {
-    position[X] = x + ((w - WIDTH) / 2);
+#include <iostream>
 
-    // if(position[X] < 0)
-    // {
-    //     position[X] = 0;
+#include <math.h>
 
-    // } else if (position[X] > MAP_WIDTH - WIDTH)
-    // {
-    //     position[X] = MAP_WIDTH - WIDTH;
-    // }
+void Camera::checkBounds() {
+    if (position[_X_] < 0) {
+        position[_X_] = 0;
 
-    position[Y] = y + ((h - HEIGHT) / 2);
+    } else if (position[_X_] > MAP_WIDTH - WIDTH) {
+        position[_X_] = MAP_WIDTH - WIDTH;
+    }
 
-    // if(position[Y] < 0)
-    // {
-    //     position[Y] = 0;
-    // } else if( position[Y] > MAP_HEIGHT - HEIGHT )
-    // {
-    //     position[Y] = MAP_HEIGHT - HEIGHT;
-    // }
+    if (position[_Y_] < 0) {
+        position[_Y_] = 0;
+
+    } else if (position[_Y_] > MAP_HEIGHT - HEIGHT) {
+        position[_Y_] = MAP_HEIGHT - HEIGHT;
+    }
+}
+
+void Camera::checkActorDimensions(const float& w, const float& h) {
+    if (w > 0) {
+        fixed_actor[_W_] = w;
+    }
+
+    if (h > 0) {
+        fixed_actor[_H_] = h;
+    }
+}
+
+void Camera::fixActor(const float& x, const float& y, const float& w, const float& h) {
+    checkActorDimensions(w, h);
+
+    position[_X_] = x + ((fixed_actor[_W_] - WIDTH) / 2);
+    position[_Y_] = y + ((fixed_actor[_H_] - HEIGHT) / 2);
+
+    checkBounds();
+}
+
+void Camera::fixMouse(const float& x, const float& y) {
+
+    float _x = x - (WIDTH / 2);
+    float _y = (y - (HEIGHT / 2)) * (-1);
+    // -1 para adaptar la diferencia de los ejes a la camara
+
+    if (_x == 0) {
+        return;
+    }
+
+    float angle = atan2(_y, _x);
+
+    position[_X_] += MOUSE_MOVEMENT_AMPLIFIER * (cosf(angle));
+    position[_Y_] += MOUSE_MOVEMENT_AMPLIFIER * (sinf(angle) * (-1));
+    // -1 para adaptar el seno a la camara que tiene los ejes invertidos
+
+    checkBounds();
 }
 
 SDL2pp::Rect Camera::calcRect(const float& x, const float& y, const float& w, const float& h) {
-    return SDL2pp::Rect(x - ((w / 2) + position[X]), y - ((h / 2) + position[Y]), w, h);
+    return SDL2pp::Rect(x - ((w / 2) + position[_X_]), y - ((h / 2) + position[_Y_]), w, h);
 }

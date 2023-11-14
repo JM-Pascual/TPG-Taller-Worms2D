@@ -5,24 +5,39 @@
 
 #include <SDL2pp/Rect.hh>
 
-#define X 0
-#define Y 1
+#define _X_ 0
+#define _Y_ 1
+
+#define _W_ 0
+#define _H_ 1
+
 #define WIDTH 1280.0f
 #define HEIGHT 720.0f
 
-#define MAP_WIDTH 1280
-#define MAP_HEIGHT 720
+#define MAP_WIDTH 1920.0f
+#define MAP_HEIGHT 1080.0f
+
+#define MOUSE_MOVEMENT_AMPLIFIER 2.40f
 
 class Camera {
 private:
     float position[2];
+    float fixed_actor[2];
+
+    void checkBounds();
+
+    void checkActorDimensions(const float& w, const float& h);
 
 public:
-    Camera(): position{0, 0} {}
+    Camera(): position{0, 0}, fixed_actor{0, 0} {}
 
-    void setNewPosition(const float& x, const float& y, const float& w, const float& h);
+    void fixActor(const float& x, const float& y, const float& w, const float& h);
+
+    void fixMouse(const float& x, const float& y);
 
     SDL2pp::Rect calcRect(const float& x, const float& y, const float& w, const float& h);
+
+    ~Camera() = default;
 };
 
 

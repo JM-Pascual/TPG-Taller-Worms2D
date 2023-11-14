@@ -4,6 +4,7 @@
 #include <atomic>
 #include <memory>
 
+#include "camera.h"
 #include "cprotocol.h"
 #include "creceiver.h"
 #include "csender.h"
@@ -20,12 +21,11 @@ private:
     ClientSide::Protocol protocol;
     ClientSide::Receiver recv;
     ClientSide::Sender send;
+    Camera camera;
     IHandler input;
     Queue<std::shared_ptr<States>> game_state_queue;
     Queue<std::shared_ptr<States>> lobby_state_queue;
     Queue<std::shared_ptr<Action>> action_queue;
-
-    void getID();
 
 public:
     /*

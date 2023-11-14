@@ -10,7 +10,6 @@
 #include "GameActor.h"
 #include "TexturesPool.h"
 #include "Window.h"
-#include "camera.h"
 
 const int DURATION = 1000 / 30;
 
@@ -21,7 +20,7 @@ Client::Client(const char* hostname, const char* servname):
         protocol(hostname, servname),
         recv(this->protocol, game_state_queue, lobby_state_queue, runned),
         send(this->protocol, this->action_queue),
-        input(this->action_queue, quit) {
+        input(this->action_queue, quit, camera) {
     spdlog::get("client")->debug("Iniciando hilo receptor en el cliente");
     recv.start();
     spdlog::get("client")->debug("Iniciando hilo sender en el cliente");
@@ -34,7 +33,6 @@ void Client::run() {
     SDL2pp::SDL sdl(SDL_INIT_VIDEO);
     Window window(1280, 720);
     TexturesPool txt_pool(window.get_renderer());
-    Camera camera;
 
     std::unordered_map<size_t, std::shared_ptr<GameActor>> actors;
     std::unordered_map<size_t, std::shared_ptr<GameActor>> proyectiles;
@@ -69,7 +67,7 @@ void Client::run() {
                         auto worm = std::dynamic_pointer_cast<PlayerStateG>(raw_state);
 
                         if (worm->is_walking) {
-                            camera.setNewPosition(worm->pos.x, worm->pos.y, 32, 60);
+                            camera.fixActor(worm->pos.x, worm->pos.y, 32, 60);
                         }
                     }
                     // Recibo el States de los proyectiles y los guardo para renderizarlos

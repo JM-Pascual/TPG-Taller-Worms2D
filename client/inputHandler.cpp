@@ -5,18 +5,23 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "Action.h"
+#include "camera.h"
 
-IHandler::IHandler(Queue<std::shared_ptr<Action>>& actionQ, std::atomic<bool>& quit):
-        action_queue(actionQ), quit(quit) {}
+IHandler::IHandler(Queue<std::shared_ptr<Action>>& actionQ, std::atomic<bool>& quit,
+                   Camera& camera):
+        action_queue(actionQ), quit(quit), camera(camera) {}
 
 void IHandler::run() {
     SDL_Event event;
+    bool kb_priority = false;
+
     while (not quit) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 quit = true;
 
             } else if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
+                kb_priority = true;
                 switch (event.key.keysym.sym) {
 
                     case SDLK_ESCAPE:
@@ -128,6 +133,7 @@ void IHandler::run() {
                 }
 
             } else if (event.type == SDL_KEYUP) {
+                kb_priority = false;
                 switch (event.key.keysym.sym) {
                     case SDLK_LEFT:
                         this->action_queue.push(std::make_shared<StopMoving>());
@@ -151,6 +157,17 @@ void IHandler::run() {
 
                     default:
                         break;
+                }
+
+            } else if (not kb_priority) {
+                if (event.type == SDL_MOUSEMOTION) {
+                    camera.fixMouse(event.motion.x, event.motion.y);
+
+                } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+
+                } else if (event.type == SDL_MOUSEBUTTONUP) {
+
+                } else if (event.type == SDL_MOUSEWHEEL_FLIPPED) {
                 }
             }
         }
