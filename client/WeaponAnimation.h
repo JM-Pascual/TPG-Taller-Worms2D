@@ -10,9 +10,11 @@ class WeaponAnimation {
 private:
     /** Current weapon. */
     WeaponsAndTools current_weapon;
-    /** SDL texture of the raw image. */
+    /** SDL texture of the current weapon draw animation. */
     std::unique_ptr<Animation> current_weapon_draw_animation;
-    /** SDL texture of the raw image. */
+    /** SDL texture of the crosshair animation. */
+    std::shared_ptr<SDL2pp::Texture>& crosshair_texture;
+    /** SDL texture of the current weapon aiming animation. */
     std::shared_ptr<SDL2pp::Texture>& current_weapon_texture;
     /** Reference to the texture holder */
     TexturesPool& pool;

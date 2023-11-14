@@ -28,6 +28,11 @@ void TexturesPool::load_worm_textures() {
 }
 
 void TexturesPool::load_weapon_textures() {
+    textures.insert({Actors::CROSSHAIR, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/crosshair.png")
+                                                                                               .SetColorKey(true, 0x000000))});
+
+    textures[Actors::CROSSHAIR]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
     textures.insert({Actors::BAZOOKA_PROYECTILE, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/bazooka-missile2.png"))});
 
     textures.insert({Actors::BAZOOKA_EXPLOSION, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/bazooka-explosion.png")
