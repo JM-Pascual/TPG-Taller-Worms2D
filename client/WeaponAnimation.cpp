@@ -5,6 +5,9 @@ WeaponAnimation::WeaponAnimation(TexturesPool& pool) :
         current_weapon_draw_animation(std::make_unique<Animation>(pool.get_texture(
                                                                           Actors::WORM_DRAW_BAZOOKA
                                                                           ), 7, 2, false)),
+        power_charge_animation(std::make_unique<Animation>(pool.get_texture(
+                                                                   Actors::POWER_CHARGE_BAR
+                                                                   ), 6, 2, false)),
         crosshair_texture(pool.get_texture(Actors::CROSSHAIR)),
         current_weapon_texture(pool.get_texture(Actors::WORM_HOLDING_BAZOOKA)),
         pool(pool), weapon_drawn_frames_counter(0), current_inclination(0) {}
@@ -26,12 +29,13 @@ void WeaponAnimation::change_weapon_texture(WeaponsAndTools equipped_weapon) {
     }
 }
 
-void WeaponAnimation::update(float new_inclination_degrees,
+void WeaponAnimation::update(float new_inclination_degrees, bool charging_power,
                              WeaponsAndTools equipped_weapon, bool weapon_currently_stored) {
     if (weapon_currently_stored){
         weapon_drawn_frames_counter = 0;
     }
     current_weapon_draw_animation->update(weapon_currently_stored);
+    power_charge_animation->update(!charging_power);
 
     current_inclination = new_inclination_degrees;
     change_weapon_texture(equipped_weapon);
@@ -74,5 +78,7 @@ void WeaponAnimation::render(SDL2pp::Renderer& renderer, SDL2pp::Rect dest,
                         flipType
                 );
             }
+
+            power_charge_animation->render(renderer, SDL2pp::Rect(dest.x, dest.y -35, 35, 60),0, 0);
     }
 }

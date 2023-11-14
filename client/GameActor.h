@@ -76,9 +76,9 @@ public:
         jumping.update(!is_jumping);
         backflipping.update(!is_backflipping);
 
-        weapon_animation.update(aim_inclination_degrees, WeaponsAndTools::BAZOOKA,
-                                (is_walking || is_jumping || is_backflipping)
-                                );
+        bool charging_weapon = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->charging_weapon;
+        weapon_animation.update(aim_inclination_degrees, charging_weapon, WeaponsAndTools::BAZOOKA,
+                                (is_walking || is_jumping || is_backflipping));
     }
 
     void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {

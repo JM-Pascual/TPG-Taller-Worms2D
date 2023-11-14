@@ -106,6 +106,8 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<States>& ps) {
     memcpy(&inclination_net, &p->aim_inclination_degrees, sizeof(uint32_t));
     inclination_net = htonl(inclination_net);
     send(&inclination_net, sizeof(uint32_t));
+
+    send(&p->charging_weapon, sizeof(bool));
 }
 
 void ServerSide::Protocol::sendGameInfo(const std::shared_ptr<States>& count) {

@@ -12,6 +12,8 @@ private:
     WeaponsAndTools current_weapon;
     /** SDL texture of the current weapon draw animation. */
     std::unique_ptr<Animation> current_weapon_draw_animation;
+    /** Animation of the power charge */
+    std::unique_ptr<Animation> power_charge_animation;
     /** SDL texture of the crosshair animation. */
     std::shared_ptr<SDL2pp::Texture>& crosshair_texture;
     /** SDL texture of the current weapon aiming animation. */
@@ -27,7 +29,7 @@ private:
 public:
     explicit WeaponAnimation(TexturesPool& pool);
 
-    void update(float new_inclination_degrees,
+    void update(float new_inclination_degrees, bool charging_power,
                 WeaponsAndTools equipped_weapon, bool weapon_currently_stored);
 
     void render(SDL2pp::Renderer &renderer, SDL2pp::Rect dest,

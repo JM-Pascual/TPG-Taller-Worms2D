@@ -33,6 +33,11 @@ void TexturesPool::load_weapon_textures() {
 
     textures[Actors::CROSSHAIR]->SetBlendMode(SDL_BLENDMODE_BLEND);
 
+    textures.insert({Actors::POWER_CHARGE_BAR, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/loading-shot.png")
+                                                                                                       .SetColorKey(true, 0x000000))});
+
+    textures[Actors::POWER_CHARGE_BAR]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
     textures.insert({Actors::BAZOOKA_PROYECTILE, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/bazooka-missile2.png"))});
 
     textures.insert({Actors::BAZOOKA_EXPLOSION, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/bazooka-explosion.png")
