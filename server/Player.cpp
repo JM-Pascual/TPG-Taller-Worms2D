@@ -71,40 +71,28 @@ void Player::check_jumping() {
 }
 
 void Player::change_aim_direction() {
-    if(!aiming){
+    if (!aiming) {
         return;
     }
 
-    switch(aim_direction){
+    switch (aim_direction) {
 
         case ADSAngleDir::UP:
-            if(facing_right){
-                if(aim_inclination_degrees < INCLINACION_MAX){
-                    aim_inclination_degrees +=  ANGLE_VARIATION;
-                }
-            }else{
-                if(aim_inclination_degrees > INCLINACION_MAX){
-                    aim_inclination_degrees -=  ANGLE_VARIATION;
-                }
 
+            if (aim_inclination_degrees <= INCLINACION_MAX) {
+                aim_inclination_degrees += ANGLE_VARIATION;
             }
-
             break;
         case ADSAngleDir::DOWN:
-            if(facing_right){
-                if(aim_inclination_degrees > INCLINACION_MIN){
-                    aim_inclination_degrees -=  ANGLE_VARIATION;
-                }
-            }else{
-                if(aim_inclination_degrees < b2_pi* 3/2){
-                    aim_inclination_degrees +=  ANGLE_VARIATION;
-                }
 
+            if (aim_inclination_degrees >= INCLINACION_MIN) {
+                aim_inclination_degrees -= ANGLE_VARIATION;
             }
-
             break;
+            }
     }
-}
+
+
 
 void Player::change_fire_power() {
     if(charging_shoot){
@@ -122,7 +110,7 @@ b2Vec2 Player::set_bullet_power() {
     // f_y = fuerza_total * sen(ang_rad * pi/180)
     b2Vec2 bullet_power;
     bullet_power.x = (weapon_power * facing_factor()) * cosf(aim_inclination_degrees);
-    bullet_power.y = (weapon_power * facing_factor()) * sinf(aim_inclination_degrees);
+    bullet_power.y = (weapon_power) * sinf(aim_inclination_degrees);
     return bullet_power;
 }
 
@@ -132,7 +120,7 @@ b2Vec2 Player::set_bullet_direction(){
     // y = (worm.y + (hip * sen(ang_rad))
     b2Vec2 bullet_position;
     bullet_position.x = (worm->GetPosition().x + (facing_factor()) * ARM_LENGHT * cosf(aim_inclination_degrees));
-    bullet_position.y = (worm->GetPosition().y + (facing_factor()) * ARM_LENGHT * sinf(aim_inclination_degrees));
+    bullet_position.y = (worm->GetPosition().y + (ARM_LENGHT * sinf(aim_inclination_degrees)));
     return bullet_position;
 
 }

@@ -125,6 +125,7 @@ void Game::player_start_moving(const Direction& direction, const uint8_t id) {
     players_stats.at(id).is_walking = true;
     players_stats.at(id).facing_right = (bool)direction;
     players_stats.at(id).move();
+
 }
 
 void Game::player_stop_moving(const uint8_t id) {
