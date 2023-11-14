@@ -6,6 +6,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <vector>
 
 #include "../common/States.h"
 #include "../common/const.h"
@@ -21,11 +22,10 @@
 #define MAX_PLAYERS 4
 
 
-
 class Game {
 private:
     std::mutex m;
-    std::map<uint8_t, Player> players_stats;
+    std::map<uint8_t, std::unique_ptr<Player>> players_stats;
     std::vector<std::shared_ptr<Projectile>> projectiles;
 
     Battlefield battlefield;
@@ -54,7 +54,7 @@ public:
             map_name(map),
             game_id(game_id),
             gameloop(*this, this->game_id, erase_id_queue),
-            need_to_join_loop(false){}
+            need_to_join_loop(false) {}
 
     Queue<std::shared_ptr<PlayerAction>>& get_action_queue();
 

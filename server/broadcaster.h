@@ -23,7 +23,8 @@ public:
 
     void broadcast(const std::list<std::shared_ptr<States>>& game_states);
 
-    void remove_closed_clients(uint8_t& ready_count, std::map<uint8_t, Player>& players_stats);
+    void remove_closed_clients(uint8_t& ready_count,
+                               std::map<uint8_t, std::unique_ptr<Player>>& players_stats);
 
     void removePlayer(const uint8_t& player_id);
 
