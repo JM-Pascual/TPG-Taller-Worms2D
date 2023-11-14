@@ -1,6 +1,7 @@
 #include "Window.h"
 
 #include "TexturesPool.h"
+#include "camera.h"
 
 Window::Window(const int& width, const int& height):
         game_window(std::make_shared<SDL2pp::Window>("Worms2D", SDL_WINDOWPOS_UNDEFINED,
@@ -21,7 +22,7 @@ void Window::clear_textures() { game_renderer->Clear(); }
 
 void Window::present_textures() { game_renderer->Present(); }
 
-void Window::render_stage(TexturesPool& pool) {
+void Window::render_stage(TexturesPool& pool, Camera& camera) {
     int vcenter = (game_renderer->GetOutputHeight() / 2);
 
     render_stage_texture(
@@ -33,6 +34,6 @@ void Window::render_stage(TexturesPool& pool) {
 
     for (int i = 0; i < 19; i++) {
         render_stage_texture(pool.get_texture(Actors::BRIDGE),
-                             SDL2pp::Rect(0 + i * 70, vcenter + 40, 70, 20));
+                             camera.calcRect(0 + i * 70, vcenter + 40, 70, 20));
     }
 }

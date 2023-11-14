@@ -10,6 +10,7 @@
 #include "GameActor.h"
 #include "TexturesPool.h"
 #include "Window.h"
+#include "camera.h"
 
 const int DURATION = 1000 / 30;
 
@@ -30,10 +31,10 @@ Client::Client(const char* hostname, const char* servname):
 
 void Client::run() {
     runned = true;
-
     SDL2pp::SDL sdl(SDL_INIT_VIDEO);
     Window window(1280, 720);
     TexturesPool txt_pool(window.get_renderer());
+    Camera camera;
 
     std::unordered_map<size_t, std::shared_ptr<GameActor>> actors;
     std::unordered_map<size_t, std::shared_ptr<GameActor>> proyectiles;
@@ -47,7 +48,7 @@ void Client::run() {
     while (!quit) {
         window.clear_textures();
 
-        window.render_stage(txt_pool);
+        window.render_stage(txt_pool, camera);
 
         std::shared_ptr<States> raw_state = nullptr;
 
@@ -59,11 +60,17 @@ void Client::run() {
                     for (size_t i = 0; i < players_quantity; i++) {
                         while (not game_state_queue.try_pop(raw_state)) {}
                         if (actors.count(i) == 0) {
-                            actors.insert({i, std::make_shared<Worm>(raw_state, txt_pool)});
+                            actors.insert({i, std::make_shared<Worm>(raw_state, txt_pool, camera)});
                         } else {
                             actors.at(i)->update(raw_state, loop_start_time);
                         }
                         // actors.at(i)->render(window.get_renderer());
+
+                        auto worm = std::dynamic_pointer_cast<PlayerStateG>(raw_state);
+
+                        if (worm->is_walking) {
+                            camera.setNewPosition(worm->pos.x, worm->pos.y, 32, 60);
+                        }
                     }
                     // Recibo el States de los proyectiles y los guardo para renderizarlos
                 } else if (raw_state->tag == StatesTag::PROJECTILE_COUNT_G) {
@@ -72,8 +79,8 @@ void Client::run() {
                     for (size_t i = 0; i < proyectiles_quantity; i++) {
                         while (not game_state_queue.try_pop(raw_state)) {}
                         if (proyectiles.count(i) == 0) {
-                            proyectiles.insert(
-                                    {i, std::make_shared<BazookaProyectile>(raw_state, txt_pool)});
+                            proyectiles.insert({i, std::make_shared<BazookaProyectile>(
+                                                           raw_state, txt_pool, camera)});
                         } else {
                             proyectiles.at(i)->update(raw_state, loop_start_time);
                         }
@@ -94,7 +101,7 @@ void Client::run() {
 
         for (int i = 0; i < 5; i++) {
             water_animation.render((*window.get_renderer()),
-                                   SDL2pp::Rect(0, 600 + i * 22, 1280, 40), 1240, 0);
+                                   camera.calcRect(0, 600 + i * 22, 1280, 40), 1240, 0);
         }
 
         window.present_textures();

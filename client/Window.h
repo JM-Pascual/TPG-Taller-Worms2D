@@ -9,6 +9,7 @@
 #include "../common/const.h"
 
 class TexturesPool;
+class Camera;
 
 class Window {
 private:
@@ -29,7 +30,7 @@ public:
     /// Presents the textures in screen calling the SDL2pp::Renderer::Present method
     void present_textures();
 
-    void render_stage(TexturesPool& pool);
+    void render_stage(TexturesPool& pool, Camera& camera);
 
     ~Window() = default;
 

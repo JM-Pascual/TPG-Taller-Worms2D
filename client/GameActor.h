@@ -11,15 +11,17 @@
 
 #include "Animation.h"
 #include "TexturesPool.h"
+#include "camera.h"
 
 // ----------------------- ACTOR INTERFACE ----------------------
 
 class GameActor {
 protected:
     b2Vec2 position;
+    Camera& camera;
 
 public:
-    GameActor(const float& x, const float& y): position(x, y) {}
+    GameActor(const float& x, const float& y, Camera& camera): position(x, y), camera(camera) {}
     virtual void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) = 0;
     virtual void update(const std::shared_ptr<States>& actor_state, unsigned int ms) = 0;
     virtual ~GameActor() = default;
@@ -41,9 +43,9 @@ private:
     Animation backflipping;
 
 public:
-    Worm(const std::shared_ptr<States>& initial_state, TexturesPool& pool):
+    Worm(const std::shared_ptr<States>& initial_state, TexturesPool& pool, Camera& camera):
             GameActor(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->pos.x,
-                      std::dynamic_pointer_cast<PlayerStateG>(initial_state)->pos.y),
+                      std::dynamic_pointer_cast<PlayerStateG>(initial_state)->pos.y, camera),
             is_walking(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->is_walking),
             is_jumping(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->is_jumping),
             is_backflipping(
@@ -69,14 +71,16 @@ public:
     }
 
     void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 32, 60);
+
         if (is_jumping) {
-            jumping.render((*game_renderer), SDL2pp::Rect(position.x, position.y, 32, 60), 0, 0,
+            jumping.render((*game_renderer), rect, 0, 0,
                            facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
         } else if (is_backflipping) {
-            backflipping.render((*game_renderer), SDL2pp::Rect(position.x, position.y, 32, 60), 0,
-                                0, facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+            backflipping.render((*game_renderer), rect, 0, 0,
+                                facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
         } else {
-            walking.render((*game_renderer), SDL2pp::Rect(position.x, position.y, 32, 60), 0, 0,
+            walking.render((*game_renderer), rect, 0, 0,
                            facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
         }
     }
@@ -92,9 +96,9 @@ protected:
     bool impacted;
 
 public:
-    Proyectile(const std::shared_ptr<States>& initial_state, TexturesPool& pool):
+    Proyectile(const std::shared_ptr<States>& initial_state, TexturesPool& pool, Camera& camera):
             GameActor(std::dynamic_pointer_cast<ProjectileStateG>(initial_state)->pos.x,
-                      std::dynamic_pointer_cast<ProjectileStateG>(initial_state)->pos.y),
+                      std::dynamic_pointer_cast<ProjectileStateG>(initial_state)->pos.y, camera),
             impacted(false) {}
 };
 
@@ -107,8 +111,9 @@ private:
     Animation impact;
 
 public:
-    BazookaProyectile(const std::shared_ptr<States>& initial_state, TexturesPool& pool):
-            Proyectile(initial_state, pool),
+    BazookaProyectile(const std::shared_ptr<States>& initial_state, TexturesPool& pool,
+                      Camera& camera):
+            Proyectile(initial_state, pool, camera),
             on_air(pool.get_texture(Actors::BAZOOKA_PROYECTILE), 1, 1),
             impact(pool.get_texture(Actors::BAZOOKA_EXPLOSION), 7, 1, false) {}
 
@@ -120,10 +125,11 @@ public:
     }
 
     void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        SDL2pp::Rect rect(position.x - camera.x(), position.y - camera.y(), 60, 60);
         if (impacted) {
-            impact.render((*game_renderer), SDL2pp::Rect(position.x, position.y, 60, 60));
+            impact.render((*game_renderer), rect);
         } else {
-            on_air.render((*game_renderer), SDL2pp::Rect(position.x, position.y, 60, 60));
+            on_air.render((*game_renderer), rect);
         }
     }
 };
