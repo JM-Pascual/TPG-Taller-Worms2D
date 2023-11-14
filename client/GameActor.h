@@ -11,6 +11,7 @@
 
 #include "Animation.h"
 #include "TexturesPool.h"
+#include "WeaponAnimation.h"
 
 // ----------------------- ACTOR INTERFACE ----------------------
 
@@ -41,6 +42,10 @@ private:
     Animation jumping;
     Animation backflipping;
 
+    bool aiming_weapon;
+    Animation bazooka_draw;
+    WeaponAnimation bazooka_aim;
+
 public:
     Worm(const std::shared_ptr<States>& initial_state, TexturesPool& pool):
             GameActor(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->pos.x,
@@ -53,9 +58,13 @@ public:
             was_hit(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->was_hit),
             aim_inclination_degrees(std::dynamic_pointer_cast<PlayerStateG>(initial_state)
                                             ->aim_inclination_degrees),
+
             walking(pool.get_texture(Actors::WORM), 15, 1),
             jumping(pool.get_texture(Actors::JUMPING_WORM), 5, 5, false),
-            backflipping(pool.get_texture(Actors::BACKFLIP_WORM), 22, 1, false){}
+            backflipping(pool.get_texture(Actors::BACKFLIP_WORM), 22, 1, false),
+            aiming_weapon(false),
+            bazooka_draw(pool.get_texture(Actors::WORM_DRAW_BAZOOKA), 7, 2, false),
+            bazooka_aim(pool){}
 
     void update(const std::shared_ptr<States>& actor_state, unsigned int ms) override {
         position = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->pos;
@@ -70,19 +79,36 @@ public:
         walking.update(!is_walking);
         jumping.update(!is_jumping);
         backflipping.update(!is_backflipping);
+        bazooka_draw.update(is_walking || is_backflipping || is_jumping);
+
+        bazooka_aim.update(aim_inclination_degrees, WeaponsAndTools::BAZOOKA);
     }
 
     void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         if (is_jumping) {
             jumping.render((*game_renderer), SDL2pp::Rect(position.x, position.y, 32, 60), 0, 0,
                            facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+            aiming_weapon = false;
         } else if (is_backflipping) {
-            backflipping.render((*game_renderer), SDL2pp::Rect(position.x, position.y, 32, 60), 0,
-                                0, facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-        } else {
+            backflipping.render((*game_renderer), SDL2pp::Rect(position.x, position.y, 32, 60),
+                                0, 0, facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+            aiming_weapon = false;
+        } else if (is_walking) {
             walking.render((*game_renderer), SDL2pp::Rect(position.x, position.y, 32, 60), 0, 0,
                            facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+            aiming_weapon = false;
+        } else {
+            if (!aiming_weapon){
+                bazooka_draw.render((*game_renderer), SDL2pp::Rect(position.x, position.y, 35, 60),
+                                    0, 0, facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+                aiming_weapon = true;
+            } else{
+                bazooka_aim.render((*game_renderer), SDL2pp::Rect(position.x, position.y, 35, 60),
+                                    facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+            }
         }
+
+
     }
 
     ~Worm() override = default;

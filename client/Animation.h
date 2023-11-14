@@ -18,8 +18,6 @@ private:
     unsigned int numFrames;
     /** Size of the sprite (height and width). */
     unsigned int size;
-    /** Time elapsed (msecs from SDL2pp::GetTickRate()). */
-    unsigned int elapsed;
     /** Current animation frame. */
     unsigned int currentFrame;
     /** Delay between frames. */

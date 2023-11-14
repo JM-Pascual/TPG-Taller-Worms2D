@@ -67,6 +67,8 @@ enum class Actions {
 
 enum class Actors {
     WORM = 0x0,
+    WORM_DRAW_BAZOOKA,
+    WORM_HOLDING_BAZOOKA,
     GRADIENT,
     BRIDGE,
     LONG_BRIDGE,
