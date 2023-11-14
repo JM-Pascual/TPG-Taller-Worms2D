@@ -21,7 +21,7 @@ Client::Client(const char* hostname, const char* servname):
         protocol(hostname, servname),
         recv(this->protocol, game_state_queue, lobby_state_queue, runned),
         send(this->protocol, this->action_queue),
-        kb(this->action_queue, quit) {
+        input(this->action_queue, quit) {
     spdlog::get("client")->debug("Iniciando hilo receptor en el cliente");
     recv.start();
     spdlog::get("client")->debug("Iniciando hilo sender en el cliente");
@@ -41,7 +41,7 @@ void Client::run() {
 
     Animation water_animation(txt_pool.get_texture(Actors::WATER), 11, 3);
 
-    kb.start();
+    input.start();
 
     int loop_start_time = SDL_GetTicks();
 
@@ -123,7 +123,7 @@ void Client::run() {
 
 Client::~Client() {
     if (runned) {
-        kb.join();
+        input.join();
     }
 
     recv.kill();

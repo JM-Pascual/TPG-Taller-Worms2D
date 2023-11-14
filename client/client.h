@@ -7,7 +7,7 @@
 #include "cprotocol.h"
 #include "creceiver.h"
 #include "csender.h"
-#include "keyboardHandler.h"
+#include "inputHandler.h"
 
 class Action;
 class States;
@@ -20,7 +20,7 @@ private:
     ClientSide::Protocol protocol;
     ClientSide::Receiver recv;
     ClientSide::Sender send;
-    KBHandler kb;
+    IHandler input;
     Queue<std::shared_ptr<States>> game_state_queue;
     Queue<std::shared_ptr<States>> lobby_state_queue;
     Queue<std::shared_ptr<Action>> action_queue;

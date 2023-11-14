@@ -1,4 +1,4 @@
-#include "keyboardHandler.h"
+#include "inputHandler.h"
 
 #include <memory>
 
@@ -6,10 +6,10 @@
 
 #include "Action.h"
 
-KBHandler::KBHandler(Queue<std::shared_ptr<Action>>& actionQ, std::atomic<bool>& quit):
+IHandler::IHandler(Queue<std::shared_ptr<Action>>& actionQ, std::atomic<bool>& quit):
         action_queue(actionQ), quit(quit) {}
 
-void KBHandler::run() {
+void IHandler::run() {
     SDL_Event event;
     while (not quit) {
         while (SDL_PollEvent(&event)) {
