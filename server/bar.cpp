@@ -1,14 +1,13 @@
 #include "bar.h"
 #include "battlefield.h"
 
-Bar::Bar(Battlefield& battlefield) {
+Bar::Bar(Battlefield& battlefield): Entity(battlefield)  {
 
     b2BodyDef barBodyDef;
     barBodyDef.position.Set(38.4f,9.8f);
 
     barBodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
     body = battlefield.add_body(barBodyDef);
-
     b2PolygonShape barBox;
     barBox.SetAsBox(76.8/2, 0.8f/2);
 
@@ -19,6 +18,6 @@ bool Bar::still_alive() {
     return alive;
 }
 
-void Bar::execute_collision_reaction(Battlefield &battlefield) {
+void Bar::execute_collision_reaction() {
 
 }

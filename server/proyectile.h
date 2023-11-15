@@ -17,6 +17,9 @@ class Projectile : public Entity{
 private:
     WeaponsAndTools type;
     float blast_radius;
+
+    void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
+
 public:
 
     explicit Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTools type);
@@ -24,8 +27,8 @@ public:
     void set_power(b2Vec2 power);
     std::shared_ptr<ProjectileStateG> get_proyectile_state();
     bool still_alive() override;
-    void execute_collision_reaction(Battlefield& battlefield) override;
-    void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
+    void execute_collision_reaction() override;
+
     ~Projectile() = default;
 };
 

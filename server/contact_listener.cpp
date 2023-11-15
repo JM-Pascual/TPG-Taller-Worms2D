@@ -36,7 +36,6 @@ void Contact_listener::EndContact(b2Contact *contact) {
     //  -En el caso de que sea un body recién se va a eliminar una vez que no tenga más vida
     //  -En el caso de la barra no importa si recibe una colisión, nunca la agrego a la lista
     if (dataA && dataB) {
-
         dataA->end_contact();
         dataB->end_contact();
     }
@@ -44,16 +43,19 @@ void Contact_listener::EndContact(b2Contact *contact) {
 
 void Contact_listener::PreSolve(b2Contact *contact, const b2Manifold *oldManifold) {
     b2ContactListener::PreSolve(contact, oldManifold);
-    /*
+
     auto contact2 = contact->GetFixtureB()->GetBody()->GetUserData().pointer;
     auto contact1 = contact->GetFixtureA()->GetBody()->GetUserData().pointer;
 
     auto* dataB = reinterpret_cast<Entity*>(contact2);
     auto* dataA = reinterpret_cast<Entity*>(contact1);
 
-    dataA->execute_collision_reaction();
-    dataB->execute_collision_reaction();
-     */
+    if(dataA && dataB){
+        dataA->execute_collision_reaction();
+        dataB->execute_collision_reaction();
+    }
+
+
 }
 
 void Contact_listener::PostSolve(b2Contact *contact, const b2ContactImpulse *impulse) {

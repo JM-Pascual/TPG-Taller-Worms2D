@@ -1,12 +1,12 @@
 #include "entity.h"
 #include "battlefield.h"
 
-Entity::Entity() : collide(false), alive(true) {}
+Entity::Entity(Battlefield& battlefield) : collide(false), alive(true), battlefield(battlefield) {}
 
 void Entity::start_contact() {collide = true;}
 
 void Entity::end_contact() {collide = false;}
 
-void Entity::remove_entity(Battlefield *battlefield) {
-    battlefield->destroy_body(body);
+void Entity::remove_entity() {
+    battlefield.destroy_body(body);
 }

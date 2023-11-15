@@ -33,7 +33,7 @@ void Battlefield::destroy_body(b2Body* body) {
 
 void Battlefield::destroy_dead_entities() {
     for(auto entity : listener->dead_list){
-        entity->remove_entity(this);
+        entity->remove_entity();
     }
 }
 

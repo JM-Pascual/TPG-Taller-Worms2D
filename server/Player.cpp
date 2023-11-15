@@ -4,7 +4,7 @@
 
 //ToDo Hardocdeado para que los worms aparezcan en la mitad del mapa
 
-Player::Player(Battlefield& battlefield): life(INITIAL_LIFE),facing_right(true), is_walking(false),ready(false),
+Player::Player(Battlefield& battlefield): Entity(battlefield), life(INITIAL_LIFE),facing_right(true), is_walking(false),ready(false),
         is_jumping(false), is_backflipping(false), aiming(false), aim_inclination_degrees(0), aim_direction(ADSAngleDir::UP),
         charging_shoot(false), weapon_power(0) {
     b2BodyDef wormDef;
@@ -98,7 +98,7 @@ void Player::change_fire_power() {
     }
 }
 
-void Player::shoot(Game& game, Battlefield& battlefield) {
+void Player::shoot(Game &game) {
     weapon->execute(game,battlefield,*this);
 }
 
@@ -136,13 +136,15 @@ int Player::facing_factor() {
 }
 
 bool Player::still_alive() {
-    if(life <= 0){
+    if(life <= 0 && alive){
         alive = false;
+    }else{
+        alive = true;
     }
     return alive;
 }
 
-void Player::execute_collision_reaction(Battlefield &battlefield) {
+void Player::execute_collision_reaction() {
 
 }
 

@@ -62,7 +62,7 @@ public:
     void stop();
     void jump(const JumpDir& direction);
 
-    void shoot(Game& game, Battlefield& battlefield);
+    void shoot(Game &game);
 
     void change_aim_direction();
     void change_fire_power();
@@ -81,7 +81,7 @@ public:
     //void use_clickeable_gadget();
 
     bool still_alive() override;
-    void execute_collision_reaction(Battlefield& battlefield) override;
+    void execute_collision_reaction() override;
 
     virtual ~Player() = default;
 

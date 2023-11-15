@@ -1,8 +1,8 @@
 #include "proyectile.h"
 #include "battlefield.h"
 
-Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTools type):
-        type(type),blast_radius(2){ //cambiar
+Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTools type): Entity(battlefield),
+        type(type),blast_radius(20){ //cambiar
 
     b2BodyDef projectile_body;
     projectile_body.type = b2_dynamicBody;
@@ -34,15 +34,17 @@ void Projectile::set_power(b2Vec2 power) { body->ApplyLinearImpulseToCenter(powe
 
 bool Projectile::still_alive() {
     if(type == WeaponsAndTools::BAZOOKA){
-        if(collide){
+        if(collide && alive){
             alive = false;
+        }else{
+            alive = true;
         }
     }
     return  alive;
 }
 
 //Este método lo tengo que llamar dentro de contact_listener
-void Projectile::execute_collision_reaction(Battlefield& battlefield) {
+void Projectile::execute_collision_reaction() {
     if (type == WeaponsAndTools::BAZOOKA) {
         //La idea es que explote. El centro tenga daño 50 pts y tenga dos metros de radio.
         Query_callback queryCallback;
@@ -53,14 +55,14 @@ void Projectile::execute_collision_reaction(Battlefield& battlefield) {
 
         //check which of these bodies have their center of mass within the blast radius
         for (int i = 0; i < queryCallback.found_bodies_size(); i++) {
-            b2Body *body = queryCallback.found_bodie_at(i);
+            b2Body *body_ = queryCallback.found_bodie_at(i);
             b2Vec2 bodyCom = body->GetWorldCenter();
 
             //ignore bodies outside the blast range
             if ((bodyCom - body->GetPosition()).Length() >= blast_radius)
                 continue;
 
-            applyBlastImpulse(body, body->GetPosition(), bodyCom, blast_radius);
+            applyBlastImpulse(body_, body->GetPosition(), bodyCom, blast_radius);
         }
     }
 

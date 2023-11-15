@@ -10,14 +10,15 @@ protected:
     bool collide;
     bool alive;
     b2Body* body;
+    Battlefield& battlefield;
 
 public:
-    Entity();
+    Entity(Battlefield& battlefield);
     void start_contact();
     void end_contact();
-    void remove_entity(Battlefield *battlefield); //todo ver si esta bien que sea un puntero
+    void remove_entity(); //todo ver si esta bien que sea un puntero
     virtual bool still_alive() = 0; //todo cambiar el nombre
-    virtual void execute_collision_reaction(Battlefield& battlefield) = 0;
+    virtual void execute_collision_reaction() = 0;
     ~Entity() = default;
 };
 

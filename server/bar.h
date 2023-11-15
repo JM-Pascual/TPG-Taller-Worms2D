@@ -11,7 +11,7 @@ class Bar : public Entity{
 public:
     explicit Bar(Battlefield& battlefield);
     bool still_alive() override;
-    void execute_collision_reaction(Battlefield& battlefield) override;
+    void execute_collision_reaction() override;
 };
 
 

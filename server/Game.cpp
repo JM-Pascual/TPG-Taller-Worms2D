@@ -191,7 +191,7 @@ void Game::player_shoot(const uint8_t id) {
     players_stats.at(id)->aiming = false;
     players_stats.at(id)->charging_shoot = false;
 
-    players_stats.at(id)->shoot(*this, battlefield);
+    players_stats.at(id)->shoot(*this);
 
     players_stats.at(id)->weapon_power = 0;
 }
