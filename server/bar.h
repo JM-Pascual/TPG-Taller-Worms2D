@@ -8,10 +8,10 @@
 class Battlefield;
 
 class Bar : public Entity{
-private:
-    b2Body* bar;
 public:
     explicit Bar(Battlefield& battlefield);
+    bool still_alive() override;
+    void execute_collision_reaction(Battlefield& battlefield) override;
 };
 
 

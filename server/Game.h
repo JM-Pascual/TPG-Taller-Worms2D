@@ -6,6 +6,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <vector>
 
 #include "../common/States.h"
 #include "../common/const.h"
@@ -20,12 +21,12 @@
 
 #define MAX_PLAYERS 4
 
-
+class Projectile;
 
 class Game {
 private:
     std::mutex m;
-    std::map<uint8_t, Player> players_stats;
+    std::map<uint8_t, std::unique_ptr<Player>> players_stats;
     std::vector<std::shared_ptr<Projectile>> projectiles;
 
     Battlefield battlefield;
@@ -54,7 +55,7 @@ public:
             map_name(map),
             game_id(game_id),
             gameloop(*this, this->game_id, erase_id_queue),
-            need_to_join_loop(false){}
+            need_to_join_loop(false) {}
 
     Queue<std::shared_ptr<PlayerAction>>& get_action_queue();
 
@@ -73,23 +74,28 @@ public:
 
     void set_player_ready(uint8_t id);
 
-    // temp protocol
-    void player_start_moving(const Direction& direction, uint8_t id);
-    void player_stop_moving(uint8_t id);
-    void player_jump(const JumpDir& direction, uint8_t id);
+
 
     void step();
     void update_physics();
     void update_weapon();
 
 
+    // temp protocol
+    void player_start_moving(const Direction& direction, uint8_t id);
+    void player_stop_moving(uint8_t id);
+    void player_jump(const JumpDir& direction, uint8_t id);
     void player_start_aiming(const ADSAngleDir& direction, uint8_t id);
     void player_stop_aiming(const uint8_t id);
-
     void player_start_charging(const uint8_t id);
     void player_shoot(const uint8_t id);
 
+
+
     void add_projectile(std::shared_ptr<Projectile> proyectile);
+    void remove_collided_projectiles();
+
+    void remove_box2d_entities();
 
     std::shared_ptr<GameInfoL> getInfo();
 

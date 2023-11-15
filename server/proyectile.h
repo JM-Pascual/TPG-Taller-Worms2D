@@ -9,22 +9,23 @@
 #include "../common/States.h"
 #include "../common/const.h"
 #include "entity.h"
+#include "query_callback.h"
 
 class Battlefield;
 
 class Projectile : public Entity{
 private:
-    b2Body* projectile;
     WeaponsAndTools type;
-
+    float blast_radius;
 public:
-    const GameEntity entity;
 
-    explicit Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTools type,
-                        GameEntity entity);
+    explicit Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTools type);
 
     void set_power(b2Vec2 power);
     std::shared_ptr<ProjectileStateG> get_proyectile_state();
+    bool still_alive() override;
+    void execute_collision_reaction(Battlefield& battlefield) override;
+    void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
     ~Projectile() = default;
 };
 

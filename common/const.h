@@ -82,19 +82,6 @@ enum class Actors {
     BAZOOKA_EXPLOSION
 };
 
-enum class GameEntity {
-    WORM,
-    BAZOOKA,
-    MORTAR,
-    GREEN_GRENADE,
-    RED_GRENADE,
-    HOLY_GRENADE,
-    BANANA,
-    DYNAMITE,
-    BASEBALL_BAT,
-    AIR_ATTACK
-};
-
 enum class StatesTag {
     GAME_NOT_JOINABLE,
     CONNECTION_ERROR_STATE,

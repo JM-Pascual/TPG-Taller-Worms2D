@@ -145,9 +145,11 @@ std::shared_ptr<PlayerStateG> ClientSide::Protocol::recvPlayerGame() {
     bool was_hit = recvBool();
     float aim_inclination = recvFloat();
     bool charging_weapon = recvBool();
+    float life = recvFloat();
 
     return std::make_shared<PlayerStateG>(x, y, is_wa, is_jumping, is_backflipping, direction, was_hit,
                                           aim_inclination, charging_weapon);
+                                          aim_inclination,life);
 }
 
 std::shared_ptr<ProjectileStateG> ClientSide::Protocol::recvProjectileGame() {

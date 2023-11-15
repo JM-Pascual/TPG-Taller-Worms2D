@@ -1,6 +1,7 @@
 #include "broadcaster.h"
 
 #include <algorithm>
+
 #include <spdlog/spdlog.h>
 
 #include "Player.h"
@@ -25,7 +26,7 @@ void BroadCaster::broadcast(const std::list<std::shared_ptr<States>>& game_state
 }
 
 void BroadCaster::remove_closed_clients(uint8_t& ready_count,
-                                        std::map<uint8_t, Player>& players_stats) {
+                                        std::map<uint8_t, std::unique_ptr<Player>>& players_stats) {
     std::lock_guard<std::mutex> lock(m);
 
     for (auto it = broadcast_map.rbegin(); it != broadcast_map.rend();) {
