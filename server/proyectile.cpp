@@ -9,8 +9,7 @@ Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTool
     projectile_body.bullet = true;  // Todo ver bien para que sirve
     projectile_body.position = b2Vec2(position.x, position.y);
     projectile_body.userData.pointer = reinterpret_cast<uintptr_t>(this);
-    projectile = battlefield.add_body(projectile_body);
-
+    body = battlefield.add_body(projectile_body);
 
     b2CircleShape shape;
     shape.m_radius = 0.25f;
@@ -19,28 +18,25 @@ Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTool
     fixtureDef.shape = &shape;
     fixtureDef.density = 1.0f;
 
-    projectile->CreateFixture(&fixtureDef);
+    body->CreateFixture(&fixtureDef);
 }
 
 
 std::shared_ptr<ProjectileStateG> Projectile::get_proyectile_state() {
 
-    float vel_angle = b2Atan2(projectile->GetLinearVelocity().y, projectile->GetLinearVelocity().x);
+    float vel_angle = b2Atan2(body->GetLinearVelocity().y, body->GetLinearVelocity().x);
     return std::make_shared<ProjectileStateG>(
-            projectile->GetPosition().x, projectile->GetPosition().y, type, collide, vel_angle);
+            body->GetPosition().x, body->GetPosition().y, type, collide, vel_angle);
 }
 
-void Projectile::set_power(b2Vec2 power) { projectile->ApplyLinearImpulseToCenter(power, true); }
+void Projectile::set_power(b2Vec2 power) { body->ApplyLinearImpulseToCenter(power, true); }
 
-void Projectile::remove() {
 
-}
-
-bool Projectile::life_end() {
+bool Projectile::still_alive() {
     if(type == WeaponsAndTools::BAZOOKA){
         if(collide){
-            end_life = true;
+            alive = false;
         }
     }
-    return  end_life;
+    return  alive;
 }

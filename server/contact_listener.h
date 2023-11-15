@@ -1,15 +1,17 @@
-#ifndef WORMS2D_MY_CONTACT_LISTENER_H
-#define WORMS2D_MY_CONTACT_LISTENER_H
+#ifndef WORMS2D_CONTACT_LISTENER_H
+#define WORMS2D_CONTACT_LISTENER_H
 
-#include "box2d/box2d.h"
+#include <box2d/box2d.h>
 #include "entity.h"
-#include "Player.h"
 #include <vector>
+#include <memory>
 
-class My_contact_listener :  public b2ContactListener  {
+
+
+class Contact_listener : public b2ContactListener  {
 
 private:
-    std::vector<b2Body*> contact_list;
+    std::vector<Entity*> dead_list; //Todo implementar vaciar la lista cuando termina cada turno
 
 public:
 
@@ -21,8 +23,8 @@ public:
 
     void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) override;
 
-    void analyze_contact_reaction();
+    friend class Battlefield;
 };
 
 
-#endif //WORMS2D_MY_CONTACT_LISTENER_H
+#endif //WORMS2D_CONTACT_LISTENER_H

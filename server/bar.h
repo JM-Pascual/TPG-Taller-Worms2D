@@ -8,12 +8,9 @@
 class Battlefield;
 
 class Bar : public Entity{
-private:
-    b2Body* bar;
 public:
     explicit Bar(Battlefield& battlefield);
-    void remove() override;
-    bool life_end() override;
+    bool still_alive() override;
 };
 
 

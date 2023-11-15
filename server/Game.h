@@ -21,6 +21,7 @@
 
 #define MAX_PLAYERS 4
 
+class Projectile;
 
 class Game {
 private:
@@ -73,23 +74,28 @@ public:
 
     void set_player_ready(uint8_t id);
 
-    // temp protocol
-    void player_start_moving(const Direction& direction, uint8_t id);
-    void player_stop_moving(uint8_t id);
-    void player_jump(const JumpDir& direction, uint8_t id);
+
 
     void step();
     void update_physics();
     void update_weapon();
 
 
+    // temp protocol
+    void player_start_moving(const Direction& direction, uint8_t id);
+    void player_stop_moving(uint8_t id);
+    void player_jump(const JumpDir& direction, uint8_t id);
     void player_start_aiming(const ADSAngleDir& direction, uint8_t id);
     void player_stop_aiming(const uint8_t id);
-
     void player_start_charging(const uint8_t id);
     void player_shoot(const uint8_t id);
 
+
+
     void add_projectile(std::shared_ptr<Projectile> proyectile);
+    void remove_collided_projectiles();
+
+    void remove_box2d_entities();
 
     std::shared_ptr<GameInfoL> getInfo();
 

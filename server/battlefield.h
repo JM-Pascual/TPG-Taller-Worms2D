@@ -6,7 +6,7 @@
 #include <vector>
 #include <iostream>
 #include "box2d/box2d.h"
-#include "my_contact_listener.h"
+#include "contact_listener.h"
 
 #define X_GRAVITY 0.0f
 #define Y_GRAVITY (-16.5f)
@@ -21,16 +21,21 @@ class Battlefield{
 private:
     b2Vec2 gravity;
     std::unique_ptr<b2World> world;
-    My_contact_listener* listener;
+    Contact_listener* listener;
 
     void create_battlefield();
 
 public:
     Battlefield();
-    b2Body* add_body(b2BodyDef bodyDef);
+    b2Body* add_body(b2BodyDef& bodyDef);
     void step();
+    void destroy_body(b2Body* bodyDef);
+    void destroy_dead_entities();
+    void clean_dead_entities();
 
     friend class Game;
+
+
 };
 
 #endif //WORMS2D_BATTLEFIELD_H

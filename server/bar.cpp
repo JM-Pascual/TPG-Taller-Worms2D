@@ -7,18 +7,14 @@ Bar::Bar(Battlefield& battlefield) {
     barBodyDef.position.Set(38.4f,9.8f);
 
     barBodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
-    bar = battlefield.add_body(barBodyDef);
+    body = battlefield.add_body(barBodyDef);
 
     b2PolygonShape barBox;
     barBox.SetAsBox(76.8/2, 0.8f/2);
 
-    bar->CreateFixture(&barBox, 0.0f);
+    body->CreateFixture(&barBox, 0.0f);
 }
 
-void Bar::remove() {
-
-}
-
-bool Bar::life_end() {
-    return false;
+bool Bar::still_alive() {
+    return alive;
 }

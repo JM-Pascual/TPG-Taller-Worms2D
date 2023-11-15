@@ -6,6 +6,7 @@
 #include <spdlog/spdlog.h>
 
 #include "game_loop.h"
+#include "proyectile.h"
 
 void Game::build_game_state(std::list<std::shared_ptr<States>>& states_list) {
     std::lock_guard<std::mutex> l(m);
@@ -15,7 +16,7 @@ void Game::build_game_state(std::list<std::shared_ptr<States>>& states_list) {
     for (auto& player: players_stats) {
         // cppcheck-suppress useStlAlgorithm
         states_list.push_back(std::make_shared<PlayerStateG>(
-                player.second->worm->GetPosition().x, player.second->worm->GetPosition().y,
+                player.second->body->GetPosition().x, player.second->body->GetPosition().y,
                 player.second->is_walking, player.second->is_jumping,
                 player.second->is_backflipping, player.second->facing_right, player.second->collide,
                 player.second->aim_inclination_degrees, player.second->life));
@@ -101,7 +102,7 @@ void Game::removePlayer(const uint8_t& player_id) {
     notifyLobbyState();
 }
 
-bool Game::isEmpty() { return players_stats.size() == 0; }
+bool Game::isEmpty() { return players_stats.empty(); }
 
 bool Game::is_playing() {
     std::lock_guard<std::mutex> lock(m);
@@ -126,6 +127,32 @@ void Game::set_player_ready(const uint8_t id) {
     }
 }
 
+void Game::step() {
+    battlefield.clean_dead_entities();
+    battlefield.step();
+}
+
+std::shared_ptr<GameInfoL> Game::getInfo() {
+    std::lock_guard<std::mutex> lock(m);
+    return std::make_shared<GameInfoL>(description, map_name, players_stats.size(), game_id);
+}
+
+// -------------- Projectiles Actions -------------------
+
+void Game::add_projectile(std::shared_ptr<Projectile> proyectile) {
+    projectiles.push_back(proyectile);
+}
+
+void Game::remove_collided_projectiles() {
+
+        projectiles.erase(std::remove_if(projectiles.begin(),
+                                  projectiles.end(),
+                                  [&](const std::shared_ptr<Projectile>& projectile) { return !projectile->still_alive();}),
+                   projectiles.end());
+}
+
+// -------------- Player Actions -------------------
+
 void Game::player_start_moving(const Direction& direction, const uint8_t id) {
     std::lock_guard<std::mutex> lock(m);
     players_stats.at(id)->is_walking = true;
@@ -144,32 +171,6 @@ void Game::player_jump(const JumpDir& direction, const uint8_t id) {
     players_stats.at(id)->jump(direction);
 }
 
-void Game::step() { battlefield.step(); }
-
-void Game::update_physics() {
-    std::lock_guard<std::mutex> lock(m);
-    for (auto& [id, player]: players_stats) {
-        player->check_jumping();
-        if (!player->is_walking && !player->is_jumping && !player->is_backflipping) {
-            player->stop();
-        } else if (player->is_walking) {
-            player->move();
-        }
-    }
-}
-
-std::shared_ptr<GameInfoL> Game::getInfo() {
-    std::lock_guard<std::mutex> lock(m);
-    return std::make_shared<GameInfoL>(description, map_name, players_stats.size(), game_id);
-}
-
-Game::~Game() {
-    spdlog::get("server")->debug("Joineando gameloop");
-    if (need_to_join_loop) {
-        gameloop.join();
-    }
-}
-
 void Game::player_start_aiming(const ADSAngleDir& direction, const uint8_t id) {
     std::lock_guard<std::mutex> lock(m);
     players_stats.at(id)->aiming = true;
@@ -179,18 +180,6 @@ void Game::player_start_aiming(const ADSAngleDir& direction, const uint8_t id) {
 void Game::player_stop_aiming(const uint8_t id) {
     std::lock_guard<std::mutex> lock(m);
     players_stats.at(id)->aiming = false;
-}
-
-void Game::update_weapon() {
-    std::lock_guard<std::mutex> lock(m);
-    for (auto& [id, player]: players_stats) {
-        if (player->aiming) {
-            player->change_aim_direction();
-        }
-        if (player->charging_shoot) {
-            player->change_fire_power();
-        }
-    }
 }
 
 void Game::player_start_charging(const uint8_t id) {
@@ -208,6 +197,50 @@ void Game::player_shoot(const uint8_t id) {
     players_stats.at(id)->weapon_power = 0;
 }
 
-void Game::add_projectile(std::shared_ptr<Projectile> proyectile) {
-    projectiles.push_back(proyectile);
+// -------------- Update States -------------------
+
+void Game::update_weapon() {
+    std::lock_guard<std::mutex> lock(m);
+    for (auto& [id, player]: players_stats) {
+        if (player->aiming) {
+            player->change_aim_direction();
+        }
+        if (player->charging_shoot) {
+            player->change_fire_power();
+        }
+    }
 }
+
+void Game::update_physics() {
+    std::lock_guard<std::mutex> lock(m);
+    for (auto& [id, player]: players_stats) {
+        player->check_jumping();
+        if (!player->is_walking && !player->is_jumping && !player->is_backflipping) {
+            player->stop();
+        } else if (player->is_walking) {
+            player->move();
+        }
+    }
+}
+
+
+
+
+
+
+Game::~Game() {
+    spdlog::get("server")->debug("Joineando gameloop");
+    if (need_to_join_loop) {
+        gameloop.join();
+    }
+}
+
+void Game::remove_box2d_entities() {
+    battlefield.destroy_dead_entities();
+}
+
+
+
+
+
+

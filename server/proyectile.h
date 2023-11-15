@@ -14,17 +14,14 @@ class Battlefield;
 
 class Projectile : public Entity{
 private:
-    b2Body* projectile;
     WeaponsAndTools type;
-
 public:
 
     explicit Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTools type);
 
     void set_power(b2Vec2 power);
     std::shared_ptr<ProjectileStateG> get_proyectile_state();
-    void remove() override;
-    bool life_end() override;
+    bool still_alive() override;
     ~Projectile() = default;
 };
 

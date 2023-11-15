@@ -9,7 +9,7 @@ TexturesPool::TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer) :
 }
 
 void TexturesPool::load_worm_textures() {
-    /// Loads all the worm textures and enables alpha blending
+    /// Loads all the body textures and enables alpha blending
     textures.insert({Actors::WORM, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/worms/worm-left.png")
                                                                                                                  .SetColorKey(true, 0x000000))});
     textures[Actors::WORM]->SetBlendMode(SDL_BLENDMODE_BLEND);

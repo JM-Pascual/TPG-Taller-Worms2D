@@ -6,7 +6,7 @@
 #include <list>
 
 #include "../common/const.h"
-#include "box2d/box2d.h"
+#include <box2d/box2d.h>
 #include "weapon.h"
 #include "entity.h"
 
@@ -19,13 +19,11 @@
 #define ARM_LENGHT ((WIDTH/2) + 1)
 
 #define POWER_RAISE 1
+#define MAX_POWER 10
 #define ANGLE_VARIATION (b2_pi/64)
 
 #define INCLINACION_MAX (b2_pi/2)
 #define INCLINACION_MIN (-b2_pi/2)
-
-#define CATEGORY_BITS 0x002
-
 
 class Game;
 class Weapon;
@@ -37,7 +35,6 @@ class Player : public Entity{
 private:
 
 
-    b2Body* worm;
     float life;
     //std::map<WeaponsAndTools,Weapon >Weapons;
     Weapon* weapon;
@@ -80,11 +77,12 @@ public:
 
 
     void shoot_aim_weapon(std::shared_ptr<Projectile> projectile);
-    void use_throwable();
-    void use_clickeable_gadget();
+    //void use_throwable();
+    //void use_clickeable_gadget();
 
-    void remove() override;
-    bool life_end() override;
+    bool still_alive() override;
+
+    virtual ~Player() = default;
 
     friend class Game;
 };
