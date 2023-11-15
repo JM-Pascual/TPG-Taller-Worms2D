@@ -103,8 +103,8 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<States>& ps) {
     send(&p->facing_right, sizeof(bool));
     send(&p->was_hit,sizeof(bool));
     this->sendFloat(p->aim_inclination_degrees);
-    this->sendFloat(p->life);
     send(&p->charging_weapon, sizeof(bool));
+    this->sendFloat(p->life);
 }
 
 void ServerSide::Protocol::sendGameInfo(const std::shared_ptr<States>& count) {

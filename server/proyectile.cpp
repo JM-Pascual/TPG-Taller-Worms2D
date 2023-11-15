@@ -71,9 +71,12 @@ void Projectile::applyBlastImpulse(b2Body *body, b2Vec2 blastCenter, b2Vec2 appl
     b2Vec2 blastDir = applyPoint - blastCenter;
     float distance = blastDir.Normalize();
     //ignore bodies exactly at the blast point - blast direction is undefined
+    if ( distance == 0) // Ahora veo si lo hago
+        return;
+
 
     float invDistance = 1 / distance;
-    float impulseMag = blastPower * invDistance * invDistance;
+    float impulseMag = blastPower * invDistance;
     body->ApplyLinearImpulse(impulseMag * blastDir, applyPoint,true);
     }
 

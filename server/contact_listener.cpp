@@ -18,13 +18,6 @@ void Contact_listener::BeginContact(b2Contact *contact) {
     if (dataA && dataB){
         dataA->start_contact();
         dataB->start_contact();
-
-        if(!dataA->still_alive()){
-            dead_list.push_back(dataA);
-        }
-        if(!dataB->still_alive()){
-            dead_list.push_back(dataB);
-        }
     }
     //Lo que quiero hacer es que si el contacto es entre una bazooka y un body lo que tiene que pasar es poner un booleano en la bazooka
     //avisando si esta colisionando o no y aplicar un metodo en el cual genero la explosión con las caracteristicas esperadas
@@ -34,14 +27,8 @@ void Contact_listener::EndContact(b2Contact *contact) {
     auto contact2 = contact->GetFixtureB()->GetBody()->GetUserData().pointer;
     auto contact1 = contact->GetFixtureA()->GetBody()->GetUserData().pointer;
 
-
-    // Access user data from fixtures.
     auto* dataB = reinterpret_cast<Entity*>(contact2);
-    auto* dataA = reinterpret_cast<Entity*>(contact1); //Todo ver bien el tema del casteo
-
-
-    //Seteo que se terminó la colisión
-
+    auto* dataA = reinterpret_cast<Entity*>(contact1);
 
     //Ahora lo que hago es meter aquellos cuerpos en una lista que quiero que sean descartados
     //Tengo que ver primero que tipo de dato es:
@@ -49,13 +36,27 @@ void Contact_listener::EndContact(b2Contact *contact) {
     //  -En el caso de que sea un body recién se va a eliminar una vez que no tenga más vida
     //  -En el caso de la barra no importa si recibe una colisión, nunca la agrego a la lista
     if (dataA && dataB) {
+
+        if(!dataA->still_alive()){
+            dead_list.push_back(dataA);
+        }
+        if(!dataB->still_alive()){
+            dead_list.push_back(dataB);
+        }
         dataA->end_contact();
         dataB->end_contact();
     }
 }
 
 void Contact_listener::PreSolve(b2Contact *contact, const b2Manifold *oldManifold) {
-    b2ContactListener::PreSolve(contact, oldManifold);
+    auto contact2 = contact->GetFixtureB()->GetBody()->GetUserData().pointer;
+    auto contact1 = contact->GetFixtureA()->GetBody()->GetUserData().pointer;
+
+    auto* dataB = reinterpret_cast<Entity*>(contact2);
+    auto* dataA = reinterpret_cast<Entity*>(contact1);
+
+    dataA->execute_collision_reaction();
+    dataB->execute_collision_reaction();
 }
 
 void Contact_listener::PostSolve(b2Contact *contact, const b2ContactImpulse *impulse) {
