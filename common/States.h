@@ -75,6 +75,13 @@ public:
     ~ProjectileStateG() override = default;
 };
 
+class PlayerTurn: public States {
+public:
+    const uint8_t is_your_turn;
+
+    explicit PlayerTurn(const bool& is_your_turn):
+            States(StatesTag::PLAYER_TURN), is_your_turn(is_your_turn) {}
+};
 
 // --------------- COUNT STATES ----------------------
 
@@ -133,5 +140,6 @@ class ConnectionError: public CountState {
 public:
     ConnectionError(): CountState(StatesTag::CONNECTION_ERROR_STATE, CONNECTION_ERROR) {}
 };
+
 
 #endif  // STATES_H

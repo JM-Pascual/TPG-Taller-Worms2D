@@ -32,7 +32,6 @@ private:
     GameLoop gameloop;
     bool need_to_join_loop;
 
-
     void build_game_state(std::list<std::shared_ptr<States>>& states_list);
 
     bool non_locking_is_playing();
@@ -65,6 +64,10 @@ public:
     bool is_playing();
 
     void set_player_ready(uint8_t id);
+
+    const uint8_t broadcast_turn(const uint8_t& player_turn);
+
+    const uint8_t players_alive();
 
     // temp protocol
     void player_start_moving(const Direction& direction, uint8_t id);

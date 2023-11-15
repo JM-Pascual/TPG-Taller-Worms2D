@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+#include "../common/States.h"
+
 #include "Player.h"
 
 void BroadCaster::add_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue) {
@@ -46,4 +48,24 @@ void BroadCaster::remove_closed_clients(uint8_t& ready_count,
 void BroadCaster::removePlayer(const uint8_t& player_id) {
     std::lock_guard<std::mutex> lock(m);
     broadcast_map.erase(player_id);
+}
+
+void BroadCaster::broadcast_turn(const uint8_t& player_turn) {
+    std::lock_guard<std::mutex> lock(m);
+
+    auto it = broadcast_map.begin();
+    for (uint8_t i = 0; i < broadcast_map.size(); i++) {
+        try {
+            std::advance(it, i);
+            if (i == player_turn) {
+                it->second->push(std::make_shared<PlayerTurn>(IS_YOUR_TURN));
+                continue;
+            }
+
+            it->second->push(std::make_shared<PlayerTurn>(NOT_YOUR_TURN));
+
+        } catch (const ClosedQueue& e) {  // Se ignoran queues cerradas, luego se eliminan
+            continue;
+        }
+    }
 }

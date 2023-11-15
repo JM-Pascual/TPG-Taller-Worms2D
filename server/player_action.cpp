@@ -8,7 +8,7 @@
 
 // ----------------------- NULL_COMMAND ----------------------
 
-void NullCommand::execute(Game& game) {}
+void NullCommand::execute(Game& game, const uint8_t& turn_id) {}
 
 void NullCommand::execute() {}
 
@@ -18,13 +18,25 @@ StartMoving::StartMoving(ServerSide::Protocol& protocol, const uint8_t id): Play
     protocol.recvDirection(this->direction);
 }
 
-void StartMoving::execute(Game& game) { game.player_start_moving(direction, id); }
+void StartMoving::execute(Game& game, const uint8_t& turn_id) {
+    if (turn_id != this->id) {
+        return;
+    }
+
+    game.player_start_moving(direction, id);
+}
 
 // ----------------------- STOP MOVING ----------------------
 
 StopMoving::StopMoving(const uint8_t id): PlayerAction(id) {}
 
-void StopMoving::execute(Game& game) { game.player_stop_moving(id); }
+void StopMoving::execute(Game& game, const uint8_t& turn_id) {
+    if (turn_id != this->id) {
+        return;
+    }
+
+    game.player_stop_moving(id);
+}
 
 
 // ----------------------- JUMP ----------------------
@@ -33,7 +45,13 @@ Jump::Jump(ServerSide::Protocol& protocol, const uint8_t id): PlayerAction(id) {
     protocol.recvJumpDir(this->direction);
 }
 
-void Jump::execute(Game& game) { game.player_jump(direction, id); }
+void Jump::execute(Game& game, const uint8_t& turn_id) {
+    if (turn_id != this->id) {
+        return;
+    }
+
+    game.player_jump(direction, id);
+}
 
 // ---------------------------- ADSAngle ------------------
 
@@ -41,25 +59,49 @@ ADSAngle::ADSAngle(ServerSide::Protocol& protocol, const uint8_t id): PlayerActi
     protocol.recvADSAngleDir(this->direction);
 }
 
-void ADSAngle::execute(Game& game) { game.player_start_aiming(direction, id); }
+void ADSAngle::execute(Game& game, const uint8_t& turn_id) {
+    if (turn_id != this->id) {
+        return;
+    }
+
+    game.player_start_aiming(direction, id);
+}
 
 // -------------------------- STOP ADS ---------------
 
 StopADSAngle::StopADSAngle(const uint8_t id): PlayerAction(id) {}
 
-void StopADSAngle::execute(Game& game) { game.player_stop_aiming(id); }
+void StopADSAngle::execute(Game& game, const uint8_t& turn_id) {
+    if (turn_id != this->id) {
+        return;
+    }
+
+    game.player_stop_aiming(id);
+}
 
 // ---------------------------- FIRE POWER ------------------
 
 FirePower::FirePower(const uint8_t id): PlayerAction(id) {}
 
-void FirePower::execute(Game& game) { game.player_start_charging(id); }
+void FirePower::execute(Game& game, const uint8_t& turn_id) {
+    if (turn_id != this->id) {
+        return;
+    }
+
+    game.player_start_charging(id);
+}
 
 // ---------------------------- SHOOT ------------------
 
 Shoot::Shoot(const uint8_t id): PlayerAction(id) {}
 
-void Shoot::execute(Game& game) { game.player_shoot(id); }
+void Shoot::execute(Game& game, const uint8_t& turn_id) {
+    if (turn_id != this->id) {
+        return;
+    }
+
+    game.player_shoot(id);
+}
 
 // ---------------------------- DELAY ------------------
 
@@ -67,7 +109,11 @@ Delay::Delay(ServerSide::Protocol& protocol, const uint8_t id): PlayerAction(id)
     protocol.recvDelay(this->amount);
 }
 
-void Delay::execute(Game& game) {}
+void Delay::execute(Game& game, const uint8_t& turn_id) {
+    if (turn_id != this->id) {
+        return;
+    }
+}
 
 // ---------------------------- CHANGE GADGET ------------------
 
@@ -75,7 +121,11 @@ ChangeGadget::ChangeGadget(ServerSide::Protocol& protocol, const uint8_t id): Pl
     protocol.recvGadget(this->gadget);
 }
 
-void ChangeGadget::execute(Game& game) {}
+void ChangeGadget::execute(Game& game, const uint8_t& turn_id) {
+    if (turn_id != this->id) {
+        return;
+    }
+}
 
 // ----------------------- JOIN ----------------------
 

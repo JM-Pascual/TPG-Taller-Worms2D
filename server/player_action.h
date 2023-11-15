@@ -28,7 +28,7 @@ public:
     explicit PlayerAction(const uint8_t id): id(id) {}
 
     // Da la interfaz para ejecutar el comando
-    virtual void execute(Game& game) = 0;
+    virtual void execute(Game& game, const uint8_t& turn_id) = 0;
 
     virtual ~PlayerAction() = default;
 };
@@ -45,7 +45,7 @@ public:
     explicit StartMoving(ServerSide::Protocol& protocol, const uint8_t id);
 
     // Delega al servidor el movimiento del gusano
-    void execute(Game& game) override;
+    void execute(Game& game, const uint8_t& turn_id) override;
 
     ~StartMoving() override = default;
 };
@@ -58,7 +58,7 @@ public:
     explicit StopMoving(const uint8_t id);
 
     // Delega al servidor el movimiento del gusano
-    void execute(Game& game) override;
+    void execute(Game& game, const uint8_t& turn_id) override;
 
     ~StopMoving() override = default;
 };
@@ -72,7 +72,7 @@ private:
 public:
     explicit Jump(ServerSide::Protocol& protocol, const uint8_t id);
 
-    void execute(Game& game) override;
+    void execute(Game& game, const uint8_t& turn_id) override;
 
     ~Jump() override = default;
 };
@@ -86,7 +86,7 @@ private:
 public:
     explicit ADSAngle(ServerSide::Protocol& protocol, uint8_t id);
 
-    void execute(Game& game) override;
+    void execute(Game& game, const uint8_t& turn_id) override;
 
     ~ADSAngle() override = default;
 };
@@ -97,7 +97,7 @@ class StopADSAngle: public PlayerAction {
 public:
     explicit StopADSAngle(uint8_t id);
 
-    void execute(Game& game) override;
+    void execute(Game& game, const uint8_t& turn_id) override;
 
     ~StopADSAngle() override = default;
 };
@@ -108,7 +108,7 @@ class FirePower: public PlayerAction {
 public:
     explicit FirePower(const uint8_t id);
 
-    void execute(Game& game) override;
+    void execute(Game& game, const uint8_t& turn_id) override;
 
     ~FirePower() = default;
 };
@@ -119,7 +119,7 @@ class Shoot: public PlayerAction {
 public:
     explicit Shoot(const uint8_t id);
 
-    void execute(Game& game) override;
+    void execute(Game& game, const uint8_t& turn_id) override;
 
     ~Shoot() = default;
 };
@@ -133,7 +133,7 @@ private:
 public:
     explicit Delay(ServerSide::Protocol& protocol, const uint8_t id);
 
-    void execute(Game& game) override;
+    void execute(Game& game, const uint8_t& turn_id) override;
 
     ~Delay() = default;
 };
@@ -147,7 +147,7 @@ private:
 public:
     explicit ChangeGadget(ServerSide::Protocol& protocol, const uint8_t id);
 
-    void execute(Game& game) override;
+    void execute(Game& game, const uint8_t& turn_id) override;
 
     ~ChangeGadget() = default;
 };
@@ -254,7 +254,7 @@ public:
     NullCommand(): PlayerAction(0) {}
 
     // Comportamiento nulo
-    void execute(Game& game) override;
+    void execute(Game& game, const uint8_t& turn_id) override;
 
     // Comportamiento nulo
     void execute() override;

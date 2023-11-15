@@ -49,9 +49,9 @@ private:
 
     void sendPlayerLobby(const std::shared_ptr<States>& count);
 
-    void sendID(const std::shared_ptr<States>& state);
-
     void sendProjectileState(const std::shared_ptr<States>& ps);
+
+    void sendTurn(const std::shared_ptr<States>& state);
 
 public:
     void sendStates(const std::shared_ptr<States>& state);

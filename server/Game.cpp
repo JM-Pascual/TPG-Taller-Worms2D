@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include <algorithm>
+#include <numeric>
 #include <utility>
 
 #include <spdlog/spdlog.h>
@@ -13,7 +14,7 @@ void Game::build_game_state(std::list<std::shared_ptr<States>>& states_list) {
     states_list.push_back(std::make_shared<PlayerCountG>(players_stats.size()));
 
     std::transform(players_stats.begin(), players_stats.end(), std::back_inserter(states_list),
-                   [&](std::pair<uint8_t, Player> player) {
+                   [](const std::pair<uint8_t, Player>& player) {
                        return std::make_shared<PlayerStateG>(
                                player.second.worm->GetPosition().x,
                                player.second.worm->GetPosition().y, player.second.is_walking,
@@ -37,7 +38,7 @@ void Game::notifyLobbyState() {
     lobby_state_list.push_back(std::make_shared<PlayerCountL>(players_stats.size()));
 
     std::transform(players_stats.begin(), players_stats.end(), std::back_inserter(lobby_state_list),
-                   [&](std::pair<uint8_t, Player> player) {
+                   [](const std::pair<uint8_t, Player>& player) {
                        return std::make_shared<PlayerStateL>(player.second.ready, player.first);
                    });
 
@@ -118,6 +119,28 @@ void Game::set_player_ready(const uint8_t id) {
         gameloop.start();
         need_to_join_loop = true;
     }
+}
+
+const uint8_t Game::broadcast_turn(const uint8_t& player_turn) {
+    std::lock_guard<std::mutex> lock(m);
+
+    // Enviar solo si cambio el turno (o sea reseteo el timer)
+    broadcaster.broadcast_turn(player_turn);
+
+
+    auto it = players_stats.begin();
+    std::advance(it, player_turn);
+    return it->first;  // Retorno la id del jugador el cual es su turno
+}
+
+const uint8_t Game::players_alive() {
+    std::lock_guard<std::mutex> lock(m);
+    uint8_t players_alive = std::accumulate(players_stats.begin(), players_stats.end(), 0,
+                                            [](int sum, const std::pair<uint8_t, Player>& player) {
+                                                return sum + player.second.is_playing;
+                                            });
+
+    return players_alive;
 }
 
 void Game::player_start_moving(const Direction& direction, const uint8_t id) {
