@@ -101,6 +101,9 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
         case StatesTag::PLAYER_COUNT_G:
             return std::make_shared<PlayerCountG>(recvUint8());
 
+        case StatesTag::PLAYER_TURN:
+            return std::make_shared<PlayerTurn>(recvUint8());
+
         default:
             return std::make_shared<PlayerCountG>(recvUint8());  // ToDo placeholder para un default
     }
