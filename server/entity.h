@@ -15,8 +15,9 @@ public:
     Entity();
     void start_contact();
     void end_contact();
-    void remove_entity(Battlefield* battlefield);
+    void remove_entity(Battlefield *battlefield); //todo ver si esta bien que sea un puntero
     virtual bool still_alive() = 0; //todo cambiar el nombre
+    virtual void execute_collision_reaction(Battlefield& battlefield) = 0;
     ~Entity() = default;
 };
 

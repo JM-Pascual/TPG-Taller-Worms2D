@@ -18,3 +18,7 @@ Bar::Bar(Battlefield& battlefield) {
 bool Bar::still_alive() {
     return alive;
 }
+
+void Bar::execute_collision_reaction(Battlefield &battlefield) {
+
+}

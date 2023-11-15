@@ -28,6 +28,7 @@ private:
 public:
     Battlefield();
     b2Body* add_body(b2BodyDef& bodyDef);
+    void add_query_AABB(b2QueryCallback* callback, const b2AABB& aabb);
     void step();
     void destroy_body(b2Body* bodyDef);
     void destroy_dead_entities();

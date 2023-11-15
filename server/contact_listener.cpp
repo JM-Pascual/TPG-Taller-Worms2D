@@ -55,7 +55,7 @@ void Contact_listener::EndContact(b2Contact *contact) {
 }
 
 void Contact_listener::PreSolve(b2Contact *contact, const b2Manifold *oldManifold) {
-    //b2ContactListener::PreSolve(contact, oldManifold);
+    b2ContactListener::PreSolve(contact, oldManifold);
 }
 
 void Contact_listener::PostSolve(b2Contact *contact, const b2ContactImpulse *impulse) {

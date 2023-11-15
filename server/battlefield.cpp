@@ -41,4 +41,8 @@ void Battlefield::clean_dead_entities() {
     listener->dead_list.clear();
 }
 
+void Battlefield::add_query_AABB(b2QueryCallback* callback, const b2AABB& aabb) {
+    world->QueryAABB(callback,aabb);
+}
+
 

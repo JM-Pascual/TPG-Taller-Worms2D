@@ -142,6 +142,10 @@ bool Player::still_alive() {
     return alive;
 }
 
+void Player::execute_collision_reaction(Battlefield &battlefield) {
+
+}
+
 
 
 

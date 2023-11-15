@@ -81,6 +81,7 @@ public:
     //void use_clickeable_gadget();
 
     bool still_alive() override;
+    void execute_collision_reaction(Battlefield& battlefield) override;
 
     virtual ~Player() = default;
 
