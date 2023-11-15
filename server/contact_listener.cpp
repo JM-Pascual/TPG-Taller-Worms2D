@@ -37,18 +37,14 @@ void Contact_listener::EndContact(b2Contact *contact) {
     //  -En el caso de la barra no importa si recibe una colisión, nunca la agrego a la lista
     if (dataA && dataB) {
 
-        if(!dataA->still_alive()){
-            dead_list.push_back(dataA);
-        }
-        if(!dataB->still_alive()){
-            dead_list.push_back(dataB);
-        }
         dataA->end_contact();
         dataB->end_contact();
     }
 }
 
 void Contact_listener::PreSolve(b2Contact *contact, const b2Manifold *oldManifold) {
+    b2ContactListener::PreSolve(contact, oldManifold);
+    /*
     auto contact2 = contact->GetFixtureB()->GetBody()->GetUserData().pointer;
     auto contact1 = contact->GetFixtureA()->GetBody()->GetUserData().pointer;
 
@@ -57,9 +53,25 @@ void Contact_listener::PreSolve(b2Contact *contact, const b2Manifold *oldManifol
 
     dataA->execute_collision_reaction();
     dataB->execute_collision_reaction();
+     */
 }
 
 void Contact_listener::PostSolve(b2Contact *contact, const b2ContactImpulse *impulse) {
-    b2ContactListener::PostSolve(contact, impulse);
+
+    auto contact2 = contact->GetFixtureB()->GetBody()->GetUserData().pointer;
+    auto contact1 = contact->GetFixtureA()->GetBody()->GetUserData().pointer;
+
+    auto* dataB = reinterpret_cast<Entity*>(contact2);
+    auto* dataA = reinterpret_cast<Entity*>(contact1);
+
+    if (dataA && dataB) {
+
+        if(!dataA->still_alive()){
+            dead_list.push_back(dataA);
+        }
+        if(!dataB->still_alive()){
+            dead_list.push_back(dataB);
+        }
+    }
 }
 
