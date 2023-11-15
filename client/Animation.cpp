@@ -9,10 +9,9 @@
 #include "Animation.h"
 
 Animation::Animation(std::shared_ptr<SDL2pp::Texture> &texture,
-                     unsigned int frames_in_texture, unsigned int delay_in_animation,
-                     bool loop) :
+                     unsigned int frames_in_texture, unsigned int delay_in_animation, bool loop) :
                                                   texture(texture), numFrames(frames_in_texture),
-                                                  size(this->texture->GetHeight() / numFrames), elapsed(0.0f),
+                                                  size(this->texture->GetHeight() / numFrames),
                                                   currentFrame(0), delay(delay_in_animation),
                                                   loop_animation(loop), counter(0) {
     assert(this->numFrames > 0);

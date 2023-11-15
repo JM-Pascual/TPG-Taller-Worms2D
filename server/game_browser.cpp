@@ -50,8 +50,8 @@ void GameBrowser::removePlayer(const uint8_t& player_id, const uint8_t& game_id)
 
 Queue<std::shared_ptr<PlayerAction>>& GameBrowser::getQueue(const uint8_t& game_id) {
     std::unique_lock<std::mutex> lck(m);
-    if (games.count(game_id) == 1 ? games.at(game_id)->is_playing() : false)
-        return games.at(game_id)->get_action_queue();
+    if (games.count(game_id) == 1 && games.at(game_id)->is_playing())
+        return (games.at(game_id)->get_action_queue());
     throw NonExistingQueue();
 }
 
@@ -76,7 +76,7 @@ void GameBrowser::set_player_ready(const uint8_t id, const uint8_t id_game) {
 
 const bool GameBrowser::game_started_playing(const uint8_t game_id) {
     std::unique_lock<std::mutex> lck(m);
-    return (games.count(game_id) == 1 ? games.at(game_id)->is_playing() : false);
+    return (games.count(game_id) == 1 && games.at(game_id)->is_playing());
     // Si el juego existe retorna si estan jugando, false en otro caso
 }
 

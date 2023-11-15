@@ -8,16 +8,14 @@
 
 #include "../common/States.h"
 #include "../common/const.h"
-
-#include "battlefield.h"
+#include "entity.h"
 
 class Battlefield;
 
-class Projectile {
+class Projectile : public Entity{
 private:
     b2Body* projectile;
     WeaponsAndTools type;
-    bool impacted;
 
 public:
     const GameEntity entity;
@@ -27,6 +25,7 @@ public:
 
     void set_power(b2Vec2 power);
     std::shared_ptr<ProjectileStateG> get_proyectile_state();
+    ~Projectile() = default;
 };
 
 

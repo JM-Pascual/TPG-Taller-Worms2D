@@ -21,12 +21,24 @@ void TexturesPool::load_worm_textures() {
     textures.insert({Actors::BACKFLIP_WORM, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/worms/worm-backflip.png")
                                                                                                   .SetColorKey(true, 0x000000))});
     textures[Actors::BACKFLIP_WORM]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    /// Loads all the worm weapon holding textures and enables alpha blending (If neccesary)
+    textures.insert({Actors::WORM_DRAW_BAZOOKA, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/worms/worm-bazooka-draw.png"))});
+    textures.insert({Actors::WORM_HOLDING_BAZOOKA, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/worms/worm-bazooka-straight.png"))});
 }
 
 void TexturesPool::load_weapon_textures() {
-    textures.insert({Actors::BAZOOKA_PROYECTILE, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/bazooka-missile2.png"))});
+    textures.insert({Actors::CROSSHAIR, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/crosshair.png")
+                                                                                               .SetColorKey(true, 0x000000))});
 
-    //textures[Actors::BAZOOKA_PROYECTILE]->SetBlendMode(SDL_BLENDMODE_BLEND);
+    textures[Actors::CROSSHAIR]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    textures.insert({Actors::POWER_CHARGE_BAR, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/loading-shot.png")
+                                                                                                       .SetColorKey(true, 0x000000))});
+
+    textures[Actors::POWER_CHARGE_BAR]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    textures.insert({Actors::BAZOOKA_PROYECTILE, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/bazooka-missile2.png"))});
 
     textures.insert({Actors::BAZOOKA_EXPLOSION, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/bazooka-explosion.png")
                                                                                                         .SetColorKey(true, 0x000000))});
@@ -51,7 +63,7 @@ void TexturesPool::load_level_textures() {
 
 void TexturesPool::load_water_textures(){
     /// Loads all the water textures and enables alpha blending
-    textures.insert({Actors::WATER, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/blue-water-sprites/new_blue_concat2.png")
+    textures.insert({Actors::WATER, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/blue-water-sprites/blue_water.png")
                                                                                            .SetColorKey(true, 0x000000))});
     textures[Actors::WATER]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }

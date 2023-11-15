@@ -1,5 +1,5 @@
 #include "Player.h"
-#include <iostream>
+#include "battlefield.h"
 
 
 //ToDo Hardocdeado para que los worms aparezcan en la mitad del mapa
@@ -11,7 +11,8 @@ Player::Player(Battlefield& battlefield): facing_right(true), is_walking(false),
     wormDef.type = b2_dynamicBody;
     wormDef.position.Set(5.0f, 21.6f); //Ahora la harcodeo, pero tiene que cambiar
     wormDef.allowSleep = true;
-    wormDef.userData.pointer = static_cast<uintptr_t>(entity);
+    wormDef.userData.pointer = reinterpret_cast<uintptr_t>(this); //Todo ver si funciona
+
 
     worm = battlefield.add_body(wormDef);
 
@@ -21,7 +22,7 @@ Player::Player(Battlefield& battlefield): facing_right(true), is_walking(false),
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &wormBox;
     fixtureDef.density = 3.0f;
-    fixtureDef.restitution = 0;
+
 
     //fixtureDef.filter.groupIndex = -1; //Todo tengo que ver como seteo cada una de las balas para que pueda colisionar con los gusanos
 
@@ -36,7 +37,7 @@ void Player::set_ready() { ready = !ready; }
 
 void Player::move() {
     b2Vec2 vel = worm->GetLinearVelocity();
-    vel.x = 0.2f * (std::pow(-1, 1 - facing_right) / TICK_RATE) * 400;
+    vel.x = 0.2f * (std::pow(-1, 1 - facing_right) / TICK_RATE) * 400; //todo no se porque si encapsulo no funciona
     worm->SetLinearVelocity(vel);  // Esto tengo que ver si esta bien, se ve cuando lo corra
 }
 
@@ -49,7 +50,7 @@ void Player::stop() {
 void Player::jump(const JumpDir& direction) {
     switch (direction) {
         case (JumpDir::FRONT):
-            worm->ApplyLinearImpulseToCenter(b2Vec2(std::pow(-1, 1 - facing_right) * 20,20), true);
+            worm->ApplyLinearImpulseToCenter(b2Vec2((facing_factor() * 20),20), true);
             is_jumping = true;
             break;
         case (JumpDir::BACK):
@@ -70,49 +71,56 @@ void Player::check_jumping() {
 }
 
 void Player::change_aim_direction() {
-    if(!aiming){
+    if (!aiming) {
         return;
     }
 
-    switch(aim_direction){
+    switch (aim_direction) {
 
         case ADSAngleDir::UP:
-            aim_inclination_degrees += ANGLE_VARIATION;
+
+            if (aim_inclination_degrees <= INCLINACION_MAX) {
+                aim_inclination_degrees += ANGLE_VARIATION;
+            }
             break;
         case ADSAngleDir::DOWN:
-            aim_inclination_degrees -= ANGLE_VARIATION;
+
+            if (aim_inclination_degrees >= INCLINACION_MIN) {
+                aim_inclination_degrees -= ANGLE_VARIATION;
+            }
             break;
+            }
     }
-}
+
+
 
 void Player::change_fire_power() {
     if(charging_shoot){
         weapon_power += POWER_RAISE;
-        std::cout << weapon_power << std::endl;
     }
 }
 
-void Player::shoot(Battlefield& battlefield) {
-    weapon->execute(battlefield,*this);
+void Player::shoot(Game& game, Battlefield& battlefield) {
+    weapon->execute(game,battlefield,*this);
 }
 
 b2Vec2 Player::set_bullet_power() {
     //Fuerza que se le aplica a la bala
     // f_x = fuerza_total * cos(ang_rad * pi/180)
     // f_y = fuerza_total * sen(ang_rad * pi/180)
-    b2Vec2 bullet_position;
-    bullet_position.x = (weapon_power * cos(aim_inclination_degrees /* * (b2_pi / 180)*/));
-    bullet_position.y = (weapon_power * sin(aim_inclination_degrees /* * (b2_pi / 180))*/));
-    return bullet_position;
+    b2Vec2 bullet_power;
+    bullet_power.x = (weapon_power * facing_factor()) * cosf(aim_inclination_degrees);
+    bullet_power.y = (weapon_power) * sinf(aim_inclination_degrees);
+    return bullet_power;
 }
 
 b2Vec2 Player::set_bullet_direction(){
     //Posición de la bala
-    // x = (worm.x + hip * cos(ang_rad * pi/18  0)
-    // y = (worm.y + hip * sen(ang_rad * pi/180)
+    // x = (worm.x + (hip * cos(ang_rad))
+    // y = (worm.y + (hip * sen(ang_rad))
     b2Vec2 bullet_position;
-    bullet_position.x = ((worm->GetPosition().x + ARM_LENGHT) * cosf(aim_inclination_degrees ));
-    bullet_position.y = ((worm->GetPosition().y + ARM_LENGHT) * sinf(aim_inclination_degrees ));
+    bullet_position.x = (worm->GetPosition().x + (facing_factor()) * ARM_LENGHT * cosf(aim_inclination_degrees));
+    bullet_position.y = (worm->GetPosition().y + (ARM_LENGHT * sinf(aim_inclination_degrees)));
     return bullet_position;
 
 }
@@ -123,6 +131,10 @@ float Player::set_bullet_angle() {
 
 void Player::shoot_aim_weapon(std::shared_ptr<Projectile> projectile) {
     projectile->set_power(set_bullet_power());
+}
+
+int Player::facing_factor() {
+    return (std::pow(-1, 1 - facing_right));
 }
 
 

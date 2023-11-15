@@ -1,5 +1,5 @@
-#ifndef TEXTURESSINGLETON_H
-#define TEXTURESSINGLETON_H
+#ifndef TEXTURESPOOL_H
+#define TEXTURESPOOL_H
 
 #include <SDL2pp/SDL2pp.hh>
 #include <memory>
@@ -24,4 +24,4 @@ public:
 };
 
 
-#endif  // TEXTURESSINGLETON_H
+#endif  // TEXTURESPOOL_H

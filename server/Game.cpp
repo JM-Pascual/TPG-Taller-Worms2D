@@ -18,12 +18,13 @@ void Game::build_game_state(std::list<std::shared_ptr<States>>& states_list) {
                                player.second.worm->GetPosition().x,
                                player.second.worm->GetPosition().y, player.second.is_walking,
                                player.second.is_jumping, player.second.is_backflipping,
-                               player.second.facing_right, player.second.aim_inclination_degrees);
+                               player.second.facing_right, player.second.collide,
+                               player.second.aim_inclination_degrees, player.second.charging_shoot);
                    });
 
-    states_list.push_back(std::make_shared<ProjectileCountG>(battlefield.projectiles.size()));
+    states_list.push_back(std::make_shared<ProjectileCountG>(projectiles.size()));
 
-    std::transform(battlefield.projectiles.begin(), battlefield.projectiles.end(),
+    std::transform(projectiles.begin(), projectiles.end(),
                    std::back_inserter(states_list),
                    [&](auto projectile) { return projectile->get_proyectile_state(); });
 }
@@ -125,6 +126,7 @@ void Game::player_start_moving(const Direction& direction, const uint8_t id) {
     players_stats.at(id).is_walking = true;
     players_stats.at(id).facing_right = (bool)direction;
     players_stats.at(id).move();
+
 }
 
 void Game::player_stop_moving(const uint8_t id) {
@@ -197,7 +199,11 @@ void Game::player_shoot(const uint8_t id) {
     players_stats.at(id).aiming = false;
     players_stats.at(id).charging_shoot = false;
 
-    players_stats.at(id).shoot(battlefield);
+    players_stats.at(id).shoot(*this,battlefield);
 
     players_stats.at(id).weapon_power = 0;
+}
+
+void Game::add_projectile(std::shared_ptr<Projectile> proyectile) {
+    projectiles.push_back(proyectile);
 }

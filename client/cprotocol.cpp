@@ -94,7 +94,6 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
         case StatesTag::PROJECTILE_G:
             return recvProjectileGame();
 
-
         case StatesTag::PROJECTILE_COUNT_G:
             return std::make_shared<ProjectileCountG>(recvUint8());
 
@@ -143,9 +142,12 @@ std::shared_ptr<PlayerStateG> ClientSide::Protocol::recvPlayerGame() {
     bool is_jumping = recvBool();
     bool is_backflipping = recvBool();
     bool direction = recvBool();
-    float aim_inclination = (recvFloat());
-    return std::make_shared<PlayerStateG>(x, y, is_wa, is_jumping, is_backflipping, direction,
-                                          aim_inclination);
+    bool was_hit = recvBool();
+    float aim_inclination = recvFloat();
+    bool charging_weapon = recvBool();
+
+    return std::make_shared<PlayerStateG>(x, y, is_wa, is_jumping, is_backflipping, direction, was_hit,
+                                          aim_inclination, charging_weapon);
 }
 
 std::shared_ptr<ProjectileStateG> ClientSide::Protocol::recvProjectileGame() {

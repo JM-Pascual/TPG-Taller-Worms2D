@@ -7,25 +7,31 @@
 
 #include "../common/const.h"
 #include "box2d/box2d.h"
-#include "battlefield.h"
 #include "weapon.h"
+#include "entity.h"
 
 #define TICK_RATE 30
-#define WIDTH 0.35f
-#define HEIGHT 0.75f
+#define WIDTH 0.9f
+#define HEIGHT 1.2f
 
-#define ARM_LENGHT ((HEIGHT/2) + 0.2)
+#define ARM_LENGHT ((WIDTH/2) + 1)
 
-#define POWER_RAISE 10
-#define ANGLE_VARIATION (b2_pi/32)
+#define POWER_RAISE 1
+#define ANGLE_VARIATION (b2_pi/64)
+
+#define INCLINACION_MAX (b2_pi/2)
+#define INCLINACION_MIN (-b2_pi/2)
 
 #define CATEGORY_BITS 0x002
 
 
 class Game;
 class Weapon;
+class Battlefield;
+class Projectile;
 
-class Player {
+
+class Player : public Entity{
 private:
 
     b2Body* worm;
@@ -45,6 +51,8 @@ private:
     bool charging_shoot;
     float weapon_power;
 
+    int facing_factor();
+
 public:
     const GameEntity entity;
 
@@ -56,7 +64,7 @@ public:
     void stop();
     void jump(const JumpDir& direction);
 
-    void shoot(Battlefield& battlefield);
+    void shoot(Game& game, Battlefield& battlefield);
 
     void change_aim_direction();
     void change_fire_power();
@@ -67,6 +75,8 @@ public:
     b2Vec2 set_bullet_direction();
     b2Vec2 set_bullet_power();
     float set_bullet_angle();
+
+
 
     void shoot_aim_weapon(std::shared_ptr<Projectile> projectile);
     void use_throwable();
