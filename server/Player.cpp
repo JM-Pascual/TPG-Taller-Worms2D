@@ -166,3 +166,11 @@ Player::Player(Player&& o):
     o.charging_shoot = false;
     o.weapon_power = 0.0f;
 }
+
+void Player::stop_all() {
+    is_walking = false;
+    is_jumping = false;
+    is_backflipping = false;
+    aiming = false;
+    charging_shoot = false;
+}

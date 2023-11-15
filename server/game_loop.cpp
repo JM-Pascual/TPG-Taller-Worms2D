@@ -25,6 +25,7 @@ void GameLoop::run() {
         turn_update = turn.update(game.players_alive(), elapsed_seconds);
 
         if (turn_update.second) {  // Si resetea el timer
+            game.stop_all_players();
             turn_id = game.broadcast_turn(turn_update.first);
         }
 

@@ -85,6 +85,8 @@ public:
     void player_start_charging(const uint8_t id);
     void player_shoot(const uint8_t id);
 
+    void stop_all_players();
+
     std::shared_ptr<GameInfoL> getInfo();
 
     ~Game();

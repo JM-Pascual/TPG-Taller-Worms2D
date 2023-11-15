@@ -57,6 +57,8 @@ public:
     void stop();
     void jump(const JumpDir& direction);
 
+    void stop_all();
+
     void shoot(Battlefield& battlefield);
 
     void change_aim_direction();
