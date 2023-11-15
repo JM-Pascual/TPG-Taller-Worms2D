@@ -124,13 +124,18 @@ void Game::set_player_ready(const uint8_t id) {
 const uint8_t Game::broadcast_turn(const uint8_t& player_turn) {
     std::lock_guard<std::mutex> lock(m);
 
-    // Enviar solo si cambio el turno (o sea reseteo el timer)
-    broadcaster.broadcast_turn(player_turn);
-
-
     auto it = players_stats.begin();
     std::advance(it, player_turn);
-    return it->first;  // Retorno la id del jugador el cual es su turno
+    uint8_t player_id = it->first;
+
+    // Enviar solo si cambio el turno (o sea reseteo el timer)
+    if (player_id != prev_player_turn_id) {
+        stop_all_players();
+        broadcaster.broadcast_turn(player_turn);
+    }
+
+    prev_player_turn_id = player_id;
+    return player_id;  // Retorno la id del jugador el cual es su turno
 }
 
 const uint8_t Game::players_alive() {

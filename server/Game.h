@@ -31,6 +31,8 @@ private:
     const uint8_t game_id;
     GameLoop gameloop;
     bool need_to_join_loop;
+    // int16_t para poder iniciarlo en -1 y que se tome bien el proximo turno
+    int16_t prev_player_turn_id;
 
     void build_game_state(std::list<std::shared_ptr<States>>& states_list);
 
@@ -46,7 +48,8 @@ public:
             map_name(map),
             game_id(game_id),
             gameloop(*this, this->game_id, erase_id_queue),
-            need_to_join_loop(false) {}
+            need_to_join_loop(false),
+            prev_player_turn_id(-1) {}
 
     Queue<std::shared_ptr<PlayerAction>>& get_action_queue();
 
