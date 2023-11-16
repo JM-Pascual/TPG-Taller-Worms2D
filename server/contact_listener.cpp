@@ -43,7 +43,7 @@ void Contact_listener::EndContact(b2Contact *contact) {
 
 void Contact_listener::PreSolve(b2Contact *contact, const b2Manifold *oldManifold) {
     b2ContactListener::PreSolve(contact, oldManifold);
-
+    /*
     auto contact2 = contact->GetFixtureB()->GetBody()->GetUserData().pointer;
     auto contact1 = contact->GetFixtureA()->GetBody()->GetUserData().pointer;
 
@@ -54,8 +54,7 @@ void Contact_listener::PreSolve(b2Contact *contact, const b2Manifold *oldManifol
         dataA->execute_collision_reaction();
         dataB->execute_collision_reaction();
     }
-
-
+     */
 }
 
 void Contact_listener::PostSolve(b2Contact *contact, const b2ContactImpulse *impulse) {
@@ -67,11 +66,11 @@ void Contact_listener::PostSolve(b2Contact *contact, const b2ContactImpulse *imp
     auto* dataA = reinterpret_cast<Entity*>(contact1);
 
     if (dataA && dataB) {
-
-        if(!dataA->still_alive()){
+        //Si estoy vivo pero no
+        if(!dataA->still_alive() && dataA->firts_contact()){
             dead_list.push_back(dataA);
         }
-        if(!dataB->still_alive()){
+        if(!dataB->still_alive() && dataB->firts_contact()){
             dead_list.push_back(dataB);
         }
     }

@@ -26,21 +26,17 @@ std::shared_ptr<ProjectileStateG> Projectile::get_proyectile_state() {
 
     float vel_angle = b2Atan2(body->GetLinearVelocity().y, body->GetLinearVelocity().x);
     return std::make_shared<ProjectileStateG>(
-            body->GetPosition().x, body->GetPosition().y, type, collide, vel_angle);
+            body->GetPosition().x, body->GetPosition().y, type, !alive, vel_angle);
 }
 
 void Projectile::set_power(b2Vec2 power) { body->ApplyLinearImpulseToCenter(power, true); }
 
 
 bool Projectile::still_alive() {
-    if(type == WeaponsAndTools::BAZOOKA){
-        if(collide && alive){
-            alive = false;
-        }else{
-            alive = true;
-        }
+    if(contact_points >= 1 && alive) {
+        alive = false;
     }
-    return  alive;
+    return alive;
 }
 
 //Este método lo tengo que llamar dentro de contact_listener

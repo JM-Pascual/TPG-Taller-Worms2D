@@ -18,7 +18,7 @@ void Game::build_game_state(std::list<std::shared_ptr<States>>& states_list) {
         states_list.push_back(std::make_shared<PlayerStateG>(
                 player.second->body->GetPosition().x, player.second->body->GetPosition().y,
                 player.second->is_walking, player.second->is_jumping,
-                player.second->is_backflipping, player.second->facing_right, player.second->collide,
+                player.second->is_backflipping, player.second->facing_right, (player.second->contact_points >= 1),
                 player.second->aim_inclination_degrees, player.second->charging_shoot, player.second->life));
     }
 

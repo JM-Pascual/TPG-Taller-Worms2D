@@ -136,10 +136,9 @@ int Player::facing_factor() {
 }
 
 bool Player::still_alive() {
-    if(life <= 0 && alive){
+
+    if(contact_points >= 1 && life <= 0 && alive){
         alive = false;
-    }else{
-        alive = true;
     }
     return alive;
 }

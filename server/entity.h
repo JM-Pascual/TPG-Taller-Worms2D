@@ -7,7 +7,7 @@ class Battlefield;
 
 class Entity {
 protected:
-    bool collide;
+    int contact_points;
     bool alive;
     b2Body* body;
     Battlefield& battlefield;
@@ -16,6 +16,7 @@ public:
     Entity(Battlefield& battlefield);
     void start_contact();
     void end_contact();
+    bool firts_contact();
     void remove_entity(); //todo ver si esta bien que sea un puntero
     virtual bool still_alive() = 0; //todo cambiar el nombre
     virtual void execute_collision_reaction() = 0;
