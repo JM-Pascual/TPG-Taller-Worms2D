@@ -18,8 +18,9 @@ void Game::build_game_state(std::list<std::shared_ptr<States>>& states_list) {
         states_list.push_back(std::make_shared<PlayerStateG>(
                 player.second->body->GetPosition().x, player.second->body->GetPosition().y,
                 player.second->is_walking, player.second->is_jumping,
-                player.second->is_backflipping, player.second->facing_right, (player.second->contact_points >= 1),
-                player.second->aim_inclination_degrees, player.second->charging_shoot, player.second->life));
+                player.second->is_backflipping, player.second->facing_right,
+                (player.second->contact_points >= 1), player.second->aim_inclination_degrees,
+                player.second->charging_shoot, player.second->life));
     }
 
     states_list.push_back(std::make_shared<ProjectileCountG>(projectiles.size()));
@@ -139,15 +140,17 @@ std::shared_ptr<GameInfoL> Game::getInfo() {
 // -------------- Projectiles Actions -------------------
 
 void Game::add_projectile(std::shared_ptr<Projectile> proyectile) {
+    // std::lock_guard<std::mutex> lock(m);
     projectiles.push_back(proyectile);
 }
 
 void Game::remove_collided_projectiles() {
 
-        projectiles.erase(std::remove_if(projectiles.begin(),
-                                  projectiles.end(),
-                                  [&](const std::shared_ptr<Projectile>& projectile) { return !projectile->still_alive();}),
-                   projectiles.end());
+    projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(),
+                                     [&](const std::shared_ptr<Projectile>& projectile) {
+                                         return projectile->is_dead();
+                                     }),
+                      projectiles.end());
 }
 
 // -------------- Player Actions -------------------
@@ -223,10 +226,6 @@ void Game::update_physics() {
 }
 
 
-
-
-
-
 Game::~Game() {
     spdlog::get("server")->debug("Joineando gameloop");
     if (need_to_join_loop) {
@@ -234,12 +233,4 @@ Game::~Game() {
     }
 }
 
-void Game::remove_box2d_entities() {
-    battlefield.destroy_dead_entities();
-}
-
-
-
-
-
-
+void Game::remove_box2d_entities() { battlefield.destroy_dead_entities(); }
