@@ -4,6 +4,7 @@
 #include <atomic>
 #include <memory>
 
+#include "audio_player.h"
 #include "camera.h"
 #include "cprotocol.h"
 #include "creceiver.h"
