@@ -101,7 +101,6 @@ void Player::change_aim_direction() {
 void Player::change_fire_power() {
     if (charging_shoot) {
         weapon_power += POWER_RAISE;
-        std::cout << weapon_power << std::endl;
     }
 }
 

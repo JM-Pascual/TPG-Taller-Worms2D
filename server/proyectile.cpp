@@ -28,11 +28,6 @@ Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTool
 
 
 std::shared_ptr<ProjectileStateG> Projectile::get_proyectile_state() {
-    std::cout << "x: " << projectile->GetPosition().x << " y: " << projectile->GetPosition().y
-              << " ";
-    std::cout << "Angle: " << projectile->GetAngle() << "       Angle 2:  "
-              << (b2Atan2(projectile->GetLinearVelocity().y, projectile->GetLinearVelocity().x))
-              << " Angular velocity " << projectile->GetAngularVelocity() << std::endl;
 
     float vel_angle = b2Atan2(projectile->GetLinearVelocity().y, projectile->GetLinearVelocity().x);
     return std::make_shared<ProjectileStateG>(

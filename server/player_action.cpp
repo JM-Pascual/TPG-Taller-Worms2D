@@ -3,22 +3,23 @@
 #include "Game.h"
 #include "game_browser.h"
 #include "sprotocol.h"
+#include "turn_handler.h"
 
 // ----------------------- COMMAND ----------------------
 
 // ----------------------- NULL_COMMAND ----------------------
 
-void NullCommand::execute(Game& game, const uint8_t& turn_id) {}
+void NullCommand::execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) {}
 
 void NullCommand::execute() {}
 
 // ----------------------- START MOVING ----------------------
 
-StartMoving::StartMoving(ServerSide::Protocol& protocol, const uint8_t id): PlayerAction(id) {
+StartMoving::StartMoving(ServerSide::Protocol& protocol, const uint8_t& id): PlayerAction(id) {
     protocol.recvDirection(this->direction);
 }
 
-void StartMoving::execute(Game& game, const uint8_t& turn_id) {
+void StartMoving::execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) {
     if (turn_id != this->id) {
         return;
     }
@@ -28,9 +29,9 @@ void StartMoving::execute(Game& game, const uint8_t& turn_id) {
 
 // ----------------------- STOP MOVING ----------------------
 
-StopMoving::StopMoving(const uint8_t id): PlayerAction(id) {}
+StopMoving::StopMoving(const uint8_t& id): PlayerAction(id) {}
 
-void StopMoving::execute(Game& game, const uint8_t& turn_id) {
+void StopMoving::execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) {
     if (turn_id != this->id) {
         return;
     }
@@ -41,11 +42,11 @@ void StopMoving::execute(Game& game, const uint8_t& turn_id) {
 
 // ----------------------- JUMP ----------------------
 
-Jump::Jump(ServerSide::Protocol& protocol, const uint8_t id): PlayerAction(id) {
+Jump::Jump(ServerSide::Protocol& protocol, const uint8_t& id): PlayerAction(id) {
     protocol.recvJumpDir(this->direction);
 }
 
-void Jump::execute(Game& game, const uint8_t& turn_id) {
+void Jump::execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) {
     if (turn_id != this->id) {
         return;
     }
@@ -55,12 +56,16 @@ void Jump::execute(Game& game, const uint8_t& turn_id) {
 
 // ---------------------------- ADSAngle ------------------
 
-ADSAngle::ADSAngle(ServerSide::Protocol& protocol, const uint8_t id): PlayerAction(id) {
+ADSAngle::ADSAngle(ServerSide::Protocol& protocol, const uint8_t& id): PlayerAction(id) {
     protocol.recvADSAngleDir(this->direction);
 }
 
-void ADSAngle::execute(Game& game, const uint8_t& turn_id) {
+void ADSAngle::execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) {
     if (turn_id != this->id) {
+        return;
+    }
+
+    if (turn_handler.player_used_stop_action()) {
         return;
     }
 
@@ -69,10 +74,14 @@ void ADSAngle::execute(Game& game, const uint8_t& turn_id) {
 
 // -------------------------- STOP ADS ---------------
 
-StopADSAngle::StopADSAngle(const uint8_t id): PlayerAction(id) {}
+StopADSAngle::StopADSAngle(const uint8_t& id): PlayerAction(id) {}
 
-void StopADSAngle::execute(Game& game, const uint8_t& turn_id) {
+void StopADSAngle::execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) {
     if (turn_id != this->id) {
+        return;
+    }
+
+    if (turn_handler.player_used_stop_action()) {
         return;
     }
 
@@ -81,10 +90,14 @@ void StopADSAngle::execute(Game& game, const uint8_t& turn_id) {
 
 // ---------------------------- FIRE POWER ------------------
 
-FirePower::FirePower(const uint8_t id): PlayerAction(id) {}
+FirePower::FirePower(const uint8_t& id): PlayerAction(id) {}
 
-void FirePower::execute(Game& game, const uint8_t& turn_id) {
+void FirePower::execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) {
     if (turn_id != this->id) {
+        return;
+    }
+
+    if (turn_handler.player_used_stop_action()) {
         return;
     }
 
@@ -93,36 +106,50 @@ void FirePower::execute(Game& game, const uint8_t& turn_id) {
 
 // ---------------------------- SHOOT ------------------
 
-Shoot::Shoot(const uint8_t id): PlayerAction(id) {}
+Shoot::Shoot(const uint8_t& id): PlayerAction(id) {}
 
-void Shoot::execute(Game& game, const uint8_t& turn_id) {
+void Shoot::execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) {
     if (turn_id != this->id) {
         return;
     }
 
+    if (turn_handler.player_used_stop_action()) {
+        return;
+    }
+
     game.player_shoot(id);
+
+    turn_handler.use_stop_action();
 }
 
 // ---------------------------- DELAY ------------------
 
-Delay::Delay(ServerSide::Protocol& protocol, const uint8_t id): PlayerAction(id) {
+Delay::Delay(ServerSide::Protocol& protocol, const uint8_t& id): PlayerAction(id) {
     protocol.recvDelay(this->amount);
 }
 
-void Delay::execute(Game& game, const uint8_t& turn_id) {
+void Delay::execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) {
     if (turn_id != this->id) {
+        return;
+    }
+
+    if (turn_handler.player_used_stop_action()) {
         return;
     }
 }
 
 // ---------------------------- CHANGE GADGET ------------------
 
-ChangeGadget::ChangeGadget(ServerSide::Protocol& protocol, const uint8_t id): PlayerAction(id) {
+ChangeGadget::ChangeGadget(ServerSide::Protocol& protocol, const uint8_t& id): PlayerAction(id) {
     protocol.recvGadget(this->gadget);
 }
 
-void ChangeGadget::execute(Game& game, const uint8_t& turn_id) {
+void ChangeGadget::execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) {
     if (turn_id != this->id) {
+        return;
+    }
+
+    if (turn_handler.player_used_stop_action()) {
         return;
     }
 }

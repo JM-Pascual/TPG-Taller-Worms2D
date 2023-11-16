@@ -22,13 +22,19 @@ const std::pair<uint8_t, bool> TurnHandler::update(uint8_t players_quantity,
 
     elapsed_time += elapsed;
 
-    // No paso el turno
-    if (std::chrono::duration_cast<std::chrono::seconds>(elapsed_time).count() <
-        TURN_DURATION_IN_SECONDS) {
-        return std::make_pair(player_turn, NOT_RESET);
+    if (player_stop_action) {
+        if (elapsed_time.count() < POST_TURN_DURATION_IN_SECONDS) {
+            return std::make_pair(player_turn, NOT_RESET);
+        }
+    } else {
+        // No paso el turno
+        if (elapsed_time.count() < TURN_DURATION_IN_SECONDS) {
+            return std::make_pair(player_turn, NOT_RESET);
+        }
     }
 
     player_turn++;
+    player_stop_action = false;
     elapsed_time = std::chrono::duration<float>(0);
 
 
@@ -37,4 +43,12 @@ const std::pair<uint8_t, bool> TurnHandler::update(uint8_t players_quantity,
     }
 
     return std::make_pair(player_turn, TIMER_RESET);
+}
+
+const bool& TurnHandler::player_used_stop_action() { return player_stop_action; }
+
+void TurnHandler::use_stop_action() {
+    player_stop_action = true;
+
+    elapsed_time = std::chrono::duration<float>(0);
 }

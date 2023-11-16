@@ -14,7 +14,7 @@ Queue<std::shared_ptr<PlayerAction>>& GameLoop::get_action_queue() { return this
 
 void GameLoop::run() {
     std::chrono::duration<float> elapsed_seconds = std::chrono::duration<float>(0);
-    TurnHandler turn;
+    TurnHandler turn_handler;
     uint8_t turn_id;
     std::pair<uint8_t, bool> turn_update;
 
@@ -22,7 +22,7 @@ void GameLoop::run() {
         std::chrono::time_point<std::chrono::steady_clock> before =
                 std::chrono::steady_clock::now();
 
-        turn_update = turn.update(game.players_alive(), elapsed_seconds);
+        turn_update = turn_handler.update(game.players_alive(), elapsed_seconds);
 
         if (turn_update.second) {  // Si resetea el timer
             turn_id = game.broadcast_turn(turn_update.first);
@@ -31,7 +31,7 @@ void GameLoop::run() {
 
         std::shared_ptr<PlayerAction> c;
         if (action_queue.try_pop(c)) {
-            c->execute(game, turn_id);
+            c->execute(game, turn_id, turn_handler);
         }
 
         game.step();

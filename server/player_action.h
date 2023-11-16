@@ -12,7 +12,7 @@
 #include "../common/queue.h"
 
 class Game;
-
+class TurnHandler;
 class GameBrowser;
 
 namespace ServerSide {
@@ -25,10 +25,10 @@ class PlayerAction {
 public:
     const uint8_t id;
 
-    explicit PlayerAction(const uint8_t id): id(id) {}
+    explicit PlayerAction(const uint8_t& id): id(id) {}
 
     // Da la interfaz para ejecutar el comando
-    virtual void execute(Game& game, const uint8_t& turn_id) = 0;
+    virtual void execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) = 0;
 
     virtual ~PlayerAction() = default;
 };
@@ -42,10 +42,10 @@ private:
 
 public:
     // LLama al constructor de PlayerAction, y recibe a traves del protocolo la direccion a moverse
-    explicit StartMoving(ServerSide::Protocol& protocol, const uint8_t id);
+    explicit StartMoving(ServerSide::Protocol& protocol, const uint8_t& id);
 
     // Delega al servidor el movimiento del gusano
-    void execute(Game& game, const uint8_t& turn_id) override;
+    void execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) override;
 
     ~StartMoving() override = default;
 };
@@ -55,10 +55,10 @@ public:
 class StopMoving: public PlayerAction {
 public:
     // LLama al constructor de PlayerAction, y recibe a traves del protocolo la direccion a moverse
-    explicit StopMoving(const uint8_t id);
+    explicit StopMoving(const uint8_t& id);
 
     // Delega al servidor el movimiento del gusano
-    void execute(Game& game, const uint8_t& turn_id) override;
+    void execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) override;
 
     ~StopMoving() override = default;
 };
@@ -70,9 +70,9 @@ private:
     JumpDir direction;
 
 public:
-    explicit Jump(ServerSide::Protocol& protocol, const uint8_t id);
+    explicit Jump(ServerSide::Protocol& protocol, const uint8_t& id);
 
-    void execute(Game& game, const uint8_t& turn_id) override;
+    void execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) override;
 
     ~Jump() override = default;
 };
@@ -84,9 +84,9 @@ private:
     ADSAngleDir direction;
 
 public:
-    explicit ADSAngle(ServerSide::Protocol& protocol, uint8_t id);
+    explicit ADSAngle(ServerSide::Protocol& protocol, const uint8_t& id);
 
-    void execute(Game& game, const uint8_t& turn_id) override;
+    void execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) override;
 
     ~ADSAngle() override = default;
 };
@@ -95,9 +95,9 @@ public:
 
 class StopADSAngle: public PlayerAction {
 public:
-    explicit StopADSAngle(uint8_t id);
+    explicit StopADSAngle(const uint8_t& id);
 
-    void execute(Game& game, const uint8_t& turn_id) override;
+    void execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) override;
 
     ~StopADSAngle() override = default;
 };
@@ -106,9 +106,9 @@ public:
 
 class FirePower: public PlayerAction {
 public:
-    explicit FirePower(const uint8_t id);
+    explicit FirePower(const uint8_t& id);
 
-    void execute(Game& game, const uint8_t& turn_id) override;
+    void execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) override;
 
     ~FirePower() = default;
 };
@@ -117,9 +117,9 @@ public:
 
 class Shoot: public PlayerAction {
 public:
-    explicit Shoot(const uint8_t id);
+    explicit Shoot(const uint8_t& id);
 
-    void execute(Game& game, const uint8_t& turn_id) override;
+    void execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) override;
 
     ~Shoot() = default;
 };
@@ -131,9 +131,9 @@ private:
     DelayAmount amount;
 
 public:
-    explicit Delay(ServerSide::Protocol& protocol, const uint8_t id);
+    explicit Delay(ServerSide::Protocol& protocol, const uint8_t& id);
 
-    void execute(Game& game, const uint8_t& turn_id) override;
+    void execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) override;
 
     ~Delay() = default;
 };
@@ -145,9 +145,9 @@ private:
     WeaponsAndTools gadget;
 
 public:
-    explicit ChangeGadget(ServerSide::Protocol& protocol, const uint8_t id);
+    explicit ChangeGadget(ServerSide::Protocol& protocol, const uint8_t& id);
 
-    void execute(Game& game, const uint8_t& turn_id) override;
+    void execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) override;
 
     ~ChangeGadget() = default;
 };
@@ -209,7 +209,7 @@ private:
     const uint8_t id_game;
 
 public:
-    explicit Ready(GameBrowser& gb, const uint8_t id, const uint8_t id_game):
+    explicit Ready(GameBrowser& gb, const uint8_t& id, const uint8_t& id_game):
             gb(gb), id(id), id_game(id_game) {}
 
     void execute() override;
@@ -254,7 +254,7 @@ public:
     NullCommand(): PlayerAction(0) {}
 
     // Comportamiento nulo
-    void execute(Game& game, const uint8_t& turn_id) override;
+    void execute(Game& game, const uint8_t& turn_id, TurnHandler& turn_handler) override;
 
     // Comportamiento nulo
     void execute() override;
