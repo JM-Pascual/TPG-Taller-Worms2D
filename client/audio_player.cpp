@@ -12,6 +12,13 @@
 // Max volume = MIX_MAX_VOLUME == 128
 #define MUSIC_VOLUME 25
 
+void AudioPlayer::play_background_music() {
+    Mix_VolumeMusic(MUSIC_VOLUME);
+    if (Mix_PlayMusic(background_music, -1) == -1) {
+        spdlog::get("client")->error("Error al intentar reproducir la musica ambiente");
+    }
+}
+
 AudioPlayer::AudioPlayer(): background_music(nullptr) {
     Mix_Init(MIX_INIT_MP3);
 
@@ -40,11 +47,8 @@ AudioPlayer::AudioPlayer(): background_music(nullptr) {
                                      key_path.first, key_path.second);
     }
 
-    Mix_VolumeMusic(MUSIC_VOLUME);
-    if (Mix_PlayMusic(background_music, -1) == -1) {
-        spdlog::get("client")->error("Error al intentar reproducir la musica ambiente");
-    }
 }
+
 
 void AudioPlayer::playAudio(const std::string& key) {
     if (chunks.count(key) == 1) {
@@ -62,8 +66,6 @@ void AudioPlayer::playAudio(const std::string& key) {
     }
 
 }
-
-
 AudioPlayer::~AudioPlayer() {
     for (auto& [key, chunk]: chunks) {
         if (chunk) {

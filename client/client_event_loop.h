@@ -10,36 +10,52 @@
 #include "creceiver.h"
 #include "csender.h"
 #include "inputHandler.h"
+#include "TexturesPool.h"
+#include "Window.h"
+#include "ActorHolder.h"
 
 class Action;
 class States;
 
-class Client {
+class EventLoop {
 
 private:
+    /// thread specific atributes
     std::atomic<bool> quit;
     std::atomic<bool> my_turn;
     std::atomic<bool> runned;
     ClientSide::Protocol protocol;
     ClientSide::Receiver recv;
     ClientSide::Sender send;
+
+    /// media specific atributes
     Camera camera;
     IHandler input;
+    AudioPlayer audio_player;
+
+    /// Holders for actors in the game
+    ActorHolder players;
+    ActorHolder proyectiles;
+
+    /// Queues for the states and actions
     Queue<std::shared_ptr<States>> game_state_queue;
     Queue<std::shared_ptr<States>> lobby_state_queue;
     Queue<std::shared_ptr<Action>> action_queue;
+
+    void process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
+                                TexturesPool& txt_pool);
 
 public:
     /*
         Construye el cliente con su protocolo
     */
-    explicit Client(const char* hostname, const char* servname);
+    explicit EventLoop(const char* hostname, const char* servname);
     /*
         Corre el cliente
     */
     void run();
 
-    ~Client();
+    ~EventLoop();
 
     friend class MainWindow;
     friend class GameFrame;

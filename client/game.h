@@ -6,7 +6,7 @@
 
 #include "../common/logger.h"
 
-#include "client.h"
+#include "client_event_loop.h"
 #include "mainwindow.h"
 
 #define HOSTNAME argv[1]
@@ -16,7 +16,7 @@ class Game {
 private:
     bool initGame;
     int appRet;
-    Client client;
+    EventLoop client;
     std::unique_ptr<QApplication> app;
     std::unique_ptr<MainWindow> window;
 

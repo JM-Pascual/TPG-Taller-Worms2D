@@ -18,7 +18,7 @@
 
 #include <stdint.h>
 
-#include "client.h"
+#include "client_event_loop.h"
 #include "lobbyListener.h"
 
 QT_BEGIN_NAMESPACE
@@ -35,7 +35,7 @@ class MainWindow: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(Client& client, bool& initGame, QWidget* parent = nullptr);
+    explicit MainWindow(EventLoop& client, bool& initGame, QWidget* parent = nullptr);
 
     ~MainWindow();
 
@@ -74,7 +74,7 @@ public:
 
 private:
     bool muted;
-    Client& client;
+    EventLoop& client;
     Ui::MainWindow* ui;
     QMovie* movie;
     QMovie* movie_aux;

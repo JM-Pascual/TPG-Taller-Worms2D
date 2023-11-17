@@ -30,7 +30,7 @@
 #define EFFECTS_VOLUME 0.4f
 #define BACKGROUND_MUSIC_VOLUME 0.2f
 
-MainWindow::MainWindow(Client& client, bool& initGame, QWidget* parent):
+MainWindow::MainWindow(EventLoop& client, bool& initGame, QWidget* parent):
         QMainWindow(parent),
         muted(false),
         client(client),

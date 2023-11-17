@@ -15,6 +15,8 @@ private:
 public:
     AudioPlayer();
 
+    void play_background_music();
+
     void playAudio(const std::string& key);
 
     ~AudioPlayer();
