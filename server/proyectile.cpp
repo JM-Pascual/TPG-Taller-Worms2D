@@ -3,7 +3,7 @@
 #include "battlefield.h"
 
 Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTools type):
-        Entity(battlefield), type(type), blast_radius(2) {  // cambiar
+        Entity(battlefield), type(type), blast_radius(2), epicenter_damage(50){  // cambiar
 
     b2BodyDef projectile_body;
     projectile_body.type = b2_dynamicBody;
@@ -43,25 +43,30 @@ bool Projectile::is_dead() {
 // Este método lo tengo que llamar dentro de contact_listener
 void Projectile::execute_collision_reaction() {
     if (type == WeaponsAndTools::BAZOOKA) {
-        // La idea es que explote. El centro tenga daño 50 pts y tenga dos metros de radio.
-        Query_callback queryCallback;
-        b2AABB aabb;
-        aabb.lowerBound = body->GetPosition() - b2Vec2(blast_radius, blast_radius);
-        aabb.upperBound = body->GetPosition() + b2Vec2(blast_radius, blast_radius);
-        battlefield.add_query_AABB(&queryCallback, aabb);
+        collide();
+    }else if(type == WeaponsAndTools::GREEN_GRENADE){
+        collide();
+    }
+}
 
-        // check which of these bodies have their center of mass within the blast radius
-        for (int i = 0; i < queryCallback.found_bodies_size(); i++) {
-            b2Body* body_ = queryCallback.found_bodie_at(i);
-            b2Vec2 bodyCom = body_->GetWorldCenter();
+void Projectile::collide() {
+    Query_callback queryCallback;
+    b2AABB aabb;
+    aabb.lowerBound = body->GetPosition() - b2Vec2(blast_radius, blast_radius);
+    aabb.upperBound = body->GetPosition() + b2Vec2(blast_radius, blast_radius);
+    battlefield.add_query_AABB(&queryCallback, aabb);
 
-            // ignore bodies outside the blast range
-            if ((bodyCom - body->GetWorldCenter()).Length() >= blast_radius)
-                continue;
+    // check which of these bodies have their center of mass within the blast radius
+    for (int i = 0; i < queryCallback.found_bodies_size(); i++) {
+        b2Body* body_ = queryCallback.found_bodie_at(i);
+        b2Vec2 bodyCom = body_->GetWorldCenter();
 
-            applyBlastImpulse(body_, body->GetWorldCenter(), bodyCom, 50);
-            reinterpret_cast<Entity*>(body_->GetUserData().pointer)->start_falling();
-        }
+        // ignore bodies outside the blast range
+        if ((bodyCom - body->GetWorldCenter()).Length() >= blast_radius)
+            continue;
+
+        applyBlastImpulse(body_, body->GetWorldCenter(), bodyCom, epicenter_damage);
+        reinterpret_cast<Entity*>(body_->GetUserData().pointer)->start_falling();
     }
 }
 // Metodo para aplicar impulso a los jugadores colisionados
@@ -87,3 +92,25 @@ void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 app
     entity->recibe_life_modification(-impulseMag);
 
 }
+/*
+
+//~~~~~~~~~~~~~~~~~~~ Rocket ~~~~~~~~~~~~~~~~~~~~
+
+
+Rocket::Rocket(Battlefield &battlefield, b2Vec2 position):Projectile(battlefield,position, WeaponsAndTools::BAZOOKA){}
+
+void Rocket::execute_collision_reaction() {collide();}
+
+//~~~~~~~~~~~~~~~~~~~ Grenade ~~~~~~~~~~~~~~~~~~~~
+
+Grenade::Grenade(Battlefield &battlefield, b2Vec2 position) :Projectile(battlefield,position, WeaponsAndTools::GREEN_GRENADE),
+                                                             explosion_delay(5){}
+
+void Grenade::execute_collision_reaction() {
+    if(explosion_delay > 0){
+        explosion_delay --;
+    }else{
+        collide();
+    }
+}
+*/

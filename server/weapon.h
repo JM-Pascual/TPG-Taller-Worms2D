@@ -8,6 +8,7 @@
 
 
 #define BAZOOKA_AMMO uint8_t(10000) //Se supone que tiene que ser infinita
+#define GREEN_GRENADE_AMMO uint8_t(10000)
 
 class Player;
 class Game;
@@ -23,8 +24,11 @@ public:
     virtual void execute(Game& game, Battlefield& battlefield, Player& player_) = 0;
     virtual std::shared_ptr<Projectile>
     prepare_ammo(Game& game,Battlefield &battlefield, b2Vec2 projectile_position, WeaponsAndTools type);
+    //prepare_ammo(Game& game,Battlefield &battlefield, b2Vec2 projectile_position, WeaponsAndTools type) = 0;
 
 };
+
+//~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
 
 class Bazooka : public Weapon{
 public:
@@ -32,6 +36,15 @@ public:
     void execute(Game& game, Battlefield& battlefield, Player& player) override;
 
 };
+/*
+//~~~~~~~~~~~~~~~~~~~ Green_grenade ~~~~~~~~~~~~~~~~~~~~
 
+class Green_grenade : public Weapon{
+public:
+    Green_grenade();
+    void execute(Game& game, Battlefield& battlefield, Player& player) override;
+
+};
+*/
 
 #endif //WORMS2D_WEAPON_H

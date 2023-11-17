@@ -14,6 +14,9 @@ Weapon::prepare_ammo(Game& game,Battlefield &battlefield, b2Vec2 projectile_posi
 }
 
 
+
+//~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
+
 Bazooka::Bazooka() : Weapon(BAZOOKA_AMMO){}
 
 void Bazooka::execute(Game& game, Battlefield& battlefield, Player& player) {
@@ -23,7 +26,16 @@ void Bazooka::execute(Game& game, Battlefield& battlefield, Player& player) {
 
     player.shoot_aim_weapon(projectile);
 }
+/*
+//~~~~~~~~~~~~~~~~~~~ Green_grenade ~~~~~~~~~~~~~~~~~~~~
 
+Green_grenade::Green_grenade() : Weapon(GREEN_GRENADE_AMMO) {}
 
+void Green_grenade::execute(Game &game, Battlefield &battlefield, Player &player) {
+    b2Vec2 proyectile_position = player.set_bullet_direction();
+    std::shared_ptr<Projectile> green_grenade  = prepare_ammo(game, battlefield, proyectile_position, WeaponsAndTools::GREEN_GRENADE);
 
+    player.shoot_aim_weapon(green_grenade);
+}
 
+ */
