@@ -18,7 +18,7 @@
 #define WIDTH 0.9f
 #define HEIGHT 1.2f
 
-#define ARM_LENGHT ((WIDTH / 2) + 2 )
+#define ARM_LENGHT ((WIDTH / 2) + 2)
 
 #define POWER_RAISE 1
 #define MAX_POWER 10
@@ -85,6 +85,7 @@ public:
     virtual ~Player() = default;
 
     friend class Game;
+    friend class BroadCaster;
 };
 
 #endif  // PLAYER_H

@@ -5,6 +5,7 @@
 #include <spdlog/spdlog.h>
 
 #include "Player.h"
+#include "battlefield.h"
 
 void BroadCaster::add_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue) {
     std::lock_guard<std::mutex> l(m);
@@ -26,20 +27,21 @@ void BroadCaster::broadcast(const std::list<std::shared_ptr<States>>& game_state
 }
 
 void BroadCaster::remove_closed_clients(uint8_t& ready_count,
-                                        std::map<uint8_t, std::unique_ptr<Player>>& players_stats) {
+                                        std::map<uint8_t, std::unique_ptr<Player>>& players_stats,
+                                        Battlefield& battlefield) {
     std::lock_guard<std::mutex> lock(m);
 
-    for (auto it = broadcast_map.rbegin(); it != broadcast_map.rend();) {
+    auto it = broadcast_map.cbegin();
+    while (it != broadcast_map.cend()) {
         if (it->second->is_closed()) {
             uint8_t id = it->first;
-            broadcast_map.erase(id);
+            it = broadcast_map.erase(it);
+            battlefield.destroy_body(players_stats.at(id)->body);
             players_stats.erase(id);
             ready_count--;
+            continue;
         }
 
-        if (broadcast_map.empty()) {
-            return;
-        }
         ++it;
     }
 }

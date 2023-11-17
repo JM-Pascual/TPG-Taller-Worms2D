@@ -55,8 +55,6 @@ Queue<std::shared_ptr<PlayerAction>>& Game::get_action_queue() {
 }
 
 void Game::add_client_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue) {
-    remove_closed_clients();
-
     std::lock_guard<std::mutex> lock(m);
 
     if (non_locking_is_playing()) {
@@ -86,7 +84,7 @@ void Game::broadcast_game_state() {
 
 void Game::remove_closed_clients() {
     std::lock_guard<std::mutex> lock(m);
-    broadcaster.remove_closed_clients(ready_count, players_stats);
+    broadcaster.remove_closed_clients(ready_count, players_stats, battlefield);
 }
 
 void Game::removePlayer(const uint8_t& player_id) {
