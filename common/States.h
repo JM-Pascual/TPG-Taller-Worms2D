@@ -79,7 +79,7 @@ public:
     const bool impacted;
     const float angle;
 
-    explicit ProjectileStateG(const float x, const float y, const WeaponsAndTools type,
+    explicit ProjectileStateG(uint8_t id, const float x, const float y, const WeaponsAndTools type,
                               const bool impacted, const float angle);
 
     ~ProjectileStateG() override = default;

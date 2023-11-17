@@ -39,9 +39,9 @@ private:
     const uint8_t game_id;
     GameLoop gameloop;
     bool need_to_join_loop;
+    uint8_t projectile_count;
     // int16_t para poder iniciarlo en -1 y que se tome bien el proximo turno
     int16_t prev_player_turn_id;
-    uint8_t projectile_count;
 
 
     void build_game_state(std::list<std::shared_ptr<States>>& states_list);

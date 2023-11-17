@@ -1,7 +1,5 @@
 #include "ActorHolder.h"
 
-
-
 bool ActorHolder::actor_loaded(const uint8_t& actor_id) { return (active_actors.count(actor_id) != 0); }
 
 void ActorHolder::add_actor(uint8_t actor_id, std::shared_ptr<GameActor> new_actor) {
