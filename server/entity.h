@@ -7,7 +7,6 @@ class Battlefield;
 
 class Entity {
 protected:
-    int contact_points;
     bool dead;
     b2Body* body;
     Battlefield& battlefield;
@@ -17,6 +16,7 @@ public:
     Entity(Battlefield& battlefield);
     void start_contact();
     void end_contact();
+    virtual void start_falling();
     bool multiple_contact();
     void remove_entity();        // todo ver si esta bien que sea un puntero
     virtual bool is_dead() = 0;  // todo cambiar el nombre

@@ -13,13 +13,14 @@
 #include "query_callback.h"
 
 class Battlefield;
+class Game;
 
 class Projectile: public Entity {
 private:
     WeaponsAndTools type;
     float blast_radius;
 
-    void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
+    void applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
 
 public:
     explicit Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTools type);
@@ -30,6 +31,7 @@ public:
     void execute_collision_reaction() override;
 
     ~Projectile() = default;
+    friend class Game;
 };
 
 

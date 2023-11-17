@@ -19,14 +19,23 @@ void Game::build_game_state(std::list<std::shared_ptr<States>>& states_list) {
                 player.second->body->GetPosition().x, player.second->body->GetPosition().y,
                 player.second->is_walking, player.second->is_jumping,
                 player.second->is_backflipping, player.second->facing_right,
-                (player.second->contact_points >= 1), player.second->aim_inclination_degrees,
+                (player.second->collided), player.second->aim_inclination_degrees,
                 player.second->charging_shoot, player.second->life));
     }
 
     states_list.push_back(std::make_shared<ProjectileCountG>(projectiles.size()));
-
+/*
     std::transform(projectiles.begin(), projectiles.end(), std::back_inserter(states_list),
                    [](auto& projectile) { return projectile->get_proyectile_state(); });
+*/
+    for (auto& projectile: projectiles) {
+        // cppcheck-suppress useStlAlgorithm
+        states_list.push_back(std::make_shared<ProjectileStateG>(
+                projectile->body->GetPosition().x, projectile->body->GetPosition().y,
+                projectile->type, projectile->dead,
+                b2Atan2(projectile->body->GetLinearVelocity().y, projectile->body->GetLinearVelocity().x)));
+    }
+
 }
 
 bool Game::non_locking_is_playing() {
@@ -217,7 +226,8 @@ void Game::update_physics() {
     std::lock_guard<std::mutex> lock(m);
     for (auto& [id, player]: players_stats) {
         player->check_jumping();
-        if (!player->is_walking && !player->is_jumping && !player->is_backflipping) {
+        player->check_falling();
+        if (!player->is_walking && !player->is_jumping && !player->is_backflipping && !player->falling) {
             player->stop();
         } else if (player->is_walking) {
             player->move();

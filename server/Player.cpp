@@ -13,6 +13,7 @@ Player::Player(Battlefield& battlefield):
         ready(false),
         is_jumping(false),
         is_backflipping(false),
+        falling(false),
         aiming(false),
         aim_inclination_degrees(0),
         aim_direction(ADSAngleDir::UP),
@@ -30,8 +31,8 @@ Player::Player(Battlefield& battlefield):
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &wormBox;
-    fixtureDef.density = 3.0f;
-
+    fixtureDef.density = 4.0f;
+    fixtureDef.friction = 0.8;
 
     // fixtureDef.filter.groupIndex = -1; //Todo tengo que ver como seteo cada una de las balas para
     // que pueda colisionar con los gusanos
@@ -79,6 +80,12 @@ void Player::check_jumping() {
             is_jumping = false;
             is_backflipping = false;
         }
+    }
+}
+
+void Player::check_falling() {
+    if (body->GetLinearVelocity() == b2Vec2(0, 0)) {
+        falling = false;
     }
 }
 
@@ -144,10 +151,14 @@ int Player::facing_factor() { return (std::pow(-1, 1 - facing_right)); }
 
 bool Player::is_dead() {
 
-    if (contact_points >= 1 && life <= 0 && dead) {
+    if (life <= 0 && dead) {
         dead = false;
     }
     return dead;
 }
 
 void Player::execute_collision_reaction() {}
+
+void Player::start_falling() {falling = true;}
+
+

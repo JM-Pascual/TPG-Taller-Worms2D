@@ -45,6 +45,7 @@ private:
     bool ready;
     bool is_jumping;
     bool is_backflipping;
+    bool falling;
 
     bool aiming;
     float aim_inclination_degrees;  // Radianes
@@ -69,6 +70,8 @@ public:
 
     void set_ready();
     void check_jumping();
+    void check_falling();
+    void start_falling() override;
 
     b2Vec2 set_bullet_direction();
     b2Vec2 set_bullet_power();
