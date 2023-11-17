@@ -16,6 +16,7 @@ void Game::build_game_state(std::list<std::shared_ptr<States>>& states_list) {
     for (auto& player: players_stats) {
         // cppcheck-suppress useStlAlgorithm
         states_list.push_back(std::make_shared<PlayerStateG>(
+                player.first,
                 player.second->body->GetPosition().x, player.second->body->GetPosition().y,
                 player.second->is_walking, player.second->is_jumping,
                 player.second->is_backflipping, player.second->facing_right,
@@ -26,7 +27,8 @@ void Game::build_game_state(std::list<std::shared_ptr<States>>& states_list) {
     states_list.push_back(std::make_shared<ProjectileCountG>(projectiles.size()));
 
     std::transform(projectiles.begin(), projectiles.end(), std::back_inserter(states_list),
-                   [](auto& projectile) { return projectile->get_proyectile_state(); });
+                   [](auto& projectile) { return projectile.second->get_proyectile_state(
+                                                  projectile.first); });
 }
 
 bool Game::non_locking_is_playing() {
@@ -141,16 +143,26 @@ std::shared_ptr<GameInfoL> Game::getInfo() {
 
 void Game::add_projectile(std::shared_ptr<Projectile> proyectile) {
     // std::lock_guard<std::mutex> lock(m);
-    projectiles.push_back(proyectile);
+    projectiles.insert({projectile_count, proyectile});
+    projectile_count++;
 }
 
 void Game::remove_collided_projectiles() {
+    //std::lock_guard<std::mutex> lock(m);
+    for (auto it = projectiles.rbegin(); it != projectiles.rend();) {
+        if (it->second->is_dead()) {
+            uint8_t id = it->first;
+            projectiles.erase(id);
+            players_stats.erase(id);
+            ready_count--;
+        }
 
-    projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(),
-                                     [&](const std::shared_ptr<Projectile>& projectile) {
-                                         return projectile->is_dead();
-                                     }),
-                      projectiles.end());
+        if (projectiles.empty()) {
+            return;
+        }
+
+        ++it;
+    }
 }
 
 // -------------- Player Actions -------------------

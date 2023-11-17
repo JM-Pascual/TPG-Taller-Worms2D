@@ -40,7 +40,6 @@ void BroadCaster::remove_closed_clients(uint8_t& ready_count,
         if (broadcast_map.empty()) {
             return;
         }
-
         ++it;
     }
 }

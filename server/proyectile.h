@@ -25,11 +25,11 @@ public:
     explicit Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTools type);
 
     void set_power(b2Vec2 power);
-    std::shared_ptr<ProjectileStateG> get_proyectile_state();
+    std::shared_ptr<ProjectileStateG> get_proyectile_state(const uint8_t& proyectile_id);
     bool is_dead() override;
     void execute_collision_reaction() override;
 
-    ~Projectile() = default;
+    virtual ~Projectile() = default;
 };
 
 

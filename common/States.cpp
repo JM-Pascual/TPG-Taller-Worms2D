@@ -1,8 +1,12 @@
 #include "States.h"
 
-PlayerStateG::PlayerStateG(float x, float y, bool is_walking, bool is_jumping, bool is_backflipping,
-                                        bool facing_right, bool was_hit, float aim_inclination_degrees, bool charging_weapon,float life) :
+PlayerStateG::PlayerStateG(const uint8_t id, const float x, const float y, const bool is_walking,
+                           const bool is_jumping, const bool is_backflipping,
+                           bool facing_right, const bool was_hit,
+                           const float aim_inclination_degrees,
+                           const bool charging_weapon,float life) :
         States(StatesTag::PLAYER_G),
+        id(id),
         pos(x, y),
         is_walking(is_walking),
         is_jumping(is_jumping),
@@ -13,6 +17,11 @@ PlayerStateG::PlayerStateG(float x, float y, bool is_walking, bool is_jumping, b
         charging_weapon(charging_weapon),
         life(life){}
 
-ProjectileStateG::ProjectileStateG(const float x, const float y, const WeaponsAndTools type,
+ProjectileStateG::ProjectileStateG(uint8_t id, const float x, const float y,
+                                   const WeaponsAndTools type,
                                    const bool impacted, const float angle):
-        States(StatesTag::PROJECTILE_G), pos(x, y), type(type), impacted(impacted), angle(angle) {}
+        States(StatesTag::PROJECTILE_G),
+        id(id),
+        pos(x, y), type(type),
+        impacted(impacted),
+        angle(angle) {}

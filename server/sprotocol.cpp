@@ -96,6 +96,7 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<States>& ps) {
     std::shared_ptr<PlayerStateG> p = std::dynamic_pointer_cast<PlayerStateG>(ps);
 
     send(&p->tag, sizeof(uint8_t));
+    send(&p->id, sizeof(uint8_t));
     this->sendPosition(p->pos);
     send(&p->is_walking, sizeof(bool));
     send(&p->is_jumping, sizeof(bool));
@@ -134,6 +135,7 @@ void ServerSide::Protocol::sendCount(const std::shared_ptr<States>& count) {
 void ServerSide::Protocol::sendProjectileState(const std::shared_ptr<States>& ps) {
     std::shared_ptr<ProjectileStateG> p = std::dynamic_pointer_cast<ProjectileStateG>(ps);
     send(&p->tag, sizeof(uint8_t));
+    send(&p->id, sizeof(uint8_t));
     this->sendPosition(p->pos);
     this->send(&p->angle, sizeof(float));
     send(&p->type, sizeof(uint8_t));

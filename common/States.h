@@ -47,21 +47,24 @@ public:
 
 class PlayerStateG: public States {
 public:
+    const uint8_t id;
     const b2Vec2 pos;
     const bool is_walking;
     const bool is_jumping;
     const bool is_backflipping;
     const bool facing_right;
-    const bool was_hit; //
+    const bool was_hit;
 
     float aim_inclination_degrees;
     bool charging_weapon;
     float life;
 
 
-    explicit PlayerStateG(float x, float y, bool is_walking, bool is_jumping, bool is_backflipping,
+    explicit PlayerStateG(uint8_t id, float x, float y, bool is_walking,
+                          bool is_jumping, bool is_backflipping,
                           bool facing_right, bool was_hit,
-                          float aim_inclination_degrees, bool charging_weapon, float life);
+                          float aim_inclination_degrees,
+                          bool charging_weapon, float life);
 
     ~PlayerStateG() override = default;
 };
@@ -70,13 +73,14 @@ class BattlefieldState: public States {};
 
 class ProjectileStateG: public States {
 public:
+    uint8_t id;
     const b2Vec2 pos;
     const WeaponsAndTools type;
     const bool impacted;
     const float angle;
 
-    explicit ProjectileStateG(const float x, const float y, const WeaponsAndTools type,
-                              const bool impacted, const float angle);
+    explicit ProjectileStateG(uint8_t id, float x, float y,
+                              WeaponsAndTools type, bool impacted, float angle);
 
     ~ProjectileStateG() override = default;
 };
@@ -91,14 +95,14 @@ public:
     explicit CountState(const StatesTag tag, const uint8_t quantity):
             States(tag), quantity(quantity) {}
 
-    ~CountState() = default;
+    ~CountState() override = default;
 };
 
 class GamesCountL: public CountState {
 public:
     explicit GamesCountL(const uint8_t quantity): CountState(StatesTag::GAMES_COUNT_L, quantity) {}
 
-    ~GamesCountL() = default;
+    ~GamesCountL() override = default;
 };
 
 class PlayerCountL: public CountState {
@@ -106,7 +110,7 @@ public:
     explicit PlayerCountL(const uint8_t quantity):
             CountState(StatesTag::PLAYER_COUNT_L, quantity) {}
 
-    ~PlayerCountL() = default;
+    ~PlayerCountL() override = default;
 };
 
 class PlayerCountG: public CountState {
@@ -114,7 +118,7 @@ public:
     explicit PlayerCountG(const uint8_t quantity):
             CountState(StatesTag::PLAYER_COUNT_G, quantity) {}
 
-    ~PlayerCountG() = default;
+    ~PlayerCountG() override = default;
 };
 
 class ProjectileCountG: public CountState {
@@ -122,7 +126,7 @@ public:
     explicit ProjectileCountG(const uint8_t quantity):
             CountState(StatesTag::PROJECTILE_COUNT_G, quantity) {}
 
-    ~ProjectileCountG() = default;
+    ~ProjectileCountG() override = default;
 };
 
 class GameNotJoinable: public CountState {

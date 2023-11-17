@@ -1,6 +1,7 @@
 #include "client.h"
 
 #include <unordered_map>
+#include <list>
 
 #include <SDL2pp/SDL2pp.hh>
 #include <spdlog/spdlog.h>
@@ -10,6 +11,7 @@
 #include "GameActor.h"
 #include "TexturesPool.h"
 #include "Window.h"
+#include "ActorHolder.h"
 
 const int DURATION = 1000 / 30;
 
@@ -33,8 +35,11 @@ void Client::run() {
     Window window(1280, 720);
     TexturesPool txt_pool(window.get_renderer());
 
-    std::unordered_map<size_t, std::shared_ptr<GameActor>> actors;
-    std::unordered_map<size_t, std::shared_ptr<GameActor>> proyectiles;
+    ActorHolder players;
+    ActorHolder proyectiles;
+
+    std::unordered_map<std::shared_ptr<ProjectileStateG>,
+            std::shared_ptr<GameActor>> collided_proyectiles;
 
     Animation water_animation(txt_pool.get_texture(Actors::WATER), 11, 3);
 
@@ -56,16 +61,16 @@ void Client::run() {
                             std::dynamic_pointer_cast<PlayerCountG>(raw_state)->quantity;
                     for (size_t i = 0; i < players_quantity; i++) {
                         while (not game_state_queue.try_pop(raw_state)) {}
-                        if (actors.count(i) == 0) {
-                            actors.insert({i, std::make_shared<Worm>(raw_state, txt_pool, camera)});
+                        auto state = std::dynamic_pointer_cast<PlayerStateG>(raw_state);
+                        if (!players.actor_loaded(state->id)) {
+                            players.add_actor(
+                                    state->id, std::make_shared<Worm>(raw_state, txt_pool, camera)
+                                            );
                         } else {
-                            actors.at(i)->update(raw_state);
-
+                            players.update_actor_state(state->id, raw_state);
                         }
-                        // actors.at(i)->render(window.get_renderer());
 
                         auto worm = std::dynamic_pointer_cast<PlayerStateG>(raw_state);
-
                         if (worm->is_walking) {
                             camera.fixActor(worm->pos.x, worm->pos.y, 32, 60);
                         }
@@ -76,24 +81,34 @@ void Client::run() {
                             std::dynamic_pointer_cast<ProjectileCountG>(raw_state)->quantity;
                     for (size_t i = 0; i < proyectiles_quantity; i++) {
                         while (not game_state_queue.try_pop(raw_state)) {}
-                        if (proyectiles.count(i) == 0) {
-                            proyectiles.insert({i, std::make_shared<BazookaProyectile>(
-                                                           raw_state, txt_pool, camera)});
+                        auto state = std::dynamic_pointer_cast<ProjectileStateG>(raw_state);
+                        if (!proyectiles.actor_loaded(i)) {
+                            proyectiles.add_actor(
+                                    state->id,
+                                    std::make_shared<BazookaProyectile>(raw_state, txt_pool, camera)
+                                            );
                         } else {
-                            proyectiles.at(i)->update(raw_state);
+                            if (std::dynamic_pointer_cast<ProjectileStateG>(raw_state)->impacted){
+                                proyectiles.remove_actor(state->id, raw_state);
+                            } else{
+                                proyectiles.update_actor_state(state->id, raw_state);
+                            }
                         }
                     }
                 }
             }
         }
 
-        for (auto& actor: actors) {
-            actor.second->render(window.get_renderer());
+        players.render_actors(window.get_renderer());
+
+        for (auto& proyectile: collided_proyectiles) {
+            auto correct_projectile = std::dynamic_pointer_cast<
+                    BazookaProyectile>(proyectile.second);
+            correct_projectile->update(proyectile.first);
+            correct_projectile->render(window.get_renderer());
         }
 
-        for (auto& proyectile: proyectiles) {
-            proyectile.second->render(window.get_renderer());
-        }
+        proyectiles.render_actors(window.get_renderer());
 
         water_animation.update();
 

@@ -7,7 +7,6 @@
 #include <memory>
 
 
-
 class Contact_listener : public b2ContactListener  {
 
 private:
