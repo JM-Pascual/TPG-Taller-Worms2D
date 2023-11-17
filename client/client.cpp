@@ -62,7 +62,7 @@ void Client::run() {
                         if (!players.actor_loaded(state->id)) {
                             players.add_actor(
                                     state->id, std::make_shared<Worm>(raw_state, txt_pool, camera)
-                                            );
+                            );
                         } else {
                             players.update_actor_state(state->id, raw_state);
                         }
@@ -79,11 +79,11 @@ void Client::run() {
                     for (size_t i = 0; i < proyectiles_quantity; i++) {
                         while (not game_state_queue.try_pop(raw_state)) {}
                         auto state = std::dynamic_pointer_cast<ProjectileStateG>(raw_state);
-                        if (!proyectiles.actor_loaded(i)) {
+                        if (!proyectiles.actor_loaded(state->id)) {
                             proyectiles.add_actor(
                                     state->id,
                                     std::make_shared<BazookaProyectile>(raw_state, txt_pool, camera)
-                                            );
+                            );
                         } else {
                             if (std::dynamic_pointer_cast<ProjectileStateG>(raw_state)->impacted){
                                 proyectiles.remove_actor(state->id, raw_state);
