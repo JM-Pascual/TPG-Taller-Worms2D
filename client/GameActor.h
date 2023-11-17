@@ -24,7 +24,7 @@ protected:
 public:
     GameActor(const float& x, const float& y, Camera& camera): position(x, y), camera(camera) {}
     virtual void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) = 0;
-    virtual void update(const std::shared_ptr<States>& actor_state) = 0;
+    virtual void update(std::shared_ptr<States>& actor_state) = 0;
     virtual ~GameActor() = default;
 };
 
@@ -47,7 +47,7 @@ private:
     WeaponAnimation weapon_animation;
 
 public:
-    Worm(const std::shared_ptr<States>& initial_state, TexturesPool& pool, Camera& camera):
+    Worm(std::shared_ptr<States>& initial_state, TexturesPool& pool, Camera& camera):
             GameActor(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->pos.x,
                       std::dynamic_pointer_cast<PlayerStateG>(initial_state)->pos.y, camera),
             is_walking(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->is_walking),
@@ -64,7 +64,7 @@ public:
             backflipping(pool.get_texture(Actors::BACKFLIP_WORM), 22, 1, false),
             weapon_animation(pool){}
 
-    void update(const std::shared_ptr<States>& actor_state) override {
+    void update(std::shared_ptr<States>& actor_state) override {
         position = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->pos;
         is_walking = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->is_walking;
         is_jumping = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->is_jumping;
@@ -114,7 +114,7 @@ protected:
     bool impacted;
 
 public:
-    Proyectile(const std::shared_ptr<States>& initial_state, TexturesPool& pool, Camera& camera):
+    Proyectile(std::shared_ptr<States>& initial_state, TexturesPool& pool, Camera& camera):
             GameActor(std::dynamic_pointer_cast<ProjectileStateG>(initial_state)->pos.x,
                       std::dynamic_pointer_cast<ProjectileStateG>(initial_state)->pos.y, camera),
             impacted(false) {}
@@ -129,13 +129,13 @@ private:
     Animation impact;
 
 public:
-    BazookaProyectile(const std::shared_ptr<States>& initial_state, TexturesPool& pool,
-                      Camera& camera):
+    BazookaProyectile(std::shared_ptr<States>& initial_state, TexturesPool& pool,
+                      Camera& camera) :
             Proyectile(initial_state, pool, camera),
             on_air(pool.get_texture(Actors::BAZOOKA_PROYECTILE), 1, 1),
             impact(pool.get_texture(Actors::BAZOOKA_EXPLOSION), 8, 3, false) {}
 
-    void update(const std::shared_ptr<States>& actor_state) override {
+    void update(std::shared_ptr<States>& actor_state) override {
         position = std::dynamic_pointer_cast<ProjectileStateG>(actor_state)->pos;
         impacted = std::dynamic_pointer_cast<ProjectileStateG>(actor_state)->impacted;
         impact.update(!impacted);

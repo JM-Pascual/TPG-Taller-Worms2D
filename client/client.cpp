@@ -104,7 +104,7 @@ void Client::run() {
         for (auto& proyectile: collided_proyectiles) {
             auto correct_projectile = std::dynamic_pointer_cast<
                     BazookaProyectile>(proyectile.second);
-            correct_projectile->update(proyectile.first);
+            correct_projectile->update((std::shared_ptr<States>&)proyectile.first);
             correct_projectile->render(window.get_renderer());
         }
 
