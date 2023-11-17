@@ -52,4 +52,17 @@ void BananaGrenade::execute(Game &game, Battlefield &battlefield, Player &player
     player.shoot_aim_weapon(banana);
 }
 
+//~~~~~~~~~~~~~~~~~~~ DynamiteGrenade ~~~~~~~~~~~~~~~~~~~~
 
+DynamiteGrenade::DynamiteGrenade() : Weapon(DYNAMITE_AMMO) {}
+
+void DynamiteGrenade::execute(Game &game, Battlefield &battlefield, Player &player) {
+
+    b2Vec2 projectile_position = player.set_bullet_direction();
+    uint8_t explosion_delay = player.set_bullet_explosion_delay();
+
+    std::shared_ptr<Projectile> dynamite = std::make_shared<Dynamite>(battlefield, projectile_position,explosion_delay);
+    game.add_projectile(dynamite);
+
+    player.use_throwable(dynamite);
+}

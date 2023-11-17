@@ -10,6 +10,7 @@
 #define BAZOOKA_AMMO uint8_t(10000) //Se supone que tiene que ser infinita
 #define GREEN_GRENADE_AMMO uint8_t(10000)
 #define BANANA_AMMO uint8_t(5)
+#define DYNAMITE_AMMO uint8_t(5)
 
 class Player;
 class Game;
@@ -52,6 +53,17 @@ class BananaGrenade : public Weapon{
     virtual ~BananaGrenade() = default;
 
 };
+
+//~~~~~~~~~~~~~~~~~~~ DynamiteGrenade ~~~~~~~~~~~~~~~~~~~~
+
+class DynamiteGrenade : public Weapon{
+public:
+    DynamiteGrenade();
+    void execute(Game& game, Battlefield& battlefield, Player& player) override;
+    virtual ~DynamiteGrenade() = default;
+
+};
+
 
 
 #endif //WORMS2D_WEAPON_H

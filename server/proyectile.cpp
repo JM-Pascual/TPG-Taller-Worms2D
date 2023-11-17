@@ -143,3 +143,8 @@ Banana::Banana(Battlefield &battlefield, b2Vec2 position, uint8_t explosion_dela
                                                                     EPICENTER_DAMAGE_BANANA,
                                                                     WeaponsAndTools::BANANA) {
 }
+
+Dynamite::Dynamite(Battlefield &battlefield, b2Vec2 position, uint8_t explosion_delay) : Grenade(battlefield,position,explosion_delay,
+                                                                                                 BLAST_RADIUS_DYNAMITE,
+                                                                                                 EPICENTER_DAMAGE_DYNAMITE,
+                                                                                                 WeaponsAndTools::DYNAMITE) {}

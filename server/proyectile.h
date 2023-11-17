@@ -17,10 +17,14 @@
 #define BLAST_RADIUS_BAZOOKA 2
 #define BLAST_RADIUS_GREEN_GRENADE 2
 #define BLAST_RADIUS_BANANA 4
+#define BLAST_RADIUS_DYNAMITE 4
+
 
 #define EPICENTER_DAMAGE_BAZOOKA 50
 #define EPICENTER_DAMAGE_GREEN_GRENADE 30
 #define EPICENTER_DAMAGE_BANANA 70
+#define EPICENTER_DAMAGE_DYNAMITE 50
+
 
 
 class Battlefield;
@@ -80,6 +84,11 @@ public:
 class Banana : public Grenade{
 public:
     Banana(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+};
+
+class Dynamite : public Grenade{
+public:
+    Dynamite(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
 };
 
 

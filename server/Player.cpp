@@ -39,7 +39,7 @@ Player::Player(Battlefield& battlefield):
 
     body->CreateFixture(&fixtureDef);
 
-    weapon = new GreenGrenade();
+    weapon = new DynamiteGrenade();
 }
 
 void Player::set_ready() { ready = !ready; }
@@ -153,6 +153,10 @@ void Player::shoot_aim_weapon(std::shared_ptr<Projectile> projectile) {
     projectile->set_power(set_bullet_power());
 }
 
+void Player::use_throwable(std::shared_ptr<Projectile> throwable) {
+    throwable->set_power(b2Vec2(0,0));
+}
+
 int Player::facing_factor() { return (std::pow(-1, 1 - facing_right)); }
 
 bool Player::is_dead() {
@@ -168,6 +172,8 @@ void Player::execute_collision_reaction() {}
 void Player::start_falling() {falling = true;}
 
 void Player::recibe_life_modification(float life_variation) {life += life_variation;}
+
+
 
 
 
