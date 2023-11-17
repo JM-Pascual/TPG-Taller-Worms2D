@@ -20,3 +20,4 @@ bool Entity::multiple_contact() {
 }
 
 void Entity::start_falling() {}
+void Entity::recibe_life_modification(float life_variation) {}

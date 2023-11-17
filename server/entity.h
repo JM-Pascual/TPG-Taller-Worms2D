@@ -17,6 +17,7 @@ public:
     void start_contact();
     void end_contact();
     virtual void start_falling();
+    virtual void recibe_life_modification(float life_variation); //todo Ver si esta bien que este acá
     bool multiple_contact();
     void remove_entity();        // todo ver si esta bien que sea un puntero
     virtual bool is_dead() = 0;  // todo cambiar el nombre

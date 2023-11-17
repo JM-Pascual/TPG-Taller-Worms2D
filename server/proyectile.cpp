@@ -69,7 +69,6 @@ void Projectile::execute_collision_reaction() {
 void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 applyPoint,
                                    float blastPower) {
 
-
     b2Vec2 blastDir = applyPoint - blastCenter;
     float distance = blastDir.Normalize();
     // ignore bodies exactly at the blast point - blast direction is undefined
@@ -80,11 +79,11 @@ void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 app
     float invDistance = 1 / distance;
     impulseMag = blastPower * invDistance;
 
-    Entity* tipo =  reinterpret_cast<Entity*>(body_->GetUserData().pointer);
-    std::cout << tipo << std::endl;
 
-
-    //b2Vec2 final_impulse = b2Vec2(impulseMag * blastDir.x * 10, impulseMag * blastDir.y);
     b2Vec2 final_impulse = impulseMag * blastDir;
     body_->ApplyLinearImpulseToCenter(final_impulse, true);
+
+    Entity* entity =  reinterpret_cast<Entity*>(body_->GetUserData().pointer);
+    entity->recibe_life_modification(-impulseMag);
+
 }

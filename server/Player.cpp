@@ -161,4 +161,6 @@ void Player::execute_collision_reaction() {}
 
 void Player::start_falling() {falling = true;}
 
+void Player::recibe_life_modification(float life_variation) {life += life_variation;}
+
 
