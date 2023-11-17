@@ -38,9 +38,6 @@ void Client::run() {
     ActorHolder players;
     ActorHolder proyectiles;
 
-    std::unordered_map<std::shared_ptr<ProjectileStateG>,
-            std::shared_ptr<GameActor>> collided_proyectiles;
-
     Animation water_animation(txt_pool.get_texture(Actors::WATER), 11, 3);
 
     input.start();
@@ -100,14 +97,6 @@ void Client::run() {
         }
 
         players.render_actors(window.get_renderer());
-
-        for (auto& proyectile: collided_proyectiles) {
-            auto correct_projectile = std::dynamic_pointer_cast<
-                    BazookaProyectile>(proyectile.second);
-            correct_projectile->update((std::shared_ptr<States>&)proyectile.first);
-            correct_projectile->render(window.get_renderer());
-        }
-
         proyectiles.render_actors(window.get_renderer());
 
         water_animation.update();

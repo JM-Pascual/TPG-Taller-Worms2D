@@ -153,8 +153,6 @@ void Game::remove_collided_projectiles() {
         if (it->second->is_dead()) {
             uint8_t id = it->first;
             projectiles.erase(id);
-            players_stats.erase(id);
-            ready_count--;
         }
 
         if (projectiles.empty()) {
