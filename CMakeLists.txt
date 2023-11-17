@@ -33,6 +33,7 @@ set(TARGET_DIR ../target)
 set(QT_RES client/resources/images.qrc)
 
 add_definitions(-DDATA_PATH="${PROJECT_SOURCE_DIR}/sprites")
+add_definitions(-DMEDIA_PATH="${PROJECT_SOURCE_DIR}/client/resources/sounds")
 include_directories(${SDL2PP_INCLUDE_DIRS})
 
 file(GLOB COMMON_SRC common/*.cpp)
@@ -41,7 +42,8 @@ file(GLOB CLIENT_H client/*.h)
 file(GLOB SERVER_SRC server/*.cpp server/main.cpp)
 file(GLOB UI_SRC client/*.ui)
 
-set(QT_CLIENT_SRC ${CLIENT_SRC})
+set(QT_CLIENT_SRC ${CLIENT_SRC}
+        server/turn_handler.cpp)
 qt_wrap_ui(QT_CLIENT_SRC ${UI_SRC})
 qt_wrap_cpp(QT_CLIENT_SRC ${CLIENT_H})
 qt_add_resources(QT_RES client/resources/images.qrc)

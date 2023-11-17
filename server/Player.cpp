@@ -70,7 +70,7 @@ void Player::jump(const JumpDir& direction) {
             break;
         case (JumpDir::BACK):
             body->ApplyLinearImpulseToCenter(b2Vec2(std::pow(-1, facing_right) * 20, 25), true);
-            is_jumping = true;
+            is_backflipping = true;
             break;
     }
 }

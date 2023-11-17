@@ -19,13 +19,13 @@ AudioPlayer::AudioPlayer(): background_music(nullptr) {
         spdlog::get("client")->error("Error al intentar cargar el dispositivo de audio");
     }
 
-    background_music = Mix_LoadMUS("client/resources/sounds/background/oriental.mp3");
+    background_music = Mix_LoadMUS(MEDIA_PATH "/background/oriental.mp3");
     if (not background_music) {
         spdlog::get("client")->error("Error al intentar cargar la musica ambiente");
     }
 
     std::list<std::pair<std::string, std::string>> key_filepath;
-    key_filepath.push_back({"test", "client/resources/sounds/laugh.mp3"});
+    key_filepath.emplace_back("test", MEDIA_PATH "/laugh.mp3");
 
     for (const auto& key_path: key_filepath) {
         Mix_Chunk* chunk = Mix_LoadWAV(key_path.second.data());
@@ -51,7 +51,7 @@ void AudioPlayer::playAudio(const std::string& key) {
         return;
     }
 
-    int channel = Mix_PlayChannel(1, chunks.at(key), -1);
+    int channel = Mix_PlayChannel(-1, chunks.at(key), -1);
     if (channel == -1) {
         spdlog::get("client")->error("Error al intentar reproducir el audio {:s}", key);
         return;
@@ -60,6 +60,7 @@ void AudioPlayer::playAudio(const std::string& key) {
     while (Mix_Playing(channel) != 0) {
         SDL_Delay(200);  // wait 200 milliseconds
     }
+
 }
 
 
