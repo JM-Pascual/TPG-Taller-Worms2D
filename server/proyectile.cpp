@@ -114,7 +114,8 @@ void Grenade::execute_collision_reaction() {
     //todo cuando lo pruebo ver si esta en segundos.
     std::chrono::time_point<std::chrono::steady_clock> actual_time = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsed_seconds = std::chrono::duration_cast<std::chrono::duration<double>>(actual_time - grenade_timer);
-    if((explosion_delay - elapsed_seconds.count()) <= 0){
+    explosion_delay -= elapsed_seconds.count();
+    if(explosion_delay <= 0){
         collide();
     }
 }
