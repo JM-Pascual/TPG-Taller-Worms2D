@@ -6,6 +6,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "../common/States.h"
@@ -27,7 +28,7 @@ class Game {
 private:
     std::mutex m;
     std::map<uint8_t, std::unique_ptr<Player>> players_stats;
-    std::vector<std::shared_ptr<Projectile>> projectiles;
+    std::map<uint8_t, std::shared_ptr<Projectile>> projectiles;
 
     Battlefield battlefield;
     Level_holder level_holder;
@@ -40,6 +41,8 @@ private:
     bool need_to_join_loop;
     // int16_t para poder iniciarlo en -1 y que se tome bien el proximo turno
     int16_t prev_player_turn_id;
+    uint8_t projectile_count;
+
 
     void build_game_state(std::list<std::shared_ptr<States>>& states_list);
 
@@ -48,15 +51,16 @@ private:
     void notifyLobbyState();
 
 public:
-    Game(const std::string& desc, const std::string& map, const uint8_t& game_id,
+    Game(std::string  desc, const std::string& map, const uint8_t& game_id,
          Queue<uint8_t>& erase_id_queue):
             level_holder(battlefield),
             ready_count(0),
-            description(desc),
+            description(std::move(desc)),
             map_name(map),
             game_id(game_id),
             gameloop(*this, this->game_id, erase_id_queue),
             need_to_join_loop(false),
+            projectile_count(0),
             prev_player_turn_id(-1) {}
 
     Queue<std::shared_ptr<PlayerAction>>& get_action_queue();

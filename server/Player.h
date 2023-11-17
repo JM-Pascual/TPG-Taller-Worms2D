@@ -93,6 +93,7 @@ public:
     virtual ~Player() = default;
 
     friend class Game;
+    friend class BroadCaster;
 
     Player(const Player&) = delete;
     Player& operator=(const Player&) = delete;

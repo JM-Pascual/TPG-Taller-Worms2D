@@ -23,11 +23,12 @@ Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, WeaponsAndTool
 }
 
 
-std::shared_ptr<ProjectileStateG> Projectile::get_proyectile_state() {
+std::shared_ptr<ProjectileStateG> Projectile::get_proyectile_state(const uint8_t& proyectile_id) {
 
     float vel_angle = b2Atan2(body->GetLinearVelocity().y, body->GetLinearVelocity().x);
-    return std::make_shared<ProjectileStateG>(body->GetPosition().x, body->GetPosition().y, type,
-                                              dead, vel_angle);
+    return std::make_shared<ProjectileStateG>(proyectile_id,
+                                              body->GetPosition().x, body->GetPosition().y,
+                                              type, dead, vel_angle);
 }
 
 void Projectile::set_power(b2Vec2 power) { body->ApplyLinearImpulseToCenter(power, true); }

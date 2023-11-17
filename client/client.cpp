@@ -10,6 +10,7 @@
 #include "GameActor.h"
 #include "TexturesPool.h"
 #include "Window.h"
+#include "ActorHolder.h"
 
 const int DURATION = 1000 / 30;
 
@@ -35,8 +36,8 @@ void Client::run() {
     TexturesPool txt_pool(window.get_renderer());
     AudioPlayer audio_player;
 
-    std::unordered_map<size_t, std::shared_ptr<GameActor>> actors;
-    std::unordered_map<size_t, std::shared_ptr<GameActor>> proyectiles;
+    ActorHolder players;
+    ActorHolder proyectiles;
 
     Animation water_animation(txt_pool.get_texture(Actors::WATER), 11, 3);
 
@@ -61,15 +62,16 @@ void Client::run() {
                             std::dynamic_pointer_cast<PlayerCountG>(raw_state)->quantity;
                     for (size_t i = 0; i < players_quantity; i++) {
                         while (not game_state_queue.try_pop(raw_state)) {}
-                        if (actors.count(i) == 0) {
-                            actors.insert({i, std::make_shared<Worm>(raw_state, txt_pool, camera)});
+                        auto state = std::dynamic_pointer_cast<PlayerStateG>(raw_state);
+                        if (!players.actor_loaded(state->id)) {
+                            players.add_actor(
+                                    state->id, std::make_shared<Worm>(raw_state, txt_pool, camera)
+                            );
                         } else {
-                            actors.at(i)->update(raw_state);
+                            players.update_actor_state(state->id, raw_state);
                         }
-                        // actors.at(i)->render(window.get_renderer());
 
                         auto worm = std::dynamic_pointer_cast<PlayerStateG>(raw_state);
-
                         if (worm->is_walking) {
                             camera.fixActor(worm->pos.x, worm->pos.y, 32, 60);
                             audio_player.playAudio("test");
@@ -81,31 +83,31 @@ void Client::run() {
                             std::dynamic_pointer_cast<ProjectileCountG>(raw_state)->quantity;
                     for (size_t i = 0; i < proyectiles_quantity; i++) {
                         while (not game_state_queue.try_pop(raw_state)) {}
-                        if (proyectiles.count(i) == 0) {
-                            proyectiles.insert({i, std::make_shared<BazookaProyectile>(
-                                                           raw_state, txt_pool, camera)});
+                        auto state = std::dynamic_pointer_cast<ProjectileStateG>(raw_state);
+                        if (!proyectiles.actor_loaded(state->id)) {
+                            proyectiles.add_actor(
+                                    state->id,
+                                    std::make_shared<BazookaProyectile>(raw_state, txt_pool, camera)
+                            );
                         } else {
-                            proyectiles.at(i)->update(raw_state);
+                            if (std::dynamic_pointer_cast<ProjectileStateG>(raw_state)->impacted){
+                                proyectiles.remove_actor(state->id, raw_state);
+                            } else{
+                                proyectiles.update_actor_state(state->id, raw_state);
+                            }
                         }
+                    } else if (raw_state->tag == StatesTag::PLAYER_TURN) {
+                        // contar tiempo
+                        my_turn = std::dynamic_pointer_cast<PlayerTurn>(raw_state)->is_your_turn;
+                        turn_start = std::chrono::steady_clock::now();
                     }
-                } else if (raw_state->tag == StatesTag::PLAYER_TURN) {
-                    // contar tiempo
-                    my_turn = std::dynamic_pointer_cast<PlayerTurn>(raw_state)->is_your_turn;
-                    turn_start = std::chrono::steady_clock::now();
                 }
             }
-        }
+            turn_time = std::chrono::steady_clock::now() - turn_start;
+            // tiempo restante turno = (uint8_t)(60 - turn_time)
 
-        turn_time = std::chrono::steady_clock::now() - turn_start;
-        // tiempo restante turno = (uint8_t)(60 - turn_time)
-
-        for (auto& actor: actors) {
-            actor.second->render(window.get_renderer());
-        }
-
-        for (auto& proyectile: proyectiles) {
-            proyectile.second->render(window.get_renderer());
-        }
+        players.render_actors(window.get_renderer());
+        proyectiles.render_actors(window.get_renderer());
 
         water_animation.update();
 

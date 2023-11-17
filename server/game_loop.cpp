@@ -43,18 +43,17 @@ void GameLoop::run() {
          * vivas
          * */
 
-
-        game.step();
-
-        game.broadcast_game_state();
         // dormir(tiempo del tick del sv - tiempo que tarde en llegar acá)
 
+        // Le llega por el broadcast_game_state los jugadores que estan muertos(booleano)
+        game.broadcast_game_state();
         // Le llega por el broadcast_game_state los jugadores que estan muertos(booleano)
         //
         game.remove_box2d_entities();
         game.remove_collided_projectiles();
         game.remove_closed_clients();
 
+        game.step();
         std::chrono::time_point<std::chrono::steady_clock> after = std::chrono::steady_clock::now();
 
         elapsed_seconds = std::chrono::milliseconds(EST_TICK_TIME) - (after - before);

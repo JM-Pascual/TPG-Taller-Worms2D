@@ -139,6 +139,7 @@ std::shared_ptr<GameInfoL> ClientSide::Protocol::recvGameInfo() {
 }
 
 std::shared_ptr<PlayerStateG> ClientSide::Protocol::recvPlayerGame() {
+    uint8_t id = recvUint8();
     float x = meter_to_pixel_x(recvFloat());
     float y = meter_to_pixel_y(recvFloat());
     bool is_wa = recvBool();
@@ -150,15 +151,16 @@ std::shared_ptr<PlayerStateG> ClientSide::Protocol::recvPlayerGame() {
     bool charging_weapon = recvBool();
     float life = recvFloat();
 
-    return std::make_shared<PlayerStateG>(x, y, is_wa, is_jumping, is_backflipping, direction,
+    return std::make_shared<PlayerStateG>(id, x, y, is_wa, is_jumping, is_backflipping, direction,
                                           was_hit, aim_inclination, charging_weapon, life);
 }
 
 std::shared_ptr<ProjectileStateG> ClientSide::Protocol::recvProjectileGame() {
+    uint8_t id = recvUint8();
     float x = meter_to_pixel_x(recvFloat());
     float y = meter_to_pixel_y(recvFloat());
     float angle = recvFloat();
     auto proyectile_type = (WeaponsAndTools)recvUint8();
     bool impacted = recvBool();
-    return std::make_shared<ProjectileStateG>(x, y, proyectile_type, impacted, angle);
+    return std::make_shared<ProjectileStateG>(id, x, y, proyectile_type, impacted, angle);
 }

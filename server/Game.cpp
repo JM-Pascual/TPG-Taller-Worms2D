@@ -17,17 +17,20 @@ void Game::build_game_state(std::list<std::shared_ptr<States>>& states_list) {
     for (auto& player: players_stats) {
         // cppcheck-suppress useStlAlgorithm
         states_list.push_back(std::make_shared<PlayerStateG>(
-                player.second->body->GetPosition().x, player.second->body->GetPosition().y,
-                player.second->is_walking, player.second->is_jumping,
-                player.second->is_backflipping, player.second->facing_right,
-                (player.second->contact_points >= 1), player.second->aim_inclination_degrees,
-                player.second->charging_shoot, player.second->life));
+                player.first, player.second->body->GetPosition().x,
+                player.second->body->GetPosition().y, player.second->is_walking,
+                player.second->is_jumping, player.second->is_backflipping,
+                player.second->facing_right, (player.second->contact_points >= 1),
+                player.second->aim_inclination_degrees, player.second->charging_shoot,
+                player.second->life));
     }
 
     states_list.push_back(std::make_shared<ProjectileCountG>(projectiles.size()));
 
     std::transform(projectiles.begin(), projectiles.end(), std::back_inserter(states_list),
-                   [](auto& projectile) { return projectile->get_proyectile_state(); });
+                   [](auto& projectile) {
+                       return projectile.second->get_proyectile_state(projectile.first);
+                   });
 }
 
 bool Game::non_locking_is_playing() {
@@ -53,8 +56,6 @@ Queue<std::shared_ptr<PlayerAction>>& Game::get_action_queue() {
 }
 
 void Game::add_client_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue) {
-    remove_closed_clients();
-
     std::lock_guard<std::mutex> lock(m);
 
     if (non_locking_is_playing()) {
@@ -84,7 +85,7 @@ void Game::broadcast_game_state() {
 
 void Game::remove_closed_clients() {
     std::lock_guard<std::mutex> lock(m);
-    broadcaster.remove_closed_clients(ready_count, players_stats);
+    broadcaster.remove_closed_clients(ready_count, players_stats, battlefield);
 }
 
 void Game::removePlayer(const uint8_t& player_id) {
@@ -168,16 +169,22 @@ std::shared_ptr<GameInfoL> Game::getInfo() {
 
 void Game::add_projectile(std::shared_ptr<Projectile> proyectile) {
     // std::lock_guard<std::mutex> lock(m);
-    projectiles.push_back(proyectile);
+    projectiles.insert({projectile_count, proyectile});
+    projectile_count++;
 }
 
 void Game::remove_collided_projectiles() {
+    std::lock_guard<std::mutex> lock(m);
 
-    projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(),
-                                     [&](const std::shared_ptr<Projectile>& projectile) {
-                                         return projectile->is_dead();
-                                     }),
-                      projectiles.end());
+    auto it = projectiles.cbegin();
+    while (it != projectiles.cend()) {
+        if (it->second->is_dead()) {
+            it = projectiles.erase(it);
+            continue;
+        }
+
+        ++it;
+    }
 }
 
 // -------------- Player Actions -------------------
