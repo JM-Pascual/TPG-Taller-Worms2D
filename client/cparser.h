@@ -8,11 +8,7 @@
 #include "../common/const.h"
 #include "../common/queue.h"
 
-#include "mainwindow.h"
-
 class States;
-class GameFrame;
-class PlayerFrame;
 
 namespace ClientSide {
 

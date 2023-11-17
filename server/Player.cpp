@@ -13,6 +13,7 @@ Player::Player(Battlefield& battlefield):
         ready(false),
         is_jumping(false),
         is_backflipping(false),
+        is_playing(true),
         aiming(false),
         aim_inclination_degrees(0),
         aim_direction(ADSAngleDir::UP),
@@ -21,8 +22,8 @@ Player::Player(Battlefield& battlefield):
     b2BodyDef wormDef;
     wormDef.type = b2_dynamicBody;
     wormDef.position.Set(5.0f, 21.6f);  // Ahora la harcodeo, pero tiene que cambiar
-    wormDef.userData.pointer = reinterpret_cast<uintptr_t>(this);  // Todo ver si funciona
     wormDef.allowSleep = true;
+    wormDef.userData.pointer = reinterpret_cast<uintptr_t>(this);  // Todo ver si funciona
 
     body = battlefield.add_body(wormDef);
     b2PolygonShape wormBox;
@@ -32,6 +33,8 @@ Player::Player(Battlefield& battlefield):
     fixtureDef.shape = &wormBox;
     fixtureDef.density = 3.0f;
 
+    // fixtureDef.filter.groupIndex = -1; //Todo tengo que ver como seteo cada una de las balas para
+    // que pueda colisionar con los gusanos
 
     // fixtureDef.filter.groupIndex = -1; //Todo tengo que ver como seteo cada una de las balas para
     // que pueda colisionar con los gusanos
@@ -67,7 +70,7 @@ void Player::jump(const JumpDir& direction) {
             break;
         case (JumpDir::BACK):
             body->ApplyLinearImpulseToCenter(b2Vec2(std::pow(-1, facing_right) * 20, 25), true);
-            is_backflipping = true;
+            is_jumping = true;
             break;
     }
 }
@@ -151,3 +154,48 @@ bool Player::is_dead() {
 }
 
 void Player::execute_collision_reaction() {}
+
+Player::Player(Player&& o):
+        Entity(o.battlefield),
+        life(o.life),
+        worm(o.worm),
+        weapon(o.weapon),
+        facing_right(o.facing_right),
+        is_walking(o.is_walking),
+        ready(o.ready),
+        is_jumping(o.is_jumping),
+        is_backflipping(o.is_backflipping),
+        is_playing(o.is_playing),
+        aiming(o.aiming),
+        aim_inclination_degrees(o.aim_inclination_degrees),
+        aim_direction(o.aim_direction),
+        charging_shoot(o.charging_shoot),
+        weapon_power(o.weapon_power) {
+
+    o.life = 0;
+
+    o.worm = nullptr;
+    o.weapon = nullptr;
+
+    o.facing_right = false;
+    o.is_walking = false;
+    o.ready = false;
+    o.is_jumping = false;
+    o.is_backflipping = false;
+    o.is_playing = false;
+
+    o.aiming = false;
+    o.aim_inclination_degrees = 0.0f;
+    o.aim_direction = ADSAngleDir::DOWN;
+
+    o.charging_shoot = false;
+    o.weapon_power = 0.0f;
+}
+
+void Player::stop_all() {
+    is_walking = false;
+    is_jumping = false;
+    is_backflipping = false;
+    aiming = false;
+    charging_shoot = false;
+}

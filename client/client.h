@@ -18,6 +18,7 @@ class Client {
 
 private:
     std::atomic<bool> quit;
+    std::atomic<bool> my_turn;
     std::atomic<bool> runned;
     ClientSide::Protocol protocol;
     ClientSide::Receiver recv;

@@ -79,7 +79,7 @@ void ServerSide::Protocol::recvString64(std::string& desc) {
 
 // ------------------------------ SEND -----------------------------------
 
-void ServerSide::Protocol::sendFloat(float number){
+void ServerSide::Protocol::sendFloat(float number) {
     uint32_t number_net;
     memcpy(&number_net, &number, sizeof(uint32_t));
     number_net = htonl(number_net);
@@ -101,7 +101,7 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<States>& ps) {
     send(&p->is_jumping, sizeof(bool));
     send(&p->is_backflipping, sizeof(bool));
     send(&p->facing_right, sizeof(bool));
-    send(&p->was_hit,sizeof(bool));
+    send(&p->was_hit, sizeof(bool));
     this->sendFloat(p->aim_inclination_degrees);
     send(&p->charging_weapon, sizeof(bool));
     this->sendFloat(p->life);
@@ -140,6 +140,12 @@ void ServerSide::Protocol::sendProjectileState(const std::shared_ptr<States>& ps
     send(&p->impacted, sizeof(bool));
 }
 
+void ServerSide::Protocol::sendTurn(const std::shared_ptr<States>& state) {
+    std::shared_ptr<PlayerTurn> turn = std::dynamic_pointer_cast<PlayerTurn>(state);
+    send(&turn->tag, sizeof(uint8_t));
+    send(&turn->is_your_turn, sizeof(uint8_t));
+}
+
 void ServerSide::Protocol::sendPlayerLobby(const std::shared_ptr<States>& count) {
     std::shared_ptr<PlayerStateL> p = std::dynamic_pointer_cast<PlayerStateL>(count);
     send(&p->tag, sizeof(uint8_t));
@@ -176,6 +182,10 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
 
         case StatesTag::PROJECTILE_G:
             sendProjectileState(state);
+            break;
+
+        case StatesTag::PLAYER_TURN:
+            sendTurn(state);
             break;
 
         default:

@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include <algorithm>
+#include <numeric>
 #include <utility>
 
 #include <spdlog/spdlog.h>
@@ -132,6 +133,32 @@ void Game::step() {
     battlefield.step();
 }
 
+const uint8_t Game::broadcast_turn(const uint8_t& player_turn) {
+    std::lock_guard<std::mutex> lock(m);
+
+    auto it = players_stats.begin();
+    std::advance(it, player_turn);
+    uint8_t player_id = it->first;
+
+    // Enviar solo si cambio el turno (o sea reseteo el timer)
+    if (player_id != prev_player_turn_id) {
+        stop_all_players();
+        broadcaster.broadcast_turn(player_turn);
+    }
+
+    prev_player_turn_id = player_id;
+    return player_id;  // Retorno la id del jugador el cual es su turno
+}
+
+const uint8_t Game::players_alive() {
+    std::lock_guard<std::mutex> lock(m);
+    uint8_t players_alive = std::accumulate(
+            players_stats.begin(), players_stats.end(), 0,
+            [](const int& sum, const auto& player) { return sum + player.second->is_playing; });
+
+    return players_alive;
+}
+
 std::shared_ptr<GameInfoL> Game::getInfo() {
     std::lock_guard<std::mutex> lock(m);
     return std::make_shared<GameInfoL>(description, map_name, players_stats.size(), game_id);
@@ -234,3 +261,10 @@ Game::~Game() {
 }
 
 void Game::remove_box2d_entities() { battlefield.destroy_dead_entities(); }
+
+void Game::stop_all_players() {
+
+    for (auto& player: players_stats) {
+        player.second->stop_all();
+    }
+}

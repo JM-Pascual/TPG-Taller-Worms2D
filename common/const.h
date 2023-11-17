@@ -13,6 +13,9 @@
 #define MAX_DESCR_CHARS 64
 #define MAX_PLAYERS 4
 
+#define NOT_YOUR_TURN 0
+#define IS_YOUR_TURN 1
+
 enum class SWIndex { INTRO, MENU, GAME_SEARCH, HELP, LOBBY };
 
 enum class Direction { LEFT = 0, RIGHT = 1 };
@@ -93,7 +96,8 @@ enum class StatesTag {
     PLAYER_G,
     PROJECTILE_G,
     PROJECTILE_COUNT_G,
-    PLAYER_COUNT_G
+    PLAYER_COUNT_G,
+    PLAYER_TURN
 };
 
 #endif

@@ -9,6 +9,7 @@
 
 #include "../common/const.h"
 
+#include "battlefield.h"
 #include "entity.h"
 #include "weapon.h"
 
@@ -24,6 +25,8 @@
 #define MAX_POWER 10
 #define ANGLE_VARIATION (b2_pi / 64)
 
+#define CATEGORY_BITS 0x002
+
 #define INCLINACION_MAX (b2_pi / 2)
 #define INCLINACION_MIN (-b2_pi / 2)
 
@@ -36,6 +39,7 @@ class Projectile;
 class Player: public Entity {
 private:
     float life;
+    b2Body* worm;
     // std::map<WeaponsAndTools,Weapon >Weapons;
     Weapon* weapon;
 
@@ -45,6 +49,7 @@ private:
     bool ready;
     bool is_jumping;
     bool is_backflipping;
+    bool is_playing;
 
     bool aiming;
     float aim_inclination_degrees;  // Radianes
@@ -63,6 +68,9 @@ public:
     void jump(const JumpDir& direction);
 
     void shoot(Game& game);
+
+    void stop_all();
+
 
     void change_aim_direction();
     void change_fire_power();
@@ -85,6 +93,11 @@ public:
     virtual ~Player() = default;
 
     friend class Game;
+
+    Player(const Player&) = delete;
+    Player& operator=(const Player&) = delete;
+    Player(Player&&);
+    Player& operator=(Player&&) = delete;
 };
 
 #endif  // PLAYER_H

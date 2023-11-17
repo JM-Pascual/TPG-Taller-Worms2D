@@ -28,6 +28,8 @@ public:
 
     void removePlayer(const uint8_t& player_id);
 
+    void broadcast_turn(const uint8_t& player_turn);
+
     ~BroadCaster() = default;
 };
 

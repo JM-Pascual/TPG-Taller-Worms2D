@@ -38,7 +38,8 @@ private:
     const uint8_t game_id;
     GameLoop gameloop;
     bool need_to_join_loop;
-
+    // int16_t para poder iniciarlo en -1 y que se tome bien el proximo turno
+    int16_t prev_player_turn_id;
 
     void build_game_state(std::list<std::shared_ptr<States>>& states_list);
 
@@ -55,7 +56,8 @@ public:
             map_name(map),
             game_id(game_id),
             gameloop(*this, this->game_id, erase_id_queue),
-            need_to_join_loop(false) {}
+            need_to_join_loop(false),
+            prev_player_turn_id(-1) {}
 
     Queue<std::shared_ptr<PlayerAction>>& get_action_queue();
 
@@ -75,6 +77,9 @@ public:
     void set_player_ready(uint8_t id);
 
 
+    const uint8_t broadcast_turn(const uint8_t& player_turn);
+
+    const uint8_t players_alive();
 
     void step();
     void update_physics();
@@ -91,11 +96,11 @@ public:
     void player_shoot(const uint8_t id);
 
 
-
     void add_projectile(std::shared_ptr<Projectile> proyectile);
     void remove_collided_projectiles();
 
     void remove_box2d_entities();
+    void stop_all_players();
 
     std::shared_ptr<GameInfoL> getInfo();
 

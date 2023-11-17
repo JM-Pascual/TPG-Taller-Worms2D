@@ -52,7 +52,7 @@ public:
     const bool is_jumping;
     const bool is_backflipping;
     const bool facing_right;
-    const bool was_hit; //
+    const bool was_hit;  //
 
     float aim_inclination_degrees;
     bool charging_weapon;
@@ -60,8 +60,8 @@ public:
 
 
     explicit PlayerStateG(float x, float y, bool is_walking, bool is_jumping, bool is_backflipping,
-                          bool facing_right, bool was_hit,
-                          float aim_inclination_degrees, bool charging_weapon, float life);
+                          bool facing_right, bool was_hit, float aim_inclination_degrees,
+                          bool charging_weapon, float life);
 
     ~PlayerStateG() override = default;
 };
@@ -81,6 +81,13 @@ public:
     ~ProjectileStateG() override = default;
 };
 
+class PlayerTurn: public States {
+public:
+    const uint8_t is_your_turn;
+
+    explicit PlayerTurn(const bool& is_your_turn):
+            States(StatesTag::PLAYER_TURN), is_your_turn(is_your_turn) {}
+};
 
 // --------------- COUNT STATES ----------------------
 
@@ -139,5 +146,6 @@ class ConnectionError: public CountState {
 public:
     ConnectionError(): CountState(StatesTag::CONNECTION_ERROR_STATE, CONNECTION_ERROR) {}
 };
+
 
 #endif  // STATES_H

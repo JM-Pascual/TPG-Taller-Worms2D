@@ -16,11 +16,12 @@ const int DURATION = 1000 / 30;
 
 Client::Client(const char* hostname, const char* servname):
         quit(false),
+        my_turn(false),
         runned(false),
         protocol(hostname, servname),
         recv(this->protocol, game_state_queue, lobby_state_queue, runned),
         send(this->protocol, this->action_queue),
-        input(this->action_queue, quit, camera) {
+        input(this->action_queue, quit, my_turn, camera) {
     spdlog::get("client")->debug("Iniciando hilo receptor en el cliente");
     recv.start();
     spdlog::get("client")->debug("Iniciando hilo sender en el cliente");
@@ -42,6 +43,9 @@ void Client::run() {
     input.start();
 
     int loop_start_time = SDL_GetTicks();
+
+    std::chrono::duration<float> turn_time;
+    std::chrono::time_point<std::chrono::steady_clock> turn_start;
 
     while (!quit) {
         window.clear_textures();
@@ -84,9 +88,16 @@ void Client::run() {
                             proyectiles.at(i)->update(raw_state);
                         }
                     }
+                } else if (raw_state->tag == StatesTag::PLAYER_TURN) {
+                    // contar tiempo
+                    my_turn = std::dynamic_pointer_cast<PlayerTurn>(raw_state)->is_your_turn;
+                    turn_start = std::chrono::steady_clock::now();
                 }
             }
         }
+
+        turn_time = std::chrono::steady_clock::now() - turn_start;
+        // tiempo restante turno = (uint8_t)(60 - turn_time)
 
         for (auto& actor: actors) {
             actor.second->render(window.get_renderer());
