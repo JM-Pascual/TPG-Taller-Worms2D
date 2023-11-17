@@ -39,7 +39,7 @@ Player::Player(Battlefield& battlefield):
 
     body->CreateFixture(&fixtureDef);
 
-    weapon = new Bazooka();
+    weapon = new GreenGrenade();
 }
 
 void Player::set_ready() { ready = !ready; }
@@ -143,6 +143,12 @@ b2Vec2 Player::set_bullet_direction() {
 
 float Player::set_bullet_angle() { return b2Atan2(set_bullet_power().y, set_bullet_power().x); }
 
+uint8_t Player::set_bullet_explosion_delay() {
+    return 3;//bullet_explosion_delete;
+}
+
+
+
 void Player::shoot_aim_weapon(std::shared_ptr<Projectile> projectile) {
     projectile->set_power(set_bullet_power());
 }
@@ -162,5 +168,6 @@ void Player::execute_collision_reaction() {}
 void Player::start_falling() {falling = true;}
 
 void Player::recibe_life_modification(float life_variation) {life += life_variation;}
+
 
 

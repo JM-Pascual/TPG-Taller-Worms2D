@@ -76,6 +76,7 @@ public:
     b2Vec2 set_bullet_direction();
     b2Vec2 set_bullet_power();
     float set_bullet_angle();
+    uint8_t set_bullet_explosion_delay();
 
     void recibe_life_modification(float life_variation) override;
     void shoot_aim_weapon(std::shared_ptr<Projectile> projectile);

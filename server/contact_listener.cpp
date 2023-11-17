@@ -69,7 +69,7 @@ void Contact_listener::PostSolve(b2Contact* contact, const b2ContactImpulse* imp
     auto* dataA = reinterpret_cast<Entity*>(contact1);
 
     if (dataA && dataB) {
-        // Si estoy vivo pero no
+        //Todo tengo que ver el caso en el que tengo una granada y puede chocar más de una vez, no tiene que entrar en la lista
         if (not dataA->multiple_contact() && dataA->is_dead()) {
             dead_list.push_back(dataA);
         }

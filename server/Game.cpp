@@ -154,7 +154,7 @@ void Game::add_projectile(std::shared_ptr<Projectile> proyectile) {
 }
 
 void Game::remove_collided_projectiles() {
-
+    std::lock_guard<std::mutex> lock(m);
     projectiles.erase(std::remove_if(projectiles.begin(), projectiles.end(),
                                      [&](const std::shared_ptr<Projectile>& projectile) {
                                          return projectile->is_dead();

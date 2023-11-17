@@ -5,37 +5,51 @@
 
 Weapon::Weapon(uint8_t ammo) : ammo(ammo){}
 
-std::shared_ptr<Projectile>
-Weapon::prepare_ammo(Game& game,Battlefield &battlefield, b2Vec2 projectile_position, WeaponsAndTools type) {
-    std::shared_ptr<Projectile> projectile = std::make_shared<Projectile> (battlefield, projectile_position, type) ;
-    game.add_projectile(projectile);
-
-    return projectile;
-}
-
-
-
 //~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
 
 Bazooka::Bazooka() : Weapon(BAZOOKA_AMMO){}
 
+
+
 void Bazooka::execute(Game& game, Battlefield& battlefield, Player& player) {
 
-    b2Vec2 proyectile_position = player.set_bullet_direction();
-    std::shared_ptr<Projectile> projectile  = prepare_ammo(game, battlefield, proyectile_position, WeaponsAndTools::BAZOOKA);
+    b2Vec2 projectile_position = player.set_bullet_direction();
+
+    std::shared_ptr<Projectile> projectile = std::make_shared<Rocket> (battlefield, projectile_position);
+    game.add_projectile(projectile);
 
     player.shoot_aim_weapon(projectile);
 }
-/*
+
+
+
 //~~~~~~~~~~~~~~~~~~~ Green_grenade ~~~~~~~~~~~~~~~~~~~~
 
-Green_grenade::Green_grenade() : Weapon(GREEN_GRENADE_AMMO) {}
+GreenGrenade::GreenGrenade() : Weapon(GREEN_GRENADE_AMMO) {}
 
-void Green_grenade::execute(Game &game, Battlefield &battlefield, Player &player) {
-    b2Vec2 proyectile_position = player.set_bullet_direction();
-    std::shared_ptr<Projectile> green_grenade  = prepare_ammo(game, battlefield, proyectile_position, WeaponsAndTools::GREEN_GRENADE);
+void GreenGrenade::execute(Game &game, Battlefield &battlefield, Player &player) {
+    b2Vec2 projectile_position = player.set_bullet_direction();
+    uint8_t explosion_delay = player.set_bullet_explosion_delay();
+
+    std::shared_ptr<Projectile> green_grenade = std::make_shared<Green> (battlefield, projectile_position,explosion_delay);
+    game.add_projectile(green_grenade);
 
     player.shoot_aim_weapon(green_grenade);
 }
 
- */
+//~~~~~~~~~~~~~~~~~~~ Banana ~~~~~~~~~~~~~~~~~~~~
+
+BananaGrenade::BananaGrenade() : Weapon(BANANA_AMMO){}
+
+void BananaGrenade::execute(Game &game, Battlefield &battlefield, Player &player) {
+
+    b2Vec2 projectile_position = player.set_bullet_direction();
+    uint8_t explosion_delay = player.set_bullet_explosion_delay();
+
+    std::shared_ptr<Projectile> banana = std::make_shared<Banana>(battlefield, projectile_position,explosion_delay);
+    game.add_projectile(banana);
+
+    player.shoot_aim_weapon(banana);
+}
+
+
