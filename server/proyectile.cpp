@@ -2,8 +2,12 @@
 
 #include "battlefield.h"
 
-Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radius, int epicenter_damage, WeaponsAndTools type):
-        Entity(battlefield), type(type), blast_radius(blast_radius), epicenter_damage(epicenter_damage){  // cambiar
+Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radius,
+                       int epicenter_damage, WeaponsAndTools type):
+        Entity(battlefield),
+        type(type),
+        blast_radius(blast_radius),
+        epicenter_damage(epicenter_damage) {  // cambiar
 
     b2BodyDef projectile_body;
     projectile_body.type = b2_dynamicBody;
@@ -30,23 +34,13 @@ std::shared_ptr<ProjectileStateG> Projectile::get_proyectile_state() {
                                               dead, vel_angle);
 }
 
-void Projectile::set_power(b2Vec2 power) {
-    body->ApplyLinearImpulseToCenter(power, true);
-}
+void Projectile::set_power(b2Vec2 power) { body->ApplyLinearImpulseToCenter(power, true); }
 
 bool Projectile::is_dead() {
     if (collided && not dead) {
         dead = true;
     }
     return dead;
-}
-
-void Projectile::execute_collision_reaction() {
-    if (type == WeaponsAndTools::BAZOOKA) {
-        collide();
-    }else if(type == WeaponsAndTools::GREEN_GRENADE){
-        collide();
-    }
 }
 
 void Projectile::collide() {
@@ -88,64 +82,60 @@ void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 app
     b2Vec2 final_impulse = impulseMag * blastDir;
     body_->ApplyLinearImpulseToCenter(final_impulse, true);
 
-    Entity* entity =  reinterpret_cast<Entity*>(body_->GetUserData().pointer);
+    Entity* entity = reinterpret_cast<Entity*>(body_->GetUserData().pointer);
     entity->recibe_life_modification(-impulseMag);
-
 }
 
 
 //~~~~~~~~~~~~~~~~~~~ Rocket ~~~~~~~~~~~~~~~~~~~~
 
-Rocket::Rocket(Battlefield &battlefield, b2Vec2 position):Projectile(battlefield,position,
-                                                                     BLAST_RADIUS_BAZOOKA,
-                                                                     EPICENTER_DAMAGE_BAZOOKA,
-                                                                     WeaponsAndTools::BAZOOKA){}
+Rocket::Rocket(Battlefield& battlefield, b2Vec2 position):
+        Projectile(battlefield, position, BLAST_RADIUS_BAZOOKA, EPICENTER_DAMAGE_BAZOOKA,
+                   WeaponsAndTools::BAZOOKA) {}
 
-void Rocket::execute_collision_reaction() {collide();}
+void Rocket::execute_collision_reaction() { collide(); }
 
 //~~~~~~~~~~~~~~~~~~~ Grenade ~~~~~~~~~~~~~~~~~~~~
 
-Grenade::Grenade(Battlefield &battlefield, b2Vec2 position,uint8_t explosion_delay, uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type) :
-                                                                        Projectile(battlefield,position,blast_radius,epicenter_damage,type),
-                                                             explosion_delay(explosion_delay),
-                                                             grenade_timer(std::chrono::steady_clock::now()){}
+Grenade::Grenade(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay,
+                 uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type):
+        Projectile(battlefield, position, blast_radius, epicenter_damage, type),
+        explosion_delay(explosion_delay),
+        grenade_timer(std::chrono::steady_clock::now()) {}
 
 void Grenade::execute_collision_reaction() {
-    //todo cuando lo pruebo ver si esta en segundos.
-    std::chrono::time_point<std::chrono::steady_clock> actual_time = std::chrono::steady_clock::now();
-    std::chrono::duration<double> elapsed_seconds = std::chrono::duration_cast<std::chrono::duration<double>>(actual_time - grenade_timer);
+    // todo cuando lo pruebo ver si esta en segundos.
+    std::chrono::duration<double> elapsed_seconds =
+            std::chrono::steady_clock::now() - grenade_timer;
+    grenade_timer = std::chrono::steady_clock::now();
     explosion_delay -= elapsed_seconds.count();
-    if(explosion_delay <= 0){
+    if (explosion_delay <= 0) {
         collide();
+        dead = true;
     }
 }
 
 bool Grenade::is_dead() {
-    if (collided && not dead && explosion_delay <= 0) {
-        dead = true;
-    }
+    // if (not dead && explosion_delay <= 0) {
+    //     dead = true;
+    // }
     return dead;
 }
 
-//bool Grenade::multiple_contact() {
-  //La idea en este caso es que puede colisionar más de una vez, pero solo se va a "morir" en el caso de que se termine el tiempo
+// bool Grenade::multiple_contact() {
+// La idea en este caso es que puede colisionar más de una vez, pero solo se va a "morir" en el caso
+// de que se termine el tiempo
 //}
 
 
+Green::Green(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay):
+        Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_GREEN_GRENADE,
+                EPICENTER_DAMAGE_GREEN_GRENADE, WeaponsAndTools::GREEN_GRENADE) {}
 
-Green::Green(Battlefield &battlefield, b2Vec2 position, uint8_t explosion_delay) :
-                                                Grenade(battlefield,position,explosion_delay,
-                                                        BLAST_RADIUS_GREEN_GRENADE,
-                                                        EPICENTER_DAMAGE_GREEN_GRENADE,
-                                                        WeaponsAndTools::GREEN_GRENADE){}
+Banana::Banana(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay):
+        Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_BANANA,
+                EPICENTER_DAMAGE_BANANA, WeaponsAndTools::BANANA) {}
 
-Banana::Banana(Battlefield &battlefield, b2Vec2 position, uint8_t explosion_delay) : Grenade(battlefield,position,explosion_delay,
-                                                                    BLAST_RADIUS_BANANA,
-                                                                    EPICENTER_DAMAGE_BANANA,
-                                                                    WeaponsAndTools::BANANA) {
-}
-
-Dynamite::Dynamite(Battlefield &battlefield, b2Vec2 position, uint8_t explosion_delay) : Grenade(battlefield,position,explosion_delay,
-                                                                                                 BLAST_RADIUS_DYNAMITE,
-                                                                                                 EPICENTER_DAMAGE_DYNAMITE,
-                                                                                                 WeaponsAndTools::DYNAMITE) {}
+Dynamite::Dynamite(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay):
+        Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_DYNAMITE,
+                EPICENTER_DAMAGE_DYNAMITE, WeaponsAndTools::DYNAMITE) {}
