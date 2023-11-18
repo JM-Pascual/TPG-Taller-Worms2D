@@ -40,7 +40,7 @@ Player::Player(Battlefield& battlefield):
 
     body->CreateFixture(&fixtureDef);
 
-    weapon = new DynamiteGrenade();
+    weapon = new Bazooka();
 }
 
 void Player::set_ready() { ready = !ready; }

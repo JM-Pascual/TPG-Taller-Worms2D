@@ -26,14 +26,14 @@ void Window::render_stage(TexturesPool& pool, Camera& camera) {
     int vcenter = (game_renderer->GetOutputHeight() / 2);
 
     render_stage_texture(
-            pool.get_texture(Actors::GRADIENT),
+            pool.get_actor_texture(Actors::GRADIENT),
             SDL2pp::Rect(0, 0, game_renderer->GetOutputWidth(), game_renderer->GetOutputHeight()));
 
-    render_stage_texture(pool.get_texture(Actors::BACKGROUND),
+    render_stage_texture(pool.get_actor_texture(Actors::BACKGROUND),
                          SDL2pp::Rect(0, vcenter - 160, game_renderer->GetOutputWidth(), 200));
 
     for (int i = 0; i < 19; i++) {
-        render_stage_texture(pool.get_texture(Actors::BRIDGE),
+        render_stage_texture(pool.get_actor_texture(Actors::BRIDGE),
                              camera.calcRect(0 + i * 70, vcenter + 40, 70, 20));
     }
 }

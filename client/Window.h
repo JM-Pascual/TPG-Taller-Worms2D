@@ -24,10 +24,10 @@ public:
 
     std::shared_ptr<SDL2pp::Renderer>& get_renderer();
 
-    /// Clears the textures in screen calling the SDL2pp::Renderer::Clear method
+    /// Clears the actors_textures in screen calling the SDL2pp::Renderer::Clear method
     void clear_textures();
 
-    /// Presents the textures in screen calling the SDL2pp::Renderer::Present method
+    /// Presents the actors_textures in screen calling the SDL2pp::Renderer::Present method
     void present_textures();
 
     void render_stage(TexturesPool& pool, Camera& camera);

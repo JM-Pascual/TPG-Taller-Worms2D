@@ -59,9 +59,9 @@ public:
             aim_inclination_degrees(std::dynamic_pointer_cast<PlayerStateG>(initial_state)
                                             ->aim_inclination_degrees),
 
-            walking(pool.get_texture(Actors::WORM), 15, 1),
-            jumping(pool.get_texture(Actors::JUMPING_WORM), 5, 5, false),
-            backflipping(pool.get_texture(Actors::BACKFLIP_WORM), 22, 1, false),
+            walking(pool.get_actor_texture(Actors::WORM), 15, 1),
+            jumping(pool.get_actor_texture(Actors::JUMPING_WORM), 5, 5, false),
+            backflipping(pool.get_actor_texture(Actors::BACKFLIP_WORM), 22, 1, false),
             weapon_animation(pool){}
 
     void update(std::shared_ptr<States>& actor_state) override {
@@ -132,8 +132,8 @@ public:
     BazookaProyectile(std::shared_ptr<States>& initial_state, TexturesPool& pool,
                       Camera& camera) :
             Proyectile(initial_state, pool, camera),
-            on_air(pool.get_texture(Actors::BAZOOKA_PROYECTILE), 1, 1),
-            impact(pool.get_texture(Actors::BAZOOKA_EXPLOSION), 8, 3, false) {}
+            on_air(pool.get_actor_texture(Actors::BAZOOKA_PROYECTILE), 1, 1),
+            impact(pool.get_actor_texture(Actors::BAZOOKA_EXPLOSION), 8, 3, false) {}
 
     void update(std::shared_ptr<States>& actor_state) override {
         position = std::dynamic_pointer_cast<ProjectileStateG>(actor_state)->pos;
