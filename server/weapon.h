@@ -3,67 +3,64 @@
 
 #include "../common/const.h"
 #include "box2d/b2_math.h"
+
 #include "Player.h"
 #include "proyectile.h"
 
 
-#define BAZOOKA_AMMO uint8_t(10000) //Se supone que tiene que ser infinita
+#define BAZOOKA_AMMO uint8_t(10000)  // Se supone que tiene que ser infinita
 #define GREEN_GRENADE_AMMO uint8_t(10000)
 #define BANANA_AMMO uint8_t(5)
 #define DYNAMITE_AMMO uint8_t(5)
 
 class Player;
 class Game;
-class Battlefield;
+class Engine;
 
 class Weapon {
 protected:
     uint8_t ammo;
-public:
 
+public:
     explicit Weapon(uint8_t ammo);
 
-    virtual void execute(Game& game, Battlefield& battlefield, Player& player_) = 0;
-
+    virtual void execute(Game& game, Engine& battlefield, Player& player_) = 0;
 };
 
 //~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
 
-class Bazooka : public Weapon{
+class Bazooka: public Weapon {
 public:
     Bazooka();
-    void execute(Game& game, Battlefield& battlefield, Player& player) override;
+    void execute(Game& game, Engine& battlefield, Player& player) override;
     virtual ~Bazooka() = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ Green_grenade ~~~~~~~~~~~~~~~~~~~~
 
-class GreenGrenade : public Weapon{
+class GreenGrenade: public Weapon {
 public:
     GreenGrenade();
-    void execute(Game& game, Battlefield& battlefield, Player& player) override;
+    void execute(Game& game, Engine& battlefield, Player& player) override;
     virtual ~GreenGrenade() = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ Banana ~~~~~~~~~~~~~~~~~~~~
 
-class BananaGrenade : public Weapon{
+class BananaGrenade: public Weapon {
     BananaGrenade();
-    void execute(Game& game, Battlefield& battlefield, Player& player) override;
+    void execute(Game& game, Engine& battlefield, Player& player) override;
     virtual ~BananaGrenade() = default;
-
 };
 
 //~~~~~~~~~~~~~~~~~~~ DynamiteGrenade ~~~~~~~~~~~~~~~~~~~~
 
-class DynamiteGrenade : public Weapon{
+class DynamiteGrenade: public Weapon {
 public:
     DynamiteGrenade();
-    void execute(Game& game, Battlefield& battlefield, Player& player) override;
+    void execute(Game& game, Engine& battlefield, Player& player) override;
     virtual ~DynamiteGrenade() = default;
-
 };
 
 
-
-#endif //WORMS2D_WEAPON_H
+#endif  // WORMS2D_WEAPON_H

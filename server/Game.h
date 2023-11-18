@@ -15,8 +15,8 @@
 #include "box2d/box2d.h"
 
 #include "Player.h"
-#include "battlefield.h"
 #include "broadcaster.h"
+#include "engine.h"
 #include "game_loop.h"
 #include "level_holder.h"
 
@@ -30,7 +30,7 @@ private:
     std::map<uint8_t, std::unique_ptr<Player>> players_stats;
     std::map<uint8_t, std::shared_ptr<Projectile>> projectiles;
 
-    Battlefield battlefield;
+    Engine battlefield;
     Level_holder level_holder;
     BroadCaster broadcaster;
     uint8_t ready_count;
@@ -51,7 +51,7 @@ private:
     void notifyLobbyState();
 
 public:
-    Game(std::string  desc, const std::string& map, const uint8_t& game_id,
+    Game(std::string desc, const std::string& map, const uint8_t& game_id,
          Queue<uint8_t>& erase_id_queue):
             level_holder(battlefield),
             ready_count(0),

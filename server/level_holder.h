@@ -3,14 +3,15 @@
 
 #include "bar.h"
 
-class Battlefield;
+class Engine;
 
 class Level_holder {
 private:
     Bar bar;
+
 public:
-    explicit Level_holder(Battlefield& battlefield);
+    explicit Level_holder(Engine& battlefield);
 };
 
 
-#endif //WORMS2D_LEVEL_HOLDER_H
+#endif  // WORMS2D_LEVEL_HOLDER_H

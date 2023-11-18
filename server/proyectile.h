@@ -26,7 +26,7 @@
 #define EPICENTER_DAMAGE_DYNAMITE 50
 
 
-class Battlefield;
+class Engine;
 class Game;
 
 class Projectile: public Entity {
@@ -38,7 +38,7 @@ protected:
     void applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
 
 public:
-    Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radius, int epicenter_damage,
+    Projectile(Engine& battlefield, b2Vec2 position, int blast_radius, int epicenter_damage,
                WeaponsAndTools type);
 
     void set_power(b2Vec2 power);
@@ -59,7 +59,7 @@ private:
     // float wind_effect; //todo tiene que ser random por cada una de las rondas --> queda para
     // implementar despues
 public:
-    Rocket(Battlefield& battlefield, b2Vec2 position);
+    Rocket(Engine& battlefield, b2Vec2 position);
     void execute_collision_reaction() override;
     virtual ~Rocket() = default;
 };
@@ -70,8 +70,8 @@ private:
     std::chrono::time_point<std::chrono::steady_clock> grenade_timer;
 
 public:
-    Grenade(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay,
-            uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type);
+    Grenade(Engine& battlefield, b2Vec2 position, uint8_t explosion_delay, uint8_t blast_radius,
+            uint8_t epicenter_damage, WeaponsAndTools type);
     void execute_collision_reaction() override;
     bool is_dead() override;
     // bool multiple_contact() override;
@@ -81,17 +81,17 @@ public:
 
 class Green: public Grenade {
 public:
-    Green(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+    Green(Engine& battlefield, b2Vec2 position, uint8_t explosion_delay);
 };
 
 class Banana: public Grenade {
 public:
-    Banana(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+    Banana(Engine& battlefield, b2Vec2 position, uint8_t explosion_delay);
 };
 
 class Dynamite: public Grenade {
 public:
-    Dynamite(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+    Dynamite(Engine& battlefield, b2Vec2 position, uint8_t explosion_delay);
 };
 
 

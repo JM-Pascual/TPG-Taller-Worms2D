@@ -1,8 +1,9 @@
 #include "entity.h"
 
-#include "battlefield.h"
+#include "engine.h"
 
-Entity::Entity(Battlefield& battlefield): dead(false), battlefield(battlefield), collided(false) {}
+Entity::Entity(Engine& battlefield):
+        dead(false), body(nullptr), battlefield(battlefield), collided(false) {}
 
 void Entity::start_contact() {}
 

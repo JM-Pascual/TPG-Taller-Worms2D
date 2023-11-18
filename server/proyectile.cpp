@@ -1,9 +1,9 @@
 #include "proyectile.h"
 
-#include "battlefield.h"
+#include "engine.h"
 
-Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radius,
-                       int epicenter_damage, WeaponsAndTools type):
+Projectile::Projectile(Engine& battlefield, b2Vec2 position, int blast_radius, int epicenter_damage,
+                       WeaponsAndTools type):
         Entity(battlefield),
         type(type),
         blast_radius(blast_radius),
@@ -89,7 +89,7 @@ void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 app
 
 //~~~~~~~~~~~~~~~~~~~ Rocket ~~~~~~~~~~~~~~~~~~~~
 
-Rocket::Rocket(Battlefield& battlefield, b2Vec2 position):
+Rocket::Rocket(Engine& battlefield, b2Vec2 position):
         Projectile(battlefield, position, BLAST_RADIUS_BAZOOKA, EPICENTER_DAMAGE_BAZOOKA,
                    WeaponsAndTools::BAZOOKA) {}
 
@@ -97,7 +97,7 @@ void Rocket::execute_collision_reaction() { collide(); }
 
 //~~~~~~~~~~~~~~~~~~~ Grenade ~~~~~~~~~~~~~~~~~~~~
 
-Grenade::Grenade(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay,
+Grenade::Grenade(Engine& battlefield, b2Vec2 position, uint8_t explosion_delay,
                  uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type):
         Projectile(battlefield, position, blast_radius, epicenter_damage, type),
         explosion_delay(explosion_delay),
@@ -128,14 +128,14 @@ bool Grenade::is_dead() {
 //}
 
 
-Green::Green(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay):
+Green::Green(Engine& battlefield, b2Vec2 position, uint8_t explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_GREEN_GRENADE,
                 EPICENTER_DAMAGE_GREEN_GRENADE, WeaponsAndTools::GREEN_GRENADE) {}
 
-Banana::Banana(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay):
+Banana::Banana(Engine& battlefield, b2Vec2 position, uint8_t explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_BANANA,
                 EPICENTER_DAMAGE_BANANA, WeaponsAndTools::BANANA) {}
 
-Dynamite::Dynamite(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay):
+Dynamite::Dynamite(Engine& battlefield, b2Vec2 position, uint8_t explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_DYNAMITE,
                 EPICENTER_DAMAGE_DYNAMITE, WeaponsAndTools::DYNAMITE) {}

@@ -9,7 +9,7 @@
 
 #include "../common/const.h"
 
-#include "battlefield.h"
+#include "engine.h"
 #include "entity.h"
 #include "weapon.h"
 
@@ -32,7 +32,7 @@
 
 class Game;
 class Weapon;
-class Battlefield;
+class Engine;
 class Projectile;
 
 
@@ -62,7 +62,7 @@ private:
     int facing_factor();
 
 public:
-    explicit Player(Battlefield& battlefield);
+    explicit Player(Engine& battlefield);
 
     void move();
     void stop();

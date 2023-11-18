@@ -1,8 +1,8 @@
 #include "bar.h"
 
-#include "battlefield.h"
+#include "engine.h"
 
-Bar::Bar(Battlefield& battlefield): Entity(battlefield) {
+Bar::Bar(Engine& battlefield): Entity(battlefield) {
 
     b2BodyDef barBodyDef;
     barBodyDef.position.Set(38.4f, 9.2f);

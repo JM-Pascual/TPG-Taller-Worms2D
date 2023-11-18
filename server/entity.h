@@ -2,23 +2,23 @@
 #define WORMS2D_ENTITY_H
 
 #include <box2d/box2d.h>
-class Battlefield;
+class Engine;
 
 
 class Entity {
 protected:
     bool dead;
     b2Body* body;
-    Battlefield& battlefield;
+    Engine& battlefield;
     bool collided;
 
 public:
-    Entity(Battlefield& battlefield);
+    explicit Entity(Engine& battlefield);
     void start_contact();
     void end_contact();
     virtual void start_falling();
     virtual void recibe_life_modification(float life_variation);
-    virtual bool multiple_contact(); //Todo lo vamos a tener que sacar
+    virtual bool multiple_contact();  // Todo lo vamos a tener que sacar
     void remove_entity();
     virtual bool is_dead() = 0;
     virtual void execute_collision_reaction() = 0;

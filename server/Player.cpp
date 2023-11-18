@@ -1,11 +1,11 @@
 #include "Player.h"
 
-#include "battlefield.h"
+#include "engine.h"
 
 
 // ToDo Hardocdeado para que los worms aparezcan en la mitad del mapa
 
-Player::Player(Battlefield& battlefield):
+Player::Player(Engine& battlefield):
         Entity(battlefield),
         life(INITIAL_LIFE),
         facing_right(true),

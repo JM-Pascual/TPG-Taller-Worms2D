@@ -6,11 +6,11 @@
 #include "entity.h"
 
 
-class Battlefield;
+class Engine;
 
 class Bar: public Entity {
 public:
-    explicit Bar(Battlefield& battlefield);
+    explicit Bar(Engine& battlefield);
     bool is_dead() override;
     void execute_collision_reaction() override;
 };

@@ -10,7 +10,7 @@
 
 class States;
 class Player;
-class Battlefield;
+class Engine;
 
 class BroadCaster {
 private:
@@ -26,7 +26,7 @@ public:
 
     void remove_closed_clients(uint8_t& ready_count,
                                std::map<uint8_t, std::unique_ptr<Player>>& players_stats,
-                               Battlefield& battlefield);
+                               Engine& battlefield);
 
     void removePlayer(const uint8_t& player_id);
 
