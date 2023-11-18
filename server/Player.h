@@ -50,6 +50,7 @@ private:
     bool is_jumping;
     bool is_backflipping;
     bool is_playing;
+    bool falling;
 
     bool aiming;
     float aim_inclination_degrees;  // Radianes
@@ -77,14 +78,17 @@ public:
 
     void set_ready();
     void check_jumping();
+    void check_falling();
+    void start_falling() override;
 
     b2Vec2 set_bullet_direction();
     b2Vec2 set_bullet_power();
     float set_bullet_angle();
+    uint8_t set_bullet_explosion_delay();
 
-
+    void recibe_life_modification(float life_variation) override;
     void shoot_aim_weapon(std::shared_ptr<Projectile> projectile);
-    // void use_throwable();
+    void use_throwable(std::shared_ptr<Projectile> throwable);
     // void use_clickeable_gadget();
 
     bool is_dead() override;

@@ -47,18 +47,17 @@ void Contact_listener::EndContact(b2Contact* contact) {
 
 void Contact_listener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold) {
     b2ContactListener::PreSolve(contact, oldManifold);
-    /*
+
     auto contact2 = contact->GetFixtureB()->GetBody()->GetUserData().pointer;
     auto contact1 = contact->GetFixtureA()->GetBody()->GetUserData().pointer;
 
     auto* dataB = reinterpret_cast<Entity*>(contact2);
     auto* dataA = reinterpret_cast<Entity*>(contact1);
 
-    if(dataA && dataB){
+    if(dataA && dataB) {
         dataA->execute_collision_reaction();
         dataB->execute_collision_reaction();
     }
-     */
 }
 
 void Contact_listener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {
@@ -70,7 +69,7 @@ void Contact_listener::PostSolve(b2Contact* contact, const b2ContactImpulse* imp
     auto* dataA = reinterpret_cast<Entity*>(contact1);
 
     if (dataA && dataB) {
-        // Si estoy vivo pero no
+        //Todo tengo que ver el caso en el que tengo una granada y puede chocar más de una vez, no tiene que entrar en la lista
         if (not dataA->multiple_contact() && dataA->is_dead()) {
             dead_list.push_back(dataA);
         }

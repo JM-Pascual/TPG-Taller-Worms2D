@@ -14,6 +14,7 @@ Player::Player(Battlefield& battlefield):
         is_jumping(false),
         is_backflipping(false),
         is_playing(true),
+        falling(false),
         aiming(false),
         aim_inclination_degrees(0),
         aim_direction(ADSAngleDir::UP),
@@ -31,17 +32,15 @@ Player::Player(Battlefield& battlefield):
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &wormBox;
-    fixtureDef.density = 3.0f;
-
-    // fixtureDef.filter.groupIndex = -1; //Todo tengo que ver como seteo cada una de las balas para
-    // que pueda colisionar con los gusanos
+    fixtureDef.density = 4.0f;
+    fixtureDef.friction = 0.8;
 
     // fixtureDef.filter.groupIndex = -1; //Todo tengo que ver como seteo cada una de las balas para
     // que pueda colisionar con los gusanos
 
     body->CreateFixture(&fixtureDef);
 
-    weapon = new Bazooka();
+    weapon = new DynamiteGrenade();
 }
 
 void Player::set_ready() { ready = !ready; }
@@ -82,6 +81,12 @@ void Player::check_jumping() {
             is_jumping = false;
             is_backflipping = false;
         }
+    }
+}
+
+void Player::check_falling() {
+    if (body->GetLinearVelocity() == b2Vec2(0, 0)) {
+        falling = false;
     }
 }
 
@@ -139,15 +144,24 @@ b2Vec2 Player::set_bullet_direction() {
 
 float Player::set_bullet_angle() { return b2Atan2(set_bullet_power().y, set_bullet_power().x); }
 
+uint8_t Player::set_bullet_explosion_delay() {
+    return 3;  // bullet_explosion_delete;
+}
+
+
 void Player::shoot_aim_weapon(std::shared_ptr<Projectile> projectile) {
     projectile->set_power(set_bullet_power());
+}
+
+void Player::use_throwable(std::shared_ptr<Projectile> throwable) {
+    throwable->set_power(b2Vec2(0, 0));
 }
 
 int Player::facing_factor() { return (std::pow(-1, 1 - facing_right)); }
 
 bool Player::is_dead() {
 
-    if (contact_points >= 1 && life <= 0 && dead) {
+    if (life <= 0 && dead) {
         dead = false;
     }
     return dead;
@@ -199,3 +213,6 @@ void Player::stop_all() {
     aiming = false;
     charging_shoot = false;
 }
+void Player::start_falling() { falling = true; }
+
+void Player::recibe_life_modification(float life_variation) { life += life_variation; }

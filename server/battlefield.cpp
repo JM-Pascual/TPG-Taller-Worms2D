@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "battlefield.h"
 
 Battlefield::Battlefield():

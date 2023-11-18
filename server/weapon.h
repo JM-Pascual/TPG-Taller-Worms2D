@@ -8,6 +8,9 @@
 
 
 #define BAZOOKA_AMMO uint8_t(10000) //Se supone que tiene que ser infinita
+#define GREEN_GRENADE_AMMO uint8_t(10000)
+#define BANANA_AMMO uint8_t(5)
+#define DYNAMITE_AMMO uint8_t(5)
 
 class Player;
 class Game;
@@ -21,17 +24,46 @@ public:
     explicit Weapon(uint8_t ammo);
 
     virtual void execute(Game& game, Battlefield& battlefield, Player& player_) = 0;
-    virtual std::shared_ptr<Projectile>
-    prepare_ammo(Game& game,Battlefield &battlefield, b2Vec2 projectile_position, WeaponsAndTools type);
 
 };
+
+//~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
 
 class Bazooka : public Weapon{
 public:
     Bazooka();
     void execute(Game& game, Battlefield& battlefield, Player& player) override;
+    virtual ~Bazooka() = default;
+};
+
+//~~~~~~~~~~~~~~~~~~~ Green_grenade ~~~~~~~~~~~~~~~~~~~~
+
+class GreenGrenade : public Weapon{
+public:
+    GreenGrenade();
+    void execute(Game& game, Battlefield& battlefield, Player& player) override;
+    virtual ~GreenGrenade() = default;
+};
+
+//~~~~~~~~~~~~~~~~~~~ Banana ~~~~~~~~~~~~~~~~~~~~
+
+class BananaGrenade : public Weapon{
+    BananaGrenade();
+    void execute(Game& game, Battlefield& battlefield, Player& player) override;
+    virtual ~BananaGrenade() = default;
 
 };
+
+//~~~~~~~~~~~~~~~~~~~ DynamiteGrenade ~~~~~~~~~~~~~~~~~~~~
+
+class DynamiteGrenade : public Weapon{
+public:
+    DynamiteGrenade();
+    void execute(Game& game, Battlefield& battlefield, Player& player) override;
+    virtual ~DynamiteGrenade() = default;
+
+};
+
 
 
 #endif //WORMS2D_WEAPON_H

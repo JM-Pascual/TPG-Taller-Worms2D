@@ -20,7 +20,7 @@ void Game::build_game_state(std::list<std::shared_ptr<States>>& states_list) {
                 player.first, player.second->body->GetPosition().x,
                 player.second->body->GetPosition().y, player.second->is_walking,
                 player.second->is_jumping, player.second->is_backflipping,
-                player.second->facing_right, (player.second->contact_points >= 1),
+                player.second->facing_right, player.second->collided,
                 player.second->aim_inclination_degrees, player.second->charging_shoot,
                 player.second->life));
     }
@@ -251,7 +251,9 @@ void Game::update_physics() {
     std::lock_guard<std::mutex> lock(m);
     for (auto& [id, player]: players_stats) {
         player->check_jumping();
-        if (!player->is_walking && !player->is_jumping && !player->is_backflipping) {
+        player->check_falling();
+        if (!player->is_walking && !player->is_jumping && !player->is_backflipping &&
+            !player->falling) {
             player->stop();
         } else if (player->is_walking) {
             player->move();
