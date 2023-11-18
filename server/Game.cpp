@@ -18,8 +18,8 @@ void Game::build_game_state(std::list<std::shared_ptr<States>>& states_list) {
         // cppcheck-suppress useStlAlgorithm
         states_list.push_back(std::make_shared<PlayerStateG>(
                 player.first, player.second->body->GetPosition().x,
-                player.second->body->GetPosition().y, player.second->is_walking,
-                player.second->is_jumping, player.second->is_backflipping,
+                player.second->body->GetPosition().y, player.second->weapon->get_type(),
+                player.second->is_walking, player.second->is_jumping, player.second->is_backflipping,
                 player.second->facing_right, player.second->collided,
                 player.second->aim_inclination_degrees, player.second->charging_shoot,
                 player.second->life));
@@ -223,6 +223,11 @@ void Game::player_start_charging(const uint8_t id) {
     players_stats.at(id)->charging_shoot = true;
 }
 
+void Game::player_change_gadget(const WeaponsAndTools& gadget, const uint8_t id) {
+    std::lock_guard<std::mutex> lock(m);
+    players_stats.at(id)->change_weapon(gadget);
+}
+
 void Game::player_shoot(const uint8_t id) {
     std::lock_guard<std::mutex> lock(m);
     players_stats.at(id)->aiming = false;
@@ -247,6 +252,7 @@ void Game::update_weapon() {
     }
 }
 
+
 void Game::update_physics() {
     std::lock_guard<std::mutex> lock(m);
     for (auto& [id, player]: players_stats) {
@@ -261,7 +267,6 @@ void Game::update_physics() {
     }
 }
 
-
 Game::~Game() {
     spdlog::get("server")->debug("Joineando gameloop");
     if (need_to_join_loop) {
@@ -270,7 +275,6 @@ Game::~Game() {
 }
 
 void Game::remove_box2d_entities() { battlefield.destroy_dead_entities(); }
-
 void Game::stop_all_players() {
 
     for (auto& player: players_stats) {

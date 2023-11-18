@@ -80,7 +80,6 @@ public:
 
     void set_player_ready(uint8_t id);
 
-
     const uint8_t broadcast_turn(const uint8_t& player_turn);
 
     const uint8_t players_alive();
@@ -98,6 +97,7 @@ public:
     void player_stop_aiming(const uint8_t id);
     void player_start_charging(const uint8_t id);
     void player_shoot(const uint8_t id);
+    void player_change_gadget(const WeaponsAndTools& gadget, const uint8_t id);
 
 
     void add_projectile(std::shared_ptr<Projectile> proyectile);

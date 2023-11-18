@@ -25,6 +25,9 @@ public:
 
     virtual void execute(Game& game, Battlefield& battlefield, Player& player_) = 0;
 
+    virtual WeaponsAndTools get_type() = 0;
+
+    virtual ~Weapon() = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
@@ -33,6 +36,7 @@ class Bazooka : public Weapon{
 public:
     Bazooka();
     void execute(Game& game, Battlefield& battlefield, Player& player) override;
+    WeaponsAndTools get_type() override;
     virtual ~Bazooka() = default;
 };
 
@@ -42,6 +46,7 @@ class GreenGrenade : public Weapon{
 public:
     GreenGrenade();
     void execute(Game& game, Battlefield& battlefield, Player& player) override;
+    WeaponsAndTools get_type() override;
     virtual ~GreenGrenade() = default;
 };
 
@@ -50,6 +55,7 @@ public:
 class BananaGrenade : public Weapon{
     BananaGrenade();
     void execute(Game& game, Battlefield& battlefield, Player& player) override;
+    WeaponsAndTools get_type() override;
     virtual ~BananaGrenade() = default;
 
 };
@@ -60,6 +66,7 @@ class DynamiteGrenade : public Weapon{
 public:
     DynamiteGrenade();
     void execute(Game& game, Battlefield& battlefield, Player& player) override;
+    WeaponsAndTools get_type() override;
     virtual ~DynamiteGrenade() = default;
 
 };

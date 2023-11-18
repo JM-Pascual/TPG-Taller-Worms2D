@@ -152,6 +152,8 @@ void ChangeGadget::execute(Game& game, const uint8_t& turn_id, TurnHandler& turn
     if (turn_handler.player_used_stop_action()) {
         return;
     }
+
+    game.player_change_gadget(gadget, id);
 }
 
 // ----------------------- JOIN ----------------------

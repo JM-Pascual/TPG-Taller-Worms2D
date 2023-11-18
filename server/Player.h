@@ -81,6 +81,7 @@ public:
     void check_falling();
     void start_falling() override;
 
+    void change_weapon(WeaponsAndTools new_weapon);
     b2Vec2 set_bullet_direction();
     b2Vec2 set_bullet_power();
     float set_bullet_angle();

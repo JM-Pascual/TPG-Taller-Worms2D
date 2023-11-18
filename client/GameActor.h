@@ -32,6 +32,7 @@ public:
 
 class Worm: public GameActor {
 private:
+    WeaponsAndTools equipped_weapon;
     bool is_walking;
     bool is_jumping;
     bool is_backflipping;
@@ -50,6 +51,7 @@ public:
     Worm(std::shared_ptr<States>& initial_state, TexturesPool& pool, Camera& camera):
             GameActor(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->pos.x,
                       std::dynamic_pointer_cast<PlayerStateG>(initial_state)->pos.y, camera),
+            equipped_weapon(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->weapon),
             is_walking(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->is_walking),
             is_jumping(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->is_jumping),
             is_backflipping(
@@ -79,7 +81,7 @@ public:
         backflipping.update(!is_backflipping);
 
         bool charging_weapon = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->charging_weapon;
-        weapon_animation.update(aim_inclination_degrees, charging_weapon, WeaponsAndTools::BAZOOKA,
+        weapon_animation.update(aim_inclination_degrees, charging_weapon, equipped_weapon,
                                 (is_walking || is_jumping || is_backflipping));
     }
 
