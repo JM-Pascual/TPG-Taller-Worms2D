@@ -12,57 +12,70 @@ void AimAnimation::load_all_aim_textures(TexturesPool& pool) {
     weapon_aim_textures.insert({WeaponsAndTools::BAZOOKA,
                                 (pool.get_aim_texture(WeaponAiming::WORM_AIM_BAZOOKA))});
 
-    weapon_aim_textures.insert({WeaponsAndTools::BAZOOKA,
+    weapon_aim_textures.insert({WeaponsAndTools::DYNAMITE,
                                 (pool.get_aim_texture(WeaponAiming::WORM_AIM_DYNAMITE))});
-}
-
-void AimAnimation::update(float new_inclination_degrees, bool charging_power) {
-    current_inclination = new_inclination_degrees;
-    power_charge_animation->update(!charging_power);
 }
 
 void AimAnimation::render(WeaponsAndTools current_weapon, SDL2pp::Renderer& renderer,
                           SDL2pp::Rect dest, SDL_RendererFlip flipType, double angle) {
-    renderer.Copy(
-            (*weapon_aim_textures.at(current_weapon)),
-            SDL2pp::Rect(0,
-                         std::min((16*60 - (60) * int(-1*((this->current_inclination /
-                                                               (M_PI/32))))), 1860), 35, 60),
-            dest,
-            angle,                // don't rotate
-            SDL2pp::NullOpt,    // rotation center - not needed
-            flipType
-    );
 
-    if (flipType == SDL_FLIP_HORIZONTAL){
+    if (current_weapon == WeaponsAndTools::BAZOOKA){
         renderer.Copy(
-                (*crosshair_texture),
+                (*weapon_aim_textures.at(current_weapon)),
                 SDL2pp::Rect(0,
                              std::min((16*60 - (60) * int(-1*((this->current_inclination /
-                                                                   (M_PI/32))))), 1860),
-                             35, 60),
-                //SDL2pp::Rect (dest.x * (1 + (cos(current_inclination)*0.35)), (dest.y * (1 - (sin(current_inclination))*0.35)), 35, 60),
-                SDL2pp::Rect((dest.x + (40*cos(current_inclination))),
-                             (dest.y - 40*sin(current_inclination)), 35, 60),
+                                                               (M_PI/32))))), 1860), 35, 60),
+                dest,
                 angle,                // don't rotate
                 SDL2pp::NullOpt,    // rotation center - not needed
                 flipType
         );
+
+        if (flipType == SDL_FLIP_HORIZONTAL){
+            renderer.Copy(
+                    (*crosshair_texture),
+                    SDL2pp::Rect(0,
+                                 std::min((16*60 - (60) * int(-1*((this->current_inclination /
+                                                                   (M_PI/32))))), 1860),
+                                 35, 60),
+                    //SDL2pp::Rect (dest.x * (1 + (cos(current_inclination)*0.35)), (dest.y * (1 - (sin(current_inclination))*0.35)), 35, 60),
+                    SDL2pp::Rect((dest.x + (40*cos(current_inclination))),
+                                 (dest.y - 40*sin(current_inclination)), 35, 60),
+                    angle,                // don't rotate
+                    SDL2pp::NullOpt,    // rotation center - not needed
+                    flipType
+            );
+        } else {
+            renderer.Copy(
+                    (*crosshair_texture),
+                    SDL2pp::Rect(0,
+                                 std::min((16*60 - (60) * int(-1*((this->current_inclination /
+                                                                   (M_PI/32))))), 1860),
+                                 35, 60),
+                    //SDL2pp::Rect (dest.x * (1 - cos(current_inclination)*0.35), dest.y * (1 - sin(current_inclination)*0.35), 35, 60),
+                    SDL2pp::Rect((dest.x - (40*cos(current_inclination))),
+                                 (dest.y - 40*sin(current_inclination)), 35, 60),
+                    angle,                // don't rotate
+                    SDL2pp::NullOpt,    // rotation center - not needed
+                    flipType
+            );
+        }
+
+        power_charge_animation->render(renderer, SDL2pp::Rect(dest.x, dest.y -35, 35, 60),0, 0);
+
     } else {
         renderer.Copy(
-                (*crosshair_texture),
-                SDL2pp::Rect(0,
-                             std::min((16*60 - (60) * int(-1*((this->current_inclination /
-                                                                   (M_PI/32))))), 1860),
-                             35, 60),
-                //SDL2pp::Rect (dest.x * (1 - cos(current_inclination)*0.35), dest.y * (1 - sin(current_inclination)*0.35), 35, 60),
-                SDL2pp::Rect((dest.x - (40*cos(current_inclination))),
-                             (dest.y - 40*sin(current_inclination)), 35, 60),
+                (*weapon_aim_textures.at(current_weapon)),
+                SDL2pp::Rect(0, 0, 35, 60),
+                dest,
                 angle,                // don't rotate
                 SDL2pp::NullOpt,    // rotation center - not needed
                 flipType
         );
     }
+}
 
-    power_charge_animation->render(renderer, SDL2pp::Rect(dest.x, dest.y -35, 35, 60),0, 0);
+void AimAnimation::update(float new_inclination_degrees, bool charging_power) {
+    current_inclination = new_inclination_degrees;
+    power_charge_animation->update(!charging_power);
 }

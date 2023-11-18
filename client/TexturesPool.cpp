@@ -35,7 +35,8 @@ void TexturesPool::load_draw_textures() {
                           std::make_shared<SDL2pp::Texture>((*renderer),
                                                             SDL2pp::Surface(
                                                                     DATA_PATH
-                                                                    "/worms/worm-dynamite-draw.png"))});
+                                                                    "/worms/worm-dynamite-draw.png")
+                                                                    .SetColorKey(true, 0x000000))});
     draw_textures[WeaponsDraw::WORM_DRAW_DYNAMITE]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
@@ -52,7 +53,8 @@ void TexturesPool::load_aiming_textures() {
                           std::make_shared<SDL2pp::Texture>((*renderer),
                                                             SDL2pp::Surface(
                                                                     DATA_PATH
-                                                                    "/worms/worm-dynamite-aim.png"))});
+                                                                    "/worms/worm-dynamite-aim.png")
+                                                                   .SetColorKey(true, 0x000000))});
     aim_textures[WeaponAiming::WORM_AIM_DYNAMITE]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
@@ -80,6 +82,7 @@ void TexturesPool::load_weapon_textures() {
 
     actors_textures[Actors::BAZOOKA_EXPLOSION]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
+
 void TexturesPool::load_level_textures() {
     /// Loads all the level actors_textures and enables alpha blending
 
@@ -94,12 +97,14 @@ void TexturesPool::load_level_textures() {
                                                                                                 .SetColorKey(true, 0x000000))});
     actors_textures[Actors::BRIDGE]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
+
 void TexturesPool::load_water_textures(){
     /// Loads all the water actors_textures and enables alpha blending
     actors_textures.insert({Actors::WATER, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/blue-water-sprites/blue_water.png")
                                                                                            .SetColorKey(true, 0x000000))});
     actors_textures[Actors::WATER]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
+
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_actor_texture(Actors actor_to_fetch) {
     return (actors_textures[actor_to_fetch]);
 }

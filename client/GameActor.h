@@ -68,6 +68,7 @@ public:
 
     void update(std::shared_ptr<States>& actor_state) override {
         position = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->pos;
+        equipped_weapon = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->weapon;
         is_walking = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->is_walking;
         is_jumping = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->is_jumping;
         is_backflipping = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->is_backflipping;

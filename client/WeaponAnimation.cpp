@@ -8,7 +8,7 @@ void WeaponAnimation::load_all_draw_animations(TexturesPool& pool) {
     weapon_draw_animations.insert({
             WeaponsAndTools::DYNAMITE, std::make_unique<Animation>(
                                                pool.get_draw_texture(WeaponsDraw::WORM_DRAW_DYNAMITE)
-                                                       , 7, 2, false)});
+                                                       , 10, 2, false)});
 }
 
 WeaponAnimation::WeaponAnimation(TexturesPool& pool) :
