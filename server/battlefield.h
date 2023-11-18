@@ -15,10 +15,14 @@
 class Projectile;
 class States;
 class Player;
+class WormHandler;
 
 class Battlefield {
 private:
-    std::mutex m;
+    /*
+        std::mutex m; No hace falta este lock, ya que el unico hilo que utiliza estos metodos es el
+       gameloop
+    */
     std::map<uint8_t, std::shared_ptr<Projectile>> projectiles;
     uint8_t projectile_count;
 
@@ -28,6 +32,8 @@ private:
 public:
     Battlefield(): projectile_count(0), level_holder(*this) {}
 
+    std::map<uint8_t, std::shared_ptr<Projectile>>& getProjectiles();
+
     void build_state(std::list<std::shared_ptr<States>>& states_list);
 
     void destroy_body(b2Body*& body);
@@ -36,7 +42,7 @@ public:
 
     void add_query_AABB(b2QueryCallback* callback, const b2AABB& aabb);
 
-    void step();
+    void step(WormHandler& worm_handler);
 
     void add_projectile(std::shared_ptr<Projectile>& proyectile);
 
@@ -45,10 +51,6 @@ public:
     void destroy_dead_entities();
 
     ~Battlefield() = default;
-
-    friend class Projectile;
-    friend class Bar;
-    friend class Player;
 };
 
 

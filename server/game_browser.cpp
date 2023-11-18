@@ -60,6 +60,9 @@ void GameBrowser::infoGames(std::vector<std::shared_ptr<GameInfoL>>& info) {
 
     spdlog::get("server")->debug("Recolectando informacion de los juegos en ejecucion");
     for (auto& [id, game]: games) {
+        if (game->is_playing()) {
+            continue;
+        }
         info.push_back(game->getInfo());
     }
 }

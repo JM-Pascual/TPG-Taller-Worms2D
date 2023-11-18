@@ -1,9 +1,12 @@
 #include "turn_handler.h"
 
-#include <iostream>
+#include "Player.h"
+#include "broadcaster.h"
+#include "worm_handler.h"
 
-const std::pair<uint8_t, bool> TurnHandler::update(uint8_t players_quantity,
-                                                   const std::chrono::duration<float>& elapsed) {
+
+const bool TurnHandler::need_to_update(uint8_t players_quantity,
+                                       const std::chrono::duration<float>& elapsed) {
 
     // Adapto el size a los index del map
     players_quantity--;
@@ -11,25 +14,25 @@ const std::pair<uint8_t, bool> TurnHandler::update(uint8_t players_quantity,
     // Primer turno
     if (first_turn) {
         first_turn = false;
-        return std::make_pair(player_turn, TIMER_RESET);
+        return TIMER_RESET;
     }
 
     // Desconecta un player
     if (players_quantity != current_players_quantity) {
         current_players_quantity = players_quantity;
-        return std::make_pair(player_turn, TIMER_RESET);
+        return TIMER_RESET;
     }
 
     elapsed_time += elapsed;
 
     if (player_stop_action) {
         if (elapsed_time.count() < POST_TURN_DURATION_IN_SECONDS) {
-            return std::make_pair(player_turn, NOT_RESET);
+            return NOT_RESET;
         }
     } else {
         // No paso el turno
         if (elapsed_time.count() < TURN_DURATION_IN_SECONDS) {
-            return std::make_pair(player_turn, NOT_RESET);
+            return NOT_RESET;
         }
     }
 
@@ -42,7 +45,27 @@ const std::pair<uint8_t, bool> TurnHandler::update(uint8_t players_quantity,
         player_turn = 0;
     }
 
-    return std::make_pair(player_turn, TIMER_RESET);
+    return TIMER_RESET;
+}
+
+const uint8_t TurnHandler::updateTurn(const std::chrono::duration<float>& elapsed,
+                                      BroadCaster& broadcaster, WormHandler& worm_handler) {
+    if (not this->need_to_update(players.size(), elapsed)) {  // Si resetea el timer
+        return prev_player_turn_id;
+    }
+
+    auto it = players.begin();
+    std::advance(it, player_turn);
+    uint8_t player_id = it->first;
+
+    // Enviar solo si cambio el turno (o sea reseteo el timer)
+    if (player_id != prev_player_turn_id) {
+        worm_handler.stop_all_players();
+        broadcaster.broadcast_turn(player_turn);
+    }
+
+    prev_player_turn_id = player_id;
+    return player_id;  // Retorno la id del jugador el cual es su turno
 }
 
 const bool& TurnHandler::player_used_stop_action() { return player_stop_action; }

@@ -8,13 +8,14 @@
 #include "proyectile.h"
 
 void InfoParser::makeLobbyState(std::list<std::shared_ptr<States>>& states) {
-    std::lock_guard<std::mutex> l(m_game);
-
+    /*
+        Sin lock, ya que previamente game coloca el lock
+    */
     states.push_back(std::make_shared<PlayerCountL>(players.size()));
 
     std::transform(players.begin(), players.end(), std::back_inserter(states),
                    [](const auto& player) {
-                       return std::make_shared<PlayerStateL>(player.second->ready, player.first)
+                       return std::make_shared<PlayerStateL>(player.second->ready, player.first);
                    });
 }
 

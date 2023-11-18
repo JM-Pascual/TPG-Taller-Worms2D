@@ -32,6 +32,7 @@
 class Weapon;
 class Battlefield;
 class Projectile;
+class BroadCaster;
 
 
 class Player: public Entity {
@@ -95,6 +96,8 @@ public:
 
     friend class Game;
     friend class BroadCaster;
+    friend class InfoParser;
+    friend class WormHandler;
 
     Player(const Player&) = delete;
     Player& operator=(const Player&) = delete;

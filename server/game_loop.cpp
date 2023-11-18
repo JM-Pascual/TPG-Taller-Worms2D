@@ -14,24 +14,18 @@ Queue<std::shared_ptr<PlayerAction>>& GameLoop::get_action_queue() { return this
 
 void GameLoop::run() {
     std::chrono::duration<float> elapsed_seconds = std::chrono::duration<float>(0);
-    TurnHandler turn_handler;
-    uint8_t turn_id;
-    std::pair<uint8_t, bool> turn_update;
+    TurnHandler turn_handler(game.players_stats);
 
     while (game.is_playing()) {
         std::chrono::time_point<std::chrono::steady_clock> before =
                 std::chrono::steady_clock::now();
 
-        turn_update = turn_handler.update(game.players_alive(), elapsed_seconds);
-
-        if (turn_update.second) {  // Si resetea el timer
-            turn_id = game.broadcast_turn(turn_update.first);
-        }
-
+        uint8_t turn_id =
+                turn_handler.updateTurn(elapsed_seconds, game.broadcaster, game.worm_handler);
 
         std::shared_ptr<PlayerAction> c;
         if (action_queue.try_pop(c)) {
-            c->execute(game, turn_id, turn_handler);
+            c->execute(game.worm_handler, turn_id, turn_handler);
         }
 
 
@@ -46,14 +40,17 @@ void GameLoop::run() {
         // dormir(tiempo del tick del sv - tiempo que tarde en llegar acá)
 
         // Le llega por el broadcast_game_state los jugadores que estan muertos(booleano)
-        game.broadcast_game_state();
+        game.broadcaster.broadcastGame();
         // Le llega por el broadcast_game_state los jugadores que estan muertos(booleano)
         //
-        game.remove_box2d_entities();
-        game.remove_collided_projectiles();
-        game.remove_closed_clients();
+        game.battlefield.destroy_dead_entities();
+        game.battlefield.remove_collided_projectiles();
 
-        game.step();
+        game.battlefield.step(game.worm_handler);
+
+        game.broadcaster.remove_closed_clients(game.ready_count, game.players_stats,
+                                               game.battlefield);
+
         std::chrono::time_point<std::chrono::steady_clock> after = std::chrono::steady_clock::now();
 
         elapsed_seconds = std::chrono::milliseconds(EST_TICK_TIME) - (after - before);

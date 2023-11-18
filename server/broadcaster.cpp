@@ -28,6 +28,18 @@ void BroadCaster::broadcast(const std::list<std::shared_ptr<States>>& game_state
     }
 }
 
+void BroadCaster::broadcastLobby() {
+    std::list<std::shared_ptr<States>> states;
+    infoParser.makeLobbyState(states);
+    broadcast(states);
+}
+
+void BroadCaster::broadcastGame() {
+    std::list<std::shared_ptr<States>> states;
+    infoParser.makeGameState(states);
+    broadcast(states);
+}
+
 void BroadCaster::remove_closed_clients(uint8_t& ready_count,
                                         std::map<uint8_t, std::unique_ptr<Player>>& players_stats,
                                         Battlefield& battlefield) {
@@ -65,7 +77,6 @@ void BroadCaster::broadcast_turn(const uint8_t& player_turn) {
     auto it = broadcast_map.begin();
     for (uint8_t i = 0; i < broadcast_map.size(); i++) {
         try {
-            std::advance(it, i);
             if (i == player_turn) {
                 it->second->push(std::make_shared<PlayerTurn>(IS_YOUR_TURN));
                 continue;
@@ -73,6 +84,7 @@ void BroadCaster::broadcast_turn(const uint8_t& player_turn) {
 
             it->second->push(std::make_shared<PlayerTurn>(NOT_YOUR_TURN));
 
+            ++it;
         } catch (const ClosedQueue& e) {  // Se ignoran queues cerradas, luego se eliminan
             continue;
         }

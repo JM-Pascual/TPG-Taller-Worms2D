@@ -8,9 +8,8 @@
 
 #include <stdint.h>
 
-#include "broadcaster.h"
-
 class Player;
+class States;
 class Projectile;
 class GameInfoL;
 
