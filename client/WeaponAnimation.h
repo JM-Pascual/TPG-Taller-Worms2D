@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "Animation.h"
+#include "AimAnimation.h"
 #include "TexturesPool.h"
 
 class WeaponAnimation {
@@ -13,24 +14,14 @@ private:
     WeaponsAndTools current_weapon;
     /** Map of SDL actors_textures of the weapon draw animations. */
     std::unordered_map<WeaponsAndTools, std::shared_ptr<Animation>> weapon_draw_animations;
-    /** Animation of the power charge */
-    std::unique_ptr<Animation> power_charge_animation;
-    /** SDL texture of the crosshair animation. */
-    std::shared_ptr<SDL2pp::Texture>& crosshair_texture;
-    /** Map of SDL actors_textures weapon aiming actors_textures. */
-    std::unordered_map<WeaponsAndTools, std::shared_ptr<SDL2pp::Texture>&> weapon_aim_textures;
-    /** Reference to the texture holder */
-    TexturesPool& pool;
+    /** Weapons aim animations*/
+    AimAnimation aim_animations;
     /** Indicates if the weapon was already animated thw draw. */
     unsigned int weapon_drawn_frames_counter;
-    /** Current worm inclination. */
-    float current_inclination;
 
     void update_weapon(WeaponsAndTools equipped_weapon);
 
-    void load_all_aim_textures();
-
-    void load_all_draw_animations();
+    void load_all_draw_animations(TexturesPool& pool);
 public:
     explicit WeaponAnimation(TexturesPool& pool);
 
