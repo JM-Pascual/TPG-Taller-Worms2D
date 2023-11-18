@@ -185,7 +185,7 @@ void ShowGames::execute() {
 
 // -------------------- EXIT GAME ----------------------
 
-void ExitGame::execute() { gb.removePlayer(player_id, game_id); }
+void ExitGame::execute() { gb.removeLobbyPlayer(player_id, game_id); }
 
 // ----------------------- READY --------------------
 

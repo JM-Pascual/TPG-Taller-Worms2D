@@ -2,4 +2,4 @@
 
 #include "engine.h"
 
-Level_holder::Level_holder(Engine& battlefield): bar(battlefield) {}
+Level_holder::Level_holder(Battlefield& battlefield): bar(battlefield) {}

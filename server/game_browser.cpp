@@ -33,7 +33,7 @@ void GameBrowser::join_game(const uint8_t& game_id_to_join, const uint8_t& id,
     spdlog::get("server")->debug("Cliente asignado a la sala {:d}", game_id_to_join);
 }
 
-void GameBrowser::removePlayer(const uint8_t& player_id, const uint8_t& game_id) {
+void GameBrowser::removeLobbyPlayer(const uint8_t& player_id, const uint8_t& game_id) {
     std::unique_lock<std::mutex> lck(m);
 
     if (games.count(game_id) != 1) {
@@ -41,7 +41,7 @@ void GameBrowser::removePlayer(const uint8_t& player_id, const uint8_t& game_id)
     }
 
     auto& game = games.at(game_id);
-    game->removePlayer(player_id);
+    game->removeLobbyPlayer(player_id);
 
     if (game->isEmpty()) {
         cleaner.game_id_to_clean.push(game_id);

@@ -7,7 +7,7 @@
 #include "../common/States.h"
 
 #include "Player.h"
-#include "engine.h"
+#include "battlefield.h"
 
 void BroadCaster::add_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue) {
     std::lock_guard<std::mutex> l(m);
@@ -30,7 +30,7 @@ void BroadCaster::broadcast(const std::list<std::shared_ptr<States>>& game_state
 
 void BroadCaster::remove_closed_clients(uint8_t& ready_count,
                                         std::map<uint8_t, std::unique_ptr<Player>>& players_stats,
-                                        Engine& battlefield) {
+                                        Battlefield& battlefield) {
     std::lock_guard<std::mutex> lock(m);
 
     auto it = broadcast_map.cbegin();
@@ -38,8 +38,14 @@ void BroadCaster::remove_closed_clients(uint8_t& ready_count,
         if (it->second->is_closed()) {
             uint8_t id = it->first;
             it = broadcast_map.erase(it);
+
+            if (players_stats.count(id) != 1) {
+                continue;
+            }
+
             battlefield.destroy_body(players_stats.at(id)->body);
             players_stats.erase(id);
+
             ready_count--;
             continue;
         }
@@ -48,7 +54,7 @@ void BroadCaster::remove_closed_clients(uint8_t& ready_count,
     }
 }
 
-void BroadCaster::removePlayer(const uint8_t& player_id) {
+void BroadCaster::removeLobbyPlayer(const uint8_t& player_id) {
     std::lock_guard<std::mutex> lock(m);
     broadcast_map.erase(player_id);
 }

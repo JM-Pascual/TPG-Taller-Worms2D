@@ -1,6 +1,6 @@
 
-#ifndef WORMS2D_BATTLEFIELD_H
-#define WORMS2D_BATTLEFIELD_H
+#ifndef WORMS2D_ENGINE_H
+#define WORMS2D_ENGINE_H
 
 #include <iostream>
 #include <memory>

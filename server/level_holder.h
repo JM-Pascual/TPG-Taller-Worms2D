@@ -1,6 +1,8 @@
 #ifndef WORMS2D_LEVEL_HOLDER_H
 #define WORMS2D_LEVEL_HOLDER_H
 
+#include <memory>
+
 #include "bar.h"
 
 class Engine;
@@ -10,7 +12,7 @@ private:
     Bar bar;
 
 public:
-    explicit Level_holder(Engine& battlefield);
+    explicit Level_holder(Battlefield& battlefield);
 };
 
 

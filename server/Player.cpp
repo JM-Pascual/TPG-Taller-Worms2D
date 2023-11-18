@@ -1,11 +1,12 @@
 #include "Player.h"
 
+#include "battlefield.h"
 #include "engine.h"
 
 
 // ToDo Hardocdeado para que los worms aparezcan en la mitad del mapa
 
-Player::Player(Engine& battlefield):
+Player::Player(Battlefield& battlefield):
         Entity(battlefield),
         life(INITIAL_LIFE),
         facing_right(true),
@@ -20,6 +21,7 @@ Player::Player(Engine& battlefield):
         aim_direction(ADSAngleDir::UP),
         charging_shoot(false),
         weapon_power(0) {
+
     b2BodyDef wormDef;
     wormDef.type = b2_dynamicBody;
     wormDef.position.Set(5.0f, 21.6f);  // Ahora la harcodeo, pero tiene que cambiar
@@ -119,7 +121,7 @@ void Player::change_fire_power() {
     }
 }
 
-void Player::shoot(Game& game) { weapon->execute(game, battlefield, *this); }
+void Player::shoot() { weapon->execute(battlefield, *this); }
 
 b2Vec2 Player::set_bullet_power() {
     // Fuerza que se le aplica a la bala
@@ -172,7 +174,6 @@ void Player::execute_collision_reaction() {}
 Player::Player(Player&& o):
         Entity(o.battlefield),
         life(o.life),
-        worm(o.worm),
         weapon(o.weapon),
         facing_right(o.facing_right),
         is_walking(o.is_walking),
@@ -188,7 +189,6 @@ Player::Player(Player&& o):
 
     o.life = 0;
 
-    o.worm = nullptr;
     o.weapon = nullptr;
 
     o.facing_right = false;

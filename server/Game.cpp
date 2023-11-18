@@ -25,12 +25,7 @@ void Game::build_game_state(std::list<std::shared_ptr<States>>& states_list) {
                 player.second->life));
     }
 
-    states_list.push_back(std::make_shared<ProjectileCountG>(projectiles.size()));
-
-    std::transform(projectiles.begin(), projectiles.end(), std::back_inserter(states_list),
-                   [](auto& projectile) {
-                       return projectile.second->get_proyectile_state(projectile.first);
-                   });
+    battlefield.build_state(states_list);
 }
 
 bool Game::non_locking_is_playing() {
@@ -88,7 +83,7 @@ void Game::remove_closed_clients() {
     broadcaster.remove_closed_clients(ready_count, players_stats, battlefield);
 }
 
-void Game::removePlayer(const uint8_t& player_id) {
+void Game::removeLobbyPlayer(const uint8_t& player_id) {
     std::lock_guard<std::mutex> lock(m);
 
     if (players_stats.count(player_id) != 1) {
@@ -99,7 +94,7 @@ void Game::removePlayer(const uint8_t& player_id) {
         ready_count--;
     }
     players_stats.erase(player_id);
-    broadcaster.removePlayer(player_id);
+    broadcaster.removeLobbyPlayer(player_id);
 
     notifyLobbyState();
 }
@@ -129,10 +124,7 @@ void Game::set_player_ready(const uint8_t id) {
     }
 }
 
-void Game::step() {
-    battlefield.clean_dead_entities();
-    battlefield.step();
-}
+void Game::step() { battlefield.step(); }
 
 const uint8_t Game::broadcast_turn(const uint8_t& player_turn) {
     std::lock_guard<std::mutex> lock(m);
@@ -167,25 +159,7 @@ std::shared_ptr<GameInfoL> Game::getInfo() {
 
 // -------------- Projectiles Actions -------------------
 
-void Game::add_projectile(std::shared_ptr<Projectile> proyectile) {
-    // std::lock_guard<std::mutex> lock(m);
-    projectiles.insert({projectile_count, proyectile});
-    projectile_count++;
-}
-
-void Game::remove_collided_projectiles() {
-    std::lock_guard<std::mutex> lock(m);
-
-    auto it = projectiles.cbegin();
-    while (it != projectiles.cend()) {
-        if (it->second->is_dead()) {
-            it = projectiles.erase(it);
-            continue;
-        }
-
-        ++it;
-    }
-}
+void Game::remove_collided_projectiles() { battlefield.remove_collided_projectiles(); }
 
 // -------------- Player Actions -------------------
 
@@ -228,7 +202,7 @@ void Game::player_shoot(const uint8_t id) {
     players_stats.at(id)->aiming = false;
     players_stats.at(id)->charging_shoot = false;
 
-    players_stats.at(id)->shoot(*this);
+    players_stats.at(id)->shoot();
 
     players_stats.at(id)->weapon_power = 0;
 }

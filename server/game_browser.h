@@ -64,7 +64,7 @@ public:
     void join_game(const uint8_t& game_code, const uint8_t& id,
                    Queue<std::shared_ptr<States>>& state_queue);
 
-    void removePlayer(const uint8_t& player_id, const uint8_t& game_id);
+    void removeLobbyPlayer(const uint8_t& player_id, const uint8_t& game_id);
     /*
 
     */

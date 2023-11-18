@@ -29,8 +29,10 @@ void Engine::step() { world->Step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERA
 void Engine::destroy_body(b2Body* body) { world->DestroyBody(body); }
 
 void Engine::destroy_dead_entities() {
+    // Sin lock ya que el gameloop es el unico hilo que opera con dead_list
+
     for (auto& entity: listener->dead_list) {
-        entity->remove_entity();
+        world->DestroyBody(entity->body);
     }
 }
 

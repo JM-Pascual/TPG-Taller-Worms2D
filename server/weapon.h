@@ -4,7 +4,6 @@
 #include "../common/const.h"
 #include "box2d/b2_math.h"
 
-#include "Player.h"
 #include "proyectile.h"
 
 
@@ -15,7 +14,7 @@
 
 class Player;
 class Game;
-class Engine;
+class Battlefield;
 
 class Weapon {
 protected:
@@ -24,7 +23,7 @@ protected:
 public:
     explicit Weapon(uint8_t ammo);
 
-    virtual void execute(Game& game, Engine& battlefield, Player& player_) = 0;
+    virtual void execute(Battlefield& battlefield, Player& player_) = 0;
 };
 
 //~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
@@ -32,7 +31,7 @@ public:
 class Bazooka: public Weapon {
 public:
     Bazooka();
-    void execute(Game& game, Engine& battlefield, Player& player) override;
+    void execute(Battlefield& battlefield, Player& player) override;
     virtual ~Bazooka() = default;
 };
 
@@ -41,7 +40,7 @@ public:
 class GreenGrenade: public Weapon {
 public:
     GreenGrenade();
-    void execute(Game& game, Engine& battlefield, Player& player) override;
+    void execute(Battlefield& battlefield, Player& player) override;
     virtual ~GreenGrenade() = default;
 };
 
@@ -49,7 +48,7 @@ public:
 
 class BananaGrenade: public Weapon {
     BananaGrenade();
-    void execute(Game& game, Engine& battlefield, Player& player) override;
+    void execute(Battlefield& battlefield, Player& player) override;
     virtual ~BananaGrenade() = default;
 };
 
@@ -58,7 +57,7 @@ class BananaGrenade: public Weapon {
 class DynamiteGrenade: public Weapon {
 public:
     DynamiteGrenade();
-    void execute(Game& game, Engine& battlefield, Player& player) override;
+    void execute(Battlefield& battlefield, Player& player) override;
     virtual ~DynamiteGrenade() = default;
 };
 

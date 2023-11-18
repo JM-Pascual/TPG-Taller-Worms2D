@@ -1,15 +1,13 @@
 #include "entity.h"
 
-#include "engine.h"
+#include "battlefield.h"
 
-Entity::Entity(Engine& battlefield):
+Entity::Entity(Battlefield& battlefield):
         dead(false), body(nullptr), battlefield(battlefield), collided(false) {}
 
 void Entity::start_contact() {}
 
 void Entity::end_contact() {}
-
-void Entity::remove_entity() { battlefield.destroy_body(body); }
 
 bool Entity::multiple_contact() {
     if (not collided) {

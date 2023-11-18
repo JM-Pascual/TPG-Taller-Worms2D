@@ -9,7 +9,6 @@
 
 #include "../common/const.h"
 
-#include "engine.h"
 #include "entity.h"
 #include "weapon.h"
 
@@ -30,16 +29,14 @@
 #define INCLINACION_MAX (b2_pi / 2)
 #define INCLINACION_MIN (-b2_pi / 2)
 
-class Game;
 class Weapon;
-class Engine;
+class Battlefield;
 class Projectile;
 
 
 class Player: public Entity {
 private:
     float life;
-    b2Body* worm;
     // std::map<WeaponsAndTools,Weapon >Weapons;
     Weapon* weapon;
 
@@ -62,13 +59,13 @@ private:
     int facing_factor();
 
 public:
-    explicit Player(Engine& battlefield);
+    explicit Player(Battlefield& battlefield);
 
     void move();
     void stop();
     void jump(const JumpDir& direction);
 
-    void shoot(Game& game);
+    void shoot();
 
     void stop_all();
 
