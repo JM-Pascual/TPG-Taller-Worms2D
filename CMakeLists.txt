@@ -42,8 +42,7 @@ file(GLOB CLIENT_H client/*.h)
 file(GLOB SERVER_SRC server/*.cpp server/main.cpp)
 file(GLOB UI_SRC client/*.ui)
 
-set(QT_CLIENT_SRC ${CLIENT_SRC}
-        server/turn_handler.cpp)
+set(QT_CLIENT_SRC ${CLIENT_SRC})
 qt_wrap_ui(QT_CLIENT_SRC ${UI_SRC})
 qt_wrap_cpp(QT_CLIENT_SRC ${CLIENT_H})
 qt_add_resources(QT_RES client/resources/images.qrc)
