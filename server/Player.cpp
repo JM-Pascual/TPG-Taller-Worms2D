@@ -59,8 +59,8 @@ void Player::change_weapon(WeaponsAndTools new_weapon) {
     if (weapons.count(new_weapon) != 1) {
         return;
     }
-
     selected_weapon = &weapons.at(new_weapon);
+    selected_gadget_type = new_weapon;
 }
 
 Player::Player(Player&& o):
