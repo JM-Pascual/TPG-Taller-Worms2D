@@ -10,6 +10,9 @@ void AimAnimation::load_all_aim_textures(TexturesPool& pool) {
 
     weapon_aim_textures.insert({WeaponsAndTools::GREEN_GRENADE,
                                 (pool.get_aim_texture(WeaponAiming::WORM_AIM_GREEN_GRENADE))});
+
+    weapon_aim_textures.insert({WeaponsAndTools::BANANA,
+                                (pool.get_aim_texture(WeaponAiming::WORM_AIM_BANANA))});
 }
 
 AimAnimation::AimAnimation(TexturesPool& pool): crosshair_texture(pool.get_actor_texture(Actors::CROSSHAIR)),

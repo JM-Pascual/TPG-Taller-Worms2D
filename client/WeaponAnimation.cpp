@@ -15,6 +15,12 @@ void WeaponAnimation::load_all_draw_animations(TexturesPool& pool) {
                                                pool.get_draw_texture(
                                                             WeaponsDraw::WORM_DRAW_GREEN_GRENADE)
                                                        , 10, 2, false)});
+
+    weapon_draw_animations.insert({
+            WeaponsAndTools::BANANA, std::make_unique<Animation>(
+                                                    pool.get_draw_texture(
+                                                            WeaponsDraw::WORM_DRAW_BANANA)
+                                                            , 10, 2, false)});
 }
 
 WeaponAnimation::WeaponAnimation(TexturesPool& pool) :
