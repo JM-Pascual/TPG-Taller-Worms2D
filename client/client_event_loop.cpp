@@ -46,9 +46,8 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                     players.update_actor_state(state->id, raw_state);
                 }
 
-                auto worm = std::dynamic_pointer_cast<WormStateG>(raw_state);
-                if (worm->is_walking) {
-                    camera.fixActor(worm->pos.x, worm->pos.y, 32, 60);
+                if (state->is_walking) {
+                    camera.fixActor(state->pos.x, state->pos.y, 32, 60);
                     audio_player.playAudio("test");
                 }
                 continue;
