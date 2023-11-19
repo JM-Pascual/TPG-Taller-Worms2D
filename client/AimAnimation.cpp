@@ -1,6 +1,17 @@
 #include "AimAnimation.h"
 
 
+void AimAnimation::load_all_aim_textures(TexturesPool& pool) {
+    weapon_aim_textures.insert({WeaponsAndTools::BAZOOKA,
+                                (pool.get_aim_texture(WeaponAiming::WORM_AIM_BAZOOKA))});
+
+    weapon_aim_textures.insert({WeaponsAndTools::DYNAMITE,
+                                (pool.get_aim_texture(WeaponAiming::WORM_AIM_DYNAMITE))});
+
+    weapon_aim_textures.insert({WeaponsAndTools::GREEN_GRENADE,
+                                (pool.get_aim_texture(WeaponAiming::WORM_AIM_GREEN_GRENADE))});
+}
+
 AimAnimation::AimAnimation(TexturesPool& pool): crosshair_texture(pool.get_actor_texture(Actors::CROSSHAIR)),
                                                 power_charge_animation(std::make_unique<Animation>(
                                                         pool.get_actor_texture(Actors::POWER_CHARGE_BAR
@@ -8,18 +19,10 @@ AimAnimation::AimAnimation(TexturesPool& pool): crosshair_texture(pool.get_actor
     this->load_all_aim_textures(pool);
 }
 
-void AimAnimation::load_all_aim_textures(TexturesPool& pool) {
-    weapon_aim_textures.insert({WeaponsAndTools::BAZOOKA,
-                                (pool.get_aim_texture(WeaponAiming::WORM_AIM_BAZOOKA))});
-
-    weapon_aim_textures.insert({WeaponsAndTools::DYNAMITE,
-                                (pool.get_aim_texture(WeaponAiming::WORM_AIM_DYNAMITE))});
-}
-
 void AimAnimation::render(WeaponsAndTools current_weapon, SDL2pp::Renderer& renderer,
                           SDL2pp::Rect dest, SDL_RendererFlip flipType, double angle) {
 
-    if (current_weapon == WeaponsAndTools::BAZOOKA){
+    if (current_weapon != WeaponsAndTools::DYNAMITE){
         renderer.Copy(
                 (*weapon_aim_textures.at(current_weapon)),
                 SDL2pp::Rect(0,
