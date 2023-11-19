@@ -38,6 +38,14 @@ void TexturesPool::load_draw_textures() {
                                                                     "/worms/worm-dynamite-draw.png")
                                                                     .SetColorKey(true, 0x000000))});
     draw_textures[WeaponsDraw::WORM_DRAW_DYNAMITE]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    draw_textures.insert({WeaponsDraw::WORM_DRAW_GREEN_GRENADE,
+                          std::make_shared<SDL2pp::Texture>((*renderer),
+                                                            SDL2pp::Surface(
+                                                                    DATA_PATH
+                                                                    "/worms/worm-ggrenade-draw.png")
+                                                                    .SetColorKey(true, 0x000000))});
+    draw_textures[WeaponsDraw::WORM_DRAW_GREEN_GRENADE]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
 void TexturesPool::load_aiming_textures() {
@@ -56,6 +64,14 @@ void TexturesPool::load_aiming_textures() {
                                                                     "/worms/worm-dynamite-aim.png")
                                                                    .SetColorKey(true, 0x000000))});
     aim_textures[WeaponAiming::WORM_AIM_DYNAMITE]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    aim_textures.insert({WeaponAiming::WORM_AIM_GREEN_GRENADE,
+                         std::make_shared<SDL2pp::Texture>((*renderer),
+                                                           SDL2pp::Surface(
+                                                                   DATA_PATH
+                                                                   "/worms/worm-ggrenade-aim.png")
+                                                                   .SetColorKey(true, 0x000000))});
+    aim_textures[WeaponAiming::WORM_AIM_GREEN_GRENADE]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
 void TexturesPool::load_worm_textures() {
