@@ -21,19 +21,15 @@ void InfoParser::makeLobbyState(std::list<std::shared_ptr<States>>& states) {
 }
 
 void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states) {
-    states.push_back(std::make_shared<ProjectileCountG>(projectiles.size()));
 
     std::transform(projectiles.begin(), projectiles.end(), std::back_inserter(states),
                    [](const auto& projectile) {
                        return projectile.second->get_proyectile_state(projectile.first);
                    });
 
-    states.push_back(std::make_shared<PlayerCountG>(players.size()));
-
     for (const auto& [id, player]: players) {
         states.push_back(
                 std::make_shared<PlayerStateG>(player->is_playing, id, player->getWeaponsAmmo()));
-        states.push_back(std::make_shared<WormCountG>(player->worms.size()));
 
         std::transform(player->worms.begin(), player->worms.end(), std::back_inserter(states),
                        [](const auto& worm) {

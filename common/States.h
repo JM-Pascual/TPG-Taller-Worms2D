@@ -144,29 +144,6 @@ public:
     ~PlayerCountL() override = default;
 };
 
-class PlayerCountG: public CountState {
-public:
-    explicit PlayerCountG(const uint8_t& quantity):
-            CountState(StatesTag::PLAYER_COUNT_G, quantity) {}
-
-    ~PlayerCountG() override = default;
-};
-
-class WormCountG: public CountState {
-public:
-    explicit WormCountG(const uint8_t& quantity): CountState(StatesTag::WORM_COUNT_G, quantity) {}
-
-    ~WormCountG() override = default;
-};
-
-class ProjectileCountG: public CountState {
-public:
-    explicit ProjectileCountG(const uint8_t& quantity):
-            CountState(StatesTag::PROJECTILE_COUNT_G, quantity) {}
-
-    ~ProjectileCountG() override = default;
-};
-
 class GameNotJoinable: public CountState {
 public:
     /*

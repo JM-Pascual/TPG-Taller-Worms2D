@@ -20,7 +20,9 @@ private:
     */
     std::map<uint8_t, std::unique_ptr<Player>>& players;
 
-    const std::shared_ptr<Worm>& getTurnWorm(const uint8_t& id, const uint8_t& worm_index);
+    void getTurnWorm(const uint8_t& id, const uint8_t& worm_index);
+
+    std::shared_ptr<Worm> turn_worm;
 
 public:
     explicit WormHandler(std::map<uint8_t, std::unique_ptr<Player>>& players): players(players) {}

@@ -173,10 +173,7 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
     switch (state->tag) {
         case StatesTag::GAMES_COUNT_L:
         case StatesTag::PLAYER_COUNT_L:
-        case StatesTag::PLAYER_COUNT_G:
         case StatesTag::GAME_NOT_JOINABLE:
-        case StatesTag::PROJECTILE_COUNT_G:
-        case StatesTag::WORM_COUNT_G:
             sendCount(state);
             break;
 
@@ -187,7 +184,6 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
         case StatesTag::INFO_GAME_L:
             sendGameInfo(state);
             break;
-
 
         case StatesTag::BATTLEFIELD_G:
             break;

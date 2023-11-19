@@ -27,50 +27,56 @@ EventLoop::EventLoop(const char* hostname, const char* servname):
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
                                     TexturesPool& txt_pool) {
     std::shared_ptr<States> raw_state = nullptr;
-    for (int j = 0; j < 5; j++) {
-        if (game_state_queue.try_pop(raw_state)) {
-            if (raw_state->tag == StatesTag::WORM_COUNT_G) {
-                uint8_t players_quantity =
-                        std::dynamic_pointer_cast<WormCountG>(raw_state)->quantity + 3;
-                for (size_t i = 0; i < players_quantity; i++) {
-                    while (not game_state_queue.try_pop(raw_state)) {}
-                    auto state = std::dynamic_pointer_cast<WormStateG>(raw_state);
-                    if (!players.actor_loaded(state->id)) {
-                        players.add_actor(state->id,
-                                          std::make_shared<Worm>(raw_state, txt_pool, camera));
-                    } else {
-                        players.update_actor_state(state->id, raw_state);
-                    }
+    for (int j = 0; j < 10; j++) {
+        if (not game_state_queue.try_pop(raw_state)) {
+            continue;
+        }
 
-                    auto worm = std::dynamic_pointer_cast<WormStateG>(raw_state);
-                    if (worm->is_walking) {
-                        camera.fixActor(worm->pos.x, worm->pos.y, 32, 60);
-                        audio_player.playAudio("test");
-                    }
+        switch (raw_state->tag) {
+            case StatesTag::PLAYER_G: {
+                continue;
+            }
+
+            case StatesTag::WORM_G: {
+                auto state = std::dynamic_pointer_cast<WormStateG>(raw_state);
+                if (!players.actor_loaded(state->id)) {
+                    players.add_actor(state->id,
+                                      std::make_shared<Worm>(raw_state, txt_pool, camera));
+                } else {
+                    players.update_actor_state(state->id, raw_state);
                 }
-                // Recibo el States de los proyectiles y los guardo para renderizarlos
-            } else if (raw_state->tag == StatesTag::PROJECTILE_COUNT_G) {
-                uint8_t proyectiles_quantity =
-                        std::dynamic_pointer_cast<ProjectileCountG>(raw_state)->quantity;
-                for (size_t i = 0; i < proyectiles_quantity; i++) {
-                    while (not game_state_queue.try_pop(raw_state)) {}
-                    auto state = std::dynamic_pointer_cast<ProjectileStateG>(raw_state);
-                    if (!proyectiles.actor_loaded(state->id)) {
-                        proyectiles.add_actor(state->id, std::make_shared<BazookaProyectile>(
-                                                                 raw_state, txt_pool, camera));
+
+                auto worm = std::dynamic_pointer_cast<WormStateG>(raw_state);
+                if (worm->is_walking) {
+                    camera.fixActor(worm->pos.x, worm->pos.y, 32, 60);
+                    audio_player.playAudio("test");
+                }
+                continue;
+            }
+
+            case StatesTag::PROJECTILE_G: {
+                auto state = std::dynamic_pointer_cast<ProjectileStateG>(raw_state);
+                if (!proyectiles.actor_loaded(state->id)) {
+                    proyectiles.add_actor(state->id, std::make_shared<BazookaProyectile>(
+                                                             raw_state, txt_pool, camera));
+                } else {
+                    if (std::dynamic_pointer_cast<ProjectileStateG>(raw_state)->impacted) {
+                        proyectiles.remove_actor(state->id, raw_state);
                     } else {
-                        if (std::dynamic_pointer_cast<ProjectileStateG>(raw_state)->impacted) {
-                            proyectiles.remove_actor(state->id, raw_state);
-                        } else {
-                            proyectiles.update_actor_state(state->id, raw_state);
-                        }
+                        proyectiles.update_actor_state(state->id, raw_state);
                     }
                 }
-            } else if (raw_state->tag == StatesTag::PLAYER_TURN) {
-                // contar tiempo
+                continue;
+            }
+
+            case StatesTag::PLAYER_TURN: {
                 my_turn = std::dynamic_pointer_cast<PlayerTurn>(raw_state)->is_your_turn;
                 turn_start = std::chrono::steady_clock::now();
+                continue;
             }
+
+            default:
+                break;
         }
     }
 }
