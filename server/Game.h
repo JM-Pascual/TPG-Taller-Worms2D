@@ -21,11 +21,13 @@
 #include "worm_handler.h"
 
 #define MAX_PLAYERS 4
+#define WORMS_QUANTITY 2
 
 class Projectile;
 
 class Game {
 private:
+    Battlefield battlefield;
     std::mutex m;
     /*
         Este mutex es necesario ya que mientras el juego este en estado "lobby", multiples hilos
@@ -34,12 +36,13 @@ private:
     std::map<uint8_t, std::unique_ptr<Player>> players_stats;
     uint8_t ready_count;
 
+    uint8_t worm_counter;
+
     const std::string description;
     const std::string map_name;
     const uint8_t game_id;
 
     WormHandler worm_handler;
-    Battlefield battlefield;
     BroadCaster broadcaster;
 
     GameLoop gameloop;
@@ -49,11 +52,13 @@ private:
 
     bool non_locking_is_playing();
 
+    void spawnWorms();
 
 public:
     Game(std::string desc, const std::string& map, const uint8_t& game_id,
          Queue<uint8_t>& erase_id_queue):
             ready_count(0),
+            worm_counter(0),
             description(std::move(desc)),
             map_name(map),
             game_id(game_id),
@@ -75,6 +80,7 @@ public:
     bool is_playing();
 
     void set_player_ready(uint8_t id);
+
 
     ~Game();
 

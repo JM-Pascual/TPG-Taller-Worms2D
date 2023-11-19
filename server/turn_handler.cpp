@@ -43,15 +43,20 @@ const bool TurnHandler::need_to_update(uint8_t players_quantity,
 
     if (player_turn > players_quantity) {
         player_turn = 0;
+        for (auto& [id, player]: players) {
+            if (++player->worm_turn > player->worms.size()) {
+                player->worm_turn = 0;
+            }
+        }
     }
 
     return TIMER_RESET;
 }
 
-const uint8_t TurnHandler::updateTurn(const std::chrono::duration<float>& elapsed,
-                                      BroadCaster& broadcaster, WormHandler& worm_handler) {
+const ActualTurn TurnHandler::updateTurn(const std::chrono::duration<float>& elapsed,
+                                         BroadCaster& broadcaster, WormHandler& worm_handler) {
     if (not this->need_to_update(players.size(), elapsed)) {  // Si resetea el timer
-        return prev_player_turn_id;
+        return ActualTurn(prev_player_turn_id, players.at(prev_player_turn_id)->worm_turn);
     }
 
     auto it = players.begin();
@@ -65,7 +70,9 @@ const uint8_t TurnHandler::updateTurn(const std::chrono::duration<float>& elapse
     }
 
     prev_player_turn_id = player_id;
-    return player_id;  // Retorno la id del jugador el cual es su turno
+    return ActualTurn(
+            player_id,
+            players.at(player_id)->worm_turn);  // Retorno la id del jugador el cual es su turno
 }
 
 const bool& TurnHandler::player_used_stop_action() { return player_stop_action; }

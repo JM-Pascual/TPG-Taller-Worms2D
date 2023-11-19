@@ -1,9 +1,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <list>
 #include <map>
 #include <memory>
+#include <vector>
 
 #include <box2d/box2d.h>
 
@@ -11,6 +11,7 @@
 
 #include "entity.h"
 #include "weapon.h"
+#include "worm.h"
 
 #define INITIAL_LIFE 100
 
@@ -34,70 +35,35 @@ class Battlefield;
 class Projectile;
 class BroadCaster;
 
-
-class Player: public Entity {
+class Player {
 private:
-    float life;
+    bool ready;
+    bool is_playing;
     // std::map<WeaponsAndTools,Weapon >Weapons;
     Weapon* weapon;
+    uint8_t worm_turn;
 
+    std::vector<std::shared_ptr<Worm>> worms;
 
-    bool facing_right;
-    bool is_walking;
-    bool ready;
-    bool is_jumping;
-    bool is_backflipping;
-    bool is_playing;
-    bool falling;
-
-    bool aiming;
-    float aim_inclination_degrees;  // Radianes
-    ADSAngleDir aim_direction;
-
-    bool charging_shoot;
-    float weapon_power;
-
-    int facing_factor();
+    void spawnWorms(Battlefield& battlefield, const uint8_t worms_quantity, uint8_t& worm_counter);
 
 public:
-    explicit Player(Battlefield& battlefield);
-
-    void move();
-    void stop();
-    void jump(const JumpDir& direction);
-
-    void shoot();
-
-    void stop_all();
+    Player();
 
 
-    void change_aim_direction();
-    void change_fire_power();
+    void destroyAllWormBodies();
 
     void set_ready();
-    void check_jumping();
-    void check_falling();
-    void start_falling() override;
 
-    b2Vec2 set_bullet_direction();
-    b2Vec2 set_bullet_power();
-    float set_bullet_angle();
-    uint8_t set_bullet_explosion_delay();
+    std::unique_ptr<AmmoLeft> getWeaponsAmmo();
 
-    void recibe_life_modification(float life_variation) override;
-    void shoot_aim_weapon(std::shared_ptr<Projectile> projectile);
-    void use_throwable(std::shared_ptr<Projectile> throwable);
-    // void use_clickeable_gadget();
-
-    bool is_dead() override;
-    void execute_collision_reaction() override;
-
-    virtual ~Player() = default;
+    ~Player();
 
     friend class Game;
     friend class BroadCaster;
     friend class InfoParser;
     friend class WormHandler;
+    friend class TurnHandler;
 
     Player(const Player&) = delete;
     Player& operator=(const Player&) = delete;

@@ -7,12 +7,12 @@
 #include "proyectile.h"
 
 
-#define BAZOOKA_AMMO uint8_t(10000)  // Se supone que tiene que ser infinita
-#define GREEN_GRENADE_AMMO uint8_t(10000)
+#define BAZOOKA_AMMO uint8_t(255)  // Se supone que tiene que ser infinita
+#define GREEN_GRENADE_AMMO uint8_t(255)
 #define BANANA_AMMO uint8_t(5)
 #define DYNAMITE_AMMO uint8_t(5)
 
-class Player;
+class Worm;
 class Game;
 class Battlefield;
 
@@ -23,7 +23,11 @@ protected:
 public:
     explicit Weapon(uint8_t ammo);
 
-    virtual void execute(Battlefield& battlefield, Player& player_) = 0;
+    virtual void execute(Battlefield& battlefield, Worm& worm) = 0;
+
+    virtual ~Weapon() = default;
+
+    friend class Player;
 };
 
 //~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
@@ -31,7 +35,7 @@ public:
 class Bazooka: public Weapon {
 public:
     Bazooka();
-    void execute(Battlefield& battlefield, Player& player) override;
+    void execute(Battlefield& battlefield, Worm& worm) override;
     virtual ~Bazooka() = default;
 };
 
@@ -40,7 +44,7 @@ public:
 class GreenGrenade: public Weapon {
 public:
     GreenGrenade();
-    void execute(Battlefield& battlefield, Player& player) override;
+    void execute(Battlefield& battlefield, Worm& worm) override;
     virtual ~GreenGrenade() = default;
 };
 
@@ -48,7 +52,7 @@ public:
 
 class BananaGrenade: public Weapon {
     BananaGrenade();
-    void execute(Battlefield& battlefield, Player& player) override;
+    void execute(Battlefield& battlefield, Worm& worm) override;
     virtual ~BananaGrenade() = default;
 };
 
@@ -57,7 +61,7 @@ class BananaGrenade: public Weapon {
 class DynamiteGrenade: public Weapon {
 public:
     DynamiteGrenade();
-    void execute(Battlefield& battlefield, Player& player) override;
+    void execute(Battlefield& battlefield, Worm& worm) override;
     virtual ~DynamiteGrenade() = default;
 };
 

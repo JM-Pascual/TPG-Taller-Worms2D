@@ -55,7 +55,7 @@ void BroadCaster::remove_closed_clients(uint8_t& ready_count,
                 continue;
             }
 
-            battlefield.destroy_body(players_stats.at(id)->body);
+            players_stats.at(id)->destroyAllWormBodies();
             players_stats.erase(id);
 
             ready_count--;

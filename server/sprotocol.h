@@ -43,6 +43,8 @@ private:
 
     void sendPlayerState(const std::shared_ptr<States>& ps);
 
+    void sendWormState(const std::shared_ptr<States>& state);
+
     void sendGameInfo(const std::shared_ptr<States>& count);
 
     void sendCount(const std::shared_ptr<States>& count);

@@ -97,7 +97,9 @@ enum class StatesTag {
     PROJECTILE_G,
     PROJECTILE_COUNT_G,
     PLAYER_COUNT_G,
-    PLAYER_TURN
+    PLAYER_TURN,
+    WORM_COUNT_G,
+    WORM_G
 };
 
 #endif

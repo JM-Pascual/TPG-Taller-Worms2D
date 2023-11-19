@@ -34,7 +34,7 @@ void Game::add_client_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& s
     }
 
     broadcaster.add_queue(id, state_queue);
-    players_stats.insert(std::make_pair(id, std::make_unique<Player>(battlefield)));
+    players_stats.insert(std::make_pair(id, std::make_unique<Player>()));
     notifyLobbyState();
 }
 
@@ -77,8 +77,15 @@ void Game::set_player_ready(const uint8_t id) {
 
     // Inicio el gl si estan todos listos y no esta iniciado ya
     if (not gameloop.is_alive() && this->non_locking_is_playing()) {
+        spawnWorms();
         gameloop.start();
         need_to_join_loop = true;
+    }
+}
+
+void Game::spawnWorms() {
+    for (auto& [id, player]: players_stats) {
+        player->spawnWorms(battlefield, WORMS_QUANTITY, worm_counter);
     }
 }
 

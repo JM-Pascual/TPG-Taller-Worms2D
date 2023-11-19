@@ -10,7 +10,7 @@
 // ----------------------- NULL_COMMAND ----------------------
 
 void NullCommand::execute(WormHandler& worm_handler, const uint8_t& turn_id,
-                          TurnHandler& turn_handler) {}
+                          const uint8_t& worm_index, TurnHandler& turn_handler) {}
 
 void NullCommand::execute() {}
 
@@ -21,12 +21,12 @@ StartMoving::StartMoving(ServerSide::Protocol& protocol, const uint8_t& id): Pla
 }
 
 void StartMoving::execute(WormHandler& worm_handler, const uint8_t& turn_id,
-                          TurnHandler& turn_handler) {
+                          const uint8_t& worm_index, TurnHandler& turn_handler) {
     if (turn_id != this->id) {
         return;
     }
 
-    worm_handler.player_start_moving(direction, id);
+    worm_handler.player_start_moving(direction, id, worm_index);
 }
 
 // ----------------------- STOP MOVING ----------------------
@@ -34,12 +34,12 @@ void StartMoving::execute(WormHandler& worm_handler, const uint8_t& turn_id,
 StopMoving::StopMoving(const uint8_t& id): PlayerAction(id) {}
 
 void StopMoving::execute(WormHandler& worm_handler, const uint8_t& turn_id,
-                         TurnHandler& turn_handler) {
+                         const uint8_t& worm_index, TurnHandler& turn_handler) {
     if (turn_id != this->id) {
         return;
     }
 
-    worm_handler.player_stop_moving(id);
+    worm_handler.player_stop_moving(id, worm_index);
 }
 
 
@@ -49,12 +49,13 @@ Jump::Jump(ServerSide::Protocol& protocol, const uint8_t& id): PlayerAction(id) 
     protocol.recvJumpDir(this->direction);
 }
 
-void Jump::execute(WormHandler& worm_handler, const uint8_t& turn_id, TurnHandler& turn_handler) {
+void Jump::execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+                   TurnHandler& turn_handler) {
     if (turn_id != this->id) {
         return;
     }
 
-    worm_handler.player_jump(direction, id);
+    worm_handler.player_jump(direction, id, worm_index);
 }
 
 // ---------------------------- ADSAngle ------------------
@@ -63,7 +64,7 @@ ADSAngle::ADSAngle(ServerSide::Protocol& protocol, const uint8_t& id): PlayerAct
     protocol.recvADSAngleDir(this->direction);
 }
 
-void ADSAngle::execute(WormHandler& worm_handler, const uint8_t& turn_id,
+void ADSAngle::execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
                        TurnHandler& turn_handler) {
     if (turn_id != this->id) {
         return;
@@ -73,7 +74,7 @@ void ADSAngle::execute(WormHandler& worm_handler, const uint8_t& turn_id,
         return;
     }
 
-    worm_handler.player_start_aiming(direction, id);
+    worm_handler.player_start_aiming(direction, id, worm_index);
 }
 
 // -------------------------- STOP ADS ---------------
@@ -81,7 +82,7 @@ void ADSAngle::execute(WormHandler& worm_handler, const uint8_t& turn_id,
 StopADSAngle::StopADSAngle(const uint8_t& id): PlayerAction(id) {}
 
 void StopADSAngle::execute(WormHandler& worm_handler, const uint8_t& turn_id,
-                           TurnHandler& turn_handler) {
+                           const uint8_t& worm_index, TurnHandler& turn_handler) {
     if (turn_id != this->id) {
         return;
     }
@@ -90,7 +91,7 @@ void StopADSAngle::execute(WormHandler& worm_handler, const uint8_t& turn_id,
         return;
     }
 
-    worm_handler.player_stop_aiming(id);
+    worm_handler.player_stop_aiming(id, worm_index);
 }
 
 // ---------------------------- FIRE POWER ------------------
@@ -98,7 +99,7 @@ void StopADSAngle::execute(WormHandler& worm_handler, const uint8_t& turn_id,
 FirePower::FirePower(const uint8_t& id): PlayerAction(id) {}
 
 void FirePower::execute(WormHandler& worm_handler, const uint8_t& turn_id,
-                        TurnHandler& turn_handler) {
+                        const uint8_t& worm_index, TurnHandler& turn_handler) {
     if (turn_id != this->id) {
         return;
     }
@@ -107,14 +108,15 @@ void FirePower::execute(WormHandler& worm_handler, const uint8_t& turn_id,
         return;
     }
 
-    worm_handler.player_start_charging(id);
+    worm_handler.player_start_charging(id, worm_index);
 }
 
 // ---------------------------- SHOOT ------------------
 
 Shoot::Shoot(const uint8_t& id): PlayerAction(id) {}
 
-void Shoot::execute(WormHandler& worm_handler, const uint8_t& turn_id, TurnHandler& turn_handler) {
+void Shoot::execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+                    TurnHandler& turn_handler) {
     if (turn_id != this->id) {
         return;
     }
@@ -123,7 +125,7 @@ void Shoot::execute(WormHandler& worm_handler, const uint8_t& turn_id, TurnHandl
         return;
     }
 
-    worm_handler.player_shoot(id);
+    worm_handler.player_shoot(id, worm_index);
 
     turn_handler.use_stop_action();
 }
@@ -134,7 +136,8 @@ Delay::Delay(ServerSide::Protocol& protocol, const uint8_t& id): PlayerAction(id
     protocol.recvDelay(this->amount);
 }
 
-void Delay::execute(WormHandler& worm_handler, const uint8_t& turn_id, TurnHandler& turn_handler) {
+void Delay::execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+                    TurnHandler& turn_handler) {
     if (turn_id != this->id) {
         return;
     }
@@ -151,7 +154,7 @@ ChangeGadget::ChangeGadget(ServerSide::Protocol& protocol, const uint8_t& id): P
 }
 
 void ChangeGadget::execute(WormHandler& worm_handler, const uint8_t& turn_id,
-                           TurnHandler& turn_handler) {
+                           const uint8_t& worm_index, TurnHandler& turn_handler) {
     if (turn_id != this->id) {
         return;
     }

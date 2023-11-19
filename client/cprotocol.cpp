@@ -2,6 +2,7 @@
 
 #include <cerrno>
 #include <cstring>
+#include <utility>
 #include <vector>
 
 #include <arpa/inet.h>
@@ -103,6 +104,12 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
         case StatesTag::PLAYER_TURN:
             return std::make_shared<PlayerTurn>(recvUint8());
 
+        case StatesTag::WORM_COUNT_G:
+            return std::make_shared<WormCountG>(recvUint8());
+
+        case StatesTag::WORM_G:
+            return recvWormGame();
+
         default:
             return std::make_shared<PlayerCountG>(recvUint8());  // ToDo placeholder para un default
     }
@@ -140,6 +147,20 @@ std::shared_ptr<GameInfoL> ClientSide::Protocol::recvGameInfo() {
 
 std::shared_ptr<PlayerStateG> ClientSide::Protocol::recvPlayerGame() {
     uint8_t id = recvUint8();
+    bool is_playing = recvBool();
+    auto ammo_left = std::make_unique<AmmoLeft>();
+
+    for (size_t i = 0; i < GADGETS_QUANTITY; i++) {
+        WeaponsAndTools type = (WeaponsAndTools)recvUint8();
+        uint8_t ammo = recvUint8();
+        ammo_left->weapon_ammo.insert({type, ammo});
+    }
+
+    return std::make_shared<PlayerStateG>(is_playing, id, std::move(ammo_left));
+}
+
+std::shared_ptr<WormStateG> ClientSide::Protocol::recvWormGame() {
+    uint8_t id = recvUint8();
     float x = meter_to_pixel_x(recvFloat());
     float y = meter_to_pixel_y(recvFloat());
     bool is_wa = recvBool();
@@ -151,8 +172,8 @@ std::shared_ptr<PlayerStateG> ClientSide::Protocol::recvPlayerGame() {
     bool charging_weapon = recvBool();
     float life = recvFloat();
 
-    return std::make_shared<PlayerStateG>(id, x, y, is_wa, is_jumping, is_backflipping, direction,
-                                          was_hit, aim_inclination, charging_weapon, life);
+    return std::make_shared<WormStateG>(id, x, y, is_wa, is_jumping, is_backflipping, direction,
+                                        was_hit, aim_inclination, charging_weapon, life);
 }
 
 std::shared_ptr<ProjectileStateG> ClientSide::Protocol::recvProjectileGame() {

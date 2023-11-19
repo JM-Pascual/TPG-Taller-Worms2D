@@ -1,11 +1,11 @@
+#include "client_event_loop.h"
+
 #include <unordered_map>
 
 #include <SDL2pp/SDL2pp.hh>
 #include <spdlog/spdlog.h>
 
 #include "../common/States.h"
-
-#include "client_event_loop.h"
 
 const int DURATION = 1000 / 30;
 
@@ -25,16 +25,16 @@ EventLoop::EventLoop(const char* hostname, const char* servname):
 }
 
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
-                                        TexturesPool& txt_pool) {
+                                    TexturesPool& txt_pool) {
     std::shared_ptr<States> raw_state = nullptr;
     for (int j = 0; j < 5; j++) {
         if (game_state_queue.try_pop(raw_state)) {
-            if (raw_state->tag == StatesTag::PLAYER_COUNT_G) {
+            if (raw_state->tag == StatesTag::WORM_COUNT_G) {
                 uint8_t players_quantity =
-                        std::dynamic_pointer_cast<PlayerCountG>(raw_state)->quantity;
+                        std::dynamic_pointer_cast<WormCountG>(raw_state)->quantity + 3;
                 for (size_t i = 0; i < players_quantity; i++) {
                     while (not game_state_queue.try_pop(raw_state)) {}
-                    auto state = std::dynamic_pointer_cast<PlayerStateG>(raw_state);
+                    auto state = std::dynamic_pointer_cast<WormStateG>(raw_state);
                     if (!players.actor_loaded(state->id)) {
                         players.add_actor(state->id,
                                           std::make_shared<Worm>(raw_state, txt_pool, camera));
@@ -42,7 +42,7 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                         players.update_actor_state(state->id, raw_state);
                     }
 
-                    auto worm = std::dynamic_pointer_cast<PlayerStateG>(raw_state);
+                    auto worm = std::dynamic_pointer_cast<WormStateG>(raw_state);
                     if (worm->is_walking) {
                         camera.fixActor(worm->pos.x, worm->pos.y, 32, 60);
                         audio_player.playAudio("test");
