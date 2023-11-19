@@ -38,8 +38,7 @@ public:
     void broadcastGame();
 
     void remove_closed_clients(uint8_t& ready_count,
-                               std::map<uint8_t, std::unique_ptr<Player>>& players_stats,
-                               Battlefield& battlefield);
+                               std::map<uint8_t, std::unique_ptr<Player>>& players_stats);
 
     void removeLobbyPlayer(const uint8_t& player_id);
 

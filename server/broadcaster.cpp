@@ -41,8 +41,7 @@ void BroadCaster::broadcastGame() {
 }
 
 void BroadCaster::remove_closed_clients(uint8_t& ready_count,
-                                        std::map<uint8_t, std::unique_ptr<Player>>& players_stats,
-                                        Battlefield& battlefield) {
+                                        std::map<uint8_t, std::unique_ptr<Player>>& players_stats) {
     std::lock_guard<std::mutex> lock(m);
 
     auto it = broadcast_map.cbegin();
@@ -79,6 +78,7 @@ void BroadCaster::broadcast_turn(const uint8_t& player_turn) {
         try {
             if (i == player_turn) {
                 it->second->push(std::make_shared<PlayerTurn>(IS_YOUR_TURN));
+                ++it;
                 continue;
             }
 

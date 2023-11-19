@@ -46,6 +46,8 @@ private:
     const bool need_to_update(uint8_t players_quantity, const std::chrono::duration<float>& elapsed,
                               WormHandler& worm_handler);
 
+    void advanceTurn(const uint8_t& players_quantity, WormHandler& worm_handler);
+
 public:
     explicit TurnHandler(std::map<uint8_t, std::unique_ptr<Player>>& players):
             player_turn(0),

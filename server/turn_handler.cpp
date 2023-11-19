@@ -1,16 +1,17 @@
 #include "turn_handler.h"
 
+#include <iostream>
+
 #include "Player.h"
 #include "broadcaster.h"
 #include "worm_handler.h"
-
 
 const bool TurnHandler::need_to_update(uint8_t players_quantity,
                                        const std::chrono::duration<float>& elapsed,
                                        WormHandler& worm_handler) {
 
     // Adapto el size a los index del map
-    players_quantity--;
+    --players_quantity;
 
     // Primer turno
     if (first_turn) {
@@ -20,6 +21,7 @@ const bool TurnHandler::need_to_update(uint8_t players_quantity,
 
     // Desconecta un player
     if (players_quantity != current_players_quantity) {
+        advanceTurn(players_quantity, worm_handler);
         current_players_quantity = players_quantity;
         return TIMER_RESET;
     }
@@ -37,7 +39,13 @@ const bool TurnHandler::need_to_update(uint8_t players_quantity,
         }
     }
 
-    player_turn++;
+    advanceTurn(players_quantity, worm_handler);
+
+    return TIMER_RESET;
+}
+
+void TurnHandler::advanceTurn(const uint8_t& players_quantity, WormHandler& worm_handler) {
+    ++player_turn;
     player_stop_action = false;
     elapsed_time = std::chrono::duration<float>(0);
 
@@ -51,8 +59,6 @@ const bool TurnHandler::need_to_update(uint8_t players_quantity,
             }
         }
     }
-
-    return TIMER_RESET;
 }
 
 const ActualTurn TurnHandler::updateTurn(const std::chrono::duration<float>& elapsed,
