@@ -24,7 +24,7 @@ public:
 
     virtual void start_falling();
 
-    virtual void recibe_life_modification(float life_variation);
+    virtual void recibe_life_modification(const float& life_variation);
 
     virtual bool multiple_contact();  // Todo lo vamos a tener que sacar
 

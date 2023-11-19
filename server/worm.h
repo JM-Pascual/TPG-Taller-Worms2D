@@ -79,7 +79,7 @@ public:
     float set_bullet_angle();
     uint8_t set_bullet_explosion_delay();
 
-    void recibe_life_modification(float life_variation) override;
+    void recibe_life_modification(const float& life_variation) override;
     void shoot_aim_weapon(std::shared_ptr<Projectile> projectile);
     void use_throwable(std::shared_ptr<Projectile> throwable);
     // void use_clickeable_gadget();

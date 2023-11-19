@@ -209,10 +209,14 @@ void Worm::stop_all() {
 }
 void Worm::start_falling() { falling = true; }
 
-void Worm::recibe_life_modification(float life_variation) {
+void Worm::recibe_life_modification(const float& life_variation) {
     if (life_variation < 0) {
         was_damaged = true;
     }
 
     life += life_variation;
+
+    if (life < 0) {
+        life = 0;
+    }
 }
