@@ -49,6 +49,8 @@ public:
 
     void player_change_gadget(const WeaponsAndTools& gadget, const uint8_t& id,
                               const uint8_t& worm_index);
+
+    void checkDeadWorms();
 };
 
 

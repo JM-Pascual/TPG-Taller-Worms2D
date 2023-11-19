@@ -10,9 +10,6 @@ const bool TurnHandler::need_to_update(uint8_t players_quantity,
                                        const std::chrono::duration<float>& elapsed,
                                        WormHandler& worm_handler) {
 
-    // Adapto el size a los index del map
-    --players_quantity;
-
     // Primer turno
     if (first_turn) {
         first_turn = false;
@@ -26,11 +23,17 @@ const bool TurnHandler::need_to_update(uint8_t players_quantity,
         return TIMER_RESET;
     }
 
-    auto& player = players.at(prev_player_turn_id);
+    {
+        auto& player = players.at(prev_player_turn_id);
 
-    if (player->worms.at(player->worm_turn)->was_damaged) {
-        advanceTurn(players_quantity, worm_handler);
-        return TIMER_RESET;
+        if (player->worm_turn > (player->worms.size() - 1)) {
+            player->worm_turn = 0;
+        }
+
+        if (player->worms.at(player->worm_turn)->was_damaged) {
+            advanceTurn(players_quantity, worm_handler);
+            return TIMER_RESET;
+        }
     }
 
     elapsed_time += elapsed;
@@ -52,13 +55,26 @@ const bool TurnHandler::need_to_update(uint8_t players_quantity,
 }
 
 void TurnHandler::advanceTurn(const uint8_t& players_quantity, WormHandler& worm_handler) {
-    ++player_turn;
+    for (++player_turn; player_turn <= players_quantity; ++player_turn) {
+        // Dejamos q se pase de index para que se resetee a 0
+        if (player_turn == players_quantity) {
+            break;
+        }
+
+        auto it = players.begin();
+        advance(it, player_turn);
+
+        if (players.at(player_turn)->is_playing) {
+            break;
+        }
+    }
+
     player_stop_action = false;
     elapsed_time = std::chrono::duration<float>(0);
 
     worm_handler.stop_turn_worm();
 
-    if (player_turn > players_quantity) {
+    if (player_turn > (players_quantity - 1)) {
         player_turn = 0;
         for (auto& [id, player]: players) {
             if (++player->worm_turn > (player->worms.size() - 1)) {

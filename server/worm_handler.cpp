@@ -123,3 +123,24 @@ const uint8_t WormHandler::players_alive() {
 
     return players_alive;
 }
+
+void WormHandler::checkDeadWorms() {
+    for (const auto& [id, player]: players) {
+
+        auto it = player->worms.cbegin();
+        while (it != player->worms.cend()) {
+            if ((*it)->life == 0) {
+                (*it)->destroyBody();
+                it = player->worms.erase(it);
+
+                continue;
+            }
+
+            ++it;
+        }
+
+        if (player->worms.empty()) {
+            player->is_playing = false;
+        }
+    }
+}
