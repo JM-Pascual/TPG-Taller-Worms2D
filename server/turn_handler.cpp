@@ -44,7 +44,7 @@ const bool TurnHandler::need_to_update(uint8_t players_quantity,
     if (player_turn > players_quantity) {
         player_turn = 0;
         for (auto& [id, player]: players) {
-            if (++player->worm_turn > player->worms.size()) {
+            if (++player->worm_turn > (player->worms.size() - 1)) {
                 player->worm_turn = 0;
             }
         }
