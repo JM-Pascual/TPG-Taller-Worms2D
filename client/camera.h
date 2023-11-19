@@ -26,6 +26,8 @@ private:
 
     void checkBounds();
 
+    void checkMouseBounds();
+
     void checkActorDimensions(const float& w, const float& h);
 
 public:
