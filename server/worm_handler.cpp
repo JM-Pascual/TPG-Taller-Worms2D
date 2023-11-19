@@ -67,6 +67,14 @@ void WormHandler::player_change_gadget(const WeaponsAndTools& gadget, const uint
     players.at(id)->change_weapon(gadget);
 }
 
+void WormHandler::clearDamagedState() {
+    for (const auto& [id, player]: players) {
+        for (const auto& worm: player->worms) {
+            worm->was_damaged = false;
+        }
+    }
+}
+
 void WormHandler::update_weapon() {
     if (not turn_worm) {
         return;

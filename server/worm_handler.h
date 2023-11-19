@@ -20,9 +20,10 @@ private:
     */
     std::map<uint8_t, std::unique_ptr<Player>>& players;
 
+    std::shared_ptr<Worm> turn_worm;
+
     void getTurnWorm(const uint8_t& id, const uint8_t& worm_index);
 
-    std::shared_ptr<Worm> turn_worm;
 
 public:
     explicit WormHandler(std::map<uint8_t, std::unique_ptr<Player>>& players): players(players) {}
@@ -31,6 +32,7 @@ public:
 
     const uint8_t players_alive();
 
+    void clearDamagedState();
     void update_physics();
     void update_weapon();
 

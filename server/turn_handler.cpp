@@ -26,6 +26,13 @@ const bool TurnHandler::need_to_update(uint8_t players_quantity,
         return TIMER_RESET;
     }
 
+    auto& player = players.at(prev_player_turn_id);
+
+    if (player->worms.at(player->worm_turn)->was_damaged) {
+        advanceTurn(players_quantity, worm_handler);
+        return TIMER_RESET;
+    }
+
     elapsed_time += elapsed;
 
     if (player_stop_action) {
@@ -77,6 +84,9 @@ const ActualTurn TurnHandler::updateTurn(const std::chrono::duration<float>& ela
     }
 
     prev_player_turn_id = player_id;
+
+    worm_handler.clearDamagedState();
+
     return ActualTurn(
             player_id,
             players.at(player_id)->worm_turn);  // Retorno la id del jugador el cual es su turno

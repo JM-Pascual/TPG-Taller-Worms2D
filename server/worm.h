@@ -49,6 +49,8 @@ private:
     std::unique_ptr<Weapon>*& selected_weapon;
     WeaponsAndTools& weapon_type;
 
+    bool was_damaged;
+
     int facing_factor();
 
 public:
@@ -93,6 +95,7 @@ public:
     friend class BroadCaster;
     friend class InfoParser;
     friend class WormHandler;
+    friend class TurnHandler;
 
     Worm(Worm&& o);
 };

@@ -20,6 +20,7 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Weapon>*& selected_weapon,
         weapon_power(0),
         selected_weapon(selected_weapon),
         weapon_type(type),
+        was_damaged(false),
         id(id) {
     b2BodyDef wormDef;
     wormDef.type = b2_dynamicBody;
@@ -208,4 +209,10 @@ void Worm::stop_all() {
 }
 void Worm::start_falling() { falling = true; }
 
-void Worm::recibe_life_modification(float life_variation) { life += life_variation; }
+void Worm::recibe_life_modification(float life_variation) {
+    if (life_variation < 0) {
+        was_damaged = true;
+    }
+
+    life += life_variation;
+}
