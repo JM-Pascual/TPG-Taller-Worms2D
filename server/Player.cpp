@@ -42,7 +42,7 @@ Player::Player(Battlefield& battlefield):
 
     body->CreateFixture(&fixtureDef);
 
-    weapon = new DynamiteGrenade();
+    weapon = new Bazooka();  // ToDo Arma base con la que spawnea el worm
 }
 
 void Player::set_ready() { ready = !ready; }
@@ -92,6 +92,24 @@ void Player::check_falling() {
     }
 }
 
+void Player::change_weapon(WeaponsAndTools new_weapon) {
+    // first we delete the old weapon
+    delete weapon;
+    // then we change the weapon accordingly
+    switch (new_weapon) {
+        case WeaponsAndTools::BAZOOKA:
+            weapon = new Bazooka();
+            break;
+        case WeaponsAndTools::DYNAMITE:
+            new DynamiteGrenade();
+            break;
+        default:
+            weapon = new Bazooka();  // ToDo cambiar por los casos que correspondan cuando estén
+            break;
+    }
+}
+
+
 void Player::change_aim_direction() {
     if (!aiming) {
         return;
@@ -113,7 +131,6 @@ void Player::change_aim_direction() {
             break;
     }
 }
-
 
 void Player::change_fire_power() {
     if (charging_shoot && weapon_power <= MAX_POWER) {
@@ -146,10 +163,10 @@ b2Vec2 Player::set_bullet_direction() {
 
 float Player::set_bullet_angle() { return b2Atan2(set_bullet_power().y, set_bullet_power().x); }
 
+
 uint8_t Player::set_bullet_explosion_delay() {
     return 3;  // bullet_explosion_delete;
 }
-
 
 void Player::shoot_aim_weapon(std::shared_ptr<Projectile> projectile) {
     projectile->set_power(set_bullet_power());
@@ -205,7 +222,6 @@ Player::Player(Player&& o):
     o.charging_shoot = false;
     o.weapon_power = 0.0f;
 }
-
 void Player::stop_all() {
     is_walking = false;
     is_jumping = false;
@@ -213,6 +229,7 @@ void Player::stop_all() {
     aiming = false;
     charging_shoot = false;
 }
+
 void Player::start_falling() { falling = true; }
 
 void Player::recibe_life_modification(float life_variation) { life += life_variation; }

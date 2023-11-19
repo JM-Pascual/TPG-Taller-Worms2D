@@ -2,30 +2,26 @@
 #define WEAPONHOLDANIMATION_H
 
 #include <SDL2pp/SDL2pp.hh>
+#include <unordered_map>
 
 #include "Animation.h"
+#include "AimAnimation.h"
 #include "TexturesPool.h"
 
 class WeaponAnimation {
 private:
     /** Current weapon. */
     WeaponsAndTools current_weapon;
-    /** SDL texture of the current weapon draw animation. */
-    std::unique_ptr<Animation> current_weapon_draw_animation;
-    /** Animation of the power charge */
-    std::unique_ptr<Animation> power_charge_animation;
-    /** SDL texture of the crosshair animation. */
-    std::shared_ptr<SDL2pp::Texture>& crosshair_texture;
-    /** SDL texture of the current weapon aiming animation. */
-    std::shared_ptr<SDL2pp::Texture>& current_weapon_texture;
-    /** Reference to the texture holder */
-    TexturesPool& pool;
+    /** Map of SDL actors_textures of the weapon draw animations. */
+    std::unordered_map<WeaponsAndTools, std::shared_ptr<Animation>> weapon_draw_animations;
+    /** Weapons aim animations*/
+    AimAnimation aim_animations;
     /** Indicates if the weapon was already animated thw draw. */
     unsigned int weapon_drawn_frames_counter;
-    /** Current worm inclination. */
-    float current_inclination;
 
-    void change_weapon_texture(WeaponsAndTools new_weapon);
+    void update_weapon(WeaponsAndTools equipped_weapon);
+
+    void load_all_draw_animations(TexturesPool& pool);
 public:
     explicit WeaponAnimation(TexturesPool& pool);
 

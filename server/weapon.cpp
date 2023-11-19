@@ -23,6 +23,7 @@ void Bazooka::execute(Battlefield& battlefield, Player& player) {
     player.shoot_aim_weapon(projectile);
 }
 
+WeaponsAndTools Bazooka::get_type() { return WeaponsAndTools::BAZOOKA; }
 
 //~~~~~~~~~~~~~~~~~~~ Green_grenade ~~~~~~~~~~~~~~~~~~~~
 
@@ -38,6 +39,8 @@ void GreenGrenade::execute(Battlefield& battlefield, Player& player) {
 
     player.shoot_aim_weapon(green_grenade);
 }
+
+WeaponsAndTools GreenGrenade::get_type() { return WeaponsAndTools::GREEN_GRENADE; }
 
 //~~~~~~~~~~~~~~~~~~~ Banana ~~~~~~~~~~~~~~~~~~~~
 
@@ -55,6 +58,8 @@ void BananaGrenade::execute(Battlefield& battlefield, Player& player) {
     player.shoot_aim_weapon(banana);
 }
 
+WeaponsAndTools BananaGrenade::get_type() { return WeaponsAndTools::BANANA; }
+
 //~~~~~~~~~~~~~~~~~~~ DynamiteGrenade ~~~~~~~~~~~~~~~~~~~~
 
 DynamiteGrenade::DynamiteGrenade(): Weapon(DYNAMITE_AMMO) {}
@@ -70,3 +75,5 @@ void DynamiteGrenade::execute(Battlefield& battlefield, Player& player) {
 
     player.use_throwable(dynamite);
 }
+
+WeaponsAndTools DynamiteGrenade::get_type() { return WeaponsAndTools::DYNAMITE; }

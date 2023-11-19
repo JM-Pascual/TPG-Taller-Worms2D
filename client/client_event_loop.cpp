@@ -83,7 +83,7 @@ void EventLoop::run() {
     SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     audio_player.play_background_music();
 
-    Animation water_animation(txt_pool.get_texture(Actors::WATER), 11, 3);
+    Animation water_animation(txt_pool.get_actor_texture(Actors::WATER), 11, 3);
 
     input.start();
 

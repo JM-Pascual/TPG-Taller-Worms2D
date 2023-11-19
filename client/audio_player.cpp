@@ -12,13 +12,6 @@
 // Max volume = MIX_MAX_VOLUME == 128
 #define MUSIC_VOLUME 25
 
-void AudioPlayer::play_background_music() {
-    Mix_VolumeMusic(MUSIC_VOLUME);
-    if (Mix_PlayMusic(background_music, -1) == -1) {
-        spdlog::get("client")->error("Error al intentar reproducir la musica ambiente");
-    }
-}
-
 AudioPlayer::AudioPlayer(): background_music(nullptr) {
     Mix_Init(MIX_INIT_MP3);
 
@@ -32,7 +25,7 @@ AudioPlayer::AudioPlayer(): background_music(nullptr) {
     }
 
     std::list<std::pair<std::string, std::string>> key_filepath;
-    key_filepath.emplace_back("test", MEDIA_PATH "/laugh.mp3");
+    key_filepath.emplace_back("test", MEDIA_PATH "/explosion.wav");
 
     for (const auto& key_path: key_filepath) {
         Mix_Chunk* chunk = Mix_LoadWAV(key_path.second.data());
@@ -47,6 +40,13 @@ AudioPlayer::AudioPlayer(): background_music(nullptr) {
                                      key_path.first, key_path.second);
     }
 
+}
+
+void AudioPlayer::play_background_music() {
+    Mix_VolumeMusic(MUSIC_VOLUME);
+    if (Mix_PlayMusic(background_music, -1) == -1) {
+        spdlog::get("client")->error("Error al intentar reproducir la musica ambiente");
+    }
 }
 
 
