@@ -10,6 +10,7 @@
 #include "../common/const.h"
 
 class Player;
+class Worm;
 
 class WormHandler {
 private:
@@ -19,12 +20,14 @@ private:
     */
     std::map<uint8_t, std::unique_ptr<Player>>& players;
 
-    // std::unique_ptr<Worm>& getTurnWorm();
+    void getTurnWorm(const uint8_t& id, const uint8_t& worm_index);
+
+    std::shared_ptr<Worm> turn_worm;
 
 public:
     explicit WormHandler(std::map<uint8_t, std::unique_ptr<Player>>& players): players(players) {}
 
-    void stop_all_players();
+    void stop_turn_worm();
 
     const uint8_t players_alive();
 
@@ -32,13 +35,18 @@ public:
     void update_weapon();
 
     // temp protocol
-    void player_start_moving(const Direction& direction, uint8_t id);
-    void player_stop_moving(uint8_t id);
-    void player_jump(const JumpDir& direction, uint8_t id);
-    void player_start_aiming(const ADSAngleDir& direction, uint8_t id);
-    void player_stop_aiming(const uint8_t id);
-    void player_start_charging(const uint8_t id);
-    void player_shoot(const uint8_t id);
+    void player_start_moving(const Direction& direction, const uint8_t& id,
+                             const uint8_t& worm_index);
+    void player_stop_moving(const uint8_t& id, const uint8_t& worm_index);
+    void player_jump(const JumpDir& direction, const uint8_t& id, const uint8_t& worm_index);
+    void player_start_aiming(const ADSAngleDir& direction, const uint8_t& id,
+                             const uint8_t& worm_index);
+    void player_stop_aiming(const uint8_t& id, const uint8_t& worm_index);
+    void player_start_charging(const uint8_t& id, const uint8_t& worm_index);
+    void player_shoot(const uint8_t& id, const uint8_t& worm_index);
+
+    void player_change_gadget(const WeaponsAndTools& gadget, const uint8_t& id,
+                              const uint8_t& worm_index);
 };
 
 

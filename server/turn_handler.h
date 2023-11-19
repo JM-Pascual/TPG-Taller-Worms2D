@@ -18,10 +18,10 @@
 struct ActualTurn {
 public:
     const uint8_t player_id;
-    const uint8_t worm_id;
+    const uint8_t worm_index;
 
-    ActualTurn(const uint8_t& player_id, const uint8_t& worm_id):
-            player_id(player_id), worm_id(worm_id) {}
+    ActualTurn(const uint8_t& player_id, const uint8_t& worm_index):
+            player_id(player_id), worm_index(worm_index) {}
 };
 
 class Player;
@@ -43,8 +43,8 @@ private:
     // int16_t para poder iniciarlo en -1 y que se tome bien el proximo turno
     int16_t prev_player_turn_id;
 
-    const bool need_to_update(uint8_t players_quantity,
-                              const std::chrono::duration<float>& elapsed);
+    const bool need_to_update(uint8_t players_quantity, const std::chrono::duration<float>& elapsed,
+                              WormHandler& worm_handler);
 
 public:
     explicit TurnHandler(std::map<uint8_t, std::unique_ptr<Player>>& players):
@@ -56,8 +56,8 @@ public:
             player_stop_action(false),
             prev_player_turn_id(-1) {}
 
-    const uint8_t updateTurn(const std::chrono::duration<float>& elapsed, BroadCaster& broadcaster,
-                             WormHandler& worm_handler);
+    const ActualTurn updateTurn(const std::chrono::duration<float>& elapsed,
+                                BroadCaster& broadcaster, WormHandler& worm_handler);
 
     const bool& player_used_stop_action();
 

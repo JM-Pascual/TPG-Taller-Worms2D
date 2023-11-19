@@ -82,7 +82,7 @@ enum class Actors {
     BAZOOKA_EXPLOSION
 };
 
-enum class WeaponsDraw{
+enum class WeaponsDraw {
     WORM_DRAW_BAZOOKA,
     WORM_DRAW_BANANA,
     WORM_DRAW_HOLY_GRENADE,
@@ -95,7 +95,7 @@ enum class WeaponsDraw{
     WORM_DRAW_TELEPORT
 };
 
-enum class WeaponAiming{
+enum class WeaponAiming {
     WORM_AIM_BAZOOKA,
     WORM_AIM_BANANA,
     WORM_AIM_HOLY_GRENADE,
@@ -118,9 +118,8 @@ enum class StatesTag {
     BATTLEFIELD_G,
     PLAYER_G,
     PROJECTILE_G,
-    PROJECTILE_COUNT_G,
-    PLAYER_COUNT_G,
-    PLAYER_TURN
+    PLAYER_TURN,
+    WORM_G
 };
 
 #endif

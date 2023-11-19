@@ -1,6 +1,7 @@
 #include "info_parser.h"
 
 #include <algorithm>
+#include <utility>
 
 #include "../common/States.h"
 
@@ -20,25 +21,24 @@ void InfoParser::makeLobbyState(std::list<std::shared_ptr<States>>& states) {
 }
 
 void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states) {
-    states.push_back(std::make_shared<ProjectileCountG>(projectiles.size()));
 
     std::transform(projectiles.begin(), projectiles.end(), std::back_inserter(states),
                    [](const auto& projectile) {
                        return projectile.second->get_proyectile_state(projectile.first);
                    });
 
-    std::lock_guard<std::mutex> l(m_game);
+    for (const auto& [id, player]: players) {
+        states.push_back(
+                std::make_shared<PlayerStateG>(player->is_playing, id, player->getWeaponsAmmo()));
 
-    states.push_back(std::make_shared<PlayerCountG>(players.size()));
-
-    std::transform(players.begin(), players.end(), std::back_inserter(states),
-                   [](const auto& player) {
-                       return std::make_shared<PlayerStateG>(
-                               player.first, player.second->body->GetPosition().x,
-                               player.second->body->GetPosition().y, player.second->is_walking,
-                               player.second->is_jumping, player.second->is_backflipping,
-                               player.second->facing_right, player.second->collided,
-                               player.second->aim_inclination_degrees,
-                               player.second->charging_shoot, player.second->life);
-                   });
+        std::transform(player->worms.begin(), player->worms.end(), std::back_inserter(states),
+                       [](const auto& worm) {
+                           return std::make_shared<WormStateG>(
+                                   worm->id, worm->body->GetPosition().x,
+                                   worm->body->GetPosition().y, worm->weapon_type, worm->is_walking,
+                                   worm->is_jumping, worm->is_backflipping, worm->facing_right,
+                                   worm->collided, worm->aim_inclination_degrees,
+                                   worm->charging_shoot, worm->life);
+                       });
+    }
 }

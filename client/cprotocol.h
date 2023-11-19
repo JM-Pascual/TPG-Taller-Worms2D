@@ -12,11 +12,13 @@
 #include "Action.h"
 
 #define PPM 33.33f  // pixel per meter ratio.
+#define GADGETS_QUANTITY 10
 
 class States;
 class GameInfoL;
 class ProjectileStateG;
 class PlayerStateG;
+class WormStateG;
 
 namespace ClientSide {
 class Protocol {
@@ -51,6 +53,8 @@ private:
     std::shared_ptr<PlayerStateG> recvPlayerGame();
 
     std::shared_ptr<ProjectileStateG> recvProjectileGame();
+
+    std::shared_ptr<WormStateG> recvWormGame();
 
 public:
     // Envia data chequeando si se cierra el socket

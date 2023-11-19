@@ -97,6 +97,19 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<States>& ps) {
 
     send(&p->tag, sizeof(uint8_t));
     send(&p->id, sizeof(uint8_t));
+    send(&p->is_playing, sizeof(uint8_t));
+
+    for (const auto& [type, ammo]: p->gadgets->weapon_ammo) {
+        send(&type, sizeof(uint8_t));
+        send(&ammo, sizeof(uint8_t));
+    }
+}
+
+void ServerSide::Protocol::sendWormState(const std::shared_ptr<States>& state) {
+    std::shared_ptr<WormStateG> p = std::dynamic_pointer_cast<WormStateG>(state);
+
+    send(&p->tag, sizeof(uint8_t));
+    send(&p->id, sizeof(uint8_t));
     this->sendPosition(p->pos);
     send(&p->weapon, sizeof(uint8_t));
     send(&p->is_walking, sizeof(bool));
@@ -161,9 +174,7 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
     switch (state->tag) {
         case StatesTag::GAMES_COUNT_L:
         case StatesTag::PLAYER_COUNT_L:
-        case StatesTag::PLAYER_COUNT_G:
         case StatesTag::GAME_NOT_JOINABLE:
-        case StatesTag::PROJECTILE_COUNT_G:
             sendCount(state);
             break;
 
@@ -175,12 +186,15 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
             sendGameInfo(state);
             break;
 
-
         case StatesTag::BATTLEFIELD_G:
             break;
 
         case StatesTag::PLAYER_G:
             sendPlayerState(state);
+            break;
+
+        case StatesTag::WORM_G:
+            sendWormState(state);
             break;
 
         case StatesTag::PROJECTILE_G:

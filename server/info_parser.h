@@ -17,6 +17,9 @@ class GameInfoL;
 class InfoParser {
 private:
     std::mutex& m_game;
+    /*
+        Lock necesario unicamente para la parte del lobby
+    */
     std::map<uint8_t, std::unique_ptr<Player>>& players;
     std::map<uint8_t, std::shared_ptr<Projectile>>& projectiles;
 

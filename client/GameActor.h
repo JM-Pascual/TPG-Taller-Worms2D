@@ -48,40 +48,37 @@ private:
     WeaponAnimation weapon_animation;
 
 public:
-    Worm(std::shared_ptr<States>& initial_state, TexturesPool& pool, Camera& camera):
-            GameActor(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->pos.x,
-                      std::dynamic_pointer_cast<PlayerStateG>(initial_state)->pos.y, camera),
-            equipped_weapon(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->weapon),
-            is_walking(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->is_walking),
-            is_jumping(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->is_jumping),
-            is_backflipping(
-                    std::dynamic_pointer_cast<PlayerStateG>(initial_state)->is_backflipping),
-            facing_right(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->facing_right),
-            was_hit(std::dynamic_pointer_cast<PlayerStateG>(initial_state)->was_hit),
-            aim_inclination_degrees(std::dynamic_pointer_cast<PlayerStateG>(initial_state)
-                                            ->aim_inclination_degrees),
+    Worm(std::shared_ptr<WormStateG>& initial_state, TexturesPool& pool, Camera& camera):
+            GameActor(initial_state->pos.x, initial_state->pos.y, camera),
+            equipped_weapon(initial_state->weapon),
+            is_walking(initial_state->is_walking),
+            is_jumping(initial_state->is_jumping),
+            is_backflipping(initial_state->is_backflipping),
+            facing_right(initial_state->facing_right),
+            was_hit(initial_state->was_hit),
+            aim_inclination_degrees(initial_state->aim_inclination_degrees),
 
             walking(pool.get_actor_texture(Actors::WORM), 15, 1),
             jumping(pool.get_actor_texture(Actors::JUMPING_WORM), 5, 5, false),
             backflipping(pool.get_actor_texture(Actors::BACKFLIP_WORM), 22, 1, false),
-            weapon_animation(pool){}
+            weapon_animation(pool) {}
 
     void update(std::shared_ptr<States>& actor_state) override {
-        position = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->pos;
-        equipped_weapon = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->weapon;
-        is_walking = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->is_walking;
-        is_jumping = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->is_jumping;
-        is_backflipping = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->is_backflipping;
-        facing_right = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->facing_right;
-        was_hit = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->was_hit;
-        aim_inclination_degrees =
-                std::dynamic_pointer_cast<PlayerStateG>(actor_state)->aim_inclination_degrees;
+        auto state = std::dynamic_pointer_cast<WormStateG>(actor_state);
+        position = state->pos;
+        equipped_weapon = state->weapon;
+        is_walking = state->is_walking;
+        is_jumping = state->is_jumping;
+        is_backflipping = state->is_backflipping;
+        facing_right = state->facing_right;
+        was_hit = state->was_hit;
+        aim_inclination_degrees = state->aim_inclination_degrees;
 
         walking.update(!is_walking);
         jumping.update(!is_jumping);
         backflipping.update(!is_backflipping);
 
-        bool charging_weapon = std::dynamic_pointer_cast<PlayerStateG>(actor_state)->charging_weapon;
+        bool charging_weapon = state->charging_weapon;
         weapon_animation.update(aim_inclination_degrees, charging_weapon, equipped_weapon,
                                 (is_walking || is_jumping || is_backflipping));
     }
@@ -101,8 +98,6 @@ public:
         } else {
             weapon_animation.render((*game_renderer), rect,
                                     facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-
-
         }
     }
 
@@ -117,10 +112,9 @@ protected:
     bool impacted;
 
 public:
-    Proyectile(std::shared_ptr<States>& initial_state, TexturesPool& pool, Camera& camera):
-            GameActor(std::dynamic_pointer_cast<ProjectileStateG>(initial_state)->pos.x,
-                      std::dynamic_pointer_cast<ProjectileStateG>(initial_state)->pos.y, camera),
-            impacted(false) {}
+    Proyectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
+               Camera& camera):
+            GameActor(initial_state->pos.x, initial_state->pos.y, camera), impacted(false) {}
 };
 
 
@@ -132,15 +126,16 @@ private:
     Animation impact;
 
 public:
-    BazookaProyectile(std::shared_ptr<States>& initial_state, TexturesPool& pool,
-                      Camera& camera) :
+    BazookaProyectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
+                      Camera& camera):
             Proyectile(initial_state, pool, camera),
             on_air(pool.get_actor_texture(Actors::BAZOOKA_PROYECTILE), 1, 1),
             impact(pool.get_actor_texture(Actors::BAZOOKA_EXPLOSION), 8, 3, false) {}
 
     void update(std::shared_ptr<States>& actor_state) override {
-        position = std::dynamic_pointer_cast<ProjectileStateG>(actor_state)->pos;
-        impacted = std::dynamic_pointer_cast<ProjectileStateG>(actor_state)->impacted;
+        auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
+        position = state->pos;
+        impacted = state->impacted;
         impact.update(!impacted);
     }
 

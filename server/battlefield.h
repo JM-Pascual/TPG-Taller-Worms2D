@@ -34,8 +34,6 @@ public:
 
     std::map<uint8_t, std::shared_ptr<Projectile>>& getProjectiles();
 
-    void build_state(std::list<std::shared_ptr<States>>& states_list);
-
     void destroy_body(b2Body*& body);
 
     b2Body* add_body(b2BodyDef& bodyDef);

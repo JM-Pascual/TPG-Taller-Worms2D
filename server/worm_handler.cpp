@@ -3,68 +3,109 @@
 #include <numeric>
 
 #include "Player.h"
+#include "worm.h"
 
-void WormHandler::player_start_moving(const Direction& direction, const uint8_t id) {
-    players.at(id)->is_walking = true;
-    players.at(id)->facing_right = (bool)direction;
-    players.at(id)->move();
+void WormHandler::getTurnWorm(const uint8_t& id, const uint8_t& worm_index) {
+    turn_worm = players.at(id)->worms.at(worm_index);
 }
 
-void WormHandler::player_stop_moving(const uint8_t id) {
-    players.at(id)->is_walking = false;
-    players.at(id)->stop();
+void WormHandler::player_start_moving(const Direction& direction, const uint8_t& id,
+                                      const uint8_t& worm_index) {
+    getTurnWorm(id, worm_index);
+
+    turn_worm->is_walking = true;
+    turn_worm->facing_right = (bool)direction;
+    turn_worm->move();
 }
 
-void WormHandler::player_jump(const JumpDir& direction, const uint8_t id) {
-    players.at(id)->jump(direction);
+void WormHandler::player_stop_moving(const uint8_t& id, const uint8_t& worm_index) {
+    getTurnWorm(id, worm_index);
+
+    turn_worm->is_walking = false;
+    turn_worm->stop();
 }
 
-void WormHandler::player_start_aiming(const ADSAngleDir& direction, const uint8_t id) {
-    players.at(id)->aiming = true;
-    players.at(id)->aim_direction = direction;
+void WormHandler::player_jump(const JumpDir& direction, const uint8_t& id,
+                              const uint8_t& worm_index) {
+    getTurnWorm(id, worm_index);
+
+    turn_worm->jump(direction);
 }
 
-void WormHandler::player_stop_aiming(const uint8_t id) { players.at(id)->aiming = false; }
+void WormHandler::player_start_aiming(const ADSAngleDir& direction, const uint8_t& id,
+                                      const uint8_t& worm_index) {
+    getTurnWorm(id, worm_index);
 
-void WormHandler::player_start_charging(const uint8_t id) { players.at(id)->charging_shoot = true; }
+    turn_worm->aiming = true;
+    turn_worm->aim_direction = direction;
+}
 
-void WormHandler::player_shoot(const uint8_t id) {
-    players.at(id)->aiming = false;
-    players.at(id)->charging_shoot = false;
+void WormHandler::player_stop_aiming(const uint8_t& id, const uint8_t& worm_index) {
+    getTurnWorm(id, worm_index);
+    turn_worm->aiming = false;
+}
 
-    players.at(id)->shoot();
+void WormHandler::player_start_charging(const uint8_t& id, const uint8_t& worm_index) {
+    getTurnWorm(id, worm_index);
+    turn_worm->charging_shoot = true;
+}
 
-    players.at(id)->weapon_power = 0;
+void WormHandler::player_shoot(const uint8_t& id, const uint8_t& worm_index) {
+    getTurnWorm(id, worm_index);
+
+    turn_worm->aiming = false;
+    turn_worm->charging_shoot = false;
+
+    turn_worm->shoot();
+
+    turn_worm->weapon_power = 0;
+}
+
+void WormHandler::player_change_gadget(const WeaponsAndTools& gadget, const uint8_t& id,
+                                       const uint8_t& worm_index) {
+    getTurnWorm(id, worm_index);
+    players.at(id)->change_weapon(gadget);
 }
 
 void WormHandler::update_weapon() {
-    for (auto& [id, player]: players) {
-        if (player->aiming) {
-            player->change_aim_direction();
-        }
-        if (player->charging_shoot) {
-            player->change_fire_power();
-        }
+    if (not turn_worm) {
+        return;
+    }
+
+    if (turn_worm->aiming) {
+        turn_worm->change_aim_direction();
+    }
+    if (turn_worm->charging_shoot) {
+        turn_worm->change_fire_power();
     }
 }
 
 void WormHandler::update_physics() {
-    for (auto& [id, player]: players) {
-        player->check_jumping();
-        player->check_falling();
-        if (!player->is_walking && !player->is_jumping && !player->is_backflipping &&
-            !player->falling) {
-            player->stop();
-        } else if (player->is_walking) {
-            player->move();
+    for (const auto& [id, player]: players) {
+        for (const auto& worm: player->worms) {
+            worm->check_falling();
         }
+    }
+
+    if (not turn_worm) {
+        return;
+    }
+
+    turn_worm->check_jumping();
+    if (!turn_worm->is_walking && !turn_worm->is_jumping && !turn_worm->is_backflipping &&
+        !turn_worm->falling) {
+        turn_worm->stop();
+    } else if (turn_worm->is_walking) {
+        turn_worm->move();
     }
 }
 
-void WormHandler::stop_all_players() {
-    for (auto& player: players) {
-        player.second->stop_all();
+void WormHandler::stop_turn_worm() {
+    if (not turn_worm) {
+        return;
     }
+
+    turn_worm->stop_all();
 }
 
 const uint8_t WormHandler::players_alive() {
