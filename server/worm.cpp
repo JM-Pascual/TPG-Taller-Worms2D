@@ -21,6 +21,7 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Weapon>*& selected_weapon,
         selected_weapon(selected_weapon),
         weapon_type(type),
         was_damaged(false),
+        pos_y_before_falling(0.0f),
         id(id) {
     b2BodyDef wormDef;
     wormDef.type = b2_dynamicBody;
@@ -70,6 +71,8 @@ void Worm::jump(const JumpDir& direction) {
             is_backflipping = true;
             break;
     }
+
+    start_falling();
 }
 
 void Worm::change_aim_direction() {
@@ -172,6 +175,7 @@ Worm::Worm(Worm&& o):
         weapon_power(o.weapon_power),
         selected_weapon(o.selected_weapon),
         weapon_type(o.weapon_type),
+        pos_y_before_falling(o.pos_y_before_falling),
         id(o.id) {
 
     o.life = 0;
@@ -188,6 +192,8 @@ Worm::Worm(Worm&& o):
     o.charging_shoot = false;
     o.weapon_power = 0.0f;
     o.selected_weapon = nullptr;
+
+    o.pos_y_before_falling = 0.0f;
 }
 
 void Worm::stop_all() {
@@ -195,7 +201,11 @@ void Worm::stop_all() {
     aiming = false;
     charging_shoot = false;
 }
-void Worm::start_falling() { falling = true; }
+
+void Worm::start_falling() {
+    pos_y_before_falling = body->GetPosition().y;
+    falling = true;
+}
 
 void Worm::stop_falling() {
     auto vel = body->GetLinearVelocity();
@@ -207,8 +217,19 @@ void Worm::stop_falling() {
 
     if (body->GetLinearVelocity().LengthSquared() < MIN_SQUARED_VELOCITY) {
         falling = false;
+
+        float fall_dmg = (pos_y_before_falling - body->GetPosition().y) * FALL_DMG_AMP;
+
+        if (fall_dmg > MIN_FALLING_DAMAGE_HEIGHT) {
+            recibe_life_modification(fall_dmg > MAX_FALLING_DAMAGE ? -MAX_FALLING_DAMAGE :
+                                                                     -fall_dmg);
+        }
+
+        pos_y_before_falling = 0.0f;
     }
 }
+
+#include <iostream>
 
 void Worm::recibe_life_modification(const float& life_variation) {
     if (life_variation < 0) {

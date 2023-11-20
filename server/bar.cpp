@@ -18,7 +18,7 @@ Bar::Bar(Battlefield& battlefield): Entity(battlefield) {
 void Bar::execute_collision_reaction() {
     Query_callback queryCallback;
     b2AABB aabb;
-    aabb.lowerBound = body->GetPosition();
+    aabb.lowerBound = body->GetPosition() - b2Vec2(76.8 / 2, 0.8f / 2);
     aabb.upperBound = body->GetPosition() + b2Vec2(76.8 / 2, 0.8f / 2);
     battlefield.add_query_AABB(&queryCallback, aabb);
 

@@ -29,6 +29,10 @@
 #define MIN_SQUARED_VELOCITY 0.0001
 #define MIN_Y_VELOCITY 0.01
 
+#define MIN_FALLING_DAMAGE_HEIGHT 2.0f
+#define MAX_FALLING_DAMAGE 25.0f
+#define FALL_DMG_AMP 3
+
 class Weapon;
 class Projectile;
 
@@ -53,6 +57,8 @@ private:
     WeaponsAndTools& weapon_type;
 
     bool was_damaged;
+
+    float pos_y_before_falling;
 
     int facing_factor();
 
