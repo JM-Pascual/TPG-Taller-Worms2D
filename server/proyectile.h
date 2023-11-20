@@ -43,7 +43,6 @@ public:
 
     void set_power(b2Vec2 power);
     std::shared_ptr<ProjectileStateG> get_proyectile_state(const uint8_t& proyectile_id);
-    bool is_dead() override;
 
     void execute_collision_reaction() override {}
 
@@ -73,7 +72,6 @@ public:
     Grenade(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay,
             uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type);
     void execute_collision_reaction() override;
-    bool is_dead() override;
     // bool multiple_contact() override;
     virtual ~Grenade() = default;
 };

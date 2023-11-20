@@ -37,14 +37,11 @@ std::shared_ptr<ProjectileStateG> Projectile::get_proyectile_state(const uint8_t
 
 void Projectile::set_power(b2Vec2 power) { body->ApplyLinearImpulseToCenter(power, true); }
 
-bool Projectile::is_dead() {
-    if (collided && not dead) {
-        dead = true;
-    }
-    return dead;
-}
-
 void Projectile::collide() {
+    if (dead) {
+        return;
+    }
+
     Query_callback queryCallback;
     b2AABB aabb;
     aabb.lowerBound = body->GetPosition() - b2Vec2(blast_radius, blast_radius);
@@ -94,7 +91,12 @@ Rocket::Rocket(Battlefield& battlefield, b2Vec2 position):
         Projectile(battlefield, position, BLAST_RADIUS_BAZOOKA, EPICENTER_DAMAGE_BAZOOKA,
                    WeaponsAndTools::BAZOOKA) {}
 
-void Rocket::execute_collision_reaction() { collide(); }
+void Rocket::execute_collision_reaction() {
+    if (not dead) {
+        collide();
+        dead = true;
+    }
+}
 
 //~~~~~~~~~~~~~~~~~~~ Grenade ~~~~~~~~~~~~~~~~~~~~
 
@@ -105,7 +107,10 @@ Grenade::Grenade(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_de
         grenade_timer(std::chrono::steady_clock::now()) {}
 
 void Grenade::execute_collision_reaction() {
-    // todo cuando lo pruebo ver si esta en segundos.
+    if (dead) {
+        return;
+    }
+
     std::chrono::duration<double> elapsed_seconds =
             std::chrono::steady_clock::now() - grenade_timer;
     grenade_timer = std::chrono::steady_clock::now();
@@ -114,13 +119,6 @@ void Grenade::execute_collision_reaction() {
         collide();
         dead = true;
     }
-}
-
-bool Grenade::is_dead() {
-    // if (not dead && explosion_delay <= 0) {
-    //     dead = true;
-    // }
-    return dead;
 }
 
 // bool Grenade::multiple_contact() {

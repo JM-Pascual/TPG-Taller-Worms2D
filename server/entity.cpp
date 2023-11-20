@@ -19,3 +19,5 @@ bool Entity::multiple_contact() {
 
 void Entity::start_falling() {}
 void Entity::recibe_life_modification(const float& life_variation) {}
+
+bool Entity::is_dead() { return dead; }

@@ -28,7 +28,7 @@ public:
 
     virtual bool multiple_contact();  // Todo lo vamos a tener que sacar
 
-    virtual bool is_dead() = 0;
+    bool is_dead();
 
     virtual void execute_collision_reaction() = 0;
 
