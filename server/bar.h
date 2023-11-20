@@ -13,6 +13,8 @@ public:
     explicit Bar(Battlefield& battlefield);
 
     void execute_collision_reaction() override;
+
+    void applyWindResistence(const float& wind_force) override;
 };
 
 

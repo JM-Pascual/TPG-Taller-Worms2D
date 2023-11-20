@@ -27,6 +27,8 @@ void Battlefield::step(WormHandler& worm_handler) {
     worm_handler.update_weapon();
 }
 
+void Battlefield::newWindForce() { engine.newWindForce(); }
+
 void Battlefield::add_projectile(std::shared_ptr<Projectile>& proyectile) {
     projectiles.insert({projectile_count++, proyectile});
 }

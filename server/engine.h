@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <memory>
+#include <random>
 #include <vector>
 
 #include "box2d/box2d.h"
@@ -17,6 +18,9 @@
 #define VELOCITY_ITERATIONS (int32)6
 #define POSITION_ITERATIONS (int32)2
 
+#define MIN_WIND -7.0f
+#define MAX_WIND 7.0f
+
 class Projectile;
 
 class Engine {
@@ -25,7 +29,14 @@ private:
     std::unique_ptr<b2World> world;
     Contact_listener* listener;
 
+    float wind_force;
+
+    std::uniform_real_distribution<float> random_distribution;
+    std::mt19937 rng;
+
     void create_battlefield();
+
+    void applyWindForce();
 
 public:
     Engine();
@@ -35,6 +46,8 @@ public:
     void destroy_body(b2Body* bodyDef);
     void destroy_dead_entities();
     void clean_dead_entities();
+
+    void newWindForce();
 
     friend class Game;
 

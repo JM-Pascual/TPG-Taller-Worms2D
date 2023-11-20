@@ -42,6 +42,8 @@ public:
 
     void step(WormHandler& worm_handler);
 
+    void newWindForce();
+
     void add_projectile(std::shared_ptr<Projectile>& proyectile);
 
     void remove_collided_projectiles();

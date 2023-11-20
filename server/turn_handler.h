@@ -28,7 +28,7 @@ public:
 class Player;
 class WormHandler;
 class BroadCaster;
-
+class Battlefield;
 
 class TurnHandler {
 private:
@@ -57,7 +57,7 @@ public:
 
     const ActualTurn updateTurn(const std::chrono::duration<float>& elapsed,
                                 BroadCaster& broadcaster, WormHandler& worm_handler,
-                                const bool& battlefield_empty);
+                                Battlefield& battlefield);
 
     const bool& player_used_stop_action();
 

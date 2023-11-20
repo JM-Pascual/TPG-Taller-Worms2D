@@ -45,6 +45,7 @@ public:
     std::shared_ptr<ProjectileStateG> get_proyectile_state(const uint8_t& proyectile_id);
 
     void execute_collision_reaction() override {}
+    void applyWindResistence(const float& wind_force) override {}
 
     virtual ~Projectile() = default;
     friend class Game;
@@ -60,6 +61,7 @@ private:
 public:
     Rocket(Battlefield& battlefield, b2Vec2 position);
     void execute_collision_reaction() override;
+    void applyWindResistence(const float& wind_force) override;
     virtual ~Rocket() = default;
 };
 
@@ -72,6 +74,7 @@ public:
     Grenade(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay,
             uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type);
     void execute_collision_reaction() override;
+    void applyWindResistence(const float& wind_force) override;
     // bool multiple_contact() override;
     virtual ~Grenade() = default;
 };

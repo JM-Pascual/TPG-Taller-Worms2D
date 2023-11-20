@@ -29,3 +29,5 @@ void Bar::execute_collision_reaction() {
         reinterpret_cast<Entity*>(body_->GetUserData().pointer)->stop_falling();
     }
 }
+
+void Bar::applyWindResistence(const float& wind_force) {}

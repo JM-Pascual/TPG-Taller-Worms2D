@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "Player.h"
+#include "battlefield.h"
 #include "broadcaster.h"
 #include "worm_handler.h"
 
@@ -83,12 +84,14 @@ const TurnReset TurnHandler::advanceTurn(const uint8_t& players_quantity, WormHa
 
 const ActualTurn TurnHandler::updateTurn(const std::chrono::duration<float>& elapsed,
                                          BroadCaster& broadcaster, WormHandler& worm_handler,
-                                         const bool& battlefield_empty) {
+                                         Battlefield& battlefield) {
 
-    switch (this->need_to_update(players.size(), elapsed, worm_handler, battlefield_empty)) {
+    switch (this->need_to_update(players.size(), elapsed, worm_handler,
+                                 battlefield.noProjectiles())) {
 
         case TurnReset::TIMER_RESET: {
             worm_handler.clearDamagedState();
+            battlefield.newWindForce();
             broadcaster.broadcast_turn(player_turn);
             break;
         }

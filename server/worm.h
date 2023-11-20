@@ -91,6 +91,8 @@ public:
 
     void destroyBody();
 
+    void applyWindResistence(const float& wind_force) override;
+
     virtual ~Worm() = default;
 
     friend class Player;

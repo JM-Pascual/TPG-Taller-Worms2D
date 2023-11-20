@@ -221,3 +221,5 @@ void Worm::recibe_life_modification(const float& life_variation) {
         life = 0;
     }
 }
+
+void Worm::applyWindResistence(const float& wind_force) {}

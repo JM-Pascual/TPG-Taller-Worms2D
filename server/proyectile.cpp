@@ -30,7 +30,7 @@ Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radi
 std::shared_ptr<ProjectileStateG> Projectile::get_proyectile_state(const uint8_t& proyectile_id) {
 
     float vel_angle = b2Atan2(body->GetLinearVelocity().y, body->GetLinearVelocity().x);
-    std::cout<<vel_angle<<std::endl;
+    std::cout << vel_angle << std::endl;
     return std::make_shared<ProjectileStateG>(proyectile_id, body->GetPosition().x,
                                               body->GetPosition().y, type, dead, vel_angle);
 }
@@ -98,6 +98,10 @@ void Rocket::execute_collision_reaction() {
     }
 }
 
+void Rocket::applyWindResistence(const float& wind_force) {
+    this->body->ApplyForce(b2Vec2(wind_force, 0), this->body->GetWorldCenter(), true);
+}
+
 //~~~~~~~~~~~~~~~~~~~ Grenade ~~~~~~~~~~~~~~~~~~~~
 
 Grenade::Grenade(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay,
@@ -120,6 +124,8 @@ void Grenade::execute_collision_reaction() {
         dead = true;
     }
 }
+
+void Grenade::applyWindResistence(const float& wind_force) {}
 
 // bool Grenade::multiple_contact() {
 // La idea en este caso es que puede colisionar más de una vez, pero solo se va a "morir" en el caso

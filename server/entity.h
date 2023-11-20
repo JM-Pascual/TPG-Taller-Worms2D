@@ -22,6 +22,8 @@ public:
 
     void end_contact();
 
+    virtual void applyWindResistence(const float& wind_force) = 0;
+
     virtual void stop_falling();
 
     virtual void start_falling();
