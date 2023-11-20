@@ -21,7 +21,8 @@ void GameLoop::run() {
                 std::chrono::steady_clock::now();
 
         ActualTurn turn_id =
-                turn_handler.updateTurn(elapsed_seconds, game.broadcaster, game.worm_handler);
+                turn_handler.updateTurn(elapsed_seconds, game.broadcaster, game.worm_handler,
+                                        game.battlefield.noProjectiles());
 
         std::shared_ptr<PlayerAction> c;
         if (action_queue.try_pop(c)) {

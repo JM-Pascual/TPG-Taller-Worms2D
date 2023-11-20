@@ -48,6 +48,8 @@ public:
 
     void destroy_dead_entities();
 
+    const bool noProjectiles();
+
     ~Battlefield() = default;
 };
 

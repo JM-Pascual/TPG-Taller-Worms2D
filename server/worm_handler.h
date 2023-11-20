@@ -51,6 +51,8 @@ public:
                               const uint8_t& worm_index);
 
     void checkDeadWorms();
+
+    const bool allWormsStayStill();
 };
 
 

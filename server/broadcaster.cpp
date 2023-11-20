@@ -70,13 +70,13 @@ void BroadCaster::removeLobbyPlayer(const uint8_t& player_id) {
     broadcast_map.erase(player_id);
 }
 
-void BroadCaster::broadcast_turn(const uint8_t& player_turn) {
+void BroadCaster::broadcast_turn(const uint8_t& player_turn, const bool& block_input) {
     std::lock_guard<std::mutex> lock(m);
 
     auto it = broadcast_map.begin();
     for (uint8_t i = 0; i < broadcast_map.size(); i++) {
         try {
-            if (i == player_turn) {
+            if (not block_input && i == player_turn) {
                 it->second->push(std::make_shared<PlayerTurn>(IS_YOUR_TURN));
                 ++it;
                 continue;

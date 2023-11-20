@@ -6,63 +6,59 @@
 #include "broadcaster.h"
 #include "worm_handler.h"
 
-const bool TurnHandler::need_to_update(uint8_t players_quantity,
-                                       const std::chrono::duration<float>& elapsed,
-                                       WormHandler& worm_handler) {
+const TurnReset TurnHandler::need_to_update(const uint8_t players_quantity,
+                                            const std::chrono::duration<float>& elapsed,
+                                            WormHandler& worm_handler,
+                                            const bool& battlefield_empty) {
 
-    // Primer turno
-    if (first_turn) {
-        first_turn = false;
-        return TIMER_RESET;
-    }
-
-    // Desconecta un player
+    // Desconecta un player o primer turno
     if (players_quantity != current_players_quantity) {
-        advanceTurn(players_quantity, worm_handler);
         current_players_quantity = players_quantity;
-        return TIMER_RESET;
+        return advanceTurn(players_quantity, worm_handler, battlefield_empty);
     }
 
     {
-        auto& player = players.at(prev_player_turn_id);
+        auto it = players.begin();
+        std::advance(it, player_turn);
 
-        if (player->worm_turn > (player->worms.size() - 1)) {
-            player->worm_turn = 0;
+        if (it->second->worm_turn > (it->second->worms.size() - 1)) {
+            it->second->worm_turn = 0;
         }
 
-        if (player->worms.at(player->worm_turn)->was_damaged) {
-            advanceTurn(players_quantity, worm_handler);
-            return TIMER_RESET;
+        if (it->second->worms.empty() ? true :
+                                        it->second->worms.at(it->second->worm_turn)->was_damaged) {
+            return advanceTurn(players_quantity, worm_handler, battlefield_empty);
         }
     }
 
     elapsed_time += elapsed;
 
-    if (player_stop_action) {
-        if (elapsed_time.count() < POST_TURN_DURATION_IN_SECONDS) {
-            return NOT_RESET;
-        }
-    } else {
-        // No paso el turno
-        if (elapsed_time.count() < TURN_DURATION_IN_SECONDS) {
-            return NOT_RESET;
-        }
+    // Post turn si player_stop_action == true
+    if (elapsed_time.count() < (std::pow(POST_TURN_DURATION_IN_SECONDS, player_stop_action) *
+                                std::pow(TURN_DURATION_IN_SECONDS, 1 - player_stop_action))) {
+        return TurnReset::NOT_RESET;
     }
 
-    advanceTurn(players_quantity, worm_handler);
-
-    return TIMER_RESET;
+    return advanceTurn(players_quantity, worm_handler, battlefield_empty);
 }
 
-void TurnHandler::advanceTurn(const uint8_t& players_quantity, WormHandler& worm_handler) {
+const TurnReset TurnHandler::advanceTurn(const uint8_t& players_quantity, WormHandler& worm_handler,
+                                         const bool& battlefield_empty) {
+    worm_handler.stop_turn_worm();
+
+    if (not battlefield_empty) {
+        return TurnReset::WAIT_TURN_END;
+    }
+
+    if (not worm_handler.allWormsStayStill()) {
+        return TurnReset::WAIT_TURN_END;
+    }
+
     for (++player_turn; player_turn <= players_quantity; ++player_turn) {
         // Dejamos q se pase de index para que se resetee a 0
         if (player_turn == players_quantity) {
             break;
         }
-
-        auto it = players.begin();
-        advance(it, player_turn);
 
         if (players.at(player_turn)->is_playing) {
             break;
@@ -72,7 +68,6 @@ void TurnHandler::advanceTurn(const uint8_t& players_quantity, WormHandler& worm
     player_stop_action = false;
     elapsed_time = std::chrono::duration<float>(0);
 
-    worm_handler.stop_turn_worm();
 
     if (player_turn > (players_quantity - 1)) {
         player_turn = 0;
@@ -82,30 +77,36 @@ void TurnHandler::advanceTurn(const uint8_t& players_quantity, WormHandler& worm
             }
         }
     }
+
+    return TurnReset::TIMER_RESET;
 }
 
 const ActualTurn TurnHandler::updateTurn(const std::chrono::duration<float>& elapsed,
-                                         BroadCaster& broadcaster, WormHandler& worm_handler) {
-    if (not this->need_to_update(players.size(), elapsed, worm_handler)) {  // Si resetea el timer
-        return ActualTurn(prev_player_turn_id, players.at(prev_player_turn_id)->worm_turn);
+                                         BroadCaster& broadcaster, WormHandler& worm_handler,
+                                         const bool& battlefield_empty) {
+
+    switch (this->need_to_update(players.size(), elapsed, worm_handler, battlefield_empty)) {
+
+        case TurnReset::TIMER_RESET: {
+            worm_handler.clearDamagedState();
+            broadcaster.broadcast_turn(player_turn);
+            break;
+        }
+
+        case TurnReset::WAIT_TURN_END: {
+            broadcaster.broadcast_turn(player_turn, BLOCK_PLAYERS_INPUT);
+            break;
+        }
+
+        default:  // NO RESET
+            break;
     }
 
     auto it = players.begin();
     std::advance(it, player_turn);
     uint8_t player_id = it->first;
 
-    // Enviar solo si cambio el turno (o sea reseteo el timer)
-    if (player_id != prev_player_turn_id) {
-        broadcaster.broadcast_turn(player_turn);
-    }
-
-    prev_player_turn_id = player_id;
-
-    worm_handler.clearDamagedState();
-
-    return ActualTurn(
-            player_id,
-            players.at(player_id)->worm_turn);  // Retorno la id del jugador el cual es su turno
+    return ActualTurn(player_id, players.at(player_id)->worm_turn);
 }
 
 const bool& TurnHandler::player_used_stop_action() { return player_stop_action; }

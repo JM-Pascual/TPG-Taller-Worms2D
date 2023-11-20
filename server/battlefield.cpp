@@ -44,3 +44,5 @@ void Battlefield::remove_collided_projectiles() {
 }
 
 void Battlefield::destroy_dead_entities() { engine.destroy_dead_entities(); }
+
+const bool Battlefield::noProjectiles() { return projectiles.empty(); }

@@ -42,7 +42,7 @@ public:
 
     void removeLobbyPlayer(const uint8_t& player_id);
 
-    void broadcast_turn(const uint8_t& player_turn);
+    void broadcast_turn(const uint8_t& player_turn, const bool& block_input = false);
 
     ~BroadCaster() = default;
 };

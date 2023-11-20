@@ -1,5 +1,6 @@
 #include "worm_handler.h"
 
+#include <algorithm>
 #include <numeric>
 
 #include "Player.h"
@@ -89,17 +90,10 @@ void WormHandler::update_weapon() {
 }
 
 void WormHandler::update_physics() {
-    for (const auto& [id, player]: players) {
-        for (const auto& worm: player->worms) {
-            worm->check_falling();
-        }
-    }
-
     if (not turn_worm) {
         return;
     }
 
-    turn_worm->check_jumping();
     if (!turn_worm->is_walking && !turn_worm->is_jumping && !turn_worm->is_backflipping &&
         !turn_worm->falling) {
         turn_worm->stop();
@@ -143,4 +137,17 @@ void WormHandler::checkDeadWorms() {
             player->is_playing = false;
         }
     }
+}
+
+const bool WormHandler::allWormsStayStill() {
+    for (const auto& [id, player]: players) {
+        for (const auto& worm: player->worms) {
+            // cppcheck-suppress useStlAlgorithm
+            if (worm->falling) {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }

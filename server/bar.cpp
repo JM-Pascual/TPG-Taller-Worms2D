@@ -1,6 +1,7 @@
 #include "bar.h"
 
 #include "battlefield.h"
+#include "query_callback.h"
 
 Bar::Bar(Battlefield& battlefield): Entity(battlefield) {
     b2BodyDef barBodyDef;
@@ -14,6 +15,17 @@ Bar::Bar(Battlefield& battlefield): Entity(battlefield) {
     body->CreateFixture(&barBox, 0.0f);
 }
 
-bool Bar::is_dead() { return dead; }
+void Bar::execute_collision_reaction() {
+    Query_callback queryCallback;
+    b2AABB aabb;
+    aabb.lowerBound = body->GetPosition() - b2Vec2(76.8 / 2, 0.8f / 2);
+    aabb.upperBound = body->GetPosition() + b2Vec2(76.8 / 2, 0.8f / 2);
+    battlefield.add_query_AABB(&queryCallback, aabb);
 
-void Bar::execute_collision_reaction() {}
+    // check which of these bodies have their center of mass within the blast radius
+    for (int i = 0; i < queryCallback.found_bodies_size(); i++) {
+        b2Body* body_ = queryCallback.found_bodie_at(i);
+
+        reinterpret_cast<Entity*>(body_->GetUserData().pointer)->stop_falling();
+    }
+}

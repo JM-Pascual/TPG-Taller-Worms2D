@@ -22,13 +22,15 @@ public:
 
     void end_contact();
 
+    virtual void stop_falling();
+
     virtual void start_falling();
 
     virtual void recibe_life_modification(const float& life_variation);
 
     virtual bool multiple_contact();  // Todo lo vamos a tener que sacar
 
-    bool is_dead();
+    virtual bool is_dead();
 
     virtual void execute_collision_reaction() = 0;
 

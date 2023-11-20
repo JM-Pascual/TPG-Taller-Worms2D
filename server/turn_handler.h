@@ -11,8 +11,9 @@
 #define TURN_DURATION_IN_SECONDS 10
 #define POST_TURN_DURATION_IN_SECONDS 3
 
-#define TIMER_RESET true
-#define NOT_RESET false
+#define BLOCK_PLAYERS_INPUT true
+
+enum class TurnReset { NOT_RESET = 0, TIMER_RESET = 1, WAIT_TURN_END = 2 };
 
 
 struct ActualTurn {
@@ -32,7 +33,6 @@ class BroadCaster;
 class TurnHandler {
 private:
     uint8_t player_turn;
-    bool first_turn;
     std::chrono::duration<float> elapsed_time;
 
     std::map<uint8_t, std::unique_ptr<Player>>& players;
@@ -40,26 +40,24 @@ private:
 
     bool player_stop_action;
 
-    // int16_t para poder iniciarlo en -1 y que se tome bien el proximo turno
-    int16_t prev_player_turn_id;
+    const TurnReset need_to_update(const uint8_t players_quantity,
+                                   const std::chrono::duration<float>& elapsed,
+                                   WormHandler& worm_handler, const bool& battlefield_empty);
 
-    const bool need_to_update(uint8_t players_quantity, const std::chrono::duration<float>& elapsed,
-                              WormHandler& worm_handler);
-
-    void advanceTurn(const uint8_t& players_quantity, WormHandler& worm_handler);
+    const TurnReset advanceTurn(const uint8_t& players_quantity, WormHandler& worm_handler,
+                                const bool& battlefield_empty);
 
 public:
     explicit TurnHandler(std::map<uint8_t, std::unique_ptr<Player>>& players):
             player_turn(0),
-            first_turn(true),
             elapsed_time(0),
             players(players),
             current_players_quantity(0),
-            player_stop_action(false),
-            prev_player_turn_id(-1) {}
+            player_stop_action(false) {}
 
     const ActualTurn updateTurn(const std::chrono::duration<float>& elapsed,
-                                BroadCaster& broadcaster, WormHandler& worm_handler);
+                                BroadCaster& broadcaster, WormHandler& worm_handler,
+                                const bool& battlefield_empty);
 
     const bool& player_used_stop_action();
 

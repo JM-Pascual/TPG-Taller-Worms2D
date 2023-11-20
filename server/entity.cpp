@@ -17,6 +17,7 @@ bool Entity::multiple_contact() {
     return collided;
 }
 
+void Entity::stop_falling() {}
 void Entity::start_falling() {}
 void Entity::recibe_life_modification(const float& life_variation) {}
 
