@@ -67,6 +67,20 @@ enum class Actions {
     CHANGE_WEAPON_OR_TOOL
 };
 
+enum class Projectiles{
+    BAZOOKA_PROYECTILE,
+    BANANA_PROYECTILE,
+    GREEN_GRENADE_PROYECTILE,
+    DYNAMITE_PROYECTILE,
+    HOLY_GRENADE_PROYECTILE,
+    MORTAR_PROYECTILE,
+    RED_GRENADE_PROYECTILE
+};
+
+enum class Effects{
+    NORMAL_EXPLOSION
+};
+
 enum class Actors {
     WORM = 0x0,
     GRADIENT,
@@ -78,8 +92,6 @@ enum class Actors {
     BACKFLIP_WORM,
     CROSSHAIR,
     POWER_CHARGE_BAR,
-    BAZOOKA_PROYECTILE,
-    BAZOOKA_EXPLOSION
 };
 
 enum class WeaponsDraw {

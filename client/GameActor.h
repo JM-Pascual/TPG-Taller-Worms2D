@@ -107,12 +107,12 @@ public:
 
 // ----------------------- PROYECTILE INTERFACE ----------------------
 
-class Proyectile: public GameActor {
+class Projectile: public GameActor {
 protected:
     bool impacted;
 
 public:
-    Proyectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
+    Projectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
                Camera& camera):
             GameActor(initial_state->pos.x, initial_state->pos.y, camera), impacted(false) {}
 };
@@ -120,17 +120,47 @@ public:
 
 // ----------------------- BAZOOKA PROYECTILE ----------------------
 
-class BazookaProyectile: public Proyectile {
+class BazookaProjectile: public Projectile {
 private:
     Animation on_air;
     Animation impact;
 
 public:
-    BazookaProyectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
+    BazookaProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
                       Camera& camera):
-            Proyectile(initial_state, pool, camera),
-            on_air(pool.get_actor_texture(Actors::BAZOOKA_PROYECTILE), 1, 1),
-            impact(pool.get_actor_texture(Actors::BAZOOKA_EXPLOSION), 8, 3, false) {}
+            Projectile(initial_state, pool, camera),
+            on_air(pool.get_projectile_texture(Projectiles::BAZOOKA_PROYECTILE), 1, 1),
+            impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false) {}
+
+    void update(std::shared_ptr<States>& actor_state) override {
+        auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
+        position = state->pos;
+        impacted = state->impacted;
+        impact.update(!impacted);
+    }
+
+    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        if (impacted) {
+            impact.render((*game_renderer), rect);
+        } else {
+            on_air.render((*game_renderer), rect);
+        }
+    }
+};
+
+// ----------------------- GREEN GRENADE ----------------------
+
+class GreenGrenadeProjectile: public Projectile {
+private:
+    Animation on_air;
+    Animation impact;
+public:
+    GreenGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
+                           TexturesPool& pool, Camera& camera) :
+            Projectile(initial_state, pool, camera),
+            on_air(pool.get_projectile_texture(Projectiles::GREEN_GRENADE_PROYECTILE), 1, 1),
+            impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false) {}
 
     void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);

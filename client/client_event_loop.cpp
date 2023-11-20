@@ -55,7 +55,7 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
             case StatesTag::PROJECTILE_G: {
                 auto state = std::dynamic_pointer_cast<ProjectileStateG>(raw_state);
                 if (!proyectiles.actor_loaded(state->id)) {
-                    proyectiles.add_actor(state->id, std::make_shared<BazookaProyectile>(
+                    proyectiles.add_actor(state->id, std::make_shared<BazookaProjectile>(
                                                              state, txt_pool, camera));
                 } else {
                     if (std::dynamic_pointer_cast<ProjectileStateG>(raw_state)->impacted) {
@@ -100,7 +100,6 @@ void EventLoop::run() {
         window.clear_textures();
 
         window.render_stage(txt_pool, camera);
-
         process_game_states(turn_start, txt_pool);
 
         turn_time = std::chrono::steady_clock::now() - turn_start;
