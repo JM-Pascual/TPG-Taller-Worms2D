@@ -53,6 +53,8 @@ public:
 
     void destroyAllWormBodies();
 
+    uint8_t calcAvgLife();
+
     void set_ready();
 
     void change_weapon(WeaponsAndTools new_weapon);

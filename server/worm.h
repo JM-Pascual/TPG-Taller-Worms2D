@@ -91,7 +91,7 @@ public:
 
     virtual ~Worm() = default;
 
-    friend class Game;
+    friend class Player;
     friend class BroadCaster;
     friend class InfoParser;
     friend class WormHandler;

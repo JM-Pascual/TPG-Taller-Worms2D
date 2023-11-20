@@ -98,6 +98,7 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<States>& ps) {
     send(&p->tag, sizeof(uint8_t));
     send(&p->id, sizeof(uint8_t));
     send(&p->is_playing, sizeof(uint8_t));
+    send(&p->avg_life, sizeof(uint8_t));
 
     for (const auto& [type, ammo]: p->gadgets->weapon_ammo) {
         send(&type, sizeof(uint8_t));

@@ -1,5 +1,6 @@
 #include "Player.h"
 
+#include <numeric>
 #include <utility>
 
 #include "../common/States.h"
@@ -27,6 +28,14 @@ Player::Player():
     weapons.insert({WeaponsAndTools::TELEPORT, std::make_unique<Bazooka>()});
 
     selected_weapon = &weapons.at(WeaponsAndTools::BAZOOKA);
+}
+
+uint8_t Player::calcAvgLife() {
+    float life_sum =
+            std::accumulate(worms.begin(), worms.end(), 0,
+                            [](const float& sum, const auto& worm) { return sum + worm->life; });
+
+    return (uint8_t)(life_sum / worms.size());
 }
 
 void Player::set_ready() { ready = !ready; }

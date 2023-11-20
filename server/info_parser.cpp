@@ -28,8 +28,8 @@ void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states) {
                    });
 
     for (const auto& [id, player]: players) {
-        states.push_back(
-                std::make_shared<PlayerStateG>(player->is_playing, id, player->getWeaponsAmmo()));
+        states.push_back(std::make_shared<PlayerStateG>(
+                player->is_playing, id, player->calcAvgLife(), player->getWeaponsAmmo()));
 
         std::transform(player->worms.begin(), player->worms.end(), std::back_inserter(states),
                        [](const auto& worm) {
