@@ -125,17 +125,22 @@ private:
     Animation on_air;
     Animation impact;
 
+    float current_angle;
+
 public:
     BazookaProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
                       Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::BAZOOKA_PROYECTILE), 1, 1),
-            impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false) {}
+            impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
+            current_angle(0){}
 
     void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
         position = state->pos;
         impacted = state->impacted;
+        current_angle = state->angle;
+        std::cout<<current_angle<<std::endl;
         impact.update(!impacted);
     }
 
@@ -144,7 +149,8 @@ public:
         if (impacted) {
             impact.render((*game_renderer), rect);
         } else {
-            on_air.render((*game_renderer), rect);
+            on_air.render((*game_renderer), rect, 0, 0, SDL_FLIP_NONE,
+                              (-1*(current_angle*180) / M_PI));
         }
     }
 };

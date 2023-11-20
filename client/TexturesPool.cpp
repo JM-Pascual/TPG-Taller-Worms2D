@@ -96,7 +96,9 @@ void TexturesPool::load_projectile_textures() {
     projectile_textures.insert({Projectiles::BAZOOKA_PROYECTILE,
                                 std::make_shared<SDL2pp::Texture>((*renderer),
                                                                   SDL2pp::Surface(
-                                                                          DATA_PATH "/weapons/bazooka-missile2.png"))});
+                                                                          DATA_PATH "/weapons/bazooka-missile2.png")
+                                                                          .SetColorKey(true, 0x000000))});
+    projectile_textures[Projectiles::BAZOOKA_PROYECTILE]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
 void TexturesPool::load_effect_textures() {
