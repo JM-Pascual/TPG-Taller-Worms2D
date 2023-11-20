@@ -5,6 +5,7 @@
 
 #include "../common/States.h"
 
+#include "Game.h"
 #include "Player.h"
 #include "proyectile.h"
 
@@ -12,9 +13,9 @@ void InfoParser::makeLobbyState(std::list<std::shared_ptr<States>>& states) {
     /*
         Sin lock, ya que previamente game coloca el lock
     */
-    states.push_back(std::make_shared<PlayerCountL>(players.size()));
+    states.push_back(std::make_shared<PlayerCountL>(game.players.size()));
 
-    std::transform(players.begin(), players.end(), std::back_inserter(states),
+    std::transform(game.players.begin(), game.players.end(), std::back_inserter(states),
                    [](const auto& player) {
                        return std::make_shared<PlayerStateL>(player.second->ready, player.first);
                    });
@@ -22,12 +23,15 @@ void InfoParser::makeLobbyState(std::list<std::shared_ptr<States>>& states) {
 
 void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states) {
 
-    std::transform(projectiles.begin(), projectiles.end(), std::back_inserter(states),
-                   [](const auto& projectile) {
+    states.push_back(
+            std::make_shared<BattlefieldState>((uint8_t)game.battlefield.engine.wind_force));
+
+    std::transform(game.battlefield.projectiles.begin(), game.battlefield.projectiles.end(),
+                   std::back_inserter(states), [](const auto& projectile) {
                        return projectile.second->get_proyectile_state(projectile.first);
                    });
 
-    for (const auto& [id, player]: players) {
+    for (const auto& [id, player]: game.players) {
         states.push_back(std::make_shared<PlayerStateG>(
                 player->is_playing, id, player->calcAvgLife(), player->getWeaponsAmmo()));
 

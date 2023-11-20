@@ -87,7 +87,7 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
             return std::make_shared<PlayerStateL>(recvBool(), recvUint8());
 
         case StatesTag::BATTLEFIELD_G:
-            return std::make_shared<PlayerCountL>(recvUint8());
+            return std::make_shared<BattlefieldState>(recvUint8());
 
         case StatesTag::PLAYER_G:
             return recvPlayerGame();

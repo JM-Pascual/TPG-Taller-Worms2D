@@ -27,9 +27,7 @@ private:
     void broadcast(const std::list<std::shared_ptr<States>>& game_states);
 
 public:
-    BroadCaster(std::mutex& m_game, std::map<uint8_t, std::unique_ptr<Player>>& players,
-                std::map<uint8_t, std::shared_ptr<Projectile>>& projectiles):
-            infoParser(m_game, players, projectiles) {}
+    explicit BroadCaster(Game& game): infoParser(game) {}
 
     void add_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue);
 
@@ -38,7 +36,7 @@ public:
     void broadcastGame();
 
     void remove_closed_clients(uint8_t& ready_count,
-                               std::map<uint8_t, std::unique_ptr<Player>>& players_stats);
+                               std::map<uint8_t, std::unique_ptr<Player>>& players);
 
     void removeLobbyPlayer(const uint8_t& player_id);
 

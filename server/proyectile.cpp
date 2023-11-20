@@ -30,7 +30,7 @@ Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radi
 std::shared_ptr<ProjectileStateG> Projectile::get_proyectile_state(const uint8_t& proyectile_id) {
 
     float vel_angle = b2Atan2(body->GetLinearVelocity().y, body->GetLinearVelocity().x);
-    std::cout << vel_angle << std::endl;
+
     return std::make_shared<ProjectileStateG>(proyectile_id, body->GetPosition().x,
                                               body->GetPosition().y, type, dead, vel_angle);
 }

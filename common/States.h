@@ -96,7 +96,13 @@ public:
     ~WormStateG() override = default;
 };
 
-class BattlefieldState: public States {};
+class BattlefieldState: public States {
+public:
+    const uint8_t wind_force;
+
+    explicit BattlefieldState(const uint8_t& wind):
+            States(StatesTag::BATTLEFIELD_G), wind_force(wind) {}
+};
 
 class ProjectileStateG: public States {
 public:

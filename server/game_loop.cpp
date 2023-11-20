@@ -14,7 +14,7 @@ Queue<std::shared_ptr<PlayerAction>>& GameLoop::get_action_queue() { return this
 
 void GameLoop::run() {
     std::chrono::duration<float> elapsed_seconds = std::chrono::duration<float>(0);
-    TurnHandler turn_handler(game.players_stats);
+    TurnHandler turn_handler(game.players);
 
     while (game.is_playing()) {
         std::chrono::time_point<std::chrono::steady_clock> before =
@@ -49,7 +49,7 @@ void GameLoop::run() {
 
         game.battlefield.step(game.worm_handler);
 
-        game.broadcaster.remove_closed_clients(game.ready_count, game.players_stats);
+        game.broadcaster.remove_closed_clients(game.ready_count, game.players);
 
         game.worm_handler.checkDeadWorms();
 

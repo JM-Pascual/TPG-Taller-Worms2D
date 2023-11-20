@@ -133,14 +133,14 @@ public:
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::BAZOOKA_PROYECTILE), 1, 1),
             impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
-            current_angle(0){}
+            current_angle(0) {}
 
     void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
         position = state->pos;
         impacted = state->impacted;
         current_angle = state->angle;
-        std::cout<<current_angle<<std::endl;
+
         impact.update(!impacted);
     }
 
@@ -150,7 +150,7 @@ public:
             impact.render((*game_renderer), rect);
         } else {
             on_air.render((*game_renderer), rect, 0, 0, SDL_FLIP_NONE,
-                              (-1*(current_angle*180) / M_PI));
+                          (-1 * (current_angle * 180) / M_PI));
         }
     }
 };
@@ -161,9 +161,10 @@ class GreenGrenadeProjectile: public Projectile {
 private:
     Animation on_air;
     Animation impact;
+
 public:
-    GreenGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
-                           TexturesPool& pool, Camera& camera) :
+    GreenGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
+                           Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::GREEN_GRENADE_PROYECTILE), 1, 1),
             impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false) {}

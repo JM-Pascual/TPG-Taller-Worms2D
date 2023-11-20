@@ -33,7 +33,7 @@ private:
         Este mutex es necesario ya que mientras el juego este en estado "lobby", multiples hilos
        intentan acceder al mapa.
     */
-    std::map<uint8_t, std::unique_ptr<Player>> players_stats;
+    std::map<uint8_t, std::unique_ptr<Player>> players;
     uint8_t ready_count;
 
     uint8_t worm_counter;
@@ -62,8 +62,8 @@ public:
             description(std::move(desc)),
             map_name(map),
             game_id(game_id),
-            worm_handler(players_stats),
-            broadcaster(m, players_stats, battlefield.getProjectiles()),
+            worm_handler(players),
+            broadcaster(*this),
             gameloop(*this, this->game_id, erase_id_queue),
             need_to_join_loop(false) {}
 
@@ -84,6 +84,7 @@ public:
     ~Game();
 
     friend class GameLoop;
+    friend class InfoParser;
 };
 
 

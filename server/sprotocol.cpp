@@ -170,6 +170,11 @@ void ServerSide::Protocol::sendPlayerLobby(const std::shared_ptr<States>& count)
     send(&p->ready, sizeof(uint8_t));
 }
 
+void ServerSide::Protocol::sendBattlefield(const std::shared_ptr<States>& state) {
+    std::shared_ptr<BattlefieldState> p = std::dynamic_pointer_cast<BattlefieldState>(state);
+    send(&p->tag, sizeof(uint8_t));
+    send(&p->wind_force, sizeof(uint8_t));
+}
 
 void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
     switch (state->tag) {
@@ -188,6 +193,7 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
             break;
 
         case StatesTag::BATTLEFIELD_G:
+            sendBattlefield(state);
             break;
 
         case StatesTag::PLAYER_G:

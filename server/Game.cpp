@@ -10,9 +10,7 @@
 #include "proyectile.h"
 
 
-bool Game::non_locking_is_playing() {
-    return (!players_stats.empty() && players_stats.size() == ready_count);
-}
+bool Game::non_locking_is_playing() { return (!players.empty() && players.size() == ready_count); }
 
 void Game::notifyLobbyState() { broadcaster.broadcastLobby(); }
 
@@ -28,27 +26,27 @@ void Game::add_client_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& s
         return;
     }
 
-    if (players_stats.size() >= MAX_PLAYERS) {
+    if (players.size() >= MAX_PLAYERS) {
         state_queue.push(std::make_shared<GameNotJoinable>());
         return;
     }
 
     broadcaster.add_queue(id, state_queue);
-    players_stats.insert(std::make_pair(id, std::make_unique<Player>()));
+    players.insert(std::make_pair(id, std::make_unique<Player>()));
     notifyLobbyState();
 }
 
 void Game::removeLobbyPlayer(const uint8_t& player_id) {
     std::lock_guard<std::mutex> lock(m);
 
-    if (players_stats.count(player_id) != 1) {
+    if (players.count(player_id) != 1) {
         return;
     }
 
-    if (players_stats.at(player_id)->ready) {
+    if (players.at(player_id)->ready) {
         ready_count--;
     }
-    players_stats.erase(player_id);
+    players.erase(player_id);
     broadcaster.removeLobbyPlayer(player_id);
 
     notifyLobbyState();
@@ -56,21 +54,21 @@ void Game::removeLobbyPlayer(const uint8_t& player_id) {
 
 bool Game::isEmpty() {
     std::lock_guard<std::mutex> lock(m);
-    return players_stats.empty();
+    return players.empty();
 }
 
 bool Game::is_playing() {
     std::lock_guard<std::mutex> lock(m);
-    return (!players_stats.empty() && players_stats.size() == ready_count);
+    return (!players.empty() && players.size() == ready_count);
 }
 
 void Game::set_player_ready(const uint8_t id) {
     std::lock_guard<std::mutex> lock(m);
     // Esta unido al game el player[id]?
-    if (players_stats.count(id) == 1) {
-        players_stats.at(id)->set_ready();
+    if (players.count(id) == 1) {
+        players.at(id)->set_ready();
         // Resta si el player dio unready, inc si dio ready
-        ready_count += std::pow(-1, 1 - players_stats.at(id)->ready);
+        ready_count += std::pow(-1, 1 - players.at(id)->ready);
     }
 
     notifyLobbyState();
@@ -84,14 +82,14 @@ void Game::set_player_ready(const uint8_t id) {
 }
 
 void Game::spawnWorms() {
-    for (auto& [id, player]: players_stats) {
+    for (auto& [id, player]: players) {
         player->spawnWorms(battlefield, WORMS_QUANTITY, worm_counter);
     }
 }
 
 std::shared_ptr<GameInfoL> Game::getInfo() {
     std::lock_guard<std::mutex> lock(m);
-    return std::make_shared<GameInfoL>(description, map_name, players_stats.size(), game_id);
+    return std::make_shared<GameInfoL>(description, map_name, players.size(), game_id);
 }
 
 Game::~Game() {

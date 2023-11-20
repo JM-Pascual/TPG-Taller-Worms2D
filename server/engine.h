@@ -49,7 +49,7 @@ public:
 
     void newWindForce();
 
-    friend class Game;
+    friend class InfoParser;
 
     ~Engine();
 

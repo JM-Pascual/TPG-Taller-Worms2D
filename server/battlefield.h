@@ -53,6 +53,8 @@ public:
     const bool noProjectiles();
 
     ~Battlefield() = default;
+
+    friend class InfoParser;
 };
 
 

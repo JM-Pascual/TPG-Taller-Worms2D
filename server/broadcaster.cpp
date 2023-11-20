@@ -41,7 +41,7 @@ void BroadCaster::broadcastGame() {
 }
 
 void BroadCaster::remove_closed_clients(uint8_t& ready_count,
-                                        std::map<uint8_t, std::unique_ptr<Player>>& players_stats) {
+                                        std::map<uint8_t, std::unique_ptr<Player>>& players) {
     std::lock_guard<std::mutex> lock(m);
 
     auto it = broadcast_map.cbegin();
@@ -50,12 +50,12 @@ void BroadCaster::remove_closed_clients(uint8_t& ready_count,
             uint8_t id = it->first;
             it = broadcast_map.erase(it);
 
-            if (players_stats.count(id) != 1) {
+            if (players.count(id) != 1) {
                 continue;
             }
 
-            players_stats.at(id)->destroyAllWormBodies();
-            players_stats.erase(id);
+            players.at(id)->destroyAllWormBodies();
+            players.erase(id);
 
             ready_count--;
             continue;
