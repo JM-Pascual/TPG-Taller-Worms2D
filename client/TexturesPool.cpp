@@ -6,6 +6,8 @@ TexturesPool::TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer) :
     load_water_textures();
     load_worm_textures();
     load_weapon_textures();
+    load_projectile_textures();
+    load_effect_textures();
 }
 
 void TexturesPool::load_general_worm_textures() {
@@ -90,6 +92,24 @@ void TexturesPool::load_aiming_textures() {
     aim_textures[WeaponAiming::WORM_AIM_BANANA]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
+void TexturesPool::load_projectile_textures() {
+    projectile_textures.insert({Projectiles::BAZOOKA_PROYECTILE,
+                                std::make_shared<SDL2pp::Texture>((*renderer),
+                                                                  SDL2pp::Surface(
+                                                                          DATA_PATH "/weapons/bazooka-missile2.png")
+                                                                          .SetColorKey(true, 0x000000))});
+    projectile_textures[Projectiles::BAZOOKA_PROYECTILE]->SetBlendMode(SDL_BLENDMODE_BLEND);
+}
+
+void TexturesPool::load_effect_textures() {
+    effect_textures.insert({Effects::NORMAL_EXPLOSION,
+                            std::make_shared<SDL2pp::Texture>((*renderer),
+                                                              SDL2pp::Surface(DATA_PATH "/weapons/bazooka-explosion.png")
+                                                                                                              .SetColorKey(true, 0x000000))});
+
+    effect_textures[Effects::NORMAL_EXPLOSION]->SetBlendMode(SDL_BLENDMODE_BLEND);
+}
+
 void TexturesPool::load_worm_textures() {
     this->load_general_worm_textures();
     this->load_draw_textures();
@@ -106,13 +126,6 @@ void TexturesPool::load_weapon_textures() {
                                                                                                        .SetColorKey(true, 0x000000))});
 
     actors_textures[Actors::POWER_CHARGE_BAR]->SetBlendMode(SDL_BLENDMODE_BLEND);
-
-    actors_textures.insert({Actors::BAZOOKA_PROYECTILE, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/bazooka-missile2.png"))});
-
-    actors_textures.insert({Actors::BAZOOKA_EXPLOSION, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/bazooka-explosion.png")
-                                                                                                        .SetColorKey(true, 0x000000))});
-
-    actors_textures[Actors::BAZOOKA_EXPLOSION]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
 void TexturesPool::load_level_textures() {
@@ -147,4 +160,13 @@ std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_aim_texture(WeaponAiming aim
 
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_draw_texture(WeaponsDraw draw_texture_to_fetch) {
     return (draw_textures[draw_texture_to_fetch]);
+}
+
+std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_projectile_texture(
+        Projectiles projectile_texture_to_fetch) {
+    return (projectile_textures[projectile_texture_to_fetch]);
+}
+std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_effect_texture(
+        Effects effect_texture_to_fetch) {
+    return (effect_textures[effect_texture_to_fetch]);
 }

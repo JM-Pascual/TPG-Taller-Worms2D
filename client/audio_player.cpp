@@ -10,7 +10,7 @@
 #define CHANNEL -1
 
 // Max volume = MIX_MAX_VOLUME == 128
-#define MUSIC_VOLUME 25
+#define MUSIC_VOLUME 15
 
 AudioPlayer::AudioPlayer(): background_music(nullptr) {
     Mix_Init(MIX_INIT_MP3);
