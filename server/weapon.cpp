@@ -13,6 +13,9 @@ Bazooka::Bazooka(): Weapon(BAZOOKA_AMMO) {}
 
 
 void Bazooka::execute(Battlefield& battlefield, Worm& worm) {
+    if (--ammo <= 0) {
+        return;
+    }
 
     b2Vec2 projectile_position = worm.set_bullet_direction();
 
@@ -28,6 +31,10 @@ void Bazooka::execute(Battlefield& battlefield, Worm& worm) {
 GreenGrenade::GreenGrenade(): Weapon(GREEN_GRENADE_AMMO) {}
 
 void GreenGrenade::execute(Battlefield& battlefield, Worm& worm) {
+    if (--ammo <= 0) {
+        return;
+    }
+
     b2Vec2 projectile_position = worm.set_bullet_direction();
     uint8_t explosion_delay = worm.set_bullet_explosion_delay();
 
@@ -43,6 +50,9 @@ void GreenGrenade::execute(Battlefield& battlefield, Worm& worm) {
 BananaGrenade::BananaGrenade(): Weapon(BANANA_AMMO) {}
 
 void BananaGrenade::execute(Battlefield& battlefield, Worm& worm) {
+    if (--ammo <= 0) {
+        return;
+    }
 
     b2Vec2 projectile_position = worm.set_bullet_direction();
     uint8_t explosion_delay = worm.set_bullet_explosion_delay();
@@ -59,6 +69,9 @@ void BananaGrenade::execute(Battlefield& battlefield, Worm& worm) {
 DynamiteGrenade::DynamiteGrenade(): Weapon(DYNAMITE_AMMO) {}
 
 void DynamiteGrenade::execute(Battlefield& battlefield, Worm& worm) {
+    if (--ammo <= 0) {
+        return;
+    }
 
     b2Vec2 projectile_position = worm.set_bullet_direction();
     uint8_t explosion_delay = worm.set_bullet_explosion_delay();
