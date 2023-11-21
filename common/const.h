@@ -77,6 +77,15 @@ enum class Projectiles{
     RED_GRENADE_PROYECTILE
 };
 
+enum class Tombstones{
+    TOMBSTONE_1,
+    TOMBSTONE_2,
+    TOMBSTONE_3,
+    TOMBSTONE_4,
+    TOMBSTONE_5,
+    TOMBSTONE_6
+};
+
 enum class Effects{
     NORMAL_EXPLOSION
 };

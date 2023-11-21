@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "audio_player.h"
+#include "text_printer.h"
 #include "camera.h"
 #include "cprotocol.h"
 #include "creceiver.h"

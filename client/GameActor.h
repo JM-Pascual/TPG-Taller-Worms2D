@@ -13,6 +13,7 @@
 #include "TexturesPool.h"
 #include "WeaponAnimation.h"
 #include "camera.h"
+#include "text_printer.h"
 
 // ----------------------- ACTOR INTERFACE ----------------------
 
@@ -38,12 +39,16 @@ private:
     bool is_backflipping;
     bool facing_right;
     bool was_hit;
+    float life_points_remaining;
 
     float aim_inclination_degrees;
+
+    TextPrinter state_printer;
 
     Animation walking;
     Animation jumping;
     Animation backflipping;
+    Animation dead;
 
     WeaponAnimation weapon_animation;
 
@@ -56,7 +61,9 @@ public:
             is_backflipping(initial_state->is_backflipping),
             facing_right(initial_state->facing_right),
             was_hit(initial_state->was_hit),
+            life_points_remaining(initial_state->life),
             aim_inclination_degrees(initial_state->aim_inclination_degrees),
+            state_printer(18),
 
             walking(pool.get_actor_texture(Actors::WORM), 15, 1),
             jumping(pool.get_actor_texture(Actors::JUMPING_WORM), 5, 5, false),
@@ -73,6 +80,7 @@ public:
         facing_right = state->facing_right;
         was_hit = state->was_hit;
         aim_inclination_degrees = state->aim_inclination_degrees;
+        life_points_remaining = state->life;
 
         walking.update(!is_walking);
         jumping.update(!is_jumping);
@@ -98,6 +106,8 @@ public:
         } else {
             weapon_animation.render((*game_renderer), rect,
                                     facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+            state_printer.print_text((*game_renderer), std::to_string(int(life_points_remaining)),
+                                     rect.x +8, rect.y -30);
         }
     }
 

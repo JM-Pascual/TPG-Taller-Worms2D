@@ -18,9 +18,9 @@ int Game::run() {
 
     if (initGame) {
         // window ya esta cerrado si el thread esta aca
-        delete window.release();
+        window = nullptr;
         app->exit(ret);
-        delete app.release();
+        app = nullptr;
         client.run();
     }
 

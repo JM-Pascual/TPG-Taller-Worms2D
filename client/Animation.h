@@ -10,7 +10,7 @@
 class SdlTexture;
 class Area;
 
-class  Animation {
+class Animation {
 private:
     /** SDL texture of the raw image. */
     std::shared_ptr<SDL2pp::Texture> &texture;

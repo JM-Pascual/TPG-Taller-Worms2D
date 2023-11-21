@@ -34,6 +34,7 @@ set(QT_RES client/resources/images.qrc)
 
 add_definitions(-DDATA_PATH="${PROJECT_SOURCE_DIR}/sprites")
 add_definitions(-DMEDIA_PATH="${PROJECT_SOURCE_DIR}/client/resources/sounds")
+add_definitions(-DFONT_PATH="${PROJECT_SOURCE_DIR}/client/resources/font")
 include_directories(${SDL2PP_INCLUDE_DIRS})
 
 file(GLOB COMMON_SRC common/*.cpp)

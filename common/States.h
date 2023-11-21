@@ -69,7 +69,6 @@ public:
             gadgets(std::move(weapon_ammo)) {}
 };
 
-
 class WormStateG: public States {
 public:
     const uint8_t id;

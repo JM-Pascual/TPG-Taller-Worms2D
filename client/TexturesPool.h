@@ -19,12 +19,14 @@ private:
     void load_weapon_textures();
     void load_projectile_textures();
     void load_effect_textures();
+    void load_tombstones_textures();
 
     std::unordered_map<Actors, std::shared_ptr<SDL2pp::Texture>> actors_textures;
     std::unordered_map<WeaponAiming, std::shared_ptr<SDL2pp::Texture>> aim_textures;
     std::unordered_map<WeaponsDraw, std::shared_ptr<SDL2pp::Texture>> draw_textures;
     std::unordered_map<Projectiles, std::shared_ptr<SDL2pp::Texture>> projectile_textures;
     std::unordered_map<Effects, std::shared_ptr<SDL2pp::Texture>> effect_textures;
+    std::unordered_map<Tombstones, std::shared_ptr<SDL2pp::Texture>> tombstones_textures;
 
     std::shared_ptr<SDL2pp::Renderer>& renderer;
 public:
@@ -35,6 +37,7 @@ public:
     std::shared_ptr<SDL2pp::Texture>& get_aim_texture(WeaponAiming aim_texture_to_fetch);
     std::shared_ptr<SDL2pp::Texture>& get_projectile_texture(Projectiles aim_texture_to_fetch);
     std::shared_ptr<SDL2pp::Texture>& get_effect_texture(Effects aim_texture_to_fetch);
+    std::shared_ptr<SDL2pp::Texture>& get_tombstone_texture(Tombstones tombstone_texture_to_fetch);
 };
 
 

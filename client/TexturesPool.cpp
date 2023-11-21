@@ -163,6 +163,33 @@ void TexturesPool::load_level_textures() {
     actors_textures[Actors::BRIDGE]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
+void TexturesPool::load_tombstones_textures() {
+    tombstones_textures.insert({Tombstones::TOMBSTONE_1, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/miscellaneous/tombstone1.png")
+                                                                                                       .SetColorKey(true, 0x000000))});
+    tombstones_textures[Tombstones::TOMBSTONE_1]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    tombstones_textures.insert({Tombstones::TOMBSTONE_2, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/miscellaneous/tombstone2.png")
+                                                                                                       .SetColorKey(true, 0x000000))});
+    tombstones_textures[Tombstones::TOMBSTONE_2]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    tombstones_textures.insert({Tombstones::TOMBSTONE_3, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/miscellaneous/tombstone3.png")
+                                                                                                       .SetColorKey(true, 0x000000))});
+    tombstones_textures[Tombstones::TOMBSTONE_3]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    tombstones_textures.insert({Tombstones::TOMBSTONE_4, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/miscellaneous/tombstone4.png")
+                                                                                                       .SetColorKey(true, 0x000000))});
+    tombstones_textures[Tombstones::TOMBSTONE_4]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    tombstones_textures.insert({Tombstones::TOMBSTONE_5, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/miscellaneous/tombstone5.png")
+                                                                                                       .SetColorKey(true, 0x000000))});
+    tombstones_textures[Tombstones::TOMBSTONE_5]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    tombstones_textures.insert({Tombstones::TOMBSTONE_6, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/miscellaneous/tombstone6.png")
+                                                                                                       .SetColorKey(true, 0x000000))});
+    tombstones_textures[Tombstones::TOMBSTONE_6]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+}
+
 void TexturesPool::load_water_textures(){
     /// Loads all the water actors_textures and enables alpha blending
     actors_textures.insert({Actors::WATER, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/blue-water-sprites/blue_water.png")
@@ -186,7 +213,13 @@ std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_projectile_texture(
         Projectiles projectile_texture_to_fetch) {
     return (projectile_textures[projectile_texture_to_fetch]);
 }
+
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_effect_texture(
         Effects effect_texture_to_fetch) {
     return (effect_textures[effect_texture_to_fetch]);
+}
+
+std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_tombstone_texture(
+        Tombstones tombstone_texture_to_fetch) {
+    return (tombstones_textures[tombstone_texture_to_fetch]);
 }

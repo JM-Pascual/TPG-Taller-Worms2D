@@ -1,12 +1,7 @@
 #include "client_event_loop.h"
 
-#include <unordered_map>
-
 #include <SDL2pp/SDL2pp.hh>
 #include <spdlog/spdlog.h>
-
-#include "../common/States.h"
-#include "../common/const.h"
 
 const int DURATION = 1000 / 30;
 
@@ -18,7 +13,7 @@ EventLoop::EventLoop(const char* hostname, const char* servname):
         protocol(hostname, servname),
         recv(this->protocol, game_state_queue, lobby_state_queue, runned),
         send(this->protocol, this->action_queue),
-        input(this->action_queue, quit, my_turn, camera) {
+        input(this->action_queue, quit, my_turn, camera){
     spdlog::get("client")->debug("Iniciando hilo receptor en el cliente");
     recv.start();
     spdlog::get("client")->debug("Iniciando hilo sender en el cliente");
@@ -118,6 +113,8 @@ void EventLoop::run() {
     TexturesPool txt_pool(window.get_renderer());
 
     SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    SDL2pp::SDLTTF ttf;
+
     audio_player.play_background_music();
 
     Animation water_animation(txt_pool.get_actor_texture(Actors::WATER), 11, 3);
