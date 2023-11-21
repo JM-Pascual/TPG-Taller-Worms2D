@@ -6,6 +6,7 @@
 #include <spdlog/spdlog.h>
 
 #include "../common/States.h"
+#include "../common/const.h"
 
 const int DURATION = 1000 / 30;
 
@@ -55,8 +56,40 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
             case StatesTag::PROJECTILE_G: {
                 auto state = std::dynamic_pointer_cast<ProjectileStateG>(raw_state);
                 if (!proyectiles.actor_loaded(state->id)) {
-                    proyectiles.add_actor(state->id, std::make_shared<BazookaProjectile>(
-                                                             state, txt_pool, camera));
+                    switch(state->type){
+                        case (WeaponsAndTools::BAZOOKA): {
+                            proyectiles.add_actor(state->id, std::make_shared<BazookaProjectile>(
+                                    state, txt_pool, camera));
+                            break;
+                        }
+                        case WeaponsAndTools::MORTAR:
+                            break;
+                        case WeaponsAndTools::GREEN_GRENADE: {
+                            proyectiles.add_actor(state->id, std::make_shared<GreenGrenadeProjectile
+                                                                              >(state, txt_pool,
+                                                                                camera));
+                            break;
+                        }
+                        case WeaponsAndTools::RED_GRENADE:
+                            break;
+                        case WeaponsAndTools::BANANA:
+                            proyectiles.add_actor(state->id, std::make_shared<BananaProjectile>(
+                                    state, txt_pool, camera));
+                            break;
+                        case WeaponsAndTools::HOLY_GRENADE:
+                            break;
+                        case WeaponsAndTools::DYNAMITE:
+                            proyectiles.add_actor(state->id, std::make_shared<DynamiteProjectile>(
+                                                                     state, txt_pool, camera));
+                            break;
+                        case WeaponsAndTools::BASEBALL_BAT:
+                            break;
+                        case WeaponsAndTools::AIR_STRIKE:
+                            break;
+                        case WeaponsAndTools::TELEPORT:
+                            break;
+                    }
+
                 } else {
                     if (std::dynamic_pointer_cast<ProjectileStateG>(raw_state)->impacted) {
                         proyectiles.remove_actor(state->id, raw_state);

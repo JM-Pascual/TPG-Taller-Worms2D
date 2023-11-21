@@ -140,7 +140,6 @@ public:
         position = state->pos;
         impacted = state->impacted;
         current_angle = state->angle;
-
         impact.update(!impacted);
     }
 
@@ -162,17 +161,20 @@ private:
     Animation on_air;
     Animation impact;
 
+    float current_angle;
 public:
     GreenGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
                            Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::GREEN_GRENADE_PROYECTILE), 1, 1),
-            impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false) {}
+            impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
+            current_angle(0) {}
 
     void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
         position = state->pos;
         impacted = state->impacted;
+        current_angle = state->angle;
         impact.update(!impacted);
     }
 
@@ -181,10 +183,76 @@ public:
         if (impacted) {
             impact.render((*game_renderer), rect);
         } else {
-            on_air.render((*game_renderer), rect);
+            on_air.render((*game_renderer), rect, 0, 0, SDL_FLIP_NONE,
+                          (-1 * (current_angle * 180) / M_PI));
         }
     }
 };
 
+// ----------------------- BANANA ----------------------
+
+class BananaProjectile: public Projectile {
+private:
+    Animation on_air;
+    Animation impact;
+
+    float current_angle;
+public:
+    BananaProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
+                           Camera& camera):
+            Projectile(initial_state, pool, camera),
+            on_air(pool.get_projectile_texture(Projectiles::BANANA_PROYECTILE), 1, 1),
+            impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
+            current_angle(0) {}
+
+    void update(std::shared_ptr<States>& actor_state) override {
+        auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
+        position = state->pos;
+        impacted = state->impacted;
+        current_angle = state->angle;
+        impact.update(!impacted);
+    }
+
+    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        if (impacted) {
+            impact.render((*game_renderer), rect);
+        } else {
+            on_air.render((*game_renderer), rect, 0, 0, SDL_FLIP_NONE,
+                          (-1 * (current_angle * 180) / M_PI));
+        }
+    }
+};
+
+// ----------------------- DYNAMITE ----------------------
+
+class DynamiteProjectile: public Projectile {
+private:
+    Animation countdown;
+    Animation explosion;
+public:
+    DynamiteProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
+                     Camera& camera):
+            Projectile(initial_state, pool, camera),
+            countdown(pool.get_projectile_texture(Projectiles::DYNAMITE_PROYECTILE), 126),
+            explosion(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false){}
+
+    void update(std::shared_ptr<States>& actor_state) override {
+        auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
+        position = state->pos;
+        countdown.update();
+        impacted = state->impacted;
+        explosion.update(!impacted);
+    }
+
+    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        if (impacted){
+            explosion.render((*game_renderer), rect);
+        } else{
+            countdown.render((*game_renderer), rect);
+        }
+    }
+};
 
 #endif  // GAMEACTOR_H
