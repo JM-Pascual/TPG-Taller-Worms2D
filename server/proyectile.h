@@ -47,6 +47,8 @@ public:
     void execute_collision_reaction() override {}
     void applyWindResistence(const float& wind_force) override {}
 
+    virtual void updateTimer() = 0;
+
     virtual ~Projectile() = default;
     friend class Game;
 
@@ -62,6 +64,7 @@ public:
     Rocket(Battlefield& battlefield, b2Vec2 position);
     void execute_collision_reaction() override;
     void applyWindResistence(const float& wind_force) override;
+    void updateTimer() override {}
     virtual ~Rocket() = default;
 };
 
@@ -75,6 +78,7 @@ public:
             uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type);
     void execute_collision_reaction() override;
     void applyWindResistence(const float& wind_force) override;
+    void updateTimer() override;
     // bool multiple_contact() override;
     virtual ~Grenade() = default;
 };

@@ -29,6 +29,8 @@ private:
     Engine engine;
     Level_holder level_holder;
 
+    void updateProjectilesTimer();
+
 public:
     Battlefield(): projectile_count(0), level_holder(*this) {}
 

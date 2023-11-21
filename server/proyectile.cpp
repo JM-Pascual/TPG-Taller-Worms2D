@@ -110,7 +110,9 @@ Grenade::Grenade(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_de
         explosion_delay(explosion_delay),
         grenade_timer(std::chrono::steady_clock::now()) {}
 
-void Grenade::execute_collision_reaction() {
+void Grenade::execute_collision_reaction() {}
+
+void Grenade::updateTimer() {
     if (dead) {
         return;
     }

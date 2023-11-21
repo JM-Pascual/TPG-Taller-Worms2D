@@ -229,8 +229,6 @@ void Worm::stop_falling() {
     }
 }
 
-#include <iostream>
-
 void Worm::recibe_life_modification(const float& life_variation) {
     if (life_variation < 0) {
         was_damaged = true;

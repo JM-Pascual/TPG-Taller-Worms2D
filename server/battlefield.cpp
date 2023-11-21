@@ -8,6 +8,12 @@
 #include "proyectile.h"
 #include "worm_handler.h"
 
+void Battlefield::updateProjectilesTimer() {
+    for (auto& projectile: projectiles) {
+        projectile.second->updateTimer();
+    }
+}
+
 std::map<uint8_t, std::shared_ptr<Projectile>>& Battlefield::getProjectiles() {
     return projectiles;
 }
@@ -21,6 +27,7 @@ void Battlefield::add_query_AABB(b2QueryCallback* callback, const b2AABB& aabb) 
 }
 
 void Battlefield::step(WormHandler& worm_handler) {
+    updateProjectilesTimer();
     engine.clean_dead_entities();
     engine.step();
     worm_handler.update_physics();
