@@ -29,17 +29,15 @@ AudioPlayer::AudioPlayer(): background_music(nullptr) {
 
     for (const auto& key_path: key_filepath) {
         Mix_Chunk* chunk = Mix_LoadWAV(key_path.second.data());
-
+        chunks.insert({key_path.first, chunk});
         if (chunk) {
-            chunks.insert({key_path.first, chunk});
-            Mix_VolumeChunk(chunk, 100);
+            Mix_VolumeChunk(chunk, 40);
             continue;
         }
 
         spdlog::get("client")->error("Error al intentar cargar el sonido {:s}: {:s}",
                                      key_path.first, key_path.second);
     }
-
 }
 
 void AudioPlayer::play_background_music() {
@@ -51,20 +49,14 @@ void AudioPlayer::play_background_music() {
 
 
 void AudioPlayer::playAudio(const std::string& key) {
-    if (chunks.count(key) == 1) {
+    if (chunks.count(key) != 1) {
         return;
     }
 
-    int channel = Mix_PlayChannel(-1, chunks.at(key), -1);
-    if (channel == -1) {
+    if (Mix_PlayChannel(-1, chunks.at(key), -1) == -1) {
         spdlog::get("client")->error("Error al intentar reproducir el audio {:s}", key);
         return;
     }
-
-    while (Mix_Playing(channel) != 0) {
-        SDL_Delay(200);  // wait 200 milliseconds
-    }
-
 }
 AudioPlayer::~AudioPlayer() {
     for (auto& [key, chunk]: chunks) {
