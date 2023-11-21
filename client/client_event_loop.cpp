@@ -47,7 +47,7 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
 
                 if (state->is_walking) {
                     camera.fixActor(state->pos.x, state->pos.y, 32, 60);
-                    audio_player.playAudio("test");
+                    //audio_player.playAudio("test");
                 }
                 continue;
             }
