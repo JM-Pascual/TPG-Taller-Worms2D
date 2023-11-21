@@ -61,7 +61,9 @@ const TurnReset TurnHandler::advanceTurn(const uint8_t& players_quantity, WormHa
             break;
         }
 
-        if (players.at(player_turn)->is_playing) {
+        auto it = players.begin();
+        std::advance(it, player_turn);
+        if (it->second->is_playing) {
             break;
         }
     }
