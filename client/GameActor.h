@@ -10,6 +10,7 @@
 #include "box2d/b2_math.h"
 
 #include "Animation.h"
+#include "death_animation.h"
 #include "TexturesPool.h"
 #include "WeaponAnimation.h"
 #include "camera.h"
@@ -48,7 +49,7 @@ private:
     Animation walking;
     Animation jumping;
     Animation backflipping;
-    Animation dead;
+    DeathAnimation dead;
 
     WeaponAnimation weapon_animation;
 
@@ -68,6 +69,7 @@ public:
             walking(pool.get_actor_texture(Actors::WORM), 15, 1),
             jumping(pool.get_actor_texture(Actors::JUMPING_WORM), 5, 5, false),
             backflipping(pool.get_actor_texture(Actors::BACKFLIP_WORM), 22, 1, false),
+            dead(pool, 0),
             weapon_animation(pool) {}
 
     void update(std::shared_ptr<States>& actor_state) override {
@@ -81,10 +83,12 @@ public:
         was_hit = state->was_hit;
         aim_inclination_degrees = state->aim_inclination_degrees;
         life_points_remaining = state->life;
+        std::cout<<life_points_remaining<<std::endl;
 
         walking.update(!is_walking);
         jumping.update(!is_jumping);
         backflipping.update(!is_backflipping);
+        dead.update((life_points_remaining >= 50));
 
         bool charging_weapon = state->charging_weapon;
         weapon_animation.update(aim_inclination_degrees, charging_weapon, equipped_weapon,
@@ -92,22 +96,25 @@ public:
     }
 
     void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
-        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 32, 60);
+        SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 32, 60);
 
         if (is_jumping) {
-            jumping.render((*game_renderer), rect, 0, 0,
+            jumping.render((*game_renderer), render_rect, 0, 0,
                            facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
         } else if (is_backflipping) {
-            backflipping.render((*game_renderer), rect, 0, 0,
+            backflipping.render((*game_renderer), render_rect, 0, 0,
                                 facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
         } else if (is_walking) {
-            walking.render((*game_renderer), rect, 0, 0,
+            walking.render((*game_renderer), render_rect, 0, 0,
                            facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+        } else if (life_points_remaining <= 50){
+            SDL2pp::Rect death_render_rect = camera.calcRect(position.x, position.y, 60, 60);
+            dead.render((*game_renderer), death_render_rect);
         } else {
-            weapon_animation.render((*game_renderer), rect,
+            weapon_animation.render((*game_renderer), render_rect,
                                     facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
             state_printer.print_text((*game_renderer), std::to_string(int(life_points_remaining)),
-                                     rect.x +8, rect.y -30);
+                                     render_rect.x +8, render_rect.y -30);
         }
     }
 

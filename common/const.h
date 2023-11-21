@@ -78,7 +78,7 @@ enum class Projectiles{
 };
 
 enum class Tombstones{
-    TOMBSTONE_1,
+    TOMBSTONE_1 = 0x1,
     TOMBSTONE_2,
     TOMBSTONE_3,
     TOMBSTONE_4,
@@ -99,6 +99,7 @@ enum class Actors {
     WATER,
     JUMPING_WORM,
     BACKFLIP_WORM,
+    DYING_WORM,
     CROSSHAIR,
     POWER_CHARGE_BAR,
 };

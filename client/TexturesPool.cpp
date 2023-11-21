@@ -1,15 +1,5 @@
 #include "TexturesPool.h"
 
-TexturesPool::TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer) :
-        renderer(game_renderer) {
-    load_level_textures();
-    load_water_textures();
-    load_worm_textures();
-    load_weapon_textures();
-    load_projectile_textures();
-    load_effect_textures();
-}
-
 void TexturesPool::load_general_worm_textures() {
     /// Loads all the body actors_textures and enables alpha blending
     actors_textures.insert({Actors::WORM, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/worms/worm-left.png")
@@ -23,6 +13,10 @@ void TexturesPool::load_general_worm_textures() {
     actors_textures.insert({Actors::BACKFLIP_WORM, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/worms/worm-backflip.png")
                                                                                                           .SetColorKey(true, 0x000000))});
     actors_textures[Actors::BACKFLIP_WORM]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    actors_textures.insert({Actors::DYING_WORM, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/worms/worm-death.png")
+                                                                                                     .SetColorKey(true, 0x000000))});
+    actors_textures[Actors::DYING_WORM]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
 void TexturesPool::load_draw_textures() {
@@ -195,6 +189,17 @@ void TexturesPool::load_water_textures(){
     actors_textures.insert({Actors::WATER, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/blue-water-sprites/blue_water.png")
                                                                                            .SetColorKey(true, 0x000000))});
     actors_textures[Actors::WATER]->SetBlendMode(SDL_BLENDMODE_BLEND);
+}
+
+TexturesPool::TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer) :
+        renderer(game_renderer) {
+    load_level_textures();
+    load_water_textures();
+    load_worm_textures();
+    load_weapon_textures();
+    load_projectile_textures();
+    load_effect_textures();
+    load_tombstones_textures();
 }
 
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_actor_texture(Actors actor_to_fetch) {

@@ -4,21 +4,24 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "TexturesPool.h"
+#include "Animation.h"
 
 class DeathAnimation {
 private:
-    /** SDL texture of the raw death image. */
-    std::shared_ptr<SDL2pp::Texture> &worm_death_texture;
-    /** SDL texture of the raw tombstone image. */
-    std::shared_ptr<SDL2pp::Texture> &worm_tombstone_texture;
+    /** Animation of the death of the worm. */
+    Animation worm_death_animation;
+    /** Animation of the tombstone of the worm. */
+    Animation worm_tombstone_animation;
+    /** Animation of the explosion. */
+    Animation explosion;
     /** Current animation frame. */
     unsigned int currentFrame;
     /** Delay between frames. */
     unsigned int delay;
-    /** Whether the animation should loop or not. */
-    bool loop_animation;
     /** Counter for the animation. */
     unsigned int counter;
+
+    std::shared_ptr<SDL2pp::Texture>& search_random_tomstone(TexturesPool& pool);
 public:
     explicit DeathAnimation(TexturesPool& pool, unsigned int delay = 0);
 
