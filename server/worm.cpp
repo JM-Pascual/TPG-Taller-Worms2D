@@ -48,6 +48,10 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Weapon>*& selected_weapon,
 // necesario
 
 void Worm::move() {
+    if (not body) {
+        return;
+    }
+
     b2Vec2 vel = body->GetLinearVelocity();
     vel.x = 0.2f * (std::pow(-1, 1 - facing_right) / TICK_RATE) *
             400;                   // todo no se porque si encapsulo no funciona
@@ -55,12 +59,20 @@ void Worm::move() {
 }
 
 void Worm::stop() {
+    if (not body) {
+        return;
+    }
+
     b2Vec2 vel = body->GetLinearVelocity();
     vel.x = 0;
     body->SetLinearVelocity(vel);
 }
 
 void Worm::jump(const JumpDir& direction) {
+    if (not body) {
+        return;
+    }
+
     switch (direction) {
         case (JumpDir::FRONT):
             body->ApplyLinearImpulseToCenter(b2Vec2((facing_factor() * 20), 20), true);
@@ -117,11 +129,9 @@ b2Vec2 Worm::set_bullet_power() {
 }
 
 b2Vec2 Worm::set_bullet_direction() {
-    // Posición de la bala
-    //  x = (body.x + (hip * cos(ang_rad))
-    //  y = (body.y + (hip * sen(ang_rad))
-
-    // No chequeamos que el worm tenga body, ya que si disparo si lo tiene
+    if (not body) {
+        return;
+    }
 
     b2Vec2 bullet_position;
     bullet_position.x = (body->GetPosition().x +
@@ -208,6 +218,10 @@ void Worm::start_falling() {
 }
 
 void Worm::stop_falling() {
+    if (not body) {
+        return;
+    }
+
     auto vel = body->GetLinearVelocity();
 
     if (vel.y < MIN_Y_VELOCITY) {
