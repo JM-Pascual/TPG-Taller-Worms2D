@@ -1,8 +1,18 @@
 #include "death_animation.h"
-#include <stdlib.h>
+#include <random>
 
 std::shared_ptr<SDL2pp::Texture>& DeathAnimation::search_random_tomstone(TexturesPool& pool) {
-    return pool.get_tombstone_texture(static_cast<Tombstones>(rand() % 6 +1));
+    // Seed the random number generator
+    std::random_device rd;
+    std::mt19937 rng(rd());
+
+    // Define a distribution (e.g., integers between 1 and 100)
+    std::uniform_int_distribution<int> dist(1, 100);
+
+    // Generate a random number
+    int random_number = dist(rng);
+
+    return pool.get_tombstone_texture(static_cast<Tombstones>(random_number % 6 +1));
 }
 
 DeathAnimation::DeathAnimation(TexturesPool& pool, unsigned int delay) :
