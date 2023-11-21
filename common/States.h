@@ -55,14 +55,16 @@ public:
 
 class PlayerStateG: public States {
 public:
+    const uint8_t id_of_turn_player;
     const uint8_t id;
     const bool is_playing;
     const uint8_t avg_life;
     const std::unique_ptr<AmmoLeft> gadgets;
 
-    explicit PlayerStateG(const bool& is_playing, const uint8_t& id, const uint8_t& avg_life,
-                          std::unique_ptr<AmmoLeft> weapon_ammo):
+    explicit PlayerStateG(uint8_t id_of_active_worm , const bool& is_playing, const uint8_t& id,
+                          const uint8_t& avg_life, std::unique_ptr<AmmoLeft> weapon_ammo):
             States(StatesTag::PLAYER_G),
+            id_of_turn_player(id_of_active_worm),
             id(id),
             is_playing(is_playing),
             avg_life(avg_life),

@@ -25,3 +25,10 @@ void ActorHolder::render_actors(std::shared_ptr<SDL2pp::Renderer>& game_renderer
         actor.second.second->render(game_renderer);
     }
 }
+
+void ActorHolder::print_actors_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                                     TextPrinter& state_printer) {
+    for (auto& actor: active_actors) {
+        actor.second->print_state(game_renderer, state_printer);
+    }
+}

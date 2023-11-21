@@ -30,6 +30,8 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
 
         switch (raw_state->tag) {
             case StatesTag::PLAYER_G: {
+                auto state = std::dynamic_pointer_cast<PlayerStateG>(raw_state);
+                id_of_active_player = state->id_of_turn_player;
                 continue;
             }
 
@@ -113,7 +115,9 @@ void EventLoop::run() {
     TexturesPool txt_pool(window.get_renderer());
 
     SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+
     SDL2pp::SDLTTF ttf;
+    TextPrinter state_printer(18);
 
     audio_player.play_background_music();
 
@@ -136,7 +140,9 @@ void EventLoop::run() {
         // tiempo restante turno = (uint8_t)(60 - turn_time)
 
         players.render_actors(window.get_renderer());
+        players.print_actors_state(window.get_renderer(), state_printer);
         proyectiles.render_actors(window.get_renderer());
+        proyectiles.print_actors_state(window.get_renderer(), state_printer);
 
         water_animation.update();
 

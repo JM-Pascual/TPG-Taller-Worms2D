@@ -27,6 +27,8 @@ public:
     GameActor(const float& x, const float& y, Camera& camera): position(x, y), camera(camera) {}
     virtual void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) = 0;
     virtual void update(std::shared_ptr<States>& actor_state) = 0;
+    virtual void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                     TextPrinter& state_printer) = 0;
     virtual ~GameActor() = default;
 };
 
@@ -43,8 +45,6 @@ private:
     float life_points_remaining;
 
     float aim_inclination_degrees;
-
-    TextPrinter state_printer;
 
     Animation walking;
     Animation jumping;
@@ -64,7 +64,6 @@ public:
             was_hit(initial_state->was_hit),
             life_points_remaining(initial_state->life),
             aim_inclination_degrees(initial_state->aim_inclination_degrees),
-            state_printer(18),
 
             walking(pool.get_actor_texture(Actors::WORM), 15, 1),
             jumping(pool.get_actor_texture(Actors::JUMPING_WORM), 5, 5, false),
@@ -112,9 +111,15 @@ public:
         } else {
             weapon_animation.render((*game_renderer), render_rect,
                                     facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-            state_printer.print_text((*game_renderer), std::to_string(int(life_points_remaining)),
-                                     render_rect.x +8, render_rect.y -30);
         }
+    }
+
+    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                           TextPrinter& state_printer) override {
+        SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 32, 60);
+        state_printer.print_text((*game_renderer), std::to_string(int(life_points_remaining)),
+                                 render_rect.x +8, render_rect.y -30);
+
     }
 
     ~Worm() override = default;
@@ -168,6 +173,9 @@ public:
                           (-1 * (current_angle * 180) / M_PI));
         }
     }
+
+    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                     TextPrinter& state_printer) override {}
 };
 
 // ----------------------- GREEN GRENADE ----------------------
@@ -203,6 +211,9 @@ public:
                           (-1 * (current_angle * 180) / M_PI));
         }
     }
+
+    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                     TextPrinter& state_printer) override {}
 };
 
 // ----------------------- BANANA ----------------------
@@ -238,6 +249,9 @@ public:
                           (-1 * (current_angle * 180) / M_PI));
         }
     }
+
+    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                     TextPrinter& state_printer) override {}
 };
 
 // ----------------------- DYNAMITE ----------------------
@@ -269,6 +283,9 @@ public:
             countdown.render((*game_renderer), rect);
         }
     }
+
+    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                     TextPrinter& state_printer) override {}
 };
 
 #endif  // GAMEACTOR_H

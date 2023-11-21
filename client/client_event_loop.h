@@ -29,10 +29,11 @@ private:
     ClientSide::Receiver recv;
     ClientSide::Sender send;
 
-    /// media specific atributes
+    /// Media specific atributes and info for rendering
     Camera camera;
     IHandler input;
     AudioPlayer audio_player;
+    uint8_t id_of_active_player;
 
     /// Holders for actors in the game
     ActorHolder players;

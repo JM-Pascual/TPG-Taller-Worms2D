@@ -137,10 +137,10 @@ std::shared_ptr<GameInfoL> ClientSide::Protocol::recvGameInfo() {
 }
 
 std::shared_ptr<PlayerStateG> ClientSide::Protocol::recvPlayerGame() {
+    uint8_t id_of_active_player = recvUint8();
     uint8_t id = recvUint8();
     bool is_playing = recvBool();
     auto ammo_left = std::make_unique<AmmoLeft>();
-    uint8_t avg_life = recvUint8();
 
     for (size_t i = 0; i < GADGETS_QUANTITY; i++) {
         WeaponsAndTools type = (WeaponsAndTools)recvUint8();
@@ -148,7 +148,10 @@ std::shared_ptr<PlayerStateG> ClientSide::Protocol::recvPlayerGame() {
         ammo_left->weapon_ammo.insert({type, ammo});
     }
 
-    return std::make_shared<PlayerStateG>(is_playing, id, avg_life, std::move(ammo_left));
+    uint8_t avg_life = recvUint8();
+
+    return std::make_shared<PlayerStateG>(id_of_active_player, is_playing,
+                                          id, avg_life, std::move(ammo_left));
 }
 
 std::shared_ptr<WormStateG> ClientSide::Protocol::recvWormGame() {
