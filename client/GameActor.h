@@ -83,7 +83,6 @@ public:
         was_hit = state->was_hit;
         aim_inclination_degrees = state->aim_inclination_degrees;
         life_points_remaining = state->life;
-        std::cout<<life_points_remaining<<std::endl;
 
         walking.update(!is_walking);
         jumping.update(!is_jumping);
