@@ -18,6 +18,8 @@ private:
     std::atomic<bool>& quit;
     std::atomic<bool>& my_turn;
     Camera& camera;
+    bool clickable_gadget;
+    bool grenade_selected;
 
     void keyDown(const SDL_Keycode& key);
 

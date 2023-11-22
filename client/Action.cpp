@@ -61,6 +61,14 @@ FirePower::FirePower(): Action(Actions::FIRE_POWER) {}
 
 Shoot::Shoot(): Action(Actions::SHOOT) {}
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Use Clickable ~~~~~~~~~~~~~~~~~~~~
+
+void UseClickable::send(ClientSide::Protocol& protocol) {
+    Action::send(protocol);
+    protocol.sendFloat(x);
+    protocol.sendFloat(y);
+}
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Delay ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Delay::Delay(DelayAmount amount): Action(Actions::DELAY), amount(amount) {}

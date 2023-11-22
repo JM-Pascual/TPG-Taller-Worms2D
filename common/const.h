@@ -66,6 +66,7 @@ enum class Actions {
     SHOOT,  // stop fpower + shoot
     DELAY,
     CHANGE_WEAPON_OR_TOOL,
+    USE_CLICKABLE,
 
     // Cheats
     WW3,

@@ -50,6 +50,13 @@ float ClientSide::Protocol::recvFloat() {
     return float_value;
 }
 
+void ClientSide::Protocol::sendFloat(const float& number) {
+    uint32_t number_net;
+    memcpy(&number_net, &number, sizeof(uint32_t));
+    number_net = htonl(number_net);
+    send(&number_net, sizeof(uint32_t));
+}
+
 bool ClientSide::Protocol::recvBool() {
     bool bool_net;
     recv(&bool_net, sizeof(bool));

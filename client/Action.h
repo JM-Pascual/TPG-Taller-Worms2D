@@ -102,6 +102,19 @@ public:
     ~Shoot() = default;
 };
 
+class UseClickable: public Action {
+private:
+    const float x;
+    const float y;
+
+public:
+    UseClickable(const float& x, const float& y): Action(Actions::USE_CLICKABLE), x(x), y(y) {}
+
+    void send(ClientSide::Protocol& protocol) override;
+
+    ~UseClickable() = default;
+};
+
 class Delay: public Action {
 private:
     const DelayAmount amount;
