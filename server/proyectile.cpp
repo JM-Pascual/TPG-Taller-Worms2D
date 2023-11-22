@@ -145,6 +145,15 @@ MortarFragment::MortarFragment(Battlefield &battlefield, b2Vec2 position, b2Vec2
     body->ApplyLinearImpulseToCenter(direction,true);
 }
 
+//~~~~~~~~~~~~~~~~~~~ MortarFragment ~~~~~~~~~~~~~~~~~~~~
+
+AirStrikeRocket::AirStrikeRocket(Battlefield &battlefield, b2Vec2 position) :
+        Rocket(battlefield, position, BLAST_RADIUS_AIR_STRIKE,
+               EPICENTER_DAMAGE_AIR_STRIKE, WeaponsAndTools::AIR_STRIKE) {
+
+}
+
+
 
 //~~~~~~~~~~~~~~~~~~~ Grenade ~~~~~~~~~~~~~~~~~~~~
 
@@ -210,6 +219,5 @@ Banana::Banana(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_dela
 Dynamite::Dynamite(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_DYNAMITE,
                 EPICENTER_DAMAGE_DYNAMITE, WeaponsAndTools::DYNAMITE) {}
-
 
 
