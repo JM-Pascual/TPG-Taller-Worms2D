@@ -5,7 +5,8 @@
 #include "weapon.h"
 
 Worm::Worm(Battlefield& battlefield, std::unique_ptr<Weapon>*& selected_weapon,
-           WeaponsAndTools& type, const uint8_t& id):
+           WeaponsAndTools& type, const uint8_t& id, const bool& allow_multiple_jump,
+           const bool& immortal_worms):
         Entity(battlefield),
         life(INITIAL_LIFE),
         facing_right(true),
@@ -22,6 +23,8 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Weapon>*& selected_weapon,
         weapon_type(type),
         was_damaged(false),
         pos_y_before_falling(0.0f),
+        allow_multiple_jump(allow_multiple_jump),
+        immortal_worms(immortal_worms),
         id(id) {
     b2BodyDef wormDef;
     wormDef.type = b2_dynamicBody;
@@ -70,6 +73,10 @@ void Worm::stop() {
 
 void Worm::jump(const JumpDir& direction) {
     if (not body) {
+        return;
+    }
+
+    if ((not allow_multiple_jump) && (is_jumping || is_backflipping)) {
         return;
     }
 
@@ -124,7 +131,7 @@ b2Vec2 Worm::set_bullet_power() {
     //  f_y = fuerza_total * sen(ang_rad * pi/180)
     b2Vec2 bullet_power;
     bullet_power.x = (weapon_power * facing_factor()) * cosf(aim_inclination_degrees);
-    bullet_power.y = (weapon_power) * sinf(aim_inclination_degrees);
+    bullet_power.y = (weapon_power)*sinf(aim_inclination_degrees);
     return bullet_power;
 }
 
@@ -182,6 +189,8 @@ Worm::Worm(Worm&& o):
         selected_weapon(o.selected_weapon),
         weapon_type(o.weapon_type),
         pos_y_before_falling(o.pos_y_before_falling),
+        allow_multiple_jump(o.allow_multiple_jump),
+        immortal_worms(o.immortal_worms),
         id(o.id) {
 
     o.life = 0;
@@ -220,10 +229,9 @@ void Worm::stop_falling() {
 
     auto vel = body->GetLinearVelocity();
 
-        if (vel.y < MIN_Y_VELOCITY) {
+    if (vel.y < MIN_Y_VELOCITY) {
         is_jumping = false;
         is_backflipping = false;
-
     }
 
     if (body->GetLinearVelocity().LengthSquared() < MIN_SQUARED_VELOCITY) {
@@ -241,6 +249,10 @@ void Worm::stop_falling() {
 }
 
 void Worm::recibe_life_modification(const float& life_variation) {
+    if (immortal_worms) {
+        return;
+    }
+
     if (life_variation < 0) {
         was_damaged = true;
     }

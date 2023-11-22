@@ -37,6 +37,30 @@ std::shared_ptr<PlayerAction> ServerSide::Parser::makePlayerAction(const Actions
         case Actions::CHANGE_WEAPON_OR_TOOL:
             return std::make_shared<ChangeGadget>(protocol, id);
 
+        case Actions::WW3:
+            return std::make_shared<WW3Cheat>(id);
+
+        case Actions::RANDOM_KILL:
+            return std::make_shared<NoWindCheat>(id);
+
+        case Actions::INFINITE_AMMO:
+            return std::make_shared<InfiniteAmmoCheat>(id);
+
+        case Actions::MADNESS:
+            return std::make_shared<MadnessCheat>(id);
+
+        case Actions::IMMORTAL_WORM:
+            return std::make_shared<ImmortalWorm>(id);
+
+        case Actions::MULTIPLE_JUMP:
+            return std::make_shared<MultipleJumpCheat>(id);
+
+        case Actions::INFINITE_TURN:
+            return std::make_shared<InfiniteTurnCheat>(id);
+
+        case Actions::EVERYONE_1HP:
+            return std::make_shared<Everyone1HPCheat>(id);
+
         default:
             return std::make_shared<NullCommand>();
     }

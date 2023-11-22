@@ -15,7 +15,9 @@ Player::Player():
         is_playing(true),
         selected_weapon(nullptr),
         selected_gadget_type(WeaponsAndTools::BAZOOKA),
-        worm_turn(0) {
+        worm_turn(0),
+        allow_multiple_jump(false),
+        immortal_worms(false) {
     weapons.insert({WeaponsAndTools::BAZOOKA, std::make_unique<Bazooka>()});
     weapons.insert({WeaponsAndTools::MORTAR, std::make_unique<Mortar>()});
     weapons.insert({WeaponsAndTools::GREEN_GRENADE, std::make_unique<GreenGrenade>()});
@@ -44,7 +46,8 @@ void Player::spawnWorms(Battlefield& battlefield, const uint8_t worms_quantity,
                         uint8_t& worm_counter) {
     for (uint8_t i = 0; i < worms_quantity; i++) {
         worms.push_back(std::make_shared<Worm>(battlefield, selected_weapon, selected_gadget_type,
-                                               worm_counter++));
+                                               worm_counter++, allow_multiple_jump,
+                                               immortal_worms));
     }
 }
 
@@ -77,9 +80,19 @@ Player::Player(Player&& o):
         is_playing(o.is_playing),
         selected_weapon(o.selected_weapon),
         selected_gadget_type(o.selected_gadget_type),
-        worm_turn(o.worm_turn) {
+        worm_turn(o.worm_turn),
+        allow_multiple_jump(o.allow_multiple_jump),
+        immortal_worms(o.immortal_worms) {
     o.selected_weapon = nullptr;
     o.ready = false;
     o.is_playing = false;
     o.worm_turn = 0;
+    o.allow_multiple_jump = false;
+    o.immortal_worms = false;
+}
+
+void Player::infiniteAmmo() {
+    for (const auto& weapon: weapons) {
+        weapon.second->infiniteAmmo();
+    }
 }

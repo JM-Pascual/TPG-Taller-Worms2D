@@ -15,22 +15,22 @@ void CheatMenu::loadHandlers() {
     connect(ui->ww3Button, &QPushButton::clicked, this,
             [this]() { this->action_queue.push(std::make_shared<WW3Cheat>()); });
 
-    connect(ui->madnessButton, &QPushButton::clicked, this,
-            [this]() { this->action_queue.push(std::make_shared<RandomKillCheat>()); });
-
-    connect(ui->randomKillButton, &QPushButton::clicked, this,
-            [this]() { this->action_queue.push(std::make_shared<InfiniteAmmoCheat>()); });
+    connect(ui->noWindButton, &QPushButton::clicked, this,
+            [this]() { this->action_queue.push(std::make_shared<NoWindCheat>()); });
 
     connect(ui->infiniteAmmoButton, &QPushButton::clicked, this,
+            [this]() { this->action_queue.push(std::make_shared<InfiniteAmmoCheat>()); });
+
+    connect(ui->madnessButton, &QPushButton::clicked, this,
             [this]() { this->action_queue.push(std::make_shared<MadnessCheat>()); });
 
-    connect(ui->infiniteTurnButton, &QPushButton::clicked, this,
+    connect(ui->inmortalWormButton, &QPushButton::clicked, this,
             [this]() { this->action_queue.push(std::make_shared<ImmortalWorm>()); });
 
-    connect(ui->inmortalWormButton, &QPushButton::clicked, this,
+    connect(ui->multipleJumpButton, &QPushButton::clicked, this,
             [this]() { this->action_queue.push(std::make_shared<MultipleJumpCheat>()); });
 
-    connect(ui->multipleJumpButton, &QPushButton::clicked, this,
+    connect(ui->infiniteTurnButton, &QPushButton::clicked, this,
             [this]() { this->action_queue.push(std::make_shared<InfiniteTurnCheat>()); });
 
     connect(ui->everyone1HPButton, &QPushButton::clicked, this,

@@ -42,7 +42,9 @@ void Battlefield::step(WormHandler& worm_handler) {
     worm_handler.update_weapon();
 }
 
-void Battlefield::newWindForce() { engine.newWindForce(); }
+void Battlefield::newWindForce(const bool& no_wind_cheat_activated) {
+    engine.newWindForce(no_wind_cheat_activated);
+}
 
 void Battlefield::add_projectile(std::shared_ptr<Projectile>& proyectile) {
     projectiles.insert({projectile_count++, proyectile});
@@ -62,4 +64,3 @@ void Battlefield::remove_collided_projectiles() {
 void Battlefield::destroy_dead_entities() { engine.destroy_dead_entities(); }
 
 const bool Battlefield::noProjectiles() { return projectiles.empty(); }
-

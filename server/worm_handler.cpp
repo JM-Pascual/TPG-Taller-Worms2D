@@ -1,10 +1,16 @@
 #include "worm_handler.h"
 
 #include <algorithm>
+#include <cstdlib>
+#include <ctime>
 #include <numeric>
 
 #include "Player.h"
 #include "worm.h"
+
+WormHandler::WormHandler(std::map<uint8_t, std::unique_ptr<Player>>& players): players(players) {
+    srand(time(NULL));
+}
 
 void WormHandler::getTurnWorm(const uint8_t& id, const uint8_t& worm_index) {
     turn_worm = players.at(id)->worms.at(worm_index);
@@ -152,3 +158,28 @@ const bool WormHandler::allWormsStayStill() {
 
     return true;
 }
+
+void WormHandler::allWorms1HP() {
+    for (const auto& [id, player]: players) {
+        for (const auto& worm: player->worms) {
+            worm->life = 1;
+        }
+    }
+}
+
+void WormHandler::playerAllowMultipleJump(const uint8_t& id) {
+    players.at(id)->allow_multiple_jump = !players.at(id)->allow_multiple_jump;
+}
+
+void WormHandler::makePlayerWormsImmortal(const uint8_t& id) {
+    players.at(id)->immortal_worms = !players.at(id)->immortal_worms;
+}
+
+void WormHandler::killRandomWorm() {
+    auto& player = players.at(rand() % players.size());
+    size_t worm_idx = rand() % player->worms.size();
+    player->worms.at(worm_idx)->destroyBody();
+    player->worms.erase(player->worms.begin() + worm_idx);
+}
+
+void WormHandler::playerInfiniteAmmo(const uint8_t& id) { players.at(id)->infiniteAmmo(); }

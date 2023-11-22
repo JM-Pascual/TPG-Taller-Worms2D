@@ -195,11 +195,11 @@ public:
     ~WW3Cheat() = default;
 };
 
-class RandomKillCheat: public Action {
+class NoWindCheat: public Action {
 public:
-    RandomKillCheat(): Action(Actions::RANDOM_KILL) {}
+    NoWindCheat(): Action(Actions::RANDOM_KILL) {}
 
-    ~RandomKillCheat() = default;
+    ~NoWindCheat() = default;
 };
 
 class InfiniteAmmoCheat: public Action {

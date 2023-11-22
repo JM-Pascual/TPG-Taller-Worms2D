@@ -14,14 +14,13 @@ Queue<std::shared_ptr<PlayerAction>>& GameLoop::get_action_queue() { return this
 
 void GameLoop::run() {
     std::chrono::duration<float> elapsed_seconds = std::chrono::duration<float>(0);
-    TurnHandler turn_handler(game.players);
+    TurnHandler turn_handler(game.players, game.broadcaster, game.worm_handler, game.battlefield);
 
     while (game.is_playing()) {
         std::chrono::time_point<std::chrono::steady_clock> before =
                 std::chrono::steady_clock::now();
 
-        ActualTurn turn_id = turn_handler.updateTurn(elapsed_seconds, game.broadcaster,
-                                                     game.worm_handler, game.battlefield);
+        ActualTurn turn_id = turn_handler.updateTurn(elapsed_seconds);
 
         std::shared_ptr<PlayerAction> c;
         if (action_queue.try_pop(c)) {

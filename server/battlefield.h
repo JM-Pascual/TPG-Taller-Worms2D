@@ -45,7 +45,7 @@ public:
 
     void step(WormHandler& worm_handler);
 
-    void newWindForce();
+    void newWindForce(const bool& no_wind_cheat_activated);
 
     void add_projectile(std::shared_ptr<Projectile>& proyectile);
 
