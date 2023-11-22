@@ -17,7 +17,7 @@ void Battlefield::updateProjectilesTimer() {
 
 void Battlefield::post_action_explosion() {
     for (auto& projectile: projectiles) {
-        projectile.second->execute_second_collision_reaction();
+        projectile.second->second_collision_reaction();
     }
 }
 

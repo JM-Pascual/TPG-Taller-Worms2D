@@ -69,7 +69,7 @@ void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 app
 
     b2Vec2 blastDir = applyPoint - blastCenter;
     float distance = blastDir.Normalize();
-    // ignore bodies exactly at the blast point - blast direction is undefined
+
     float impulseMag;
     if (distance == 0) {
         return;
@@ -91,14 +91,14 @@ void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 app
 Rocket::Rocket(Battlefield& battlefield, b2Vec2 position,int blast_radius, int epicenter_damage, WeaponsAndTools type):
         Projectile(battlefield, position, blast_radius, epicenter_damage,type) {}
 
-void Rocket::execute_collision_reaction() {
+void Rocket::collision_reaction() {
     if (not dead) {
         collide();
         dead = true;
     }
 }
 
-void Rocket::applyWindResistence(const float& wind_force) {
+void Rocket::applyWindResistance(const float& wind_force) {
     this->body->ApplyForce(b2Vec2(wind_force, 0), this->body->GetWorldCenter(), true);
 }
 
@@ -113,9 +113,10 @@ BazookaRocket::BazookaRocket(Battlefield &battlefield, b2Vec2 position) : Rocket
 
 //~~~~~~~~~~~~~~~~~~~ Mortar ~~~~~~~~~~~~~~~~~~~~
 
-MortarRocket::MortarRocket(Battlefield &battlefield, b2Vec2 position) : Rocket(battlefield, position, BLAST_RADIUS_MORTAR, EPICENTER_DAMAGE_MORTAR, WeaponsAndTools::BAZOOKA), fragments(FRAGMENT_POWER) {}
+MortarRocket::MortarRocket(Battlefield &battlefield, b2Vec2 position) : Rocket(battlefield, position, BLAST_RADIUS_MORTAR, EPICENTER_DAMAGE_MORTAR, WeaponsAndTools::MORTAR
+), fragments(FRAGMENT_POWER) {}
 
-void MortarRocket::execute_second_collision_reaction() {
+void MortarRocket::second_collision_reaction() {
     if(not collided){
         return;
     }
@@ -139,7 +140,7 @@ void MortarRocket::execute_second_collision_reaction() {
 
 MortarFragment::MortarFragment(Battlefield &battlefield, b2Vec2 position, b2Vec2 direction) :
         Rocket(battlefield, position, BLAST_RADIUS_MORTAR_FRAGMENT,
-               EPICENTER_DAMAGE_MORTAR_FRAGMENT, WeaponsAndTools::BAZOOKA) {
+               EPICENTER_DAMAGE_MORTAR_FRAGMENT, WeaponsAndTools::MORTAR_FRAGMENT) {
 
     body->ApplyLinearImpulseToCenter(direction,true);
 
@@ -155,7 +156,7 @@ Grenade::Grenade(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_de
         explosion_delay(explosion_delay),
         grenade_timer(std::chrono::steady_clock::now()) {}
 
-void Grenade::execute_collision_reaction() {}
+void Grenade::collision_reaction() {}
 
 void Grenade::updateTimer() {
     if (dead) {
@@ -172,19 +173,34 @@ void Grenade::updateTimer() {
     }
 }
 
-void Grenade::applyWindResistence(const float& wind_force) {}
-
-// bool Grenade::multiple_contact() {
-// La idea en este caso es que puede colisionar más de una vez, pero solo se va a "morir" en el caso
-// de que se termine el tiempo
-//}
+void Grenade::applyWindResistance(const float& wind_force) {}
 
 
 Green::Green(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_GREEN_GRENADE,
-                EPICENTER_DAMAGE_GREEN_GRENADE, WeaponsAndTools::GREEN_GRENADE) {
+                EPICENTER_DAMAGE_GREEN_GRENADE, WeaponsAndTools::GREEN_GRENADE) {}
 
+Red::Red(Battlefield &battlefield, b2Vec2 position, uint8_t explosion_delay):
+        Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_RED_GRENADE,
+                EPICENTER_DAMAGE_RED_GRENADE, WeaponsAndTools::RED_GRENADE), fragments(FRAGMENTS_AMOUNT) {}
 
+void Red::second_collision_reaction() {
+    if(not dead){
+        return;
+    }
+    for (int i = 0; i < fragments; i++) {
+
+        float angle = (i / (float)fragments) * 360 * DEGTORAD;
+        b2Vec2 rayDir( sinf(angle), cosf(angle) );
+
+        b2Vec2 position;
+        position.x = body->GetPosition().x;
+        position.y = body->GetPosition().y + 1.0f;
+
+        std::shared_ptr<Projectile> projectile =
+                std::make_shared<MortarFragment>(battlefield, position,rayDir);
+        battlefield.add_projectile(projectile);
+    }
 }
 
 Banana::Banana(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay):

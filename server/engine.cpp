@@ -60,7 +60,7 @@ void Engine::applyWindForce() {
             continue;
         }
 
-        entity->applyWindResistence(wind_force);
+        entity->applyWindResistance(wind_force);
 
         if (not body_list->GetNext()) {
             break;

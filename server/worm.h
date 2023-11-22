@@ -93,11 +93,11 @@ public:
     // void use_clickeable_gadget();
 
     bool is_dead() override;
-    void execute_collision_reaction() override;
+    void collision_reaction() override;
 
     void destroyBody();
 
-    void applyWindResistence(const float& wind_force) override;
+    void applyWindResistance(const float& wind_force) override;
 
     virtual ~Worm() = default;
 

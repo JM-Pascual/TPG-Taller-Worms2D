@@ -154,7 +154,7 @@ bool Worm::is_dead() {
     return dead;
 }
 
-void Worm::execute_collision_reaction() {}
+void Worm::collision_reaction() {}
 
 void Worm::destroyBody() {
     battlefield.destroy_body(body);
@@ -242,4 +242,4 @@ void Worm::recibe_life_modification(const float& life_variation) {
     }
 }
 
-void Worm::applyWindResistence(const float& wind_force) {}
+void Worm::applyWindResistance(const float& wind_force) {}
