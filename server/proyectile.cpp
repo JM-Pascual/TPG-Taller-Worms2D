@@ -143,8 +143,6 @@ MortarFragment::MortarFragment(Battlefield &battlefield, b2Vec2 position, b2Vec2
                EPICENTER_DAMAGE_MORTAR_FRAGMENT, WeaponsAndTools::MORTAR_FRAGMENT) {
 
     body->ApplyLinearImpulseToCenter(direction,true);
-
-    //body.GE fragment_fixture.density = 60 / (float)fragments; // very high - shared across all particles
 }
 
 

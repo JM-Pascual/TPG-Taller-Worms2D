@@ -20,7 +20,7 @@ void Bazooka::execute(Battlefield& battlefield, Worm& worm) {
     b2Vec2 projectile_position = worm.set_bullet_direction();
 
     std::shared_ptr<Projectile> projectile =
-            std::make_shared<MortarRocket>(battlefield, projectile_position);
+            std::make_shared<BazookaRocket>(battlefield, projectile_position);
     battlefield.add_projectile(projectile);
 
     worm.shoot_aim_weapon(projectile);
