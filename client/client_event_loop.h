@@ -4,21 +4,24 @@
 #include <atomic>
 #include <memory>
 
+#include "../common/thread.h"
+
+#include "ActorHolder.h"
+#include "TexturesPool.h"
+#include "Window.h"
 #include "audio_player.h"
-#include "text_printer.h"
 #include "camera.h"
 #include "cprotocol.h"
 #include "creceiver.h"
 #include "csender.h"
 #include "inputHandler.h"
-#include "TexturesPool.h"
-#include "Window.h"
-#include "ActorHolder.h"
+#include "text_printer.h"
 
 class Action;
 class States;
+class CheatMenu;
 
-class EventLoop {
+class EventLoop: public Thread {
 
 private:
     /// thread specific atributes
@@ -34,6 +37,7 @@ private:
     IHandler input;
     AudioPlayer audio_player;
     uint8_t id_of_active_player;
+    std::unique_ptr<CheatMenu>& cheat_menu;
 
     /// Holders for actors in the game
     ActorHolder players;
@@ -45,7 +49,7 @@ private:
     Queue<std::shared_ptr<Action>> action_queue;
 
     void process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
-                                TexturesPool& txt_pool);
+                             TexturesPool& txt_pool);
 
     void update_terrain(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
                               Animation& water_animation);
@@ -53,17 +57,19 @@ public:
     /*
         Construye el cliente con su protocolo
     */
-    explicit EventLoop(const char* hostname, const char* servname);
+    explicit EventLoop(const char* hostname, const char* servname,
+                       std::unique_ptr<CheatMenu>& cheat_menu);
     /*
         Corre el cliente
     */
-    void run();
+    void run() override;
 
     ~EventLoop();
 
     friend class MainWindow;
     friend class GameFrame;
     void update_terrain(std::shared_ptr<SDL2pp::Renderer> ptr);
+    friend class CheatMenu;
 };
 
 
