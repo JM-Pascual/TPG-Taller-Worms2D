@@ -89,6 +89,7 @@ void WormHandler::update_weapon() {
     }
 }
 
+
 void WormHandler::update_physics() {
     if (not turn_worm) {
         return;

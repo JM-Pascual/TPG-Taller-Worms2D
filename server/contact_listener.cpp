@@ -55,8 +55,9 @@ void Contact_listener::PreSolve(b2Contact* contact, const b2Manifold* oldManifol
     auto* dataA = reinterpret_cast<Entity*>(contact1);
 
     if(dataA && dataB) {
-        dataA->execute_collision_reaction();
-        dataB->execute_collision_reaction();
+
+        dataA->collision_reaction();
+        dataB->collision_reaction();
     }
 }
 

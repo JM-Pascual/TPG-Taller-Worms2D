@@ -14,6 +14,13 @@ void Battlefield::updateProjectilesTimer() {
     }
 }
 
+
+void Battlefield::post_action_explosion() {
+    for (auto& projectile: projectiles) {
+        projectile.second->second_collision_reaction();
+    }
+}
+
 std::map<uint8_t, std::shared_ptr<Projectile>>& Battlefield::getProjectiles() {
     return projectiles;
 }
@@ -30,6 +37,7 @@ void Battlefield::step(WormHandler& worm_handler) {
     updateProjectilesTimer();
     engine.clean_dead_entities();
     engine.step();
+    post_action_explosion();
     worm_handler.update_physics();
     worm_handler.update_weapon();
 }
@@ -47,7 +55,6 @@ void Battlefield::remove_collided_projectiles() {
             it = projectiles.erase(it);
             continue;
         }
-
         ++it;
     }
 }
@@ -55,3 +62,4 @@ void Battlefield::remove_collided_projectiles() {
 void Battlefield::destroy_dead_entities() { engine.destroy_dead_entities(); }
 
 const bool Battlefield::noProjectiles() { return projectiles.empty(); }
+

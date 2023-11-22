@@ -11,6 +11,8 @@
 #define GREEN_GRENADE_AMMO uint8_t(255)
 #define BANANA_AMMO uint8_t(5)
 #define DYNAMITE_AMMO uint8_t(5)
+#define MORTAR_AMMO uint8_t(10)
+#define RED_GRENADE_AMMO uint8_t(10)
 
 class Worm;
 class Game;
@@ -39,13 +41,32 @@ public:
     virtual ~Bazooka() = default;
 };
 
-//~~~~~~~~~~~~~~~~~~~ Green_grenade ~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~ Mortar ~~~~~~~~~~~~~~~~~~~~
+
+class Mortar: public Weapon {
+public:
+    Mortar();
+    void execute(Battlefield& battlefield, Worm& worm) override;
+    virtual ~Mortar() = default;
+};
+
+
+//~~~~~~~~~~~~~~~~~~~ GreenGrenade ~~~~~~~~~~~~~~~~~~~~
 
 class GreenGrenade: public Weapon {
 public:
     GreenGrenade();
     void execute(Battlefield& battlefield, Worm& worm) override;
     virtual ~GreenGrenade() = default;
+};
+
+//~~~~~~~~~~~~~~~~~~~ RedGrenade ~~~~~~~~~~~~~~~~~~~~
+
+class RedGrenade: public Weapon {
+public:
+    RedGrenade();
+    void execute(Battlefield& battlefield, Worm& worm) override;
+    virtual ~RedGrenade() = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ Banana ~~~~~~~~~~~~~~~~~~~~

@@ -15,7 +15,7 @@ Bar::Bar(Battlefield& battlefield): Entity(battlefield) {
     body->CreateFixture(&barBox, 0.0f);
 }
 
-void Bar::execute_collision_reaction() {
+void Bar::collision_reaction() {
     Query_callback queryCallback;
     b2AABB aabb;
     aabb.lowerBound = body->GetPosition() - b2Vec2(76.8 / 2, 0.8f / 2);
@@ -30,4 +30,4 @@ void Bar::execute_collision_reaction() {
     }
 }
 
-void Bar::applyWindResistence(const float& wind_force) {}
+void Bar::applyWindResistance(const float& wind_force) {}

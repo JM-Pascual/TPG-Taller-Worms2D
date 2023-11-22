@@ -27,7 +27,7 @@
 #define INCLINACION_MIN (-b2_pi / 2)
 
 #define MIN_SQUARED_VELOCITY 0.0001
-#define MIN_Y_VELOCITY 0.01
+#define MIN_Y_VELOCITY 0.001
 
 #define MIN_FALLING_DAMAGE_HEIGHT 2.0f
 #define MAX_FALLING_DAMAGE 25.0f
@@ -93,11 +93,11 @@ public:
     // void use_clickeable_gadget();
 
     bool is_dead() override;
-    void execute_collision_reaction() override;
+    void collision_reaction() override;
 
     void destroyBody();
 
-    void applyWindResistence(const float& wind_force) override;
+    void applyWindResistance(const float& wind_force) override;
 
     virtual ~Worm() = default;
 

@@ -30,6 +30,7 @@ private:
     Level_holder level_holder;
 
     void updateProjectilesTimer();
+    void post_action_explosion();
 
 public:
     Battlefield(): projectile_count(0), level_holder(*this) {}

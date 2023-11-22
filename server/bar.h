@@ -12,9 +12,9 @@ class Bar: public Entity {
 public:
     explicit Bar(Battlefield& battlefield);
 
-    void execute_collision_reaction() override;
+    void collision_reaction() override;
 
-    void applyWindResistence(const float& wind_force) override;
+    void applyWindResistance(const float& wind_force) override;
 };
 
 

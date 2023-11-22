@@ -15,6 +15,9 @@ protected:
     Battlefield& battlefield;
     bool collided;
 
+
+
+
 public:
     explicit Entity(Battlefield& battlefield);
 
@@ -22,7 +25,9 @@ public:
 
     void end_contact();
 
-    virtual void applyWindResistence(const float& wind_force) = 0;
+    virtual void applyWindResistance(const float& wind_force) = 0;
+
+    virtual void apply_explosion(b2Vec2 final_impulse);
 
     virtual void stop_falling();
 
@@ -34,7 +39,7 @@ public:
 
     virtual bool is_dead();
 
-    virtual void execute_collision_reaction() = 0;
+    virtual void collision_reaction() = 0;
 
     ~Entity() = default;
 

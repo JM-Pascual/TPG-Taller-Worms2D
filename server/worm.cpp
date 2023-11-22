@@ -124,7 +124,7 @@ b2Vec2 Worm::set_bullet_power() {
     //  f_y = fuerza_total * sen(ang_rad * pi/180)
     b2Vec2 bullet_power;
     bullet_power.x = (weapon_power * facing_factor()) * cosf(aim_inclination_degrees);
-    bullet_power.y = (weapon_power)*sinf(aim_inclination_degrees);
+    bullet_power.y = (weapon_power) * sinf(aim_inclination_degrees);
     return bullet_power;
 }
 
@@ -164,7 +164,7 @@ bool Worm::is_dead() {
     return dead;
 }
 
-void Worm::execute_collision_reaction() {}
+void Worm::collision_reaction() {}
 
 void Worm::destroyBody() {
     battlefield.destroy_body(body);
@@ -224,9 +224,10 @@ void Worm::stop_falling() {
 
     auto vel = body->GetLinearVelocity();
 
-    if (vel.y < MIN_Y_VELOCITY) {
+        if (vel.y < MIN_Y_VELOCITY) {
         is_jumping = false;
         is_backflipping = false;
+
     }
 
     if (body->GetLinearVelocity().LengthSquared() < MIN_SQUARED_VELOCITY) {
@@ -255,4 +256,4 @@ void Worm::recibe_life_modification(const float& life_variation) {
     }
 }
 
-void Worm::applyWindResistence(const float& wind_force) {}
+void Worm::applyWindResistance(const float& wind_force) {}
