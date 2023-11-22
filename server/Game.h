@@ -21,7 +21,8 @@
 #include "worm_handler.h"
 
 #define MAX_PLAYERS 4
-#define WORMS_QUANTITY 2
+#define WORMS_QUANTITY 10
+#define EXTRA_LIFE 25
 
 class Projectile;
 

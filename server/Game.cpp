@@ -82,8 +82,25 @@ void Game::set_player_ready(const uint8_t id) {
 }
 
 void Game::spawnWorms() {
+    size_t min_worms_player = WORMS_QUANTITY / players.size();
+    size_t no_assigned_worms = WORMS_QUANTITY % players.size();
+
     for (auto& [id, player]: players) {
-        player->spawnWorms(battlefield, WORMS_QUANTITY, worm_counter);
+        player->spawnWorms(battlefield, min_worms_player, worm_counter);
+    }
+
+    auto it = players.cbegin();
+    for (size_t i = 0; i < no_assigned_worms; i++) {
+        it->second->spawnWorms(battlefield, 1, worm_counter);
+        ++it;
+    }
+
+    while (it != players.cend()) {
+        for (auto& worm: it->second->worms) {
+            worm->recibe_life_modification(EXTRA_LIFE);
+        }
+
+        ++it;
     }
 }
 
