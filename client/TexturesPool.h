@@ -16,7 +16,7 @@ private:
     void load_general_worm_textures();
     void load_level_textures();
     void load_water_textures();
-    void load_weapon_textures();
+    void load_combat_textures();
     void load_projectile_textures();
     void load_effect_textures();
     void load_tombstones_textures();

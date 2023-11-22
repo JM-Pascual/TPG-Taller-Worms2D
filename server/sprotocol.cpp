@@ -96,7 +96,6 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<States>& ps) {
     std::shared_ptr<PlayerStateG> p = std::dynamic_pointer_cast<PlayerStateG>(ps);
 
     send(&p->tag, sizeof(uint8_t));
-    send(&p->id_of_turn_player, sizeof(uint8_t));
     send(&p->id, sizeof(uint8_t));
     send(&p->is_playing, sizeof(bool));
 
@@ -114,6 +113,7 @@ void ServerSide::Protocol::sendWormState(const std::shared_ptr<States>& state) {
     send(&p->tag, sizeof(uint8_t));
     send(&p->id, sizeof(uint8_t));
     this->sendPosition(p->pos);
+    send(&p->on_turn_time, sizeof(bool));
     send(&p->weapon, sizeof(uint8_t));
     send(&p->is_walking, sizeof(bool));
     send(&p->is_jumping, sizeof(bool));

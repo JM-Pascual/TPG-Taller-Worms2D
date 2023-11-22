@@ -21,7 +21,8 @@ void InfoParser::makeLobbyState(std::list<std::shared_ptr<States>>& states) {
                    });
 }
 
-void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states) {
+void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states,
+                               uint8_t id_of_active_player) {
 
     states.push_back(
             std::make_shared<BattlefieldState>((uint8_t)game.battlefield.engine.wind_force));
@@ -31,18 +32,23 @@ void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states) {
                        return projectile.second->get_proyectile_state(projectile.first);
                    });
 
+    uint8_t id_of_active_worm = game.players.at(id_of_active_player)
+                                        ->worms.at(game.players.at(id_of_active_player)
+                                                           ->worm_turn)->id;
+
     for (const auto& [id, player]: game.players) {
         states.push_back(std::make_shared<PlayerStateG>(
-                player->worms.at(player->worm_turn)->id, player->is_playing, id,
+                player->is_playing, id,
                 player->calcAvgLife(), player->getWeaponsAmmo()));
 
         std::transform(player->worms.begin(), player->worms.end(), std::back_inserter(states),
-                       [](const auto& worm) {
-                           return std::make_shared<WormStateG>(
-                                   worm->id, worm->body->GetPosition().x,
-                                   worm->body->GetPosition().y, worm->weapon_type, worm->is_walking,
-                                   worm->is_jumping, worm->is_backflipping, worm->facing_right,
-                                   worm->collided, worm->aim_inclination_degrees,
+                       [&id_of_active_worm](const auto& worm) {
+                           return std::make_shared<WormStateG>(worm->id,
+                                   worm->body->GetPosition().x, worm->body->GetPosition().y,
+                                   worm->weapon_type,
+                                   ((worm->id == id_of_active_worm)),
+                                   worm->is_walking, worm->is_jumping, worm->is_backflipping,
+                                   worm->facing_right, worm->collided, worm->aim_inclination_degrees,
                                    worm->charging_shoot, worm->life);
                        });
     }

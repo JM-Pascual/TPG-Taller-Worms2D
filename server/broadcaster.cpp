@@ -34,9 +34,9 @@ void BroadCaster::broadcastLobby() {
     broadcast(states);
 }
 
-void BroadCaster::broadcastGame() {
+void BroadCaster::broadcastGame(uint8_t id_of_active_player) {
     std::list<std::shared_ptr<States>> states;
-    infoParser.makeGameState(states);
+    infoParser.makeGameState(states, id_of_active_player);
     broadcast(states);
 }
 
