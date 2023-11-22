@@ -89,7 +89,7 @@ public:
         walking.update(!is_walking);
         jumping.update(!is_jumping);
         backflipping.update(!is_backflipping);
-        dead.update((life_points_remaining >= 50));
+        dead.update((life_points_remaining > 0));
 
         bool charging_weapon = state->charging_weapon;
         weapon_animation.update(aim_inclination_degrees, charging_weapon, equipped_weapon,
@@ -109,7 +109,7 @@ public:
             } else if (is_walking) {
                 walking.render((*game_renderer), render_rect, 0, 0,
                                facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-            } else if (life_points_remaining <= 50){
+            } else if (life_points_remaining == 0){
                 SDL2pp::Rect death_render_rect = camera.calcRect(position.x, position.y, 60, 60);
                 dead.render((*game_renderer), death_render_rect);
             } else {

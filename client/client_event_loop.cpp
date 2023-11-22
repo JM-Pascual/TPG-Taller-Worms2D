@@ -38,7 +38,11 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                 if (!players.actor_loaded(state->id)) {
                     players.add_actor(state->id, std::make_shared<Worm>(state, txt_pool, camera));
                 } else {
-                    players.update_actor_state(state->id, raw_state);
+                    if (std::dynamic_pointer_cast<WormStateG>(raw_state)->life == 0) {
+                        players.remove_actor(state->id, raw_state);
+                    } else {
+                        players.update_actor_state(state->id, raw_state);
+                    }
                 }
 
                 if (state->is_walking) {
@@ -138,7 +142,7 @@ void EventLoop::run() {
 
     int loop_start_time = SDL_GetTicks();
 
-    std::chrono::duration<float> turn_time;
+    std::chrono::duration<float> turn_time{};
     std::chrono::time_point<std::chrono::steady_clock> turn_start;
 
     while (!quit) {
