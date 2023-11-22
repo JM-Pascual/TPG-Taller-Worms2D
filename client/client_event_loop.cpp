@@ -62,6 +62,8 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                             break;
                         }
                         case WeaponsAndTools::MORTAR:
+                            proyectiles.add_actor(state->id, std::make_shared<MortarProjectile>(
+                                                                     state, txt_pool, camera));
                             break;
                         case WeaponsAndTools::GREEN_GRENADE: {
                             proyectiles.add_actor(state->id, std::make_shared<GreenGrenadeProjectile

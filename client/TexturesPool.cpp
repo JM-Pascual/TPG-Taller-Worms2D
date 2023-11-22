@@ -50,6 +50,14 @@ void TexturesPool::load_draw_textures() {
                                                                     "/worms/worm-banana-draw.png")
                                                                     .SetColorKey(true, 0x000000))});
     draw_textures[WeaponsDraw::WORM_DRAW_BANANA]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    draw_textures.insert({WeaponsDraw::WORM_DRAW_MORTAR,
+                          std::make_shared<SDL2pp::Texture>((*renderer),
+                                                            SDL2pp::Surface(
+                                                                    DATA_PATH
+                                                                    "/worms/worm-mortar-draw.png")
+                                                                    .SetColorKey(true, 0x000000))});
+    draw_textures[WeaponsDraw::WORM_DRAW_MORTAR]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
 void TexturesPool::load_aiming_textures() {
@@ -84,6 +92,14 @@ void TexturesPool::load_aiming_textures() {
                                                                    "/worms/worm-banana-aim.png")
                                                                    .SetColorKey(true, 0x000000))});
     aim_textures[WeaponAiming::WORM_AIM_BANANA]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    aim_textures.insert({WeaponAiming::WORM_AIM_MORTAR,
+                         std::make_shared<SDL2pp::Texture>((*renderer),
+                                                           SDL2pp::Surface(
+                                                                   DATA_PATH
+                                                                   "/worms/worm-mortar-aim.png")
+                                                                   .SetColorKey(true, 0x000000))});
+    aim_textures[WeaponAiming::WORM_AIM_MORTAR]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
 void TexturesPool::load_projectile_textures() {
@@ -91,6 +107,12 @@ void TexturesPool::load_projectile_textures() {
                                 std::make_shared<SDL2pp::Texture>((*renderer),
                                                                   SDL2pp::Surface(
                                                                           DATA_PATH "/weapons/bazooka-missile.png")
+                                                                          .SetColorKey(true, 0x000000))});
+
+    projectile_textures.insert({Projectiles::MORTAR_PROYECTILE,
+                                std::make_shared<SDL2pp::Texture>((*renderer),
+                                                                  SDL2pp::Surface(
+                                                                          DATA_PATH "/weapons/mortar-missile.png")
                                                                           .SetColorKey(true, 0x000000))});
 
     projectile_textures.insert({Projectiles::GREEN_GRENADE_PROYECTILE,

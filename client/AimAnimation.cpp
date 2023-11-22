@@ -5,6 +5,9 @@ void AimAnimation::load_all_aim_textures(TexturesPool& pool) {
     weapon_aim_textures.insert({WeaponsAndTools::BAZOOKA,
                                 (pool.get_aim_texture(WeaponAiming::WORM_AIM_BAZOOKA))});
 
+    weapon_aim_textures.insert({WeaponsAndTools::MORTAR,
+                                (pool.get_aim_texture(WeaponAiming::WORM_AIM_MORTAR))});
+
     weapon_aim_textures.insert({WeaponsAndTools::DYNAMITE,
                                 (pool.get_aim_texture(WeaponAiming::WORM_AIM_DYNAMITE))});
 
