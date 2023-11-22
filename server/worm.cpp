@@ -142,12 +142,16 @@ uint8_t Worm::set_bullet_explosion_delay() {
     return 3;  // bullet_explosion_delete;
 }
 
-void Worm::shoot_aim_weapon(std::shared_ptr<Projectile> projectile) {
+void Worm::shoot_aim_weapon(const std::shared_ptr<Projectile>& projectile) {
     projectile->set_power(set_bullet_power());
 }
 
-void Worm::use_throwable(std::shared_ptr<Projectile> throwable) {
+void Worm::use_throwable(const std::shared_ptr<Projectile>& throwable) {
     throwable->set_power(b2Vec2(0, 0));
+}
+
+void Worm::use_clickeable_gadget(const std::shared_ptr<Projectile>& gadget) {
+
 }
 
 int Worm::facing_factor() { return (std::pow(-1, 1 - facing_right)); }
@@ -253,3 +257,8 @@ void Worm::recibe_life_modification(const float& life_variation) {
 }
 
 void Worm::applyWindResistance(const float& wind_force) {}
+
+void Worm::change_position(b2Vec2 new_position) {
+    body->SetTransform(new_position, 0);
+}
+

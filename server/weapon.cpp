@@ -127,3 +127,27 @@ void DynamiteGrenade::execute(Battlefield& battlefield, Worm& worm) {
     worm.use_throwable(dynamite);
 }
 
+Teleport::Teleport() : Weapon(TELEPORT_AMMO) {}
+
+void Teleport::execute(Battlefield &battlefield, Worm &worm) {
+    //La idea es poder acceder a la posición del worm y cambiarle la posición
+    //worm.change_position()
+}
+
+AirStrike::AirStrike() : Weapon(AIRSTRIKE_AMMO){}
+
+void AirStrike::execute(Battlefield &battlefield, Worm &worm) {
+    if (--ammo <= 0) {
+        return;
+    }
+
+    for(int i  = 0; i < 5 ; i++){
+        b2Vec2 projectile_position = worm.set_bullet_direction();
+        std::shared_ptr<Projectile> projectile =
+                std::make_shared<AirStrikeRocket>(battlefield, projectile_position);
+        battlefield.add_projectile(projectile);
+
+    }
+
+    //worm.use_clickeable_gadget();
+}

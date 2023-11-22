@@ -13,6 +13,8 @@
 #define DYNAMITE_AMMO uint8_t(5)
 #define MORTAR_AMMO uint8_t(10)
 #define RED_GRENADE_AMMO uint8_t(10)
+#define TELEPORT_AMMO uint8_t(255)
+#define AIRSTRIKE_AMMO uint8_t(2)
 
 class Worm;
 class Game;
@@ -85,6 +87,24 @@ public:
     DynamiteGrenade();
     void execute(Battlefield& battlefield, Worm& worm) override;
     virtual ~DynamiteGrenade() = default;
+};
+
+//~~~~~~~~~~~~~~~~~~~ Teleport ~~~~~~~~~~~~~~~~~~~~
+
+class Teleport: public Weapon {
+public:
+    Teleport();
+    void execute(Battlefield& battlefield, Worm& worm) override;
+    virtual ~Teleport() = default;
+};
+
+//~~~~~~~~~~~~~~~~~~~ AirStrike ~~~~~~~~~~~~~~~~~~~~
+
+class AirStrike: public Weapon {
+public:
+    AirStrike();
+    void execute(Battlefield& battlefield, Worm& worm) override;
+    virtual ~AirStrike() = default;
 };
 
 

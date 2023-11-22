@@ -21,6 +21,7 @@
 #define BLAST_RADIUS_RED_GRENADE 2
 #define BLAST_RADIUS_BANANA 4
 #define BLAST_RADIUS_DYNAMITE 4
+#define BLAST_RADIUS_AIR_STRIKE 2
 
 
 #define EPICENTER_DAMAGE_BAZOOKA 50
@@ -29,6 +30,7 @@
 #define EPICENTER_DAMAGE_GREEN_GRENADE 30
 #define EPICENTER_DAMAGE_RED_GRENADE 30
 #define EPICENTER_DAMAGE_BANANA 70
+#define EPICENTER_DAMAGE_AIR_STRIKE 40
 #define EPICENTER_DAMAGE_DYNAMITE 50
 
 
@@ -111,6 +113,12 @@ public:
     virtual ~MortarFragment() = default;
 };
 
+class AirStrikeRocket: public Rocket {
+public:
+    AirStrikeRocket(Battlefield& battlefield, b2Vec2 position);
+    void applyWindResistance(const float &wind_force) override{};
+    virtual ~AirStrikeRocket() = default;
+};
 
 
 

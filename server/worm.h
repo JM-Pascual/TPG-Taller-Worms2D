@@ -88,9 +88,10 @@ public:
     uint8_t set_bullet_explosion_delay();
 
     void recibe_life_modification(const float& life_variation) override;
-    void shoot_aim_weapon(std::shared_ptr<Projectile> projectile);
-    void use_throwable(std::shared_ptr<Projectile> throwable);
-    // void use_clickeable_gadget();
+    void shoot_aim_weapon(const std::shared_ptr<Projectile>& projectile);
+    void use_throwable(const std::shared_ptr<Projectile>& throwable);
+    void use_clickeable_gadget(const std::shared_ptr<Projectile>& gadget);
+    void change_position(b2Vec2 new_position);
 
     bool is_dead() override;
     void collision_reaction() override;
