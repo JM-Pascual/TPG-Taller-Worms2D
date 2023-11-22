@@ -3,6 +3,8 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <spdlog/spdlog.h>
 
+#include "../common/const.h"
+
 #include "cheatmenu.h"
 
 const int DURATION = 1000 / 30;
@@ -29,7 +31,7 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
                                     TexturesPool& txt_pool) {
     std::shared_ptr<States> raw_state = nullptr;
-    for (int j = 0; j < 10; j++) {
+    for (int j = 0; j < (MAX_PLAYERS + WORMS_QUANTITY); j++) {
         if (not game_state_queue.try_pop(raw_state)) {
             continue;
         }
@@ -125,12 +127,13 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
     }
 }
 
-void EventLoop::update_terrain(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+void EventLoop::update_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_renderer,
                                Animation& water_animation) {
     water_animation.update();
 
     for (int i = 0; i < 5; i++) {
-        water_animation.render((*game_renderer), camera.calcRect(0, 600 + i * 22, 1280, 40), 1240, 0);
+        water_animation.render((*game_renderer), camera.calcRect(0, 600 + i * 22, 1280, 40), 1240,
+                               0);
     }
 }
 

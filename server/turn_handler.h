@@ -8,7 +8,7 @@
 
 #include <stdint.h>
 
-#define TURN_DURATION_IN_SECONDS 10
+#define TURN_DURATION_IN_SECONDS 60
 #define POST_TURN_DURATION_IN_SECONDS 3
 
 #define BLOCK_PLAYERS_INPUT true

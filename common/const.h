@@ -16,6 +16,9 @@
 #define NOT_YOUR_TURN 0
 #define IS_YOUR_TURN 1
 
+#define MAX_PLAYERS 4
+#define WORMS_QUANTITY 10
+
 enum class SWIndex { INTRO, MENU, GAME_SEARCH, HELP, LOBBY };
 
 enum class Direction { LEFT = 0, RIGHT = 1 };
@@ -100,10 +103,7 @@ enum class Tombstones {
     TOMBSTONE_6
 };
 
-enum class Effects{
-    NORMAL_EXPLOSION,
-    FRAGMENT_EXPLOSION
-};
+enum class Effects { NORMAL_EXPLOSION, FRAGMENT_EXPLOSION };
 
 enum class Actors {
     WORM = 0x0,
