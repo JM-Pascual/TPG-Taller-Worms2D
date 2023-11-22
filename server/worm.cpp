@@ -28,7 +28,7 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Weapon>*& selected_weapon,
         id(id) {
     b2BodyDef wormDef;
     wormDef.type = b2_dynamicBody;
-    wormDef.position.Set(5.0f, 21.6f);  // Ahora la harcodeo, pero tiene que cambiar
+    wormDef.position.Set(22.0f, 21.6f);  // Ahora la harcodeo, pero tiene que cambiar
     wormDef.allowSleep = true;
     wormDef.userData.pointer = reinterpret_cast<uintptr_t>(this);  // Todo ver si funciona
 
@@ -76,7 +76,7 @@ void Worm::jump(const JumpDir& direction) {
         return;
     }
 
-    if ((not allow_multiple_jump) && (is_jumping || is_backflipping)) {
+    if ((is_jumping || is_backflipping) && (not allow_multiple_jump)) {
         return;
     }
 
