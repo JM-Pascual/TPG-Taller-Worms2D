@@ -82,6 +82,10 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                             proyectiles.add_actor(state->id, std::make_shared<DynamiteProjectile>(
                                                                      state, txt_pool, camera));
                             break;
+                        case WeaponsAndTools::MORTAR_FRAGMENT:
+                            proyectiles.add_actor(state->id, std::make_shared<BazookaProjectile>(
+                                                                     state, txt_pool, camera));
+                            break;
                         case WeaponsAndTools::BASEBALL_BAT:
                             break;
                         case WeaponsAndTools::AIR_STRIKE:

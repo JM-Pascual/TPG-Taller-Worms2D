@@ -38,7 +38,8 @@ enum class WeaponsAndTools {
     DYNAMITE,
     BASEBALL_BAT,
     AIR_STRIKE,
-    TELEPORT
+    TELEPORT,
+    MORTAR_FRAGMENT
 };
 
 enum class Actions {

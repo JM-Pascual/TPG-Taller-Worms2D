@@ -112,7 +112,7 @@ b2Vec2 Worm::set_bullet_power() {
     //  f_y = fuerza_total * sen(ang_rad * pi/180)
     b2Vec2 bullet_power;
     bullet_power.x = (weapon_power * facing_factor()) * cosf(aim_inclination_degrees);
-    bullet_power.y = (weapon_power)*sinf(aim_inclination_degrees);
+    bullet_power.y = (weapon_power) * sinf(aim_inclination_degrees);
     return bullet_power;
 }
 
@@ -210,9 +210,10 @@ void Worm::start_falling() {
 void Worm::stop_falling() {
     auto vel = body->GetLinearVelocity();
 
-    if (vel.y < MIN_Y_VELOCITY) {
+        if (vel.y < MIN_Y_VELOCITY) {
         is_jumping = false;
         is_backflipping = false;
+
     }
 
     if (body->GetLinearVelocity().LengthSquared() < MIN_SQUARED_VELOCITY) {

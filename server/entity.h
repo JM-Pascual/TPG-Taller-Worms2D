@@ -15,6 +15,8 @@ protected:
     Battlefield& battlefield;
     bool collided;
 
+
+
 public:
     explicit Entity(Battlefield& battlefield);
 
@@ -23,6 +25,8 @@ public:
     void end_contact();
 
     virtual void applyWindResistence(const float& wind_force) = 0;
+
+    virtual void apply_explosion(b2Vec2 final_impulse);
 
     virtual void stop_falling();
 
