@@ -3,6 +3,7 @@
 
 #include <QApplication>
 #include <QDialog>
+#include <QSoundEffect>
 #include <memory>
 
 #include "../common/queue.h"
@@ -25,6 +26,7 @@ public:
 private:
     Ui::CheatMenu* ui;
     Queue<std::shared_ptr<Action>>& action_queue;
+    QSoundEffect button_sound;
 
     void loadHandlers();
 };

@@ -8,33 +8,49 @@ CheatMenu::CheatMenu(Queue<std::shared_ptr<Action>>& action_queue, QWidget* pare
         QDialog(parent), ui(new Ui::CheatMenu), action_queue(action_queue) {
     ui->setupUi(this);
     loadHandlers();
-    this->show();
+    button_sound.setSource(QUrl::fromLocalFile(":/sounds/button.wav"));
 }
 
 void CheatMenu::loadHandlers() {
-    connect(ui->ww3Button, &QPushButton::clicked, this,
-            [this]() { this->action_queue.push(std::make_shared<WW3Cheat>()); });
+    connect(ui->ww3Button, &QPushButton::clicked, this, [this]() {
+        this->action_queue.push(std::make_shared<WW3Cheat>());
+        this->button_sound.play();
+    });
 
-    connect(ui->noWindButton, &QPushButton::clicked, this,
-            [this]() { this->action_queue.push(std::make_shared<NoWindCheat>()); });
+    connect(ui->noWindButton, &QPushButton::clicked, this, [this]() {
+        this->action_queue.push(std::make_shared<NoWindCheat>());
+        this->button_sound.play();
+    });
 
-    connect(ui->infiniteAmmoButton, &QPushButton::clicked, this,
-            [this]() { this->action_queue.push(std::make_shared<InfiniteAmmoCheat>()); });
+    connect(ui->infiniteAmmoButton, &QPushButton::clicked, this, [this]() {
+        this->action_queue.push(std::make_shared<InfiniteAmmoCheat>());
+        this->button_sound.play();
+    });
 
-    connect(ui->madnessButton, &QPushButton::clicked, this,
-            [this]() { this->action_queue.push(std::make_shared<MadnessCheat>()); });
+    connect(ui->madnessButton, &QPushButton::clicked, this, [this]() {
+        this->action_queue.push(std::make_shared<MadnessCheat>());
+        this->button_sound.play();
+    });
 
-    connect(ui->inmortalWormButton, &QPushButton::clicked, this,
-            [this]() { this->action_queue.push(std::make_shared<ImmortalWorm>()); });
+    connect(ui->inmortalWormButton, &QPushButton::clicked, this, [this]() {
+        this->action_queue.push(std::make_shared<ImmortalWorm>());
+        this->button_sound.play();
+    });
 
-    connect(ui->multipleJumpButton, &QPushButton::clicked, this,
-            [this]() { this->action_queue.push(std::make_shared<MultipleJumpCheat>()); });
+    connect(ui->multipleJumpButton, &QPushButton::clicked, this, [this]() {
+        this->action_queue.push(std::make_shared<MultipleJumpCheat>());
+        this->button_sound.play();
+    });
 
-    connect(ui->infiniteTurnButton, &QPushButton::clicked, this,
-            [this]() { this->action_queue.push(std::make_shared<InfiniteTurnCheat>()); });
+    connect(ui->infiniteTurnButton, &QPushButton::clicked, this, [this]() {
+        this->action_queue.push(std::make_shared<InfiniteTurnCheat>());
+        this->button_sound.play();
+    });
 
-    connect(ui->everyone1HPButton, &QPushButton::clicked, this,
-            [this]() { this->action_queue.push(std::make_shared<Everyone1HPCheat>()); });
+    connect(ui->everyone1HPButton, &QPushButton::clicked, this, [this]() {
+        this->action_queue.push(std::make_shared<Everyone1HPCheat>());
+        this->button_sound.play();
+    });
 }
 
 CheatMenu::~CheatMenu() { delete ui; }
