@@ -111,13 +111,24 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
     }
 }
 
+void EventLoop::update_terrain(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                               Animation& water_animation) {
+    water_animation.update();
+
+    for (int i = 0; i < 5; i++) {
+        water_animation.render((*game_renderer), camera.calcRect(0, 600 + i * 22, 1280, 40), 1240, 0);
+    }
+}
+
 void EventLoop::run() {
     runned = true;
     Window window(1280, 720);
     TexturesPool txt_pool(window.get_renderer());
 
     SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+
     SDL2pp::SDLTTF ttf;
+    TextPrinter state_printer(18, txt_pool);
 
     audio_player.play_background_music();
 
@@ -140,14 +151,11 @@ void EventLoop::run() {
         // tiempo restante turno = (uint8_t)(60 - turn_time)
 
         players.render_actors(window.get_renderer());
+        players.print_actors_state(window.get_renderer(), state_printer);
         proyectiles.render_actors(window.get_renderer());
+        proyectiles.print_actors_state(window.get_renderer(), state_printer);
 
-        water_animation.update();
-
-        for (int i = 0; i < 5; i++) {
-            water_animation.render((*window.get_renderer()),
-                                   camera.calcRect(0, 600 + i * 22, 1280, 40), 1240, 0);
-        }
+        update_terrain(window.get_renderer(), water_animation);
 
         window.present_textures();
 
@@ -165,6 +173,7 @@ void EventLoop::run() {
         loop_start_time += DURATION;
     }
 }
+
 EventLoop::~EventLoop() {
     if (runned) {
         input.join();

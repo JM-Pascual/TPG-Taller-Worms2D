@@ -140,13 +140,14 @@ std::shared_ptr<PlayerStateG> ClientSide::Protocol::recvPlayerGame() {
     uint8_t id = recvUint8();
     bool is_playing = recvBool();
     auto ammo_left = std::make_unique<AmmoLeft>();
-    uint8_t avg_life = recvUint8();
 
     for (size_t i = 0; i < GADGETS_QUANTITY; i++) {
         WeaponsAndTools type = (WeaponsAndTools)recvUint8();
         uint8_t ammo = recvUint8();
         ammo_left->weapon_ammo.insert({type, ammo});
     }
+
+    uint8_t avg_life = recvUint8();
 
     return std::make_shared<PlayerStateG>(is_playing, id, avg_life, std::move(ammo_left));
 }
@@ -155,6 +156,7 @@ std::shared_ptr<WormStateG> ClientSide::Protocol::recvWormGame() {
     uint8_t id = recvUint8();
     float x = meter_to_pixel_x(recvFloat());
     float y = meter_to_pixel_y(recvFloat());
+    bool on_turn_time = recvBool();
     auto equipped_weapon = (WeaponsAndTools)recvUint8();
     bool is_wa = recvBool();
     bool is_jumping = recvBool();
@@ -165,7 +167,7 @@ std::shared_ptr<WormStateG> ClientSide::Protocol::recvWormGame() {
     bool charging_weapon = recvBool();
     float life = recvFloat();
 
-    return std::make_shared<WormStateG>(id, x, y, equipped_weapon, is_wa, is_jumping,
+    return std::make_shared<WormStateG>(id, x, y, equipped_weapon, on_turn_time, is_wa, is_jumping,
                                         is_backflipping, direction, was_hit, aim_inclination,
                                         charging_weapon, life);
 }

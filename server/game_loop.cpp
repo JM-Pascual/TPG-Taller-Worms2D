@@ -40,7 +40,7 @@ void GameLoop::run() {
         // dormir(tiempo del tick del sv - tiempo que tarde en llegar acá)
 
         // Le llega por el broadcast_game_state los jugadores que estan muertos(booleano)
-        game.broadcaster.broadcastGame();
+        game.broadcaster.broadcastGame(turn_id.player_id);
         // Le llega por el broadcast_game_state los jugadores que estan muertos(booleano)
         //
 

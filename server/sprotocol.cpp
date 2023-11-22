@@ -97,13 +97,14 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<States>& ps) {
 
     send(&p->tag, sizeof(uint8_t));
     send(&p->id, sizeof(uint8_t));
-    send(&p->is_playing, sizeof(uint8_t));
-    send(&p->avg_life, sizeof(uint8_t));
+    send(&p->is_playing, sizeof(bool));
 
     for (const auto& [type, ammo]: p->gadgets->weapon_ammo) {
         send(&type, sizeof(uint8_t));
         send(&ammo, sizeof(uint8_t));
     }
+
+    send(&p->avg_life, sizeof(uint8_t));
 }
 
 void ServerSide::Protocol::sendWormState(const std::shared_ptr<States>& state) {
@@ -112,6 +113,7 @@ void ServerSide::Protocol::sendWormState(const std::shared_ptr<States>& state) {
     send(&p->tag, sizeof(uint8_t));
     send(&p->id, sizeof(uint8_t));
     this->sendPosition(p->pos);
+    send(&p->on_turn_time, sizeof(bool));
     send(&p->weapon, sizeof(uint8_t));
     send(&p->is_walking, sizeof(bool));
     send(&p->is_jumping, sizeof(bool));

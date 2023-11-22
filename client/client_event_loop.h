@@ -29,10 +29,11 @@ private:
     ClientSide::Receiver recv;
     ClientSide::Sender send;
 
-    /// media specific atributes
+    /// Media specific atributes and info for rendering
     Camera camera;
     IHandler input;
     AudioPlayer audio_player;
+    uint8_t id_of_active_player;
 
     /// Holders for actors in the game
     ActorHolder players;
@@ -46,6 +47,8 @@ private:
     void process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
                                 TexturesPool& txt_pool);
 
+    void update_terrain(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                              Animation& water_animation);
 public:
     /*
         Construye el cliente con su protocolo
@@ -60,6 +63,7 @@ public:
 
     friend class MainWindow;
     friend class GameFrame;
+    void update_terrain(std::shared_ptr<SDL2pp::Renderer> ptr);
 };
 
 

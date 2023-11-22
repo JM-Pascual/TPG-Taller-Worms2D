@@ -124,22 +124,25 @@ void TexturesPool::load_effect_textures() {
     effect_textures[Effects::NORMAL_EXPLOSION]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
-void TexturesPool::load_worm_textures() {
-    this->load_general_worm_textures();
-    this->load_draw_textures();
-    this->load_aiming_textures();
-}
-
-void TexturesPool::load_weapon_textures() {
+void TexturesPool::load_combat_textures() {
     actors_textures.insert({Actors::CROSSHAIR, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/crosshair.png")
-                                                                                               .SetColorKey(true, 0x000000))});
+            .SetColorKey(true, 0x000000))});
 
     actors_textures[Actors::CROSSHAIR]->SetBlendMode(SDL_BLENDMODE_BLEND);
 
     actors_textures.insert({Actors::POWER_CHARGE_BAR, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/weapons/loading-shot.png")
-                                                                                                       .SetColorKey(true, 0x000000))});
+            .SetColorKey(true, 0x000000))});
 
     actors_textures[Actors::POWER_CHARGE_BAR]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    actors_textures.insert({Actors::STATE_SIGN, std::make_shared<SDL2pp::Texture>((*renderer), SDL2pp::Surface(DATA_PATH "/miscellaneous/font-background.png")
+                                                                                                       .SetColorKey(true, 0x000000))});
+}
+
+void TexturesPool::load_worm_textures() {
+    this->load_general_worm_textures();
+    this->load_draw_textures();
+    this->load_aiming_textures();
 }
 
 void TexturesPool::load_level_textures() {
@@ -196,7 +199,7 @@ TexturesPool::TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer) :
     load_level_textures();
     load_water_textures();
     load_worm_textures();
-    load_weapon_textures();
+    load_combat_textures();
     load_projectile_textures();
     load_effect_textures();
     load_tombstones_textures();

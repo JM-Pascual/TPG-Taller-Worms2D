@@ -60,8 +60,8 @@ public:
     const uint8_t avg_life;
     const std::unique_ptr<AmmoLeft> gadgets;
 
-    explicit PlayerStateG(const bool& is_playing, const uint8_t& id, const uint8_t& avg_life,
-                          std::unique_ptr<AmmoLeft> weapon_ammo):
+    explicit PlayerStateG(const bool& is_playing, const uint8_t& id,
+                          const uint8_t& avg_life, std::unique_ptr<AmmoLeft> weapon_ammo):
             States(StatesTag::PLAYER_G),
             id(id),
             is_playing(is_playing),
@@ -74,6 +74,7 @@ public:
     const uint8_t id;
     const b2Vec2 pos;
     const WeaponsAndTools weapon;
+    bool on_turn_time;
     const bool is_walking;
     const bool is_jumping;
     const bool is_backflipping;
@@ -86,8 +87,8 @@ public:
 
 
     explicit WormStateG(const uint8_t& id, const float& x, const float& y,
-                        const WeaponsAndTools& equipped_weapon, const bool& is_walking,
-                        const bool& is_jumping, const bool& is_backflipping,
+                        const WeaponsAndTools& equipped_weapon, bool on_turn_time,
+                        const bool& is_walking,const bool& is_jumping, const bool& is_backflipping,
                         const bool& facing_right, const bool& was_hit,
                         const float& aim_inclination_degrees, const bool& charging_weapon,
                         const float& life);

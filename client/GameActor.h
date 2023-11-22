@@ -27,6 +27,8 @@ public:
     GameActor(const float& x, const float& y, Camera& camera): position(x, y), camera(camera) {}
     virtual void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) = 0;
     virtual void update(std::shared_ptr<States>& actor_state) = 0;
+    virtual void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                     TextPrinter& state_printer) = 0;
     virtual ~GameActor() = default;
 };
 
@@ -35,6 +37,7 @@ public:
 class Worm: public GameActor {
 private:
     WeaponsAndTools equipped_weapon;
+    bool on_turn_time;
     bool is_walking;
     bool is_jumping;
     bool is_backflipping;
@@ -43,8 +46,6 @@ private:
     float life_points_remaining;
 
     float aim_inclination_degrees;
-
-    TextPrinter state_printer;
 
     Animation walking;
     Animation jumping;
@@ -57,6 +58,7 @@ public:
     Worm(std::shared_ptr<WormStateG>& initial_state, TexturesPool& pool, Camera& camera):
             GameActor(initial_state->pos.x, initial_state->pos.y, camera),
             equipped_weapon(initial_state->weapon),
+            on_turn_time(initial_state->on_turn_time),
             is_walking(initial_state->is_walking),
             is_jumping(initial_state->is_jumping),
             is_backflipping(initial_state->is_backflipping),
@@ -64,7 +66,6 @@ public:
             was_hit(initial_state->was_hit),
             life_points_remaining(initial_state->life),
             aim_inclination_degrees(initial_state->aim_inclination_degrees),
-            state_printer(18),
 
             walking(pool.get_actor_texture(Actors::WORM), 15, 1),
             jumping(pool.get_actor_texture(Actors::JUMPING_WORM), 5, 5, false),
@@ -75,6 +76,7 @@ public:
     void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<WormStateG>(actor_state);
         position = state->pos;
+        on_turn_time = state->on_turn_time;
         equipped_weapon = state->weapon;
         is_walking = state->is_walking;
         is_jumping = state->is_jumping;
@@ -97,24 +99,38 @@ public:
     void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 32, 60);
 
-        if (is_jumping) {
-            jumping.render((*game_renderer), render_rect, 0, 0,
-                           facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-        } else if (is_backflipping) {
-            backflipping.render((*game_renderer), render_rect, 0, 0,
-                                facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-        } else if (is_walking) {
+        if (on_turn_time){
+            if (is_jumping) {
+                jumping.render((*game_renderer), render_rect, 0, 0,
+                               facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+            } else if (is_backflipping) {
+                backflipping.render((*game_renderer), render_rect, 0, 0,
+                                    facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+            } else if (is_walking) {
+                walking.render((*game_renderer), render_rect, 0, 0,
+                               facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+            } else if (life_points_remaining <= 50){
+                SDL2pp::Rect death_render_rect = camera.calcRect(position.x, position.y, 60, 60);
+                dead.render((*game_renderer), death_render_rect);
+            } else {
+                weapon_animation.render((*game_renderer), render_rect,
+                                        facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+            }
+        } else {
             walking.render((*game_renderer), render_rect, 0, 0,
                            facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-        } else if (life_points_remaining <= 50){
-            SDL2pp::Rect death_render_rect = camera.calcRect(position.x, position.y, 60, 60);
-            dead.render((*game_renderer), death_render_rect);
-        } else {
-            weapon_animation.render((*game_renderer), render_rect,
-                                    facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-            state_printer.print_text((*game_renderer), std::to_string(int(life_points_remaining)),
-                                     render_rect.x +8, render_rect.y -30);
         }
+    }
+
+
+    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                           TextPrinter& state_printer) override {
+        if (!on_turn_time){
+            SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 32, 60);
+            state_printer.print_text((*game_renderer), std::to_string(int(life_points_remaining)),
+                                     render_rect.x +8, render_rect.y -30, true);
+        }
+
     }
 
     ~Worm() override = default;
@@ -168,6 +184,9 @@ public:
                           (-1 * (current_angle * 180) / M_PI));
         }
     }
+
+    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                     TextPrinter& state_printer) override {}
 };
 
 // ----------------------- GREEN GRENADE ----------------------
@@ -203,6 +222,9 @@ public:
                           (-1 * (current_angle * 180) / M_PI));
         }
     }
+
+    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                     TextPrinter& state_printer) override {}
 };
 
 // ----------------------- BANANA ----------------------
@@ -238,6 +260,9 @@ public:
                           (-1 * (current_angle * 180) / M_PI));
         }
     }
+
+    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                     TextPrinter& state_printer) override {}
 };
 
 // ----------------------- DYNAMITE ----------------------
@@ -269,6 +294,9 @@ public:
             countdown.render((*game_renderer), rect);
         }
     }
+
+    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                     TextPrinter& state_printer) override {}
 };
 
 #endif  // GAMEACTOR_H
