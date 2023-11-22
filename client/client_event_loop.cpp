@@ -3,21 +3,27 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <spdlog/spdlog.h>
 
+#include "cheatmenu.h"
+
 const int DURATION = 1000 / 30;
 
 
-EventLoop::EventLoop(const char* hostname, const char* servname):
+EventLoop::EventLoop(const char* hostname, const char* servname,
+                     std::unique_ptr<CheatMenu>& cheat_menu):
         quit(false),
         my_turn(false),
         runned(false),
         protocol(hostname, servname),
         recv(this->protocol, game_state_queue, lobby_state_queue, runned),
         send(this->protocol, this->action_queue),
-        input(this->action_queue, quit, my_turn, camera){
+        input(this->action_queue, quit, my_turn, camera),
+        cheat_menu(cheat_menu) {
     spdlog::get("client")->debug("Iniciando hilo receptor en el cliente");
     recv.start();
     spdlog::get("client")->debug("Iniciando hilo sender en el cliente");
     send.start();
+    cheat_menu = std::make_unique<CheatMenu>(action_queue);
+    cheat_menu->hide();
 }
 
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
@@ -43,7 +49,7 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
 
                 if (state->is_walking) {
                     camera.fixActor(state->pos.x, state->pos.y, 32, 60);
-                    //audio_player.playAudio("test");
+                    // audio_player.playAudio("test");
                 }
                 continue;
             }
@@ -51,25 +57,25 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
             case StatesTag::PROJECTILE_G: {
                 auto state = std::dynamic_pointer_cast<ProjectileStateG>(raw_state);
                 if (!proyectiles.actor_loaded(state->id)) {
-                    switch(state->type){
+                    switch (state->type) {
                         case (WeaponsAndTools::BAZOOKA): {
                             proyectiles.add_actor(state->id, std::make_shared<BazookaProjectile>(
-                                    state, txt_pool, camera));
+                                                                     state, txt_pool, camera));
                             break;
                         }
                         case WeaponsAndTools::MORTAR:
                             break;
                         case WeaponsAndTools::GREEN_GRENADE: {
-                            proyectiles.add_actor(state->id, std::make_shared<GreenGrenadeProjectile
-                                                                              >(state, txt_pool,
-                                                                                camera));
+                            proyectiles.add_actor(state->id,
+                                                  std::make_shared<GreenGrenadeProjectile>(
+                                                          state, txt_pool, camera));
                             break;
                         }
                         case WeaponsAndTools::RED_GRENADE:
                             break;
                         case WeaponsAndTools::BANANA:
                             proyectiles.add_actor(state->id, std::make_shared<BananaProjectile>(
-                                    state, txt_pool, camera));
+                                                                     state, txt_pool, camera));
                             break;
                         case WeaponsAndTools::HOLY_GRENADE:
                             break;
@@ -160,8 +166,11 @@ void EventLoop::run() {
         SDL_Delay(rest_time);
         loop_start_time += DURATION;
     }
+
+    cheat_menu->close();
 }
 EventLoop::~EventLoop() {
+
     if (runned) {
         input.join();
     }

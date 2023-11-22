@@ -64,10 +64,21 @@ enum class Actions {
     FIRE_POWER,
     SHOOT,  // stop fpower + shoot
     DELAY,
-    CHANGE_WEAPON_OR_TOOL
+    CHANGE_WEAPON_OR_TOOL,
+
+    // Cheats
+    WW3,
+    RANDOM_KILL,
+    INFINITE_AMMO,
+    MADNESS,
+    IMMORTAL_WORM,
+    MULTIPLE_JUMP,
+    INFINITE_TURN,
+    EVERYONE_1HP
+
 };
 
-enum class Projectiles{
+enum class Projectiles {
     BAZOOKA_PROYECTILE,
     BANANA_PROYECTILE,
     GREEN_GRENADE_PROYECTILE,
@@ -77,7 +88,7 @@ enum class Projectiles{
     RED_GRENADE_PROYECTILE
 };
 
-enum class Tombstones{
+enum class Tombstones {
     TOMBSTONE_1 = 0x1,
     TOMBSTONE_2,
     TOMBSTONE_3,
@@ -86,9 +97,7 @@ enum class Tombstones{
     TOMBSTONE_6
 };
 
-enum class Effects{
-    NORMAL_EXPLOSION
-};
+enum class Effects { NORMAL_EXPLOSION };
 
 enum class Actors {
     WORM = 0x0,

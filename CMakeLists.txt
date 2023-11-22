@@ -48,6 +48,7 @@ qt_wrap_ui(QT_CLIENT_SRC ${UI_SRC})
 qt_wrap_cpp(QT_CLIENT_SRC ${CLIENT_H})
 qt_add_resources(QT_RES client/resources/images.qrc)
 qt_add_resources(QT_RES client/resources/sounds.qrc)
+qt_add_resources(QT_RES client/resources/cheat_images.qrc)
 
 add_executable(client_exe ${COMMON_SRC} ${QT_CLIENT_SRC} ${QT_RES}
         client/Window.cpp)

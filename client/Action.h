@@ -18,7 +18,7 @@ public:
 
     explicit Action(const Actions c): c(c) {}
 
-    virtual void send(ClientSide::Protocol& protocol) = 0;
+    virtual void send(ClientSide::Protocol& protocol);
 
     virtual ~Action() = default;
 };
@@ -51,8 +51,6 @@ public:
 class StopMoving: public Action {
 public:
     StopMoving();
-
-    void send(ClientSide::Protocol& protocol) override;
 
     ~StopMoving() override = default;
 };
@@ -87,8 +85,6 @@ class StopADSAngle: public Action {
 public:
     StopADSAngle();
 
-    void send(ClientSide::Protocol& protocol) override;
-
     ~StopADSAngle() = default;
 };
 
@@ -96,16 +92,12 @@ class FirePower: public Action {
 public:
     FirePower();
 
-    void send(ClientSide::Protocol& protocol) override;
-
     ~FirePower() = default;
 };
 
 class Shoot: public Action {
 public:
     Shoot();
-
-    void send(ClientSide::Protocol& protocol) override;
 
     ~Shoot() = default;
 };
@@ -166,16 +158,12 @@ class ShowGames: public Action {
 public:
     ShowGames(): Action(Actions::SHOW_GAMES) {}
 
-    void send(ClientSide::Protocol& protocol) override;
-
     ~ShowGames() = default;
 };
 
 class ExitGame: public Action {
 public:
     ExitGame(): Action(Actions::EXIT_GAME) {}
-
-    void send(ClientSide::Protocol& protocol) override;
 
     ~ExitGame() = default;
 };
@@ -184,9 +172,63 @@ class Ready: public Action {
 public:
     Ready(): Action(Actions::READY) {}
 
-    void send(ClientSide::Protocol& protocol) override;
-
     ~Ready() = default;
+};
+
+class WW3Cheat: public Action {
+public:
+    WW3Cheat(): Action(Actions::WW3) {}
+
+    ~WW3Cheat() = default;
+};
+
+class RandomKillCheat: public Action {
+public:
+    RandomKillCheat(): Action(Actions::RANDOM_KILL) {}
+
+    ~RandomKillCheat() = default;
+};
+
+class InfiniteAmmoCheat: public Action {
+public:
+    InfiniteAmmoCheat(): Action(Actions::INFINITE_AMMO) {}
+
+    ~InfiniteAmmoCheat() = default;
+};
+
+class MadnessCheat: public Action {
+public:
+    MadnessCheat(): Action(Actions::MADNESS) {}
+
+    ~MadnessCheat() = default;
+};
+
+class ImmortalWorm: public Action {
+public:
+    ImmortalWorm(): Action(Actions::IMMORTAL_WORM) {}
+
+    ~ImmortalWorm() = default;
+};
+
+class MultipleJumpCheat: public Action {
+public:
+    MultipleJumpCheat(): Action(Actions::MULTIPLE_JUMP) {}
+
+    ~MultipleJumpCheat() = default;
+};
+
+class InfiniteTurnCheat: public Action {
+public:
+    InfiniteTurnCheat(): Action(Actions::INFINITE_TURN) {}
+
+    ~InfiniteTurnCheat() = default;
+};
+
+class Everyone1HPCheat: public Action {
+public:
+    Everyone1HPCheat(): Action(Actions::EVERYONE_1HP) {}
+
+    ~Everyone1HPCheat() = default;
 };
 
 #endif

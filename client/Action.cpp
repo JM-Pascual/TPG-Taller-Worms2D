@@ -2,6 +2,10 @@
 
 #include "cprotocol.h"
 
+// -------------------------- ACTION ------------------
+
+void Action::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
+
 // -------------------------- NULL ACTION ------------------------
 NullAction::NullAction(): Action(Actions::NULL_) {}
 
@@ -16,7 +20,7 @@ StartMoving::StartMoving(Direction direction):
         Action(Actions::START_MOVING), direction(direction) {}
 
 void StartMoving::send(ClientSide::Protocol& protocol) {
-    protocol.send(&c, sizeof(uint8_t));
+    Action::send(protocol);
     protocol.send(&direction, sizeof(bool));
 }
 
@@ -24,14 +28,12 @@ void StartMoving::send(ClientSide::Protocol& protocol) {
 
 StopMoving::StopMoving(): Action(Actions::STOP_MOVING) {}
 
-void StopMoving::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
-
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JUMP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Jump::Jump(JumpDir dir): Action(Actions::JUMP), direction(dir) {}
 
 void Jump::send(ClientSide::Protocol& protocol) {
-    protocol.send(&c, sizeof(uint8_t));
+    Action::send(protocol);
     protocol.send(&direction, sizeof(bool));
 }
 
@@ -43,7 +45,7 @@ void Jump::send(ClientSide::Protocol& protocol) {
 ADSAngle::ADSAngle(ADSAngleDir dir): Action(Actions::ADS_ANGLE), direction(dir) {}
 
 void ADSAngle::send(ClientSide::Protocol& protocol) {
-    protocol.send(&c, sizeof(uint8_t));
+    Action::send(protocol);
     protocol.send(&direction, sizeof(bool));
 }
 
@@ -51,26 +53,20 @@ void ADSAngle::send(ClientSide::Protocol& protocol) {
 
 StopADSAngle::StopADSAngle(): Action(Actions::STOP_ADS_ANGLE) {}
 
-void StopADSAngle::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
-
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ FirePower ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 FirePower::FirePower(): Action(Actions::FIRE_POWER) {}
 
-void FirePower::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
-
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Shoot ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Shoot::Shoot(): Action(Actions::SHOOT) {}
-
-void Shoot::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Delay ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Delay::Delay(DelayAmount amount): Action(Actions::DELAY), amount(amount) {}
 
 void Delay::send(ClientSide::Protocol& protocol) {
-    protocol.send(&c, sizeof(uint8_t));
+    Action::send(protocol);
     protocol.send(&amount, sizeof(uint8_t));
 }
 
@@ -80,7 +76,7 @@ ChangeGadget::ChangeGadget(WeaponsAndTools gadget):
         Action(Actions::CHANGE_WEAPON_OR_TOOL), gadget(gadget) {}
 
 void ChangeGadget::send(ClientSide::Protocol& protocol) {
-    protocol.send(&c, sizeof(uint8_t));
+    Action::send(protocol);
     protocol.send(&gadget, sizeof(uint8_t));
 }
 
@@ -88,19 +84,13 @@ void ChangeGadget::send(ClientSide::Protocol& protocol) {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CREATE GAME ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void CreateGame::send(ClientSide::Protocol& protocol) {
-    protocol.send(&c, sizeof(uint8_t));
+    Action::send(protocol);
     protocol.sendString64(description);
     protocol.sendString64(map);
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JOIN GAME ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void JoinGame::send(ClientSide::Protocol& protocol) {
-    protocol.send(&c, sizeof(uint8_t));
+    Action::send(protocol);
     protocol.send(&game_id, sizeof(uint8_t));
 }
-
-void Ready::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
-
-void ShowGames::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }
-
-void ExitGame::send(ClientSide::Protocol& protocol) { protocol.send(&c, sizeof(uint8_t)); }

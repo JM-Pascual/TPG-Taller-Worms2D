@@ -1,12 +1,11 @@
 #include "game.h"
 
-
 Game::Game(int argc, char* argv[]):
-        initGame(false),
-        appRet(0),
-        client(HOSTNAME, SERVNAME),
         app(std::make_unique<QApplication>(argc, argv)),
-        window(std::make_unique<MainWindow>(client, initGame)) {}
+        window(std::make_unique<MainWindow>(client, initGame)),
+        initGame(false),
+        cheat_menu(nullptr),
+        client(HOSTNAME, SERVNAME, cheat_menu) {}
 
 int Game::run() {
     window->show();
@@ -19,10 +18,16 @@ int Game::run() {
     if (initGame) {
         // window ya esta cerrado si el thread esta aca
         window = nullptr;
-        app->exit(ret);
-        app = nullptr;
-        client.run();
+        client.start();
+        cheat_menu->show();
+        ret = app->exec();
     }
 
-    return appRet;
+    return ret;
+}
+
+Game::~Game() {
+    if (initGame) {
+        client.join();
+    }
 }

@@ -129,10 +129,6 @@ b2Vec2 Worm::set_bullet_power() {
 }
 
 b2Vec2 Worm::set_bullet_direction() {
-    if (not body) {
-        return;
-    }
-
     b2Vec2 bullet_position;
     bullet_position.x = (body->GetPosition().x +
                          (facing_factor()) * ARM_LENGHT * cosf(aim_inclination_degrees));
