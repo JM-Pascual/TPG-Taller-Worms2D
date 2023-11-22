@@ -73,7 +73,7 @@ color: rgb(255, 58, 255)</string>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="randomKillButton">
+           <widget class="QPushButton" name="noWindButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -91,7 +91,7 @@ color: rgb(255, 58, 255)</string>
 color: rgb(255, 58, 255)</string>
             </property>
             <property name="text">
-             <string>Random Kill</string>
+             <string>No Wind</string>
             </property>
            </widget>
           </item>
@@ -168,7 +168,7 @@ color: rgb(255, 58, 255)</string>
 color: rgb(255, 58, 255)</string>
             </property>
             <property name="text">
-             <string>Immortal Worm</string>
+             <string>Immortal Worms</string>
             </property>
            </widget>
           </item>

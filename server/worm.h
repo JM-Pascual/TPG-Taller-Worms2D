@@ -59,6 +59,8 @@ private:
     bool was_damaged;
 
     float pos_y_before_falling;
+    const bool& allow_multiple_jump;
+    const bool& immortal_worms;
 
     int facing_factor();
 
@@ -66,7 +68,8 @@ public:
     const uint8_t id;
 
     explicit Worm(Battlefield& battlefield, std::unique_ptr<Weapon>*& selected_weapon,
-                  WeaponsAndTools& type, const uint8_t& id);
+                  WeaponsAndTools& type, const uint8_t& id, const bool& allow_multiple_jump,
+                  const bool& immortal_worms);
 
     void move();
     void stop();

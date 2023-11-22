@@ -26,7 +26,7 @@ private:
 
 
 public:
-    explicit WormHandler(std::map<uint8_t, std::unique_ptr<Player>>& players): players(players) {}
+    explicit WormHandler(std::map<uint8_t, std::unique_ptr<Player>>& players);
 
     void stop_turn_worm();
 
@@ -51,6 +51,16 @@ public:
                               const uint8_t& worm_index);
 
     void checkDeadWorms();
+
+    void allWorms1HP();
+
+    void playerAllowMultipleJump(const uint8_t& id);
+
+    void makePlayerWormsImmortal(const uint8_t& id);
+
+    void killRandomWorm();
+
+    void playerInfiniteAmmo(const uint8_t& id);
 
     const bool allWormsStayStill();
 };

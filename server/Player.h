@@ -46,6 +46,9 @@ private:
 
     std::vector<std::shared_ptr<Worm>> worms;
 
+    bool allow_multiple_jump;
+    bool immortal_worms;
+
     void spawnWorms(Battlefield& battlefield, const uint8_t worms_quantity, uint8_t& worm_counter);
 
 public:
@@ -59,6 +62,8 @@ public:
 
     void change_weapon(WeaponsAndTools new_weapon);
     std::unique_ptr<AmmoLeft> getWeaponsAmmo();
+
+    void infiniteAmmo();
 
     ~Player() = default;
 

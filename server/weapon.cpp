@@ -7,13 +7,15 @@
 
 Weapon::Weapon(uint8_t ammo): ammo(ammo) {}
 
+void Weapon::infiniteAmmo() { ammo = 255; }
+
 //~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
 
 Bazooka::Bazooka(): Weapon(BAZOOKA_AMMO) {}
 
 
 void Bazooka::execute(Battlefield& battlefield, Worm& worm) {
-    if (--ammo <= 0) {
+    if (ammo == 0) {
         return;
     }
 
@@ -24,17 +26,18 @@ void Bazooka::execute(Battlefield& battlefield, Worm& worm) {
     battlefield.add_projectile(projectile);
 
     worm.shoot_aim_weapon(projectile);
-}
 
+    --ammo;
+}
 
 
 //~~~~~~~~~~~~~~~~~~~ Mortar ~~~~~~~~~~~~~~~~~~~~
 
-//Difiere nada más en la munición, despues el execute es igual al de la bazooka
-Mortar::Mortar() : Weapon(MORTAR_AMMO){}
+// Difiere nada más en la munición, despues el execute es igual al de la bazooka
+Mortar::Mortar(): Weapon(MORTAR_AMMO) {}
 
-void Mortar::execute(Battlefield &battlefield, Worm &worm) {
-    if (--ammo <= 0) {
+void Mortar::execute(Battlefield& battlefield, Worm& worm) {
+    if (ammo == 0) {
         return;
     }
 
@@ -45,6 +48,8 @@ void Mortar::execute(Battlefield &battlefield, Worm &worm) {
     battlefield.add_projectile(mortar_rocket);
 
     worm.shoot_aim_weapon(mortar_rocket);
+
+    --ammo;
 }
 
 
@@ -53,7 +58,7 @@ void Mortar::execute(Battlefield &battlefield, Worm &worm) {
 GreenGrenade::GreenGrenade(): Weapon(GREEN_GRENADE_AMMO) {}
 
 void GreenGrenade::execute(Battlefield& battlefield, Worm& worm) {
-    if (--ammo <= 0) {
+    if (ammo == 0) {
         return;
     }
 
@@ -65,6 +70,8 @@ void GreenGrenade::execute(Battlefield& battlefield, Worm& worm) {
     battlefield.add_projectile(green_grenade);
 
     worm.shoot_aim_weapon(green_grenade);
+
+    --ammo;
 }
 
 //~~~~~~~~~~~~~~~~~~~ Green_grenade ~~~~~~~~~~~~~~~~~~~~
@@ -72,7 +79,7 @@ void GreenGrenade::execute(Battlefield& battlefield, Worm& worm) {
 RedGrenade::RedGrenade(): Weapon(RED_GRENADE_AMMO) {}
 
 void RedGrenade::execute(Battlefield& battlefield, Worm& worm) {
-    if (--ammo <= 0) {
+    if (ammo == 0) {
         return;
     }
 
@@ -84,9 +91,9 @@ void RedGrenade::execute(Battlefield& battlefield, Worm& worm) {
     battlefield.add_projectile(red_grenade);
 
     worm.shoot_aim_weapon(red_grenade);
+
+    --ammo;
 }
-
-
 
 
 //~~~~~~~~~~~~~~~~~~~ Banana ~~~~~~~~~~~~~~~~~~~~
@@ -94,7 +101,7 @@ void RedGrenade::execute(Battlefield& battlefield, Worm& worm) {
 BananaGrenade::BananaGrenade(): Weapon(BANANA_AMMO) {}
 
 void BananaGrenade::execute(Battlefield& battlefield, Worm& worm) {
-    if (--ammo <= 0) {
+    if (ammo == 0) {
         return;
     }
 
@@ -106,6 +113,8 @@ void BananaGrenade::execute(Battlefield& battlefield, Worm& worm) {
     battlefield.add_projectile(banana);
 
     worm.shoot_aim_weapon(banana);
+
+    --ammo;
 }
 
 //~~~~~~~~~~~~~~~~~~~ DynamiteGrenade ~~~~~~~~~~~~~~~~~~~~
@@ -113,7 +122,7 @@ void BananaGrenade::execute(Battlefield& battlefield, Worm& worm) {
 DynamiteGrenade::DynamiteGrenade(): Weapon(DYNAMITE_AMMO) {}
 
 void DynamiteGrenade::execute(Battlefield& battlefield, Worm& worm) {
-    if (--ammo <= 0) {
+    if (ammo == 0) {
         return;
     }
 
@@ -125,5 +134,6 @@ void DynamiteGrenade::execute(Battlefield& battlefield, Worm& worm) {
     battlefield.add_projectile(dynamite);
 
     worm.use_throwable(dynamite);
-}
 
+    --ammo;
+}

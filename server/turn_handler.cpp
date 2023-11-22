@@ -8,14 +8,12 @@
 #include "worm_handler.h"
 
 const TurnReset TurnHandler::need_to_update(const uint8_t players_quantity,
-                                            const std::chrono::duration<float>& elapsed,
-                                            WormHandler& worm_handler,
-                                            const bool& battlefield_empty) {
+                                            const std::chrono::duration<float>& elapsed) {
 
     // Desconecta un player o primer turno
     if (players_quantity != current_players_quantity) {
         current_players_quantity = players_quantity;
-        return advanceTurn(players_quantity, worm_handler, battlefield_empty);
+        return advanceTurn(players_quantity);
     }
 
     {
@@ -28,7 +26,7 @@ const TurnReset TurnHandler::need_to_update(const uint8_t players_quantity,
 
         if (it->second->worms.empty() ? true :
                                         it->second->worms.at(it->second->worm_turn)->was_damaged) {
-            return advanceTurn(players_quantity, worm_handler, battlefield_empty);
+            return advanceTurn(players_quantity);
         }
     }
 
@@ -40,14 +38,13 @@ const TurnReset TurnHandler::need_to_update(const uint8_t players_quantity,
         return TurnReset::NOT_RESET;
     }
 
-    return advanceTurn(players_quantity, worm_handler, battlefield_empty);
+    return advanceTurn(players_quantity);
 }
 
-const TurnReset TurnHandler::advanceTurn(const uint8_t& players_quantity, WormHandler& worm_handler,
-                                         const bool& battlefield_empty) {
+const TurnReset TurnHandler::advanceTurn(const uint8_t& players_quantity) {
     worm_handler.stop_turn_worm();
 
-    if (not battlefield_empty) {
+    if (not battlefield.noProjectiles()) {
         return TurnReset::WAIT_TURN_END;
     }
 
@@ -84,27 +81,25 @@ const TurnReset TurnHandler::advanceTurn(const uint8_t& players_quantity, WormHa
     return TurnReset::TIMER_RESET;
 }
 
-const ActualTurn TurnHandler::updateTurn(const std::chrono::duration<float>& elapsed,
-                                         BroadCaster& broadcaster, WormHandler& worm_handler,
-                                         Battlefield& battlefield) {
+const ActualTurn TurnHandler::updateTurn(const std::chrono::duration<float>& elapsed) {
+    if (not infinite_turn_cheat_activated) {
+        switch (this->need_to_update(players.size(), elapsed)) {
 
-    switch (this->need_to_update(players.size(), elapsed, worm_handler,
-                                 battlefield.noProjectiles())) {
+            case TurnReset::TIMER_RESET: {
+                worm_handler.clearDamagedState();
+                battlefield.newWindForce(no_wind_cheat_activated);
+                broadcaster.broadcast_turn(player_turn);
+                break;
+            }
 
-        case TurnReset::TIMER_RESET: {
-            worm_handler.clearDamagedState();
-            battlefield.newWindForce();
-            broadcaster.broadcast_turn(player_turn);
-            break;
+            case TurnReset::WAIT_TURN_END: {
+                broadcaster.broadcast_turn(player_turn, BLOCK_PLAYERS_INPUT);
+                break;
+            }
+
+            default:  // NO RESET
+                break;
         }
-
-        case TurnReset::WAIT_TURN_END: {
-            broadcaster.broadcast_turn(player_turn, BLOCK_PLAYERS_INPUT);
-            break;
-        }
-
-        default:  // NO RESET
-            break;
     }
 
     auto it = players.begin();
@@ -117,7 +112,20 @@ const ActualTurn TurnHandler::updateTurn(const std::chrono::duration<float>& ela
 const bool& TurnHandler::player_used_stop_action() { return player_stop_action; }
 
 void TurnHandler::use_stop_action() {
+    if (infinite_turn_cheat_activated) {
+        return;
+    }
+
     player_stop_action = true;
 
     elapsed_time = std::chrono::duration<float>(0);
+}
+
+void TurnHandler::activateInfiniteTurn() {
+    infinite_turn_cheat_activated = !infinite_turn_cheat_activated;
+}
+
+void TurnHandler::activateNoWind() {
+    no_wind_cheat_activated = !no_wind_cheat_activated;
+    battlefield.newWindForce(no_wind_cheat_activated);
 }

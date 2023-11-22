@@ -47,7 +47,7 @@ public:
     void destroy_dead_entities();
     void clean_dead_entities();
 
-    void newWindForce();
+    void newWindForce(const bool& no_wind_cheat_activated);
 
     friend class InfoParser;
 

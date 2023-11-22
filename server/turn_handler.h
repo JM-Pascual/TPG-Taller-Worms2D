@@ -32,6 +32,10 @@ class Battlefield;
 
 class TurnHandler {
 private:
+    BroadCaster& broadcaster;
+    WormHandler& worm_handler;
+    Battlefield& battlefield;
+
     uint8_t player_turn;
     std::chrono::duration<float> elapsed_time;
 
@@ -40,28 +44,38 @@ private:
 
     bool player_stop_action;
 
-    const TurnReset need_to_update(const uint8_t players_quantity,
-                                   const std::chrono::duration<float>& elapsed,
-                                   WormHandler& worm_handler, const bool& battlefield_empty);
+    bool infinite_turn_cheat_activated;
+    bool no_wind_cheat_activated;
 
-    const TurnReset advanceTurn(const uint8_t& players_quantity, WormHandler& worm_handler,
-                                const bool& battlefield_empty);
+    const TurnReset need_to_update(const uint8_t players_quantity,
+                                   const std::chrono::duration<float>& elapsed);
+
+    const TurnReset advanceTurn(const uint8_t& players_quantity);
 
 public:
-    explicit TurnHandler(std::map<uint8_t, std::unique_ptr<Player>>& players):
+    explicit TurnHandler(std::map<uint8_t, std::unique_ptr<Player>>& players,
+                         BroadCaster& broadcaster, WormHandler& worm_handler,
+                         Battlefield& battlefield):
+            broadcaster(broadcaster),
+            worm_handler(worm_handler),
+            battlefield(battlefield),
             player_turn(0),
             elapsed_time(0),
             players(players),
             current_players_quantity(0),
-            player_stop_action(false) {}
+            player_stop_action(false),
+            infinite_turn_cheat_activated(false),
+            no_wind_cheat_activated(false) {}
 
-    const ActualTurn updateTurn(const std::chrono::duration<float>& elapsed,
-                                BroadCaster& broadcaster, WormHandler& worm_handler,
-                                Battlefield& battlefield);
+    const ActualTurn updateTurn(const std::chrono::duration<float>& elapsed);
 
     const bool& player_used_stop_action();
 
     void use_stop_action();
+
+    void activateInfiniteTurn();
+
+    void activateNoWind();
 };
 
 #endif

@@ -27,6 +27,8 @@ public:
 
     virtual void execute(Battlefield& battlefield, Worm& worm) = 0;
 
+    void infiniteAmmo();
+
     virtual ~Weapon() = default;
 
     friend class Player;

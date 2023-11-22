@@ -48,7 +48,9 @@ void Engine::add_query_AABB(b2QueryCallback* callback, const b2AABB& aabb) {
     world->QueryAABB(callback, aabb);
 }
 
-void Engine::newWindForce() { this->wind_force = random_distribution(rng); }
+void Engine::newWindForce(const bool& no_wind_cheat_activated) {
+    this->wind_force = random_distribution(rng) * (!no_wind_cheat_activated);
+}
 
 void Engine::applyWindForce() {
     auto body_list = world->GetBodyList();
