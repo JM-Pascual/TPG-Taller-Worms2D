@@ -75,6 +75,7 @@ enum class Projectiles{
     DYNAMITE_PROYECTILE,
     HOLY_GRENADE_PROYECTILE,
     MORTAR_PROYECTILE,
+    MORTAR_FRAGMENT,
     RED_GRENADE_PROYECTILE
 };
 
@@ -88,7 +89,8 @@ enum class Tombstones{
 };
 
 enum class Effects{
-    NORMAL_EXPLOSION
+    NORMAL_EXPLOSION,
+    FRAGMENT_EXPLOSION
 };
 
 enum class Actors {

@@ -115,6 +115,13 @@ void TexturesPool::load_projectile_textures() {
                                                                           DATA_PATH "/weapons/mortar-missile.png")
                                                                           .SetColorKey(true, 0x000000))});
 
+    projectile_textures.insert({Projectiles::MORTAR_FRAGMENT,
+                                std::make_shared<SDL2pp::Texture>((*renderer),
+                                                                  SDL2pp::Surface(
+                                                                          DATA_PATH "/weapons/mortar-fragment.png")
+                                                                          .SetColorKey(true, 0x000000))});
+    projectile_textures[Projectiles::MORTAR_FRAGMENT]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
     projectile_textures.insert({Projectiles::GREEN_GRENADE_PROYECTILE,
                                 std::make_shared<SDL2pp::Texture>((*renderer),
                                                                   SDL2pp::Surface(
@@ -144,6 +151,13 @@ void TexturesPool::load_effect_textures() {
                                                                                                               .SetColorKey(true, 0x000000))});
 
     effect_textures[Effects::NORMAL_EXPLOSION]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    effect_textures.insert({Effects::FRAGMENT_EXPLOSION,
+                            std::make_shared<SDL2pp::Texture>((*renderer),
+                                                              SDL2pp::Surface(DATA_PATH "/weapons/mortar-fragment-explosion.png")
+                                                                      .SetColorKey(true, 0x000000))});
+
+    effect_textures[Effects::FRAGMENT_EXPLOSION]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
 void TexturesPool::load_combat_textures() {

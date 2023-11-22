@@ -61,10 +61,12 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                                     state, txt_pool, camera));
                             break;
                         }
-                        case WeaponsAndTools::MORTAR:
+                        case WeaponsAndTools::MORTAR: {
                             proyectiles.add_actor(state->id, std::make_shared<MortarProjectile>(
                                                                      state, txt_pool, camera));
                             break;
+                        }
+
                         case WeaponsAndTools::GREEN_GRENADE: {
                             proyectiles.add_actor(state->id, std::make_shared<GreenGrenadeProjectile
                                                                               >(state, txt_pool,
@@ -84,7 +86,7 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                                                                      state, txt_pool, camera));
                             break;
                         case WeaponsAndTools::MORTAR_FRAGMENT:
-                            proyectiles.add_actor(state->id, std::make_shared<BazookaProjectile>(
+                            proyectiles.add_actor(state->id, std::make_shared<MortarFragment>(
                                                                      state, txt_pool, camera));
                             break;
                         case WeaponsAndTools::BASEBALL_BAT:

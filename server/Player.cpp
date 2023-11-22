@@ -17,9 +17,9 @@ Player::Player():
         selected_gadget_type(WeaponsAndTools::BAZOOKA),
         worm_turn(0) {
     weapons.insert({WeaponsAndTools::BAZOOKA, std::make_unique<Bazooka>()});
-    weapons.insert({WeaponsAndTools::MORTAR, std::make_unique<Bazooka>()});
+    weapons.insert({WeaponsAndTools::MORTAR, std::make_unique<Mortar>()});
     weapons.insert({WeaponsAndTools::GREEN_GRENADE, std::make_unique<GreenGrenade>()});
-    weapons.insert({WeaponsAndTools::RED_GRENADE, std::make_unique<Bazooka>()});
+    weapons.insert({WeaponsAndTools::RED_GRENADE, std::make_unique<RedGrenade>()});
     weapons.insert({WeaponsAndTools::BANANA, std::make_unique<BananaGrenade>()});
     weapons.insert({WeaponsAndTools::HOLY_GRENADE, std::make_unique<Bazooka>()});
     weapons.insert({WeaponsAndTools::DYNAMITE, std::make_unique<DynamiteGrenade>()});
