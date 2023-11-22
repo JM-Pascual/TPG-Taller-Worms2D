@@ -5,6 +5,13 @@ void WeaponAnimation::load_all_draw_animations(TexturesPool& pool) {
             WeaponsAndTools::BAZOOKA, std::make_unique<Animation>(
                                               pool.get_draw_texture(WeaponsDraw::WORM_DRAW_BAZOOKA)
                                                       , 7, 2, false)});
+
+    weapon_draw_animations.insert({
+            WeaponsAndTools::MORTAR, std::make_unique<Animation>(
+                                             pool.get_draw_texture(
+                                                     WeaponsDraw::WORM_DRAW_MORTAR)
+                                                     , 7, 2, false)});
+
     weapon_draw_animations.insert({
             WeaponsAndTools::DYNAMITE, std::make_unique<Animation>(
                                                pool.get_draw_texture(WeaponsDraw::WORM_DRAW_DYNAMITE)
