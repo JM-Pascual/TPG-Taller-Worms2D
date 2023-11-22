@@ -52,7 +52,8 @@ private:
                              TexturesPool& txt_pool);
 
     void update_terrain(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                              Animation& water_animation);
+                        Animation& water_animation);
+
 public:
     /*
         Construye el cliente con su protocolo
@@ -71,6 +72,5 @@ public:
     void update_terrain(std::shared_ptr<SDL2pp::Renderer> ptr);
     friend class CheatMenu;
 };
-
 
 #endif
