@@ -1,4 +1,4 @@
-# TPG- Taller I 7542/9508
+# TPG - Taller de Programación I (7542/9508)
 # Worms2D
 
 ![worms-logo](https://cdn.discordapp.com/attachments/1162524969142599822/1176873747249111070/pngegg.png?ex=65707416&is=655dff16&hm=ab3c9c99ee749053d6545c462345340b3ade8931082e20abc46a4c63a65aeec8&)
