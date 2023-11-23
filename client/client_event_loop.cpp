@@ -130,6 +130,30 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                 continue;
             }
 
+            case StatesTag::LEVEL_BUILD: {
+                auto state = std::dynamic_pointer_cast<LevelStateG>(raw_state);
+
+                //Charge all the bars as terrain
+                for (auto & bar : state->bars) {
+                    if (bar.type == TerrainActors::BAR){
+                        terrain_elements.emplace_back(std::make_unique<ShortBar>(bar.pos.x,
+                                                                                 bar.pos.y,
+                                                                                 bar.angle,
+                                                                                 txt_pool,
+                                                                                 camera));
+                    } else {
+                        terrain_elements.emplace_back(std::make_unique<LongBar>(bar.pos.x,
+                                                                                bar.pos.y,
+                                                                                bar.angle,
+                                                                                txt_pool,
+                                                                                camera));
+                    }
+                }
+
+                terrain_elements.emplace_back(std::make_unique<Water>(0, 600, txt_pool, camera));
+                continue;
+            }
+
             default:
                 break;
         }
@@ -138,6 +162,7 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
 
 void EventLoop::run() {
     runned = true;
+
     Window window(1280, 720);
     TexturesPool txt_pool(window.get_renderer());
 
@@ -152,15 +177,13 @@ void EventLoop::run() {
 
     int loop_start_time = SDL_GetTicks();
 
-    terrain_elements.emplace_back(std::make_unique<Water>(0, 600, txt_pool, camera));
-
     std::chrono::duration<float> turn_time{};
     std::chrono::time_point<std::chrono::steady_clock> turn_start;
 
     while (!quit) {
         window.clear_textures();
 
-        window.render_stage(txt_pool, camera);
+        window.render_background(txt_pool);
         process_game_states(turn_start, txt_pool);
 
         turn_time = std::chrono::steady_clock::now() - turn_start;

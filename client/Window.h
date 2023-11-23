@@ -16,6 +16,8 @@ private:
     std::shared_ptr<SDL2pp::Window> game_window;
     std::shared_ptr<SDL2pp::Renderer> game_renderer;
 
+    std::unordered_map<TerrainActors, std::shared_ptr<SDL2pp::Texture>&> background_textures;
+
     void render_stage_texture(const std::shared_ptr<SDL2pp::Texture>& texture,
                               SDL2pp::Rect destination);
 
@@ -24,13 +26,16 @@ public:
 
     std::shared_ptr<SDL2pp::Renderer>& get_renderer();
 
+    /// Load background textures
+    void load_background_textures(TexturesPool& pool);
+
     /// Clears the actors_textures in screen calling the SDL2pp::Renderer::Clear method
     void clear_textures();
 
     /// Presents the actors_textures in screen calling the SDL2pp::Renderer::Present method
     void present_textures();
 
-    void render_stage(TexturesPool& pool, Camera& camera);
+    void render_background(TexturesPool& pool);
 
     ~Window() = default;
 

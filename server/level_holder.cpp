@@ -2,8 +2,23 @@
 
 #include "engine.h"
 
-Level_holder::Level_holder(Battlefield& battlefield) : battlefield_ref(battlefield) {}
+LevelHolder::LevelHolder(Battlefield& battlefield) : battlefield_ref(battlefield) {}
 
-void Level_holder::add_bar(float x, float y, float angle, bool is_long) {
+void LevelHolder::add_bar(float x, float y, float angle, bool is_long) {
     bars.emplace_back(battlefield_ref, x, y, angle, is_long);
+}
+
+std::shared_ptr<LevelStateG> LevelHolder::get_level_building_state() {
+    uint8_t amount_of_bars = bars.size();
+    std::vector<BarDto> bars_dto;
+    bars_dto.reserve(amount_of_bars);
+
+    for (auto& bar : bars) {
+        bars_dto.emplace_back(
+                bar.get_bar_position(),
+                bar.angle,
+                bar.get_bar_type());
+    }
+
+    return (std::make_shared<LevelStateG>(amount_of_bars, std::move(bars_dto)));
 }

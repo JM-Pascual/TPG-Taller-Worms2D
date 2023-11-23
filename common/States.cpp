@@ -29,3 +29,6 @@ ProjectileStateG::ProjectileStateG(const uint8_t& id, const float& x, const floa
         type(type),
         impacted(impacted),
         angle(angle) {}
+
+BarDto::BarDto(b2Vec2 pos_vect, float angle, TerrainActors actor_type):
+    pos(pos_vect), angle(angle), type(actor_type){}

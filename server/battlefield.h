@@ -27,7 +27,7 @@ private:
     uint8_t projectile_count;
 
     Engine engine;
-    Level_holder level_holder;
+    LevelHolder level_holder;
 
     void updateProjectilesTimer();
     void post_action_explosion();

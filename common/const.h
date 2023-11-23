@@ -159,6 +159,7 @@ enum class StatesTag {
     INFO_GAME_L,
     PLAYER_COUNT_L,
     PLAYER_L,
+    LEVEL_BUILD,
     BATTLEFIELD_G,
     PLAYER_G,
     PROJECTILE_G,

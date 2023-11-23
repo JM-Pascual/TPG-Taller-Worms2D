@@ -1,10 +1,10 @@
 #ifndef WORMS2D_BAR_H
 #define WORMS2D_BAR_H
 
-#include "../common/config.h"
 #include "box2d/box2d.h"
-
 #include "entity.h"
+
+#include "../common/const.h"
 
 #define BAR_WIDTH_SHORT 6.0f
 #define BAR_WIDTH_LONG 12.0f
@@ -12,16 +12,24 @@
 
 //Resolver estas contantes en el YAML
 
-
 class Battlefield;
+class LevelHolder;
 
 class Bar: public Entity {
+private:
+    float width;
+    float angle;
+    b2Vec2 get_bar_position();
+    TerrainActors get_bar_type();
 public:
-    explicit Bar(Battlefield& battlefield, float x, float y, float angle, bool is_long);
+    explicit Bar(Battlefield& battlefield, float x, float y,
+                 float inclination_angle, bool is_long);
 
     void collision_reaction() override;
 
     void applyWindResistance(const float& wind_force) override;
+
+    friend class LevelHolder;
 };
 
 
