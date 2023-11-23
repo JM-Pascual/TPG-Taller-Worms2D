@@ -8,8 +8,8 @@
 
 #include <stdint.h>
 
-#define TURN_DURATION_IN_SECONDS 60
-#define POST_TURN_DURATION_IN_SECONDS 3
+#define TURN_DURATION_IN_SECONDS Config::yamlNode["turn_duration_in_seconds"].as<int>()
+#define POST_TURN_DURATION_IN_SECONDS Config::yamlNode["post_turn_duration_in_seconds"].as<int>()
 
 #define BLOCK_PLAYERS_INPUT true
 

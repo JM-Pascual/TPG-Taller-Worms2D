@@ -5,12 +5,15 @@
 
 #include <spdlog/spdlog.h>
 
+#include "../common/config.h"
+
 #define CHUNKSIZE 4096
 
 #define CHANNEL -1
 
 // Max volume = MIX_MAX_VOLUME == 128
-#define MUSIC_VOLUME 15
+#define MUSIC_VOLUME Config::yamlNode["music_volume"].as<int>()
+#define EFFECT_VOLUME Config::yamlNode["effect_volume"].as<int>()
 
 AudioPlayer::AudioPlayer(): background_music(nullptr) {
     Mix_Init(MIX_INIT_MP3);
@@ -31,7 +34,7 @@ AudioPlayer::AudioPlayer(): background_music(nullptr) {
         Mix_Chunk* chunk = Mix_LoadWAV(key_path.second.data());
         chunks.insert({key_path.first, chunk});
         if (chunk) {
-            Mix_VolumeChunk(chunk, 40);
+            Mix_VolumeChunk(chunk, EFFECT_VOLUME);
             continue;
         }
 

@@ -14,6 +14,7 @@
 #include <qmovie.h>
 #include <spdlog/spdlog.h>
 
+#include "../common/config.h"
 #include "../common/const.h"
 #include "./ui_mainwindow.h"
 
@@ -25,7 +26,7 @@
 #define WINDOW_HEIGHT 720
 
 #define INTRO_EXPLOSION_DURATION 1500
-#define LOBBY_REFRESH_RATE 33
+#define LOBBY_REFRESH_RATE Config::yamlNode["frame_duration"].as<int>()
 
 #define EFFECTS_VOLUME 0.4f
 #define BACKGROUND_MUSIC_VOLUME 0.2f
@@ -467,7 +468,6 @@ void MainWindow::closeEvent(QCloseEvent* event) {
         client.action_queue.push(std::make_shared<ExitGame>());
     }
     event->accept();
-
 }
 
 

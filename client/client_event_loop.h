@@ -4,6 +4,7 @@
 #include <atomic>
 #include <memory>
 
+#include "../common/config.h"
 #include "../common/thread.h"
 
 #include "ActorHolder.h"
@@ -16,6 +17,8 @@
 #include "csender.h"
 #include "inputHandler.h"
 #include "text_printer.h"
+
+#define FRAME_DURATION Config::yamlNode["frame_duration"].as<int>()
 
 class Action;
 class States;

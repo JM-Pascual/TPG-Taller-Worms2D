@@ -11,8 +11,7 @@
 
 #include "player_action.h"
 
-#define TICK_RATE 30
-#define EST_TICK_TIME 1000 / TICK_RATE
+#define EST_TICK_TIME Config::yamlNode["tick_duration"].as<int>()
 
 class Game;
 

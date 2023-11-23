@@ -11,7 +11,6 @@
 #define NULL_ARG ""
 
 #define MAX_DESCR_CHARS 64
-#define MAX_PLAYERS 4
 
 #define NOT_YOUR_TURN 0
 #define IS_YOUR_TURN 1

@@ -1,5 +1,6 @@
 #include <spdlog/spdlog.h>
 
+#include "../common/config.h"
 #include "../common/const.h"
 #include "../common/liberror.h"
 #include "../common/queue.h"
@@ -16,6 +17,10 @@ int main(int argc, char* argv[]) try {
                   << " <ip/hostname server> <port/servicename>\n";
         return ERROR_;
     }
+
+    Config::commonNode = YAML::LoadFile(YAML_PATH "/common_const.yaml");
+    Config::yamlNode = YAML::LoadFile(YAML_PATH "/client_const.yaml");
+
     Logger l(LOGNAME, LOGFILE);
     Game game(argc, argv);
     return game.run();

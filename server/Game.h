@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "../common/States.h"
+#include "../common/config.h"
 #include "../common/const.h"
 #include "../common/queue.h"
 #include "box2d/box2d.h"
@@ -20,7 +21,9 @@
 #include "game_loop.h"
 #include "worm_handler.h"
 
-#define EXTRA_LIFE 25
+#define EXTRA_LIFE Config::yamlNode["extra_worm_life"].as<int>()
+#define MAX_PLAYERS Config::commonNode["max_players"].as<unsigned int>()
+#define WORMS_QUANTITY Config::commonNode["worms_quantity"].as<unsigned int>()
 
 class Projectile;
 
