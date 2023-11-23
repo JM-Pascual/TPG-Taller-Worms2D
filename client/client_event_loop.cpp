@@ -1,8 +1,5 @@
 #include "client_event_loop.h"
 
-#include <SDL2pp/SDL2pp.hh>
-#include <spdlog/spdlog.h>
-
 #include "../common/const.h"
 
 #include "cheatmenu.h"
@@ -26,6 +23,18 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
     send.start();
     cheat_menu = std::make_unique<CheatMenu>(action_queue);
     cheat_menu->hide();
+}
+
+void EventLoop::update_terrain() {
+    for (auto& terrain: terrain_elements) {
+        terrain->update();
+    }
+}
+
+void EventLoop::render_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) {
+    for (auto& terrain: terrain_elements) {
+        terrain->render(game_renderer);
+    }
 }
 
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
@@ -127,16 +136,6 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
     }
 }
 
-void EventLoop::update_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                               Animation& water_animation) {
-    water_animation.update();
-
-    for (int i = 0; i < 5; i++) {
-        water_animation.render((*game_renderer), camera.calcRect(0, 600 + i * 22, 1280, 40), 1240,
-                               0);
-    }
-}
-
 void EventLoop::run() {
     runned = true;
     Window window(1280, 720);
@@ -149,11 +148,11 @@ void EventLoop::run() {
 
     audio_player.play_background_music();
 
-    Animation water_animation(txt_pool.get_level_texture(LevelActors::WATER), 11, 3);
-
     input.start();
 
     int loop_start_time = SDL_GetTicks();
+
+    terrain_elements.emplace_back(std::make_unique<Water>(0, 600, txt_pool, camera));
 
     std::chrono::duration<float> turn_time{};
     std::chrono::time_point<std::chrono::steady_clock> turn_start;
@@ -172,7 +171,8 @@ void EventLoop::run() {
         proyectiles.render_actors(window.get_renderer());
         proyectiles.print_actors_state(window.get_renderer(), state_printer);
 
-        update_terrain(window.get_renderer(), water_animation);
+        update_terrain();
+        render_terrain(window.get_renderer());
 
         window.present_textures();
 

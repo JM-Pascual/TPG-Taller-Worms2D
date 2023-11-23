@@ -72,10 +72,15 @@ void TexturesPool::load_worm_textures() {
 
 void TexturesPool::load_level_textures() {
     /// Loads all the level actors_textures and enables alpha blending
-    load_texture_into_map(DATA_PATH "/stage/gradient.bmp", level_actors_textures, LevelActors::GRADIENT, false);
-    load_texture_into_map(DATA_PATH "/stage/background.png", level_actors_textures, LevelActors::BACKGROUND);
-    load_texture_into_map(DATA_PATH "/stage/bridge.png", level_actors_textures, LevelActors::LONG_BAR);
-    load_texture_into_map(DATA_PATH "/blue-water-sprites/blue_water.png", level_actors_textures, LevelActors::WATER);
+    load_texture_into_map(DATA_PATH "/stage/gradient.bmp", level_actors_textures,
+                          TerrainActors::GRADIENT, false);
+    load_texture_into_map(DATA_PATH "/stage/background.png", level_actors_textures,
+                          TerrainActors::BACKGROUND);
+    load_texture_into_map(DATA_PATH "/stage/bar.png", level_actors_textures, TerrainActors::BAR);
+    load_texture_into_map(DATA_PATH "/stage/long-bar.png", level_actors_textures,
+                          TerrainActors::LONG_BAR);
+    load_texture_into_map(DATA_PATH "/blue-water-sprites/blue_water.png", level_actors_textures,
+                          TerrainActors::WATER);
 }
 
 void TexturesPool::load_tombstones_textures() {
@@ -103,7 +108,7 @@ std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_actor_texture(Actors actor_t
 }
 
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_level_texture(
-        LevelActors level_actor_to_fetch) {
+        TerrainActors level_actor_to_fetch) {
     return (level_actors_textures[level_actor_to_fetch]);
 }
 

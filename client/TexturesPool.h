@@ -26,7 +26,7 @@ private:
                             EnumType texture_enum, bool with_alpha_blending = true);
 
     std::unordered_map<Actors, std::shared_ptr<SDL2pp::Texture>> actors_textures;
-    std::unordered_map<LevelActors, std::shared_ptr<SDL2pp::Texture>> level_actors_textures;
+    std::unordered_map<TerrainActors, std::shared_ptr<SDL2pp::Texture>> level_actors_textures;
     std::unordered_map<WeaponAiming, std::shared_ptr<SDL2pp::Texture>> aim_textures;
     std::unordered_map<WeaponsDraw, std::shared_ptr<SDL2pp::Texture>> draw_textures;
     std::unordered_map<Projectiles, std::shared_ptr<SDL2pp::Texture>> projectile_textures;
@@ -38,7 +38,7 @@ public:
     explicit TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer);
 
     std::shared_ptr<SDL2pp::Texture>& get_actor_texture(Actors actor_to_fetch);
-    std::shared_ptr<SDL2pp::Texture>& get_level_texture(LevelActors level_actor_to_fetch);
+    std::shared_ptr<SDL2pp::Texture>& get_level_texture(TerrainActors level_actor_to_fetch);
     std::shared_ptr<SDL2pp::Texture>& get_draw_texture(WeaponsDraw draw_texture_to_fetch);
     std::shared_ptr<SDL2pp::Texture>& get_aim_texture(WeaponAiming aim_texture_to_fetch);
     std::shared_ptr<SDL2pp::Texture>& get_projectile_texture(Projectiles aim_texture_to_fetch);

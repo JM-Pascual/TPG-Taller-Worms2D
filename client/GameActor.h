@@ -22,7 +22,6 @@ class GameActor {
 protected:
     b2Vec2 position;
     Camera& camera;
-
 public:
     GameActor(const float& x, const float& y, Camera& camera): position(x, y), camera(camera) {}
     virtual void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) = 0;

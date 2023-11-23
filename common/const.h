@@ -8,15 +8,10 @@
 #define NOT_POPPED_COUNT 254
 #define CONNECTION_ERROR 255
 
-#define NULL_ARG ""
-
 #define MAX_DESCR_CHARS 64
 
 #define NOT_YOUR_TURN 0
 #define IS_YOUR_TURN 1
-
-#define MAX_PLAYERS 4
-#define WORMS_QUANTITY 2//3
 
 enum class SWIndex { INTRO, MENU, GAME_SEARCH, HELP, LOBBY };
 
@@ -82,7 +77,7 @@ enum class Actions {
 
 };
 
-enum class LevelActors{
+enum class TerrainActors {
     GRADIENT,
     BAR,
     LONG_BAR,
