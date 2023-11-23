@@ -13,10 +13,6 @@
 #define DYNAMITE_AMMO uint8_t(5)
 #define MORTAR_AMMO uint8_t(10)
 #define RED_GRENADE_AMMO uint8_t(10)
-#define TELEPORT_AMMO uint8_t(255)
-#define AIRSTRIKE_AMMO uint8_t(2)
-
-#define AIRSTRIKE_ROCKETS uint8_t(6)
 
 class Worm;
 class Game;
