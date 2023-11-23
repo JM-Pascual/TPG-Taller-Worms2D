@@ -106,7 +106,12 @@ const ActualTurn TurnHandler::updateTurn(const std::chrono::duration<float>& ela
     std::advance(it, player_turn);
     uint8_t player_id = it->first;
 
-    return ActualTurn(player_id, players.at(player_id)->worm_turn);
+    // Evita que rompa en caso de que un worm se suicide junto a sus companieros
+    if (it->second->worm_turn > (it->second->worms.size() - 1)) {
+        it->second->worm_turn = 0;
+    }
+
+    return ActualTurn(player_id, it->second->worm_turn);
 }
 
 const bool& TurnHandler::player_used_stop_action() { return player_stop_action; }
