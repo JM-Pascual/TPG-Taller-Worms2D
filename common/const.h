@@ -17,7 +17,7 @@
 #define IS_YOUR_TURN 1
 
 #define MAX_PLAYERS 4
-#define WORMS_QUANTITY 10
+#define WORMS_QUANTITY 2//3
 
 enum class SWIndex { INTRO, MENU, GAME_SEARCH, HELP, LOBBY };
 
@@ -83,6 +83,23 @@ enum class Actions {
 
 };
 
+enum class LevelActors{
+    GRADIENT,
+    BAR,
+    LONG_BAR,
+    BACKGROUND,
+    WATER
+};
+
+enum class TerrainInclinations{
+    HORIZONTAL,
+    VERTICAL,
+    INCLINED_RIGHT,
+    INCLINED_LEFT,
+    UPWARDS_RIGHT,
+    UPWARDS_LEFT
+};
+
 enum class Projectiles {
     BAZOOKA_PROYECTILE,
     BANANA_PROYECTILE,
@@ -107,11 +124,6 @@ enum class Effects { NORMAL_EXPLOSION, FRAGMENT_EXPLOSION };
 
 enum class Actors {
     WORM = 0x0,
-    GRADIENT,
-    BRIDGE,
-    LONG_BRIDGE,
-    BACKGROUND,
-    WATER,
     JUMPING_WORM,
     BACKFLIP_WORM,
     DYING_WORM,

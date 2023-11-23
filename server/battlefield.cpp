@@ -8,12 +8,16 @@
 #include "proyectile.h"
 #include "worm_handler.h"
 
+Battlefield::Battlefield() : projectile_count(0), level_holder(*this) {
+    level_holder.add_bar(0, 0, 0, true);
+}
+
+
 void Battlefield::updateProjectilesTimer() {
     for (auto& projectile: projectiles) {
         projectile.second->updateTimer();
     }
 }
-
 
 void Battlefield::post_action_explosion() {
     for (auto& projectile: projectiles) {
@@ -63,4 +67,4 @@ void Battlefield::remove_collided_projectiles() {
 
 void Battlefield::destroy_dead_entities() { engine.destroy_dead_entities(); }
 
-const bool Battlefield::noProjectiles() { return projectiles.empty(); }
+bool Battlefield::noProjectiles() { return projectiles.empty(); }

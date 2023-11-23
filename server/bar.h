@@ -5,12 +5,16 @@
 
 #include "entity.h"
 
+#define BAR_WIDTH_SHORT 6.0f
+#define BAR_WIDTH_LONG 12.0f
+#define BAR_HEIGHT 0.8f
+
 
 class Battlefield;
 
 class Bar: public Entity {
 public:
-    explicit Bar(Battlefield& battlefield);
+    explicit Bar(Battlefield& battlefield, float x, float y, float angle, bool is_long);
 
     void collision_reaction() override;
 

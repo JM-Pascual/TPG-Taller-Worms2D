@@ -18,7 +18,7 @@
 #define VELOCITY_ITERATIONS (int32)6
 #define POSITION_ITERATIONS (int32)2
 
-#define MIN_WIND -7.0f
+#define MIN_WIND (-7.0f)
 #define MAX_WIND 7.0f
 
 class Projectile;

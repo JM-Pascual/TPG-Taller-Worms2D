@@ -149,7 +149,7 @@ void EventLoop::run() {
 
     audio_player.play_background_music();
 
-    Animation water_animation(txt_pool.get_actor_texture(Actors::WATER), 11, 3);
+    Animation water_animation(txt_pool.get_level_texture(LevelActors::WATER), 11, 3);
 
     input.start();
 

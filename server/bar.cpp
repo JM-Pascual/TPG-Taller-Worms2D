@@ -3,14 +3,19 @@
 #include "battlefield.h"
 #include "query_callback.h"
 
-Bar::Bar(Battlefield& battlefield): Entity(battlefield) {
+Bar::Bar(Battlefield& battlefield, float x, float y, float angle, bool is_long): Entity(battlefield) {
     b2BodyDef barBodyDef;
-    barBodyDef.position.Set(38.4f, 9.2f);
+    barBodyDef.position.Set(x, y);
+    //angle set in radians
 
     barBodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
     body = battlefield.add_body(barBodyDef);
     b2PolygonShape barBox;
-    barBox.SetAsBox(76.8 / 2, 0.8f / 2);
+
+    if (is_long)
+        barBox.SetAsBox(BAR_WIDTH_LONG / 2, BAR_HEIGHT / 2);
+    else
+        barBox.SetAsBox(BAR_WIDTH_SHORT / 2, BAR_HEIGHT / 2);
 
     body->CreateFixture(&barBox, 0.0f);
 }

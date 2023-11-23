@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include <stdint.h>
 
@@ -51,6 +52,16 @@ public:
 
     explicit PlayerStateL(const bool& ready, const uint8_t& id):
             States(StatesTag::PLAYER_L), ready(ready), id(id) {}
+};
+
+struct BarDto{
+    const b2Vec2 pos;
+
+};
+
+class LevelStateG: public States {
+public:
+    std::vector<b2Vec2> bars;
 };
 
 class PlayerStateG: public States {

@@ -12,7 +12,7 @@ public:
     virtual void stop() = 0;
     virtual bool is_alive() const = 0;
 
-    virtual ~Runnable() {}
+    virtual ~Runnable() = default;
 };
 
 class Thread: public Runnable {
