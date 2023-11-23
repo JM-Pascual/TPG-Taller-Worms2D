@@ -2,6 +2,7 @@
 
 #include <spdlog/spdlog.h>
 
+#include "../common/config.h"
 #include "../common/const.h"
 #include "../common/liberror.h"
 #include "../common/logger.h"
@@ -20,6 +21,8 @@ int main(int argc, char* argv[]) try {
         std::cerr << "Bad program call. Expected " << argv[0] << " <port/servicename>\n";
         return ERROR_;
     }
+    Config::commonNode = YAML::LoadFile(YAML_PATH "/common_const.yaml");
+    Config::yamlNode = YAML::LoadFile(YAML_PATH "/server_const.yaml");
 
     Logger l(LOGNAME, LOGFILE);
     Server sv(SERVNAME);

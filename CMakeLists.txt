@@ -35,6 +35,7 @@ set(QT_RES client/resources/images.qrc)
 add_definitions(-DDATA_PATH="${PROJECT_SOURCE_DIR}/sprites")
 add_definitions(-DMEDIA_PATH="${PROJECT_SOURCE_DIR}/client/resources/sounds")
 add_definitions(-DFONT_PATH="${PROJECT_SOURCE_DIR}/client/resources/font")
+add_definitions(-DYAML_PATH="${PROJECT_SOURCE_DIR}/yaml")
 include_directories(${SDL2PP_INCLUDE_DIRS})
 
 file(GLOB COMMON_SRC common/*.cpp)
@@ -67,13 +68,14 @@ target_link_libraries(client_exe PUBLIC SDL2)
 target_link_libraries(client_exe PUBLIC SDL2_image)
 target_link_libraries(client_exe PUBLIC SDL2_mixer)
 target_link_libraries(client_exe PUBLIC ${SDL2PP_LIBRARIES})
+target_link_libraries(client_exe PUBLIC yaml-cpp)
 
 
 add_executable(server_exe ${COMMON_SRC} ${SERVER_SRC})
 
 target_link_libraries(server_exe PRIVATE spdlog::spdlog)
 target_link_libraries(server_exe PUBLIC box2d)
-target_link_libraries(server_exe ${yaml-cpp_LIBRARIES})
+target_link_libraries(server_exe PUBLIC yaml-cpp)
 target_link_libraries(server_exe ${GTest_LIBRARIES})
 
 set_target_properties(client_exe server_exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TARGET_DIR})

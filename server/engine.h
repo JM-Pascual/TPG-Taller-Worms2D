@@ -7,19 +7,20 @@
 #include <random>
 #include <vector>
 
+#include "../common/config.h"
 #include "box2d/box2d.h"
 
 #include "contact_listener.h"
 
-#define X_GRAVITY 0.0f
-#define Y_GRAVITY (-16.5f)
+#define X_GRAVITY Config::yamlNode["gravity_x"].as<float>()
+#define Y_GRAVITY Config::yamlNode["gravity_y"].as<float>()
 
-#define TIME_STEP (1.0f / 60.0f)
-#define VELOCITY_ITERATIONS (int32)6
-#define POSITION_ITERATIONS (int32)2
+#define TIME_STEP Config::yamlNode["time_step"].as<float>()
+#define VELOCITY_ITERATIONS Config::yamlNode["velocity_iterations"].as<int>()
+#define POSITION_ITERATIONS Config::yamlNode["position_iterations"].as<int>()
 
-#define MIN_WIND -7.0f
-#define MAX_WIND 7.0f
+#define MIN_WIND Config::yamlNode["min_wind"].as<float>()
+#define MAX_WIND Config::yamlNode["max_wind"].as<float>()
 
 class Projectile;
 

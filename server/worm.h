@@ -5,20 +5,22 @@
 
 #include <box2d/box2d.h>
 
+#include "../common/config.h"
 #include "../common/const.h"
 
 #include "entity.h"
 
-#define INITIAL_LIFE 100
+#define INITIAL_LIFE Config::yamlNode["initial_life"].as<int>()
 
-#define TICK_RATE 30
-#define WIDTH 0.9f
-#define HEIGHT 1.2f
+#define TICK_RATE Config::yamlNode["tick_rate"].as<int>()
 
-#define ARM_LENGHT ((WIDTH / 2) + 1)
+#define WIDTH Config::yamlNode["worm_width"].as<float>()
+#define HEIGHT Config::yamlNode["worm_height"].as<float>()
 
-#define POWER_RAISE 1
-#define MAX_POWER 10
+#define ARM_LENGHT Config::yamlNode["arm_length"].as<float>()
+
+#define POWER_RAISE Config::yamlNode["power_raise"].as<int>()
+#define MAX_POWER Config::yamlNode["max_power"].as<int>()
 #define ANGLE_VARIATION (b2_pi / 64)
 
 #define CATEGORY_BITS 0x002
@@ -29,9 +31,9 @@
 #define MIN_SQUARED_VELOCITY 0.0001
 #define MIN_Y_VELOCITY 0.001
 
-#define MIN_FALLING_DAMAGE_HEIGHT 2.0f
-#define MAX_FALLING_DAMAGE 25.0f
-#define FALL_DMG_AMP 3
+#define MIN_FALLING_DAMAGE_HEIGHT Config::yamlNode["min_falling_damage"].as<float>()
+#define MAX_FALLING_DAMAGE Config::yamlNode["max_falling_damage"].as<float>()
+#define FALL_DMG_AMP Config::yamlNode["fall_damage_amplification"].as<int>()
 
 class Weapon;
 class Projectile;

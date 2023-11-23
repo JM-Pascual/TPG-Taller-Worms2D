@@ -7,8 +7,8 @@
 
 #include "cheatmenu.h"
 
-const int DURATION = 1000 / 30;
-
+#define MAX_PLAYERS Config::commonNode["max_players"].as<int>()
+#define WORMS_QUANTITY Config::commonNode["worms_quantity"].as<int>()
 
 EventLoop::EventLoop(const char* hostname, const char* servname,
                      std::unique_ptr<CheatMenu>& cheat_menu):
@@ -31,7 +31,7 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
                                     TexturesPool& txt_pool) {
     std::shared_ptr<States> raw_state = nullptr;
-    for (int j = 0; j < (MAX_PLAYERS + WORMS_QUANTITY); j++) {
+    for (int j = 0; j < MAX_PLAYERS + WORMS_QUANTITY; j++) {
         if (not game_state_queue.try_pop(raw_state)) {
             continue;
         }
@@ -177,17 +177,19 @@ void EventLoop::run() {
         window.present_textures();
 
         int loop_end_time = SDL_GetTicks();
-        int rest_time = DURATION - (loop_end_time - loop_start_time);
+        int rest_time = FRAME_DURATION - (loop_end_time - loop_start_time);
 
         if (rest_time < 0) {
             int time_behind = -rest_time;
-            rest_time = DURATION - time_behind % DURATION;
+
+            rest_time = FRAME_DURATION - time_behind % FRAME_DURATION;
+
             int lost = time_behind + rest_time;
             loop_start_time += lost;
         }
 
         SDL_Delay(rest_time);
-        loop_start_time += DURATION;
+        loop_start_time += FRAME_DURATION;
     }
 
     cheat_menu->close();

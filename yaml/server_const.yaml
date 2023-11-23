@@ -1,0 +1,77 @@
+---
+
+  bar_x: 38.4 # 76.8 / 2
+  bar_y: 0.4 # 0.8 / 2
+
+  gravity_x: 0
+  gravity_y: -16.5
+
+  tick_rate: 30
+  tick_duration: 33 # 1000 / 30 rounded
+  time_step: 0.017 # 1/60
+
+  velocity_iterations: 6
+  position_iterations: 2
+
+  min_wind: -7.0
+  max_wind: 7.0
+
+  extra_worm_life: 25
+
+  initial_life: 100
+  worm_width: 0.9
+  worm_height: 1.2
+  arm_length: 1.45  #(${worm_width} / 2) + 1
+  power_raise: 1
+  max_power: 5
+  min_falling_damage: 2.0
+  max_falling_damage: 25.0
+  fall_damage_amplification: 3
+
+  bazooka_ammo: 255
+  green_grenade_ammo: 255
+  banana_ammo: 5
+  dynamite_ammo: 5
+  mortar_ammo: 10
+  red_grenade_ammo: 10
+  holy_grenade_ammo: 2
+  baseball_bat_ammo: 255
+  air_strike_ammo: 2
+  teleport_ammo: 255
+
+  turn_duration_in_seconds: 60
+  post_turn_duration_in_seconds: 3
+
+  blast_radius_bazooka: 2
+  epicenter_damage_bazooka: 50
+
+  blast_radius_green_grenade: 2
+  epicenter_damage_green_grenade: 30
+
+  blast_radius_banana: 4
+  epicenter_damage_banana: 70
+
+  blast_radius_dynamite: 4
+  epicenter_damage_dynamite: 50
+
+  blast_radius_mortar: 2
+  epicenter_damage_mortar: 50
+  blast_radius_mortar_fragment: 2
+  epicenter_damage_mortar_fragment: 10
+  fragments_amount: 6
+  fragment_power: 5
+
+  blast_radius_red_grenade: 2
+  epicenter_damage_red_grenade: 30
+
+  blast_radius_holy_grenade: 0 
+  epicenter_damage_holy_grenade: 0
+
+  blast_radius_baseball_bat: 0
+  epicenter_damage_baseball_bat: 0
+
+  blast_radius_air_strike: 0
+  epicenter_damage_air_strike: 0
+
+  blast_radius_teleport: 0
+  epicenter_damage_teleport: 0

@@ -37,13 +37,13 @@ public:
     void join() override { thread.join(); }
 
     void main() {
-        try {
-            this->run();
-        } catch (const std::exception& err) {
-            std::cerr << "Unexpected exception: " << err.what() << "\n";
-        } catch (...) {
-            std::cerr << "Unexpected exception: <unknown>\n";
-        }
+        // try {
+        this->run();
+        // } catch (const std::exception& err) {
+        //     std::cerr << "Unexpected exception: " << err.what() << "\n";
+        // } catch (...) {
+        //     std::cerr << "Unexpected exception: <unknown>\n";
+        // }
 
         _is_alive = false;
     }

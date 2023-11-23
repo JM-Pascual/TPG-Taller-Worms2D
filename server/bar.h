@@ -1,9 +1,13 @@
 #ifndef WORMS2D_BAR_H
 #define WORMS2D_BAR_H
 
+#include "../common/config.h"
 #include "box2d/box2d.h"
 
 #include "entity.h"
+
+#define BAR_X Config::yamlNode["bar_x"].as<float>()
+#define BAR_Y Config::yamlNode["bar_y"].as<float>()
 
 
 class Battlefield;

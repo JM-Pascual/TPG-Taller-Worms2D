@@ -1,18 +1,19 @@
 #ifndef WORMS2D_WEAPON_H
 #define WORMS2D_WEAPON_H
 
+#include "../common/config.h"
 #include "../common/const.h"
 #include "box2d/b2_math.h"
 
 #include "proyectile.h"
 
 
-#define BAZOOKA_AMMO uint8_t(255)  // Se supone que tiene que ser infinita
-#define GREEN_GRENADE_AMMO uint8_t(255)
-#define BANANA_AMMO uint8_t(5)
-#define DYNAMITE_AMMO uint8_t(5)
-#define MORTAR_AMMO uint8_t(10)
-#define RED_GRENADE_AMMO uint8_t(10)
+#define BAZOOKA_AMMO Config::yamlNode["bazooka_ammo"].as<int>()
+#define GREEN_GRENADE_AMMO Config::yamlNode["green_grenade_ammo"].as<int>()
+#define BANANA_AMMO Config::yamlNode["banana_ammo"].as<int>()
+#define DYNAMITE_AMMO Config::yamlNode["dynamite_ammo"].as<int>()
+#define MORTAR_AMMO Config::yamlNode["mortar_ammo"].as<int>()
+#define RED_GRENADE_AMMO Config::yamlNode["red_grenade_ammo"].as<int>()
 
 class Worm;
 class Game;

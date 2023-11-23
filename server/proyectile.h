@@ -8,35 +8,36 @@
 #include <box2d/b2_body.h>
 
 #include "../common/States.h"
+#include "../common/config.h"
 #include "../common/const.h"
 
 #include "entity.h"
 #include "query_callback.h"
 
-
-#define BLAST_RADIUS_BAZOOKA 2
-#define BLAST_RADIUS_MORTAR 2
-#define BLAST_RADIUS_MORTAR_FRAGMENT 2
-#define BLAST_RADIUS_GREEN_GRENADE 2
-#define BLAST_RADIUS_RED_GRENADE 2
-#define BLAST_RADIUS_BANANA 4
-#define BLAST_RADIUS_DYNAMITE 4
-
-
-#define EPICENTER_DAMAGE_BAZOOKA 50
-#define EPICENTER_DAMAGE_MORTAR 50
-#define EPICENTER_DAMAGE_MORTAR_FRAGMENT 10
-#define EPICENTER_DAMAGE_GREEN_GRENADE 30
-#define EPICENTER_DAMAGE_RED_GRENADE 30
-#define EPICENTER_DAMAGE_BANANA 70
-#define EPICENTER_DAMAGE_DYNAMITE 50
+#define BLAST_RADIUS_BAZOOKA Config::yamlNode["blast_radius_bazooka"].as<int>()
+#define BLAST_RADIUS_MORTAR Config::yamlNode["blast_radius_mortar"].as<int>()
+#define BLAST_RADIUS_MORTAR_FRAGMENT Config::yamlNode["blast_radius_mortar_fragment"].as<int>()
+#define BLAST_RADIUS_GREEN_GRENADE Config::yamlNode["blast_radius_green_grenade"].as<int>()
+#define BLAST_RADIUS_RED_GRENADE Config::yamlNode["blast_radius_red_grenade"].as<int>()
+#define BLAST_RADIUS_BANANA Config::yamlNode["blast_radius_banana"].as<int>()
+#define BLAST_RADIUS_DYNAMITE Config::yamlNode["blast_radius_dynamite"].as<int>()
 
 
-#define FRAGMENTS_AMOUNT 6
-#define FRAGMENT_POWER 5
+#define EPICENTER_DAMAGE_BAZOOKA Config::yamlNode["epicenter_damage_bazooka"].as<int>()
+#define EPICENTER_DAMAGE_MORTAR Config::yamlNode["epicenter_damage_mortar"].as<int>()
+#define EPICENTER_DAMAGE_MORTAR_FRAGMENT \
+    Config::yamlNode["epicenter_damage_mortar_fragment"].as<int>()
+#define EPICENTER_DAMAGE_GREEN_GRENADE Config::yamlNode["epicenter_damage_green_grenade"].as<int>()
+#define EPICENTER_DAMAGE_RED_GRENADE Config::yamlNode["epicenter_damage_red_grenade"].as<int>()
+#define EPICENTER_DAMAGE_BANANA Config::yamlNode["epicenter_damage_banana"].as<int>()
+#define EPICENTER_DAMAGE_DYNAMITE Config::yamlNode["epicenter_damage_dynamite"].as<int>()
 
 
-#define DEGTORAD 180/b2_pi
+#define FRAGMENTS_AMOUNT Config::yamlNode["fragments_amount"].as<int>()
+#define FRAGMENT_POWER Config::yamlNode["fragment_power"].as<int>()
+
+
+#define DEGTORAD 180 / b2_pi
 
 
 class Battlefield;
@@ -68,16 +69,16 @@ public:
 
     virtual ~Projectile() = default;
     friend class Game;
-
-
 };
 
 
 class Rocket: public Projectile {
 protected:
     void apply_explosion(b2Vec2 final_impulse) override;
+
 public:
-    Rocket(Battlefield& battlefield, b2Vec2 position,int blast_radius, int epicenter_damage, WeaponsAndTools type);
+    Rocket(Battlefield& battlefield, b2Vec2 position, int blast_radius, int epicenter_damage,
+           WeaponsAndTools type);
     void collision_reaction() override;
     void applyWindResistance(const float& wind_force) override;
     void updateTimer() override {}
@@ -85,7 +86,6 @@ public:
 
     virtual ~Rocket() = default;
 };
-
 
 
 class BazookaRocket: public Rocket {
@@ -97,6 +97,7 @@ public:
 class MortarRocket: public Rocket {
 private:
     int fragments;
+
 public:
     MortarRocket(Battlefield& battlefield, b2Vec2 position);
     void second_collision_reaction() override;
@@ -106,12 +107,10 @@ public:
 class MortarFragment: public Rocket {
 private:
 public:
-    MortarFragment(Battlefield& battlefield, b2Vec2 position,b2Vec2 direction);
-    void applyWindResistance(const float &wind_force) override{};
+    MortarFragment(Battlefield& battlefield, b2Vec2 position, b2Vec2 direction);
+    void applyWindResistance(const float& wind_force) override{};
     virtual ~MortarFragment() = default;
 };
-
-
 
 
 class Grenade: public Projectile {
@@ -139,6 +138,7 @@ public:
 class Red: public Grenade {
 private:
     int fragments;
+
 public:
     Red(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
     void second_collision_reaction() override;
