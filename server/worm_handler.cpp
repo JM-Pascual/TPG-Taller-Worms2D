@@ -60,6 +60,7 @@ void WormHandler::player_shoot(const uint8_t& id, const uint8_t& worm_index) {
     turn_worm->shoot();
 
     turn_worm->weapon_power = 0;
+    turn_worm->weapon_delay = DelayAmount::FIVE;
 }
 
 void WormHandler::player_use_clickable(b2Vec2 position, const uint8_t& id, const uint8_t& worm_index) {

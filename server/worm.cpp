@@ -2,7 +2,7 @@
 
 #include "battlefield.h"
 #include "proyectile.h"
-#include "weapon.h"
+#include "gadget.h"
 
 Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
            WeaponsAndTools& type, const uint8_t& id):
@@ -13,6 +13,7 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
         is_jumping(false),
         is_backflipping(false),
         falling(false),
+        using_tool(false),
         aiming(false),
         aim_inclination_degrees(0),
         aim_direction(ADSAngleDir::UP),
@@ -119,16 +120,17 @@ void Worm::change_fire_power() {
 
 void Worm::change_position() {
     body->SetTransform(clicked_position, 0);
+    body->SetAwake(true);
 }
 
 void Worm::shoot() { (*selected_weapon)->shoot(battlefield, *this); }
 
-void Worm::use_loadable_weapon(const std::shared_ptr<Projectile>& projectile) {
+void Worm::use_chargeable_weapon(const std::shared_ptr<Projectile>& projectile) {
     projectile->set_power(set_bullet_power());
 }
 
-void Worm::use_throwable(const std::shared_ptr<Projectile>& projectile) {
-    projectile->set_power(b2Vec2(0, 0));
+void Worm::use_positional_weapon(const std::shared_ptr<Projectile>& throwable) {
+    throwable->set_power(b2Vec2(0, 0));
 }
 
 
@@ -154,10 +156,11 @@ b2Vec2 Worm::set_bullet_direction() {
 float Worm::set_bullet_angle() { return b2Atan2(set_bullet_power().y, set_bullet_power().x); }
 
 void Worm::change_bullet_explosion_delay(DelayAmount delay) {
-   weapon_delay = delay;
+    weapon_delay = delay;
 }
 
 void Worm::change_clicked_position(b2Vec2 new_position) {
+    using_tool = true;
     clicked_position = new_position;
 }
 

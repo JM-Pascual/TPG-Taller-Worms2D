@@ -171,7 +171,7 @@ void ChangeGadget::execute(WormHandler& worm_handler, const uint8_t& turn_id,
 // ---------------------- USE CLICKABLE ---------------------------
 
 UseClickable::UseClickable(ServerSide::Protocol &protocol, const uint8_t &id) : PlayerAction(id) {
-    protocol.recvPosition(position);
+    protocol.recvPosition(this->position);
 }
 
 void UseClickable::execute(WormHandler &worm_handler, const uint8_t &turn_id, const uint8_t &worm_index,

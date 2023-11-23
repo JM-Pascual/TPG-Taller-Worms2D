@@ -45,6 +45,7 @@ private:
     bool is_jumping;
     bool is_backflipping;
     bool falling;
+    bool using_tool;
 
     bool aiming;
     float aim_inclination_degrees;  // Radianes
@@ -93,8 +94,9 @@ public:
 
 
     void recibe_life_modification(const float& life_variation) override;
-    void use_loadable_weapon(const std::shared_ptr<Projectile>& projectile);
-    void use_throwable(const std::shared_ptr<Projectile>& throwable);
+    void use_chargeable_weapon(const std::shared_ptr<Projectile>& projectile);
+    void use_positional_weapon(const std::shared_ptr<Projectile>& throwable);
+
 
     void change_position();
     b2Vec2 clicked_position_();

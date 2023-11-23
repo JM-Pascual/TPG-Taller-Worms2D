@@ -1,5 +1,5 @@
-#ifndef WORMS2D_WEAPON_H
-#define WORMS2D_WEAPON_H
+#ifndef WORMS2D_GADGET_H
+#define WORMS2D_GADGET_H
 
 #include "../common/const.h"
 #include "box2d/b2_math.h"
@@ -13,7 +13,10 @@
 #define DYNAMITE_AMMO uint8_t(5)
 #define MORTAR_AMMO uint8_t(10)
 #define RED_GRENADE_AMMO uint8_t(10)
+#define TELEPORT_AMMO uint8_t(255)
+#define AIRSTRIKE_AMMO uint8_t(2)
 
+#define AIRSTRIKE_ROCKETS uint8_t(6 )
 class Worm;
 class Game;
 class Battlefield;
@@ -103,4 +106,4 @@ public:
     virtual ~AirStrike() = default;
 };
 
-#endif  // WORMS2D_WEAPON_H
+#endif  // WORMS2D_GADGET_H

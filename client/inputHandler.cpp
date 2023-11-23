@@ -44,15 +44,17 @@ void IHandler::run() {
                     camera.fixMouse(event.motion.x, event.motion.y);
 
                 } else if (event.type == SDL_MOUSEBUTTONDOWN) {
-                    // if (clickable_gadget) {
-                    action_queue.push(
-                            std::make_shared<UseClickable>(event.motion.x, event.motion.y));
-                    //}
+                    if (clickable_gadget) {
+                        auto rec = camera.realRect(event.motion.x, event.motion.y);
+                        action_queue.push(
+                                std::make_shared<UseClickable>(rec.x, rec.y));
+                        }
+                    }
                 }
             }
         }
     }
-}
+
 
 void IHandler::keyUp(const SDL_Keycode& key) {
     if (not my_turn) {
@@ -200,7 +202,7 @@ void IHandler::keyDown(const SDL_Keycode& key) {
 
         case SDLK_F7:
             this->action_queue.push(std::make_shared<ChangeGadget>(WeaponsAndTools::DYNAMITE));
-            clickable_gadget = false;
+            clickable_gadget = true;
             grenade_selected = true;
             return;
 

@@ -1,4 +1,4 @@
-#include "weapon.h"
+#include "gadget.h"
 
 #include <memory>
 
@@ -24,7 +24,7 @@ void Bazooka::shoot(Battlefield& battlefield, Worm& worm) {
             std::make_shared<BazookaRocket>(battlefield, projectile_position);
     battlefield.add_projectile(projectile);
 
-    worm.use_loadable_weapon(projectile);
+    worm.use_chargeable_weapon(projectile);
 }
 
 
@@ -45,7 +45,7 @@ void Mortar::shoot(Battlefield &battlefield, Worm &worm) {
             std::make_shared<MortarRocket>(battlefield, projectile_position);
     battlefield.add_projectile(mortar_rocket);
 
-    worm.use_loadable_weapon(mortar_rocket);
+    worm.use_chargeable_weapon(mortar_rocket);
 }
 
 
@@ -65,7 +65,7 @@ void GreenGrenade::shoot(Battlefield& battlefield, Worm& worm) {
             std::make_shared<Green>(battlefield, projectile_position, float(explosion_delay));
     battlefield.add_projectile(green_grenade);
 
-    worm.use_loadable_weapon(green_grenade);
+    worm.use_chargeable_weapon(green_grenade);
 }
 
 //~~~~~~~~~~~~~~~~~~~ Green_grenade ~~~~~~~~~~~~~~~~~~~~
@@ -84,7 +84,7 @@ void RedGrenade::shoot(Battlefield& battlefield, Worm& worm) {
             std::make_shared<Red>(battlefield, projectile_position, float(explosion_delay));
     battlefield.add_projectile(red_grenade);
 
-    worm.use_loadable_weapon(red_grenade);
+    worm.use_chargeable_weapon(red_grenade);
 }
 
 
@@ -104,7 +104,7 @@ void BananaGrenade::shoot(Battlefield& battlefield, Worm& worm) {
             std::make_shared<Banana>(battlefield, projectile_position, float(explosion_delay));
     battlefield.add_projectile(banana);
 
-    worm.use_loadable_weapon(banana);
+    worm.use_chargeable_weapon(banana);
 }
 
 //~~~~~~~~~~~~~~~~~~~ DynamiteGrenade ~~~~~~~~~~~~~~~~~~~~
@@ -115,7 +115,7 @@ void DynamiteGrenade::shoot(Battlefield& battlefield, Worm& worm) {
     if (--ammo <= 0) {
         return;
     }
-
+    /*
     b2Vec2 projectile_position = worm.set_bullet_direction();
     DelayAmount explosion_delay = worm.grenade_explosion_delay();
 
@@ -123,13 +123,15 @@ void DynamiteGrenade::shoot(Battlefield& battlefield, Worm& worm) {
             std::make_shared<Dynamite>(battlefield, projectile_position, float(explosion_delay));
     battlefield.add_projectile(dynamite);
 
-    worm.use_throwable(dynamite);
+    worm.use_positional_weapon(dynamite);
+     */
+    worm.change_position();
 }
 
 
 //~~~~~~~~~~~~~~~~~~~ Teleport ~~~~~~~~~~~~~~~~~~~~
 
-Teleport::Teleport() : Gadget(TELEPORT_AMMO) {}
+Teleport::Teleport() : Gadget(TELEPORT_AMMO){}
 
 void Teleport::shoot(Battlefield& battlefield, Worm& worm) {
     if (--ammo <= 0) {

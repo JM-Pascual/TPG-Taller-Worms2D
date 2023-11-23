@@ -88,12 +88,10 @@ float ServerSide::Protocol::recvFloat() {
 }
 
 
-void ServerSide::Protocol::recvPosition(b2Vec2 position) {
-    position.x = recvFloat();
-    position.y = recvFloat();
+void ServerSide::Protocol::recvPosition(b2Vec2& position) {
+    position.x = pixel_to_meter_x(recvFloat());
+    position.y = pixel_to_meter_y(recvFloat());
 }
-
-
 
 // ------------------------------ SEND -----------------------------------
 
@@ -235,5 +233,14 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
         default:
             break;
     }
+}
+
+
+float ServerSide::Protocol::pixel_to_meter_x(float pixel_position) {
+    return (pixel_position / PPM);
+}
+
+float ServerSide::Protocol::pixel_to_meter_y(float pixel_position) {
+    return ((720 - pixel_position) / PPM );
 }
 

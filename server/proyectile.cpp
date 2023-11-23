@@ -22,6 +22,8 @@ Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radi
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &shape;
     fixtureDef.density = 1.0f;
+    fixtureDef.restitution = 0.2f;
+
     fixtureDef.filter.groupIndex = -1; // Para que no colisione con los demás proyectiles
 
     body->CreateFixture(&fixtureDef);

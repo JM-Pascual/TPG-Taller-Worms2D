@@ -10,7 +10,7 @@
 #include "../common/const.h"
 
 #include "entity.h"
-#include "weapon.h"
+#include "gadget.h"
 #include "worm.h"
 
 #define INITIAL_LIFE 100
