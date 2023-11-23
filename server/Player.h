@@ -30,7 +30,7 @@
 #define INCLINACION_MAX (b2_pi / 2)
 #define INCLINACION_MIN (-b2_pi / 2)
 
-class Weapon;
+class Gadget;
 class Battlefield;
 class Projectile;
 class BroadCaster;
@@ -39,8 +39,8 @@ class Player {
 private:
     bool ready;
     bool is_playing;
-    std::map<WeaponsAndTools, std::unique_ptr<Weapon>> weapons;
-    std::unique_ptr<Weapon>* selected_weapon;
+    std::map<WeaponsAndTools, std::unique_ptr<Gadget>> weapons;
+    std::unique_ptr<Gadget>* selected_weapon;
     WeaponsAndTools selected_gadget_type;
     uint8_t worm_turn;
 

@@ -128,7 +128,7 @@ protected:
     std::chrono::time_point<std::chrono::steady_clock> grenade_timer;
 
 public:
-    Grenade(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay,
+    Grenade(Battlefield& battlefield, b2Vec2 position, float explosion_delay,
             uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type);
     void collision_reaction() override;
     void applyWindResistance(const float& wind_force) override;
@@ -141,25 +141,25 @@ public:
 
 class Green: public Grenade {
 public:
-    Green(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+    Green(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
 };
 
 class Red: public Grenade {
 private:
     int fragments;
 public:
-    Red(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+    Red(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
     void second_collision_reaction() override;
 };
 
 class Banana: public Grenade {
 public:
-    Banana(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+    Banana(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
 };
 
 class Dynamite: public Grenade {
 public:
-    Dynamite(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+    Dynamite(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
 };
 
 

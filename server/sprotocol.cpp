@@ -77,6 +77,24 @@ void ServerSide::Protocol::recvString64(std::string& desc) {
     desc = std::string(str_net.data());
 }
 
+
+float ServerSide::Protocol::recvFloat() {
+    uint32_t raw_bits;
+    recv(&raw_bits, sizeof(uint32_t));
+    raw_bits = ntohl(raw_bits);
+    float float_value;
+    memcpy(&float_value, &raw_bits, sizeof(uint32_t));
+    return float_value;
+}
+
+
+void ServerSide::Protocol::recvPosition(b2Vec2 position) {
+    position.x = recvFloat();
+    position.y = recvFloat();
+}
+
+
+
 // ------------------------------ SEND -----------------------------------
 
 void ServerSide::Protocol::sendFloat(float number) {
@@ -218,3 +236,4 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
             break;
     }
 }
+

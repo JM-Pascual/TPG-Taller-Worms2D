@@ -157,7 +157,7 @@ AirStrikeRocket::AirStrikeRocket(Battlefield &battlefield, b2Vec2 position) :
 
 //~~~~~~~~~~~~~~~~~~~ Grenade ~~~~~~~~~~~~~~~~~~~~
 
-Grenade::Grenade(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay,
+Grenade::Grenade(Battlefield& battlefield, b2Vec2 position, float explosion_delay,
                  uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type):
         Projectile(battlefield, position, blast_radius, epicenter_damage, type),
         explosion_delay(explosion_delay),
@@ -183,11 +183,11 @@ void Grenade::updateTimer() {
 void Grenade::applyWindResistance(const float& wind_force) {}
 
 
-Green::Green(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay):
+Green::Green(Battlefield& battlefield, b2Vec2 position, float explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_GREEN_GRENADE,
                 EPICENTER_DAMAGE_GREEN_GRENADE, WeaponsAndTools::GREEN_GRENADE) {}
 
-Red::Red(Battlefield &battlefield, b2Vec2 position, uint8_t explosion_delay):
+Red::Red(Battlefield &battlefield, b2Vec2 position, float explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_RED_GRENADE,
                 EPICENTER_DAMAGE_RED_GRENADE, WeaponsAndTools::RED_GRENADE), fragments(FRAGMENTS_AMOUNT) {}
 
@@ -210,13 +210,13 @@ void Red::second_collision_reaction() {
     }
 }
 
-Banana::Banana(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay):
+Banana::Banana(Battlefield& battlefield, b2Vec2 position, float explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_BANANA,
                 EPICENTER_DAMAGE_BANANA, WeaponsAndTools::BANANA) {
     body->GetFixtureList()->SetRestitution(0.9);
 }
 
-Dynamite::Dynamite(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay):
+Dynamite::Dynamite(Battlefield& battlefield, b2Vec2 position, float explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_DYNAMITE,
                 EPICENTER_DAMAGE_DYNAMITE, WeaponsAndTools::DYNAMITE) {}
 

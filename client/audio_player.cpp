@@ -41,10 +41,10 @@ AudioPlayer::AudioPlayer(): background_music(nullptr) {
 }
 
 void AudioPlayer::play_background_music() {
-    Mix_VolumeMusic(MUSIC_VOLUME);
+    /*Mix_VolumeMusic(MUSIC_VOLUME);
     if (Mix_PlayMusic(background_music, -1) == -1) {
         spdlog::get("client")->error("Error al intentar reproducir la musica ambiente");
-    }
+    }*/
 }
 
 

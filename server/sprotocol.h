@@ -97,6 +97,12 @@ public:
         Recibe un string de maximo 64 caracteres
     */
     void recvString64(std::string& desc);
+
+
+    float recvFloat();
+
+
+    void recvPosition(b2Vec2 position);
     /*
         Recibe la id del game al que se quiere conectar el cliente
     */

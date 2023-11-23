@@ -4,7 +4,7 @@
 #include "proyectile.h"
 #include "weapon.h"
 
-Worm::Worm(Battlefield& battlefield, std::unique_ptr<Weapon>*& selected_weapon,
+Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
            WeaponsAndTools& type, const uint8_t& id):
         Entity(battlefield),
         life(INITIAL_LIFE),
@@ -18,6 +18,8 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Weapon>*& selected_weapon,
         aim_direction(ADSAngleDir::UP),
         charging_shoot(false),
         weapon_power(0),
+        weapon_delay(DelayAmount::FIVE),
+        clicked_position(0, 0),
         selected_weapon(selected_weapon),
         weapon_type(type),
         was_damaged(false),
@@ -109,14 +111,27 @@ void Worm::change_aim_direction() {
     }
 }
 
-
 void Worm::change_fire_power() {
     if (charging_shoot && weapon_power <= MAX_POWER) {
         weapon_power += POWER_RAISE;
     }
 }
 
-void Worm::shoot() { (*selected_weapon)->execute(battlefield, *this); }
+void Worm::change_position() {
+    body->SetTransform(clicked_position, 0);
+}
+
+void Worm::shoot() { (*selected_weapon)->shoot(battlefield, *this); }
+
+void Worm::use_loadable_weapon(const std::shared_ptr<Projectile>& projectile) {
+    projectile->set_power(set_bullet_power());
+}
+
+void Worm::use_throwable(const std::shared_ptr<Projectile>& projectile) {
+    projectile->set_power(b2Vec2(0, 0));
+}
+
+
 
 b2Vec2 Worm::set_bullet_power() {
     // Fuerza que se le aplica a la bala
@@ -138,21 +153,22 @@ b2Vec2 Worm::set_bullet_direction() {
 
 float Worm::set_bullet_angle() { return b2Atan2(set_bullet_power().y, set_bullet_power().x); }
 
-uint8_t Worm::set_bullet_explosion_delay() {
-    return 3;  // bullet_explosion_delete;
+void Worm::change_bullet_explosion_delay(DelayAmount delay) {
+   weapon_delay = delay;
 }
 
-void Worm::shoot_aim_weapon(const std::shared_ptr<Projectile>& projectile) {
-    projectile->set_power(set_bullet_power());
+void Worm::change_clicked_position(b2Vec2 new_position) {
+    clicked_position = new_position;
 }
 
-void Worm::use_throwable(const std::shared_ptr<Projectile>& throwable) {
-    throwable->set_power(b2Vec2(0, 0));
+b2Vec2 Worm::clicked_position_() {
+    return clicked_position;
 }
 
-void Worm::use_clickeable_gadget(const std::shared_ptr<Projectile>& gadget) {
-
+DelayAmount Worm::grenade_explosion_delay() {
+    return weapon_delay;
 }
+
 
 int Worm::facing_factor() { return (std::pow(-1, 1 - facing_right)); }
 
@@ -258,7 +274,9 @@ void Worm::recibe_life_modification(const float& life_variation) {
 
 void Worm::applyWindResistance(const float& wind_force) {}
 
-void Worm::change_position(b2Vec2 new_position) {
-    body->SetTransform(new_position, 0);
-}
+
+
+
+
+
 

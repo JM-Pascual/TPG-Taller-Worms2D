@@ -62,6 +62,17 @@ void WormHandler::player_shoot(const uint8_t& id, const uint8_t& worm_index) {
     turn_worm->weapon_power = 0;
 }
 
+void WormHandler::player_use_clickable(b2Vec2 position, const uint8_t& id, const uint8_t& worm_index) {
+    getTurnWorm(id, worm_index);
+    turn_worm->change_clicked_position(position);
+}
+
+void WormHandler::player_set_delay(DelayAmount delay, const uint8_t &id, const uint8_t &worm_index) {
+    getTurnWorm(id, worm_index);
+    turn_worm->change_bullet_explosion_delay(delay);
+}
+
+
 void WormHandler::player_change_gadget(const WeaponsAndTools& gadget, const uint8_t& id,
                                        const uint8_t& worm_index) {
     getTurnWorm(id, worm_index);
@@ -152,3 +163,6 @@ const bool WormHandler::allWormsStayStill() {
 
     return true;
 }
+
+
+

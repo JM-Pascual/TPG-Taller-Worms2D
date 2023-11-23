@@ -142,6 +142,8 @@ void Delay::execute(WormHandler& worm_handler, const uint8_t& turn_id, const uin
         return;
     }
 
+    worm_handler.player_set_delay(amount, id, worm_index);
+
     if (turn_handler.player_used_stop_action()) {
         return;
     }
@@ -165,6 +167,30 @@ void ChangeGadget::execute(WormHandler& worm_handler, const uint8_t& turn_id,
 
     worm_handler.player_change_gadget(gadget, id, worm_index);
 }
+
+// ---------------------- USE CLICKABLE ---------------------------
+
+UseClickable::UseClickable(ServerSide::Protocol &protocol, const uint8_t &id) : PlayerAction(id) {
+    protocol.recvPosition(position);
+}
+
+void UseClickable::execute(WormHandler &worm_handler, const uint8_t &turn_id, const uint8_t &worm_index,
+                           TurnHandler &turn_handler) {
+    if (turn_id != this->id) {
+        return;
+    }
+
+    if (turn_handler.player_used_stop_action()) {
+        return;
+    }
+
+    worm_handler.player_use_clickable(position ,id, worm_index);
+    worm_handler.player_shoot(id,worm_index);
+
+    turn_handler.use_stop_action();
+}
+
+
 
 // ----------------------- JOIN ----------------------
 
@@ -202,3 +228,5 @@ void ExitGame::execute() { gb.removeLobbyPlayer(player_id, game_id); }
 // ----------------------- READY --------------------
 
 void Ready::execute() { gb.set_player_ready(id, id_game); }
+
+

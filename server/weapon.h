@@ -16,96 +16,95 @@
 #define TELEPORT_AMMO uint8_t(255)
 #define AIRSTRIKE_AMMO uint8_t(2)
 
+#define AIRSTRIKE_ROCKETS uint8_t(6)
+
 class Worm;
 class Game;
 class Battlefield;
 
-class Weapon {
+class Gadget{
 protected:
     uint8_t ammo;
 
 public:
-    explicit Weapon(uint8_t ammo);
-
-    virtual void execute(Battlefield& battlefield, Worm& worm) = 0;
-
-    virtual ~Weapon() = default;
+    explicit Gadget(uint8_t ammo);
+    virtual void shoot(Battlefield& battlefield, Worm& worm) = 0;
+    ~Gadget() = default;
 
     friend class Player;
 };
 
-//~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
-
-class Bazooka: public Weapon {
-public:
-    Bazooka();
-    void execute(Battlefield& battlefield, Worm& worm) override;
-    virtual ~Bazooka() = default;
-};
-
-//~~~~~~~~~~~~~~~~~~~ Mortar ~~~~~~~~~~~~~~~~~~~~
-
-class Mortar: public Weapon {
-public:
-    Mortar();
-    void execute(Battlefield& battlefield, Worm& worm) override;
-    virtual ~Mortar() = default;
-};
-
-
 //~~~~~~~~~~~~~~~~~~~ GreenGrenade ~~~~~~~~~~~~~~~~~~~~
 
-class GreenGrenade: public Weapon {
+class GreenGrenade: public Gadget {
 public:
     GreenGrenade();
-    void execute(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm) override;
     virtual ~GreenGrenade() = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ RedGrenade ~~~~~~~~~~~~~~~~~~~~
 
-class RedGrenade: public Weapon {
+class RedGrenade: public Gadget {
 public:
     RedGrenade();
-    void execute(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm) override;
     virtual ~RedGrenade() = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ Banana ~~~~~~~~~~~~~~~~~~~~
 
-class BananaGrenade: public Weapon {
+class BananaGrenade: public Gadget {
 public:
     BananaGrenade();
-    void execute(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm) override;
     virtual ~BananaGrenade() = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ DynamiteGrenade ~~~~~~~~~~~~~~~~~~~~
 
-class DynamiteGrenade: public Weapon {
+class DynamiteGrenade: public Gadget {
 public:
     DynamiteGrenade();
-    void execute(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm) override;
     virtual ~DynamiteGrenade() = default;
+};
+
+
+//~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
+
+class Bazooka: public Gadget {
+public:
+    Bazooka();
+    void shoot(Battlefield& battlefield, Worm& worm) override;
+    virtual ~Bazooka() = default;
+};
+
+//~~~~~~~~~~~~~~~~~~~ Mortar ~~~~~~~~~~~~~~~~~~~~
+
+class Mortar: public Gadget {
+public:
+    Mortar();
+    void shoot(Battlefield& battlefield, Worm& worm) override;
+    virtual ~Mortar() = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ Teleport ~~~~~~~~~~~~~~~~~~~~
 
-class Teleport: public Weapon {
+class Teleport: public Gadget {
 public:
     Teleport();
-    void execute(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm) override;
     virtual ~Teleport() = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ AirStrike ~~~~~~~~~~~~~~~~~~~~
 
-class AirStrike: public Weapon {
+class AirStrike: public Gadget {
 public:
     AirStrike();
-    void execute(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm) override;
     virtual ~AirStrike() = default;
 };
-
 
 #endif  // WORMS2D_WEAPON_H
