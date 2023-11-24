@@ -21,7 +21,7 @@
 #define BLAST_RADIUS_RED_GRENADE Config::yamlNode["blast_radius_red_grenade"].as<int>()
 #define BLAST_RADIUS_BANANA Config::yamlNode["blast_radius_banana"].as<int>()
 #define BLAST_RADIUS_DYNAMITE Config::yamlNode["blast_radius_dynamite"].as<int>()
-
+#define BLAST_RADIUS_AIR_STRIKE Config::yamlNode["blast_radius_air_strike"].as<int>() //2
 
 #define EPICENTER_DAMAGE_BAZOOKA Config::yamlNode["epicenter_damage_bazooka"].as<int>()
 #define EPICENTER_DAMAGE_MORTAR Config::yamlNode["epicenter_damage_mortar"].as<int>()
@@ -31,7 +31,7 @@
 #define EPICENTER_DAMAGE_RED_GRENADE Config::yamlNode["epicenter_damage_red_grenade"].as<int>()
 #define EPICENTER_DAMAGE_BANANA Config::yamlNode["epicenter_damage_banana"].as<int>()
 #define EPICENTER_DAMAGE_DYNAMITE Config::yamlNode["epicenter_damage_dynamite"].as<int>()
-
+#define EPICENTER_DAMAGE_AIR_STRIKE Config::yamlNode["epicenter_damage_air_strike"].as<int>() //40
 
 #define FRAGMENTS_AMOUNT Config::yamlNode["fragments_amount"].as<int>()
 #define FRAGMENT_POWER Config::yamlNode["fragment_power"].as<int>()
@@ -112,6 +112,12 @@ public:
     virtual ~MortarFragment() = default;
 };
 
+class AirStrikeRocket: public Rocket {
+public:
+    AirStrikeRocket(Battlefield& battlefield, b2Vec2 position);
+    void applyWindResistance(const float &wind_force) override{};
+    virtual ~AirStrikeRocket() = default;
+};
 
 class Grenade: public Projectile {
 protected:
@@ -119,7 +125,7 @@ protected:
     std::chrono::time_point<std::chrono::steady_clock> grenade_timer;
 
 public:
-    Grenade(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay,
+    Grenade(Battlefield& battlefield, b2Vec2 position, float explosion_delay,
             uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type);
     void collision_reaction() override;
     void applyWindResistance(const float& wind_force) override;
@@ -132,7 +138,7 @@ public:
 
 class Green: public Grenade {
 public:
-    Green(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+    Green(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
 };
 
 class Red: public Grenade {
@@ -140,18 +146,18 @@ private:
     int fragments;
 
 public:
-    Red(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+    Red(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
     void second_collision_reaction() override;
 };
 
 class Banana: public Grenade {
 public:
-    Banana(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+    Banana(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
 };
 
 class Dynamite: public Grenade {
 public:
-    Dynamite(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+    Dynamite(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
 };
 
 

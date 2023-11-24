@@ -10,10 +10,27 @@
 #include "../common/const.h"
 
 #include "entity.h"
-#include "weapon.h"
+#include "gadget.h"
 #include "worm.h"
 
-class Weapon;
+#define INITIAL_LIFE 100
+
+#define TICK_RATE 30
+#define WIDTH 0.9f
+#define HEIGHT 1.2f
+
+#define ARM_LENGHT ((WIDTH / 2) + 1)
+
+#define POWER_RAISE 1
+#define MAX_POWER 10
+#define ANGLE_VARIATION (b2_pi / 64)
+
+#define CATEGORY_BITS 0x002
+
+#define INCLINACION_MAX (b2_pi / 2)
+#define INCLINACION_MIN (-b2_pi / 2)
+
+class Gadget;
 class Battlefield;
 class Projectile;
 class BroadCaster;
@@ -22,8 +39,8 @@ class Player {
 private:
     bool ready;
     bool is_playing;
-    std::map<WeaponsAndTools, std::unique_ptr<Weapon>> weapons;
-    std::unique_ptr<Weapon>* selected_weapon;
+    std::map<WeaponsAndTools, std::unique_ptr<Gadget>> weapons;
+    std::unique_ptr<Gadget>* selected_weapon;
     WeaponsAndTools selected_gadget_type;
     uint8_t worm_turn;
 

@@ -13,6 +13,8 @@
 class Battlefield;
 
 class Bar: public Entity {
+private:
+
 public:
     explicit Bar(Battlefield& battlefield);
 

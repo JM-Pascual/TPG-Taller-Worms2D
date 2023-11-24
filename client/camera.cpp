@@ -71,6 +71,11 @@ void Camera::fixMouse(const float& x, const float& y) {
     checkMouseBounds();
 }
 
+
 SDL2pp::Rect Camera::calcRect(const float& x, const float& y, const float& w, const float& h) {
-    return SDL2pp::Rect(x - ((w / 2) + position[_X_]), y - ((h / 2) + position[_Y_]), w, h);
+    return SDL2pp::Rect(x - position[_X_], y - position[_Y_], w, h);
+}
+
+SDL2pp::Rect Camera::realRect(const float& x, const float& y) {
+    return SDL2pp::Rect(x + position[_X_], y + position[_Y_], 0, 0);
 }

@@ -7,6 +7,7 @@
 Bar::Bar(Battlefield& battlefield): Entity(battlefield) {
     b2BodyDef barBodyDef;
     barBodyDef.position.Set(38.4f, 9.2f);
+    //barBodyDef.angle = b2_pi/4;
 
     barBodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
     body = battlefield.add_body(barBodyDef);

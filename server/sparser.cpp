@@ -34,6 +34,9 @@ std::shared_ptr<PlayerAction> ServerSide::Parser::makePlayerAction(const Actions
         case Actions::DELAY:
             return std::make_shared<Delay>(protocol, id);
 
+        case Actions::USE_CLICKABLE:
+            return std::make_shared<UseClickable>(protocol, id);
+
         case Actions::CHANGE_WEAPON_OR_TOOL:
             return std::make_shared<ChangeGadget>(protocol, id);
 
