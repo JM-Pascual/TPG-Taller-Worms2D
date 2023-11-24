@@ -7,11 +7,11 @@ Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radi
         Entity(battlefield),
         type(type),
         blast_radius(blast_radius),
-        epicenter_damage(epicenter_damage) {  // cambiar
+        epicenter_damage(epicenter_damage) {
 
     b2BodyDef projectile_body;
     projectile_body.type = b2_dynamicBody;
-    projectile_body.bullet = true;  // Todo ver bien para que sirve
+    projectile_body.bullet = true;
     projectile_body.position = b2Vec2(position.x, position.y);
     projectile_body.userData.pointer = reinterpret_cast<uintptr_t>(this);
     body = battlefield.add_body(projectile_body);
@@ -64,7 +64,7 @@ void Projectile::collide() {
         reinterpret_cast<Entity*>(body_->GetUserData().pointer)->start_falling();
     }
 }
-// Metodo para aplicar impulso a los jugadores colisionados
+
 
 void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 applyPoint,
                                    float blastPower) {
@@ -78,7 +78,6 @@ void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 app
     }
     float invDistance = 1 / distance;
     impulseMag = blastPower * invDistance;
-
 
     Entity* entity = reinterpret_cast<Entity*>(body_->GetUserData().pointer);
 

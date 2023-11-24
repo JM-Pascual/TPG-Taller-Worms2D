@@ -64,6 +64,7 @@ private:
 
     float pos_y_before_falling;
 
+
     int facing_factor();
 
 public:
@@ -81,7 +82,7 @@ public:
 
     b2Vec2 set_bullet_direction();
     b2Vec2 set_bullet_power();
-    float set_bullet_angle();
+    b2Vec2 set_bullet_angle();
     void change_bullet_explosion_delay(DelayAmount delay);
     void change_clicked_position(b2Vec2 new_position);
 
@@ -108,6 +109,14 @@ public:
     void destroyBody();
 
     void applyWindResistance(const float& wind_force) override;
+
+    b2Vec2 position();
+
+    float distance_to_body(b2Body* body_);
+    b2Vec2 forward_bound(b2Vec2 bound);
+    b2Vec2 backward_bound(b2Vec2 bound);
+
+    bool is_facing_right();
 
     virtual ~Worm() = default;
 

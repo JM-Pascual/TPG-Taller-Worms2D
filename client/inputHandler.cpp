@@ -166,7 +166,7 @@ void IHandler::keyDown(const SDL_Keycode& key) {
 
         case SDLK_F1:
             this->action_queue.push(std::make_shared<ChangeGadget>(WeaponsAndTools::BAZOOKA));
-            clickable_gadget = true;
+            clickable_gadget = false;
             grenade_selected = false;
             return;
 
@@ -202,7 +202,7 @@ void IHandler::keyDown(const SDL_Keycode& key) {
 
         case SDLK_F7:
             this->action_queue.push(std::make_shared<ChangeGadget>(WeaponsAndTools::DYNAMITE));
-            clickable_gadget = true;
+            clickable_gadget = false;
             grenade_selected = true;
             return;
 

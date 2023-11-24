@@ -15,11 +15,16 @@
 #define RED_GRENADE_AMMO uint8_t(10)
 #define TELEPORT_AMMO uint8_t(255)
 #define AIRSTRIKE_AMMO uint8_t(2)
+#define BASEBALL_BAT_AMMO uint8_t(255)
 
 #define AIRSTRIKE_ROCKETS uint8_t(6)
 #define AIRSTRIKE_ROCKET_SEPARATION 0.6f
 #define AIRSTRIKE_ROCKET_X_DEVIATION 3.2F
 #define AIRSTRIKE_ROCKET_Y_POSITION 22
+
+#define BAT_DAMAGE uint8_t(10)
+#define BAT_POWER uint8_t(50)
+#define BAT_RANGE uint8_t(4)
 
 class Worm;
 class Game;
@@ -108,6 +113,20 @@ public:
     AirStrike();
     void shoot(Battlefield& battlefield, Worm& worm) override;
     virtual ~AirStrike() = default;
+};
+
+
+//~~~~~~~~~~~~~~~~~~~ BaseballBat ~~~~~~~~~~~~~~~~~~~~
+
+class BaseballBat: public Gadget {
+private:
+    void bat(Battlefield& battlefield, Worm& worm);
+    void applyBlastImpulse(b2Body *body_, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower, b2Vec2 direction);
+public:
+    BaseballBat();
+    void shoot(Battlefield& battlefield, Worm& worm) override;
+
+    virtual ~BaseballBat() = default;
 };
 
 #endif  // WORMS2D_GADGET_H

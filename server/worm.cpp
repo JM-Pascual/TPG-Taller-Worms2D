@@ -45,6 +45,7 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
     // que pueda colisionar con los gusanos
 
     body->CreateFixture(&fixtureDef);
+
 }
 
 // Todo puede ser que pueda poner todo en un mismo metodo para ahorrarme un if pero no se si es
@@ -152,8 +153,8 @@ b2Vec2 Worm::set_bullet_direction() {
     bullet_position.y = (body->GetPosition().y + (ARM_LENGHT * sinf(aim_inclination_degrees)));
     return bullet_position;
 }
-
-float Worm::set_bullet_angle() { return b2Atan2(set_bullet_power().y, set_bullet_power().x); }
+//todo cambiar nombre
+b2Vec2 Worm::set_bullet_angle() { return b2Vec2( facing_factor() * cosf(aim_inclination_degrees),sinf(aim_inclination_degrees)); }
 
 void Worm::change_bullet_explosion_delay(DelayAmount delay) {
     weapon_delay = delay;
@@ -276,6 +277,23 @@ void Worm::recibe_life_modification(const float& life_variation) {
 }
 
 void Worm::applyWindResistance(const float& wind_force) {}
+
+float Worm::distance_to_body(b2Body *body_) { return (body_->GetWorldCenter() - body->GetWorldCenter()).Length();}
+
+b2Vec2 Worm::forward_bound(b2Vec2 bound) {
+    return body->GetPosition() + facing_factor() * bound;
+}
+b2Vec2 Worm::backward_bound(b2Vec2 bound) {
+    return body->GetPosition() - facing_factor() * bound;
+}
+
+b2Vec2 Worm::position() {
+    return body->GetWorldCenter();
+}
+
+bool Worm::is_facing_right() {
+    return facing_right;
+}
 
 
 
