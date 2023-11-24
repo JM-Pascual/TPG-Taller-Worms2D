@@ -41,12 +41,13 @@ void GameFrame::setFrame(const std::string& descrip, const std::string& map_name
     layout->addWidget(joinGame, 10, Qt::AlignCenter);
     // cppcheck-suppress danglingTemporaryLifetime
     description->setText(desc);
+    description->setStyleSheet("color: white;");
     // cppcheck-suppress danglingTemporaryLifetime
     map->setText(name_map);
-    map->setStyleSheet("font-size: 16px;");
+    map->setStyleSheet("font-size: 16px; color: white;");
     // cppcheck-suppress danglingTemporaryLifetime
     players->setText(p_quant);
-    players->setStyleSheet("font-size: 16px;");
+    players->setStyleSheet("font-size: 16px; color: white;");
 
     joinGame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     joinGame->setStyleSheet("border-image: url(:/images/joinGame.bmp);");

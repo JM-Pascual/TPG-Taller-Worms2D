@@ -727,7 +727,7 @@ background-color: rgba(89, 89, 89, 180);</string>
            </property>
            <property name="styleSheet">
             <string notr="true">border: 0px;
-background-color: rgba(0, 0, 0, 220)</string>
+background-color: rgba(0, 0, 0, 220); color: white;</string>
            </property>
            <property name="text">
             <string>With this button you go to the browser section of the game.</string>
@@ -786,7 +786,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            </property>
            <property name="styleSheet">
             <string notr="true">border: 0px;
-background-color: rgba(0, 0, 0, 220)</string>
+background-color: rgba(0, 0, 0, 220); color: white;</string>
            </property>
            <property name="text">
             <string>With this button you join that game.</string>
@@ -836,7 +836,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            </property>
            <property name="styleSheet">
             <string notr="true">border: 0px;
-background-color: rgba(0, 0, 0, 220)</string>
+background-color: rgba(0, 0, 0, 220); color: white;</string>
            </property>
            <property name="text">
             <string>With this button you refresh the browser.</string>
@@ -895,7 +895,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            </property>
            <property name="styleSheet">
             <string notr="true">border: 0px;
-background-color: rgba(0, 0, 0, 220)</string>
+background-color: rgba(0, 0, 0, 220); color: white;</string>
            </property>
            <property name="text">
             <string>With this button you go back or exit the game.</string>
@@ -945,7 +945,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            </property>
            <property name="styleSheet">
             <string notr="true">border: 0px;
-background-color: rgba(0, 0, 0, 220)</string>
+background-color: rgba(0, 0, 0, 220); color: white;</string>
            </property>
            <property name="text">
             <string>With this button you create a new game.</string>
@@ -1028,7 +1028,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            </property>
            <property name="styleSheet">
             <string notr="true">border: 0px;
-background-color: rgba(0, 0, 0, 220)</string>
+background-color: rgba(0, 0, 0, 220); color: white;</string>
            </property>
            <property name="text">
             <string>With the button at the top, you change your ready status. Red means you're not ready, green means you're ready.</string>
@@ -1078,7 +1078,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            </property>
            <property name="styleSheet">
             <string notr="true">border: 0px;
-background-color: rgba(0, 0, 0, 220)</string>
+background-color: rgba(0, 0, 0, 220); color: white;</string>
            </property>
            <property name="text">
             <string>You can move left using the left arrow and right using the right arrow</string>
@@ -1137,7 +1137,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            </property>
            <property name="styleSheet">
             <string notr="true">border: 0px;
-background-color: rgba(0, 0, 0, 220)</string>
+background-color: rgba(0, 0, 0, 220); color: white;</string>
            </property>
            <property name="text">
             <string>You can jump backwards using return and forward using enter</string>
@@ -1187,7 +1187,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            </property>
            <property name="styleSheet">
             <string notr="true">border: 0px;
-background-color: rgba(0, 0, 0, 220)</string>
+background-color: rgba(0, 0, 0, 220); color: white;</string>
            </property>
            <property name="text">
             <string>You can change your equipped gadget using the F1 - F10 keys</string>
@@ -1246,7 +1246,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            </property>
            <property name="styleSheet">
             <string notr="true">border: 0px;
-background-color: rgba(0, 0, 0, 220)</string>
+background-color: rgba(0, 0, 0, 220); color: white;</string>
            </property>
            <property name="text">
             <string>You can aim using the up arrow and down using the down arrow. Hold space to power your shot, release to fire.</string>
@@ -1296,7 +1296,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            </property>
            <property name="styleSheet">
             <string notr="true">border: 0px;
-background-color: rgba(0, 0, 0, 220)</string>
+background-color: rgba(0, 0, 0, 220); color: white;</string>
            </property>
            <property name="text">
             <string>You can set the grenade explosion delay with 1 - 5 number keys</string>
@@ -1355,7 +1355,7 @@ background-color: rgba(0, 0, 0, 220)</string>
            </property>
            <property name="styleSheet">
             <string notr="true">border: 0px;
-background-color: rgba(0, 0, 0, 220)</string>
+background-color: rgba(0, 0, 0, 220); color: white;</string>
            </property>
            <property name="text">
             <string>You can surrender and leave the game with ESC key</string>
