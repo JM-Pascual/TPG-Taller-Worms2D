@@ -1,19 +1,29 @@
 #include "battlefield.h"
 
-#include <algorithm>
-
-#include "../common/States.h"
-
 #include "Player.h"
 #include "proyectile.h"
 #include "worm_handler.h"
+
+Battlefield::Battlefield() : projectile_count(0), level_holder(*this) {
+    std::string level_selected = "beach";
+    //Concat "_bars" to the level name
+    level_selected += "_bars";
+    for (const auto& element : Config::levelLayoutNode[0][level_selected]) {
+        // Extract values from the YAML node
+        auto x = element[0].as<float>();
+        auto y = element[1].as<float>();
+        auto angle = element[2].as<float>();
+        auto is_long = element[3].as<bool>();
+
+        level_holder.add_bar(x, y, (angle*M_PI), is_long);
+    }
+}
 
 void Battlefield::updateProjectilesTimer() {
     for (auto& projectile: projectiles) {
         projectile.second->updateTimer();
     }
 }
-
 
 void Battlefield::post_action_explosion() {
     for (auto& projectile: projectiles) {
@@ -63,4 +73,4 @@ void Battlefield::remove_collided_projectiles() {
 
 void Battlefield::destroy_dead_entities() { engine.destroy_dead_entities(); }
 
-const bool Battlefield::noProjectiles() { return projectiles.empty(); }
+bool Battlefield::noProjectiles() { return projectiles.empty(); }

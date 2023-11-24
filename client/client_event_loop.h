@@ -4,10 +4,15 @@
 #include <atomic>
 #include <memory>
 
+#include <SDL2pp/SDL2pp.hh>
+#include <spdlog/spdlog.h>
+
 #include "../common/config.h"
 #include "../common/thread.h"
 
 #include "ActorHolder.h"
+#include "GameActor.h"
+#include "LevelActors.h"
 #include "TexturesPool.h"
 #include "Window.h"
 #include "audio_player.h"
@@ -39,10 +44,10 @@ private:
     Camera camera;
     IHandler input;
     AudioPlayer audio_player;
-    uint8_t id_of_active_player;
     std::unique_ptr<CheatMenu>& cheat_menu;
 
     /// Holders for actors in the game
+    std::list<std::unique_ptr<LevelActor>> terrain_elements;
     ActorHolder players;
     ActorHolder proyectiles;
 
@@ -54,9 +59,8 @@ private:
     void process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
                              TexturesPool& txt_pool);
 
-    void update_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                        Animation& water_animation);
-
+    void update_terrain();
+    void render_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_renderer);
 public:
     /*
         Construye el cliente con su protocolo
@@ -72,7 +76,6 @@ public:
 
     friend class MainWindow;
     friend class GameFrame;
-    void update_terrain(std::shared_ptr<SDL2pp::Renderer> ptr);
     friend class CheatMenu;
 };
 

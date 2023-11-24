@@ -27,13 +27,12 @@ private:
     uint8_t projectile_count;
 
     Engine engine;
-    Level_holder level_holder;
+    LevelHolder level_holder;
 
     void updateProjectilesTimer();
     void post_action_explosion();
-
 public:
-    Battlefield(): projectile_count(0), level_holder(*this) {}
+    Battlefield();
 
     std::map<uint8_t, std::shared_ptr<Projectile>>& getProjectiles();
 
@@ -53,7 +52,7 @@ public:
 
     void destroy_dead_entities();
 
-    const bool noProjectiles();
+    bool noProjectiles();
 
     ~Battlefield() = default;
 
