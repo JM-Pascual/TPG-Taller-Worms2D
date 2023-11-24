@@ -7,18 +7,20 @@ Bar::Bar(Battlefield& battlefield, float x, float y, float inclination_angle, bo
     b2BodyDef barBodyDef;
     barBodyDef.position.Set(x, y);
 
-    angle = inclination_angle;
-
     barBodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
+
+    angle = inclination_angle;
+    barBodyDef.angle = inclination_angle;
+
     body = battlefield.add_body(barBodyDef);
     b2PolygonShape barBox;
 
     if (is_long){
         width = BAR_WIDTH_LONG;
-        barBox.SetAsBox(width / 2, BAR_HEIGHT / 2);
+        barBox.SetAsBox(width /2, BAR_HEIGHT /2);
     } else{
         width = BAR_WIDTH_SHORT;
-        barBox.SetAsBox(width / 2, BAR_HEIGHT / 2);
+        barBox.SetAsBox(width /2, BAR_HEIGHT /2);
     }
 
     body->CreateFixture(&barBox, 0.0f);
@@ -31,6 +33,14 @@ b2Vec2 Bar::get_bar_position() {
 TerrainActors Bar::get_bar_type() {
     if (width == BAR_WIDTH_LONG) return TerrainActors::LONG_BAR;
     else return TerrainActors::BAR;
+}
+
+float Bar::get_bar_width() const {
+    return (width);
+}
+
+float Bar::get_bar_height() const {
+    return (BAR_HEIGHT);
 }
 
 void Bar::collision_reaction() {
@@ -47,5 +57,4 @@ void Bar::collision_reaction() {
         reinterpret_cast<Entity*>(body_->GetUserData().pointer)->stop_falling();
     }
 }
-
 void Bar::applyWindResistance(const float& wind_force) {}

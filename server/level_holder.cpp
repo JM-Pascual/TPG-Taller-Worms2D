@@ -17,9 +17,9 @@ std::shared_ptr<LevelStateG> LevelHolder::get_level_building_state() {
         b2Vec2 bar_pos = bar.get_bar_position();
         bars_dto.emplace_back(
                 bar.get_bar_type(),
-                bar_pos.x,
-                bar_pos.y,
-                bar.angle);
+                bar_pos.x - bar.get_bar_width()/2,
+                bar_pos.y - bar.get_bar_height()/2,
+                360 - (bar.angle * (180/M_PI)));
     }
 
     return (std::make_shared<LevelStateG>(amount_of_bars, std::move(bars_dto)));

@@ -39,6 +39,8 @@ public:
 
     SDL2pp::Rect calcRect(const float& x, const float& y, const float& w, const float& h);
 
+    SDL2pp::Rect realRect(const float& x, const float& y);
+
     ~Camera() = default;
 };
 

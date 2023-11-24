@@ -6,9 +6,9 @@
 
 #include "../common/const.h"
 
-#define BAR_WIDTH_SHORT 6.0f
-#define BAR_WIDTH_LONG 12.0f
-#define BAR_HEIGHT 0.8f
+#define BAR_WIDTH_SHORT 2.1f
+#define BAR_WIDTH_LONG 4.2f
+#define BAR_HEIGHT 0.7f
 
 //Resolver estas contantes en el YAML
 
@@ -21,6 +21,9 @@ private:
     float angle;
     b2Vec2 get_bar_position();
     TerrainActors get_bar_type();
+
+    [[nodiscard]] float get_bar_width() const;
+    [[nodiscard]] float get_bar_height() const;
 public:
     explicit Bar(Battlefield& battlefield, float x, float y,
                  float inclination_angle, bool is_long);

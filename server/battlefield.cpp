@@ -5,7 +5,13 @@
 #include "worm_handler.h"
 
 Battlefield::Battlefield() : projectile_count(0), level_holder(*this) {
-    level_holder.add_bar(0, 0, 0, true);
+    level_holder.add_bar(26.6, 9.5, (M_PI*0.25), true);
+    level_holder.add_bar(22.6, 8, 0, true);
+    level_holder.add_bar(18.6, 8, 0, true);
+    level_holder.add_bar(14.6, 8, 0, true);
+    level_holder.add_bar(10.6, 8, 0, true);
+    level_holder.add_bar(6.6, 8, 0, true);
+    level_holder.add_bar(2.6, 9.5, (M_PI*0.75), true);
 }
 
 void Battlefield::updateProjectilesTimer() {
