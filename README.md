@@ -23,14 +23,49 @@ Para el proyecto se emplearon una serie de bibliotecas las cuales se listan como
 
 ```console
 sudo apt install doxygen
-...
+git clone --depth 1 --branch v2.4.1 git@github.com:erincatto/box2d.git
+cd box2d
+mkdir build
+cd build
+cmake -DBOX2D_BUILD_DOCS=ON ..
+make -j4
+sudo make install
 ```
 
 
 - SDL2pp
 
+Para desarrollo del juego se utilizo la versión 0.18 de libsdl2pp. Para su correcto funcionamiento se necesita descargar las siguientes releases de bibliotecas del paquete SDL: 
+  - libsdl2-image ( 2.6.3, https://github.com/libsdl-org/SDL_image/releases/tag/release-2.6.3)
+  - libsdl2-mixer (2.6.3, https://github.com/libsdl-org/SDL_mixer/releases/tag/release-2.6.3)
+  - libsdl2-ttf (2.20.2, https://github.com/libsdl-org/SDL_ttf/releases/tag/release-2.20.2)
+
+Acto seguido instalamos algunas dependencias que deberemos linkear para compilar el proyecto. 
 ```console
-...
+sudo apt-get install libjpeg-dev libpng-dev libfreetype-dev libopusfile-dev
+libflac-dev libxmp-dev libfluidsynth-dev libwavpack-dev cmake libmodplug-dev libsdl2-dev
+```
+
+Luego, con cada uno de los zip de la primera parte seguimos el siguiente proceso de compilado e instalado:
+```console
+cd carpeta_sdl_x
+mkdir build
+cd build
+cmake ..
+make -j4
+sudo make install #importante el hacerlo como sudo
+```
+
+Una vez compiladas e instaladas las ultimas versiones de libsdl2 (mixer, ttf e image), compilamos e instalamos la version 0.18.1 de libsdl2pp
+ - Link a la versión: https://github.com/libSDL2pp/libSDL2pp/releases/tag/0.18.1
+
+```console
+cd libSDL2pp-0.18.1
+mkdir build
+cd build
+cmake ..
+make -j4
+sudo make install #importante el hacerlo como sudo
 ```
 
 - QT
