@@ -36,6 +36,8 @@
 #define FRAGMENTS_AMOUNT Config::yamlNode["fragments_amount"].as<int>()
 #define FRAGMENT_POWER Config::yamlNode["fragment_power"].as<int>()
 
+#define ROCKET_DELAY Config::yamlNode["rocket_delay"].as<float>()
+
 
 #define DEGTORAD 180 / b2_pi
 
@@ -48,12 +50,14 @@ protected:
     WeaponsAndTools type;
     int blast_radius;
     int epicenter_damage;
+    float explosion_delay;
+    std::chrono::time_point<std::chrono::steady_clock> grenade_timer;
 
     void applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
 
 public:
     Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radius, int epicenter_damage,
-               WeaponsAndTools type);
+               WeaponsAndTools type, float explosion_delay);
 
     void set_power(b2Vec2 power);
     std::shared_ptr<ProjectileStateG> get_proyectile_state(const uint8_t& proyectile_id);
@@ -81,7 +85,7 @@ public:
            WeaponsAndTools type);
     void collision_reaction() override;
     void applyWindResistance(const float& wind_force) override;
-    void updateTimer() override {}
+    void updateTimer() override;
     void second_collision_reaction() override{};
 
     virtual ~Rocket() = default;
@@ -120,10 +124,6 @@ public:
 };
 
 class Grenade: public Projectile {
-protected:
-    float explosion_delay;
-    std::chrono::time_point<std::chrono::steady_clock> grenade_timer;
-
 public:
     Grenade(Battlefield& battlefield, b2Vec2 position, float explosion_delay,
             uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type);
@@ -131,7 +131,6 @@ public:
     void applyWindResistance(const float& wind_force) override;
     void updateTimer() override;
     void second_collision_reaction() override{};
-    // bool multiple_contact() override;
     virtual ~Grenade() = default;
 };
 

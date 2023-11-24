@@ -80,3 +80,5 @@
 
   blast_radius_teleport: 0
   epicenter_damage_teleport: 0
+
+  rocket_delay : 10

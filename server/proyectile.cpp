@@ -3,11 +3,13 @@
 #include "battlefield.h"
 
 Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radius,
-                       int epicenter_damage, WeaponsAndTools type):
+                       int epicenter_damage, WeaponsAndTools type, float explosion_delay):
         Entity(battlefield),
         type(type),
         blast_radius(blast_radius),
-        epicenter_damage(epicenter_damage) {
+        epicenter_damage(epicenter_damage),
+        explosion_delay(explosion_delay),
+        grenade_timer(std::chrono::steady_clock::now()){
 
     b2BodyDef projectile_body;
     projectile_body.type = b2_dynamicBody;
@@ -90,7 +92,7 @@ void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 app
 //~~~~~~~~~~~~~~~~~~~ Rocket ~~~~~~~~~~~~~~~~~~~~
 
 Rocket::Rocket(Battlefield& battlefield, b2Vec2 position,int blast_radius, int epicenter_damage, WeaponsAndTools type):
-        Projectile(battlefield, position, blast_radius, epicenter_damage,type) {}
+        Projectile(battlefield, position, blast_radius, epicenter_damage,type, ROCKET_DELAY) {}
 
 void Rocket::collision_reaction() {
     if (not dead) {
@@ -105,6 +107,21 @@ void Rocket::applyWindResistance(const float& wind_force) {
 
 void Rocket::apply_explosion(b2Vec2 final_impulse) {
     Entity::apply_explosion(b2Vec2(0,0));
+}
+
+void Rocket::updateTimer() {
+    if (dead) {
+        return;
+    }
+
+    std::chrono::duration<double> elapsed_seconds =
+            std::chrono::steady_clock::now() - grenade_timer;
+    grenade_timer = std::chrono::steady_clock::now();
+    explosion_delay -= elapsed_seconds.count();
+    if ( !dead && explosion_delay <= 0) {
+        collide();
+        dead = true;
+    }
 }
 
 //~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
@@ -160,9 +177,7 @@ AirStrikeRocket::AirStrikeRocket(Battlefield &battlefield, b2Vec2 position) :
 
 Grenade::Grenade(Battlefield& battlefield, b2Vec2 position, float explosion_delay,
                  uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type):
-        Projectile(battlefield, position, blast_radius, epicenter_damage, type),
-        explosion_delay(explosion_delay),
-        grenade_timer(std::chrono::steady_clock::now()) {}
+        Projectile(battlefield, position, blast_radius, epicenter_damage, type, explosion_delay){}
 
 void Grenade::collision_reaction() {}
 
