@@ -16,7 +16,11 @@
 #define TELEPORT_AMMO uint8_t(255)
 #define AIRSTRIKE_AMMO uint8_t(2)
 
-#define AIRSTRIKE_ROCKETS uint8_t(6 )
+#define AIRSTRIKE_ROCKETS uint8_t(6)
+#define AIRSTRIKE_ROCKET_SEPARATION 0.6f
+#define AIRSTRIKE_ROCKET_X_DEVIATION 3.2F
+#define AIRSTRIKE_ROCKET_Y_POSITION 22
+
 class Worm;
 class Game;
 class Battlefield;

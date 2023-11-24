@@ -147,7 +147,7 @@ MortarFragment::MortarFragment(Battlefield &battlefield, b2Vec2 position, b2Vec2
     body->ApplyLinearImpulseToCenter(direction,true);
 }
 
-//~~~~~~~~~~~~~~~~~~~ MortarFragment ~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~ AirStrikeRocket ~~~~~~~~~~~~~~~~~~~~
 
 AirStrikeRocket::AirStrikeRocket(Battlefield &battlefield, b2Vec2 position) :
         Rocket(battlefield, position, BLAST_RADIUS_AIR_STRIKE,

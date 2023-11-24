@@ -17,7 +17,7 @@ void Bazooka::shoot(Battlefield& battlefield, Worm& worm) {
     if (--ammo <= 0) {
         return;
     }
-
+    /*
     b2Vec2 projectile_position = worm.set_bullet_direction();
 
     std::shared_ptr<Projectile> projectile =
@@ -25,9 +25,24 @@ void Bazooka::shoot(Battlefield& battlefield, Worm& worm) {
     battlefield.add_projectile(projectile);
 
     worm.use_chargeable_weapon(projectile);
+     */
+
+
+    b2Vec2 destination = worm.clicked_position_();
+    destination.y =  22; //Es una altura constante
+    destination.x = destination.x - 3.2f;
+
+    for(int i  = 0; i < AIRSTRIKE_ROCKETS ; i++){
+        //tengo que setear una posición difetente para cada caso
+
+        destination.x += 0.6f;
+
+        std::shared_ptr<Projectile> projectile =
+                std::make_shared<BazookaRocket>(battlefield, destination);
+        battlefield.add_projectile(projectile);
+
+    }
 }
-
-
 
 //~~~~~~~~~~~~~~~~~~~ Mortar ~~~~~~~~~~~~~~~~~~~~
 
@@ -151,11 +166,15 @@ void AirStrike::shoot(Battlefield& battlefield, Worm& worm) {
     }
 
     b2Vec2 destination = worm.clicked_position_();
+    destination.y =  AIRSTRIKE_ROCKET_Y_POSITION; //Es una altura constante
+    destination.x = destination.x - AIRSTRIKE_ROCKET_X_DEVIATION;
 
     for(int i  = 0; i < AIRSTRIKE_ROCKETS ; i++){
-        std::shared_ptr<Projectile> projectile =
-                std::make_shared<AirStrikeRocket>(battlefield, destination);
-        battlefield.add_projectile(projectile);
 
+        destination.x += AIRSTRIKE_ROCKET_SEPARATION;
+
+        std::shared_ptr<Projectile> projectile =
+                std::make_shared<BazookaRocket>(battlefield, destination);
+        battlefield.add_projectile(projectile);
     }
 }
