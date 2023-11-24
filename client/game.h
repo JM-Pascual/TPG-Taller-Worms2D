@@ -24,7 +24,7 @@ private:
     EventLoop client;
 
 public:
-    Game(int argc, char* argv[]);
+    Game(int& argc, char* argv[]);
 
     int run();
 
