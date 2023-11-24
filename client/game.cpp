@@ -1,6 +1,6 @@
 #include "game.h"
 
-Game::Game(int argc, char* argv[]):
+Game::Game(int& argc, char* argv[]):
         app(std::make_unique<QApplication>(argc, argv)),
         window(std::make_unique<MainWindow>(client, initGame)),
         initGame(false),
