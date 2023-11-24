@@ -14,6 +14,7 @@ Para el proyecto se emplearon una serie de bibliotecas las cuales se listan como
 - QT // Framework de diseño utilizado para la UI del juego.
 - Google Tests // Suite para test unitarios en C++.
 - LibYAML // Librería para facilitar el parseo y lectura de archivos YAML.
+- Spdlog // Libreria de logging
 
 ![worm-dependencias](https://cdn.discordapp.com/attachments/1162524969142599822/1176873875846463558/pngegg1.png?ex=65707435&is=655dff35&hm=e1bed770c3dea42b01800af9efa5ead113d4bc6d8d645dfb2497efc2278785c1&)
 
@@ -79,6 +80,11 @@ libqt6multimedia6 libqt5multimedia5-plugins
 - libYAML & GoogleTests
 ```console
 sudo apt install libgtest-dev libyaml-cpp-dev libyaml-cpp0.7 -y
+```
+
+- Spdlog
+```console
+sudo apt install libspdlog-dev libspdlog1.10 -y
 ```
 
 ## Ejecucion de la aplicacion
