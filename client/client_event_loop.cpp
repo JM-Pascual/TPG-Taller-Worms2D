@@ -1,8 +1,5 @@
 #include "client_event_loop.h"
 
-#include <SDL2pp/SDL2pp.hh>
-#include <spdlog/spdlog.h>
-
 #include "../common/const.h"
 
 #include "cheatmenu.h"
@@ -26,6 +23,18 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
     send.start();
     cheat_menu = std::make_unique<CheatMenu>(action_queue);
     cheat_menu->hide();
+}
+
+void EventLoop::update_terrain() {
+    for (auto& terrain: terrain_elements) {
+        terrain->update();
+    }
+}
+
+void EventLoop::render_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) {
+    for (auto& terrain: terrain_elements) {
+        terrain->render(game_renderer);
+    }
 }
 
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
@@ -121,24 +130,39 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                 continue;
             }
 
+            case StatesTag::LEVEL_BUILD: {
+                auto state = std::dynamic_pointer_cast<LevelStateG>(raw_state);
+
+                //Charge all the bars as terrain
+                for (auto & bar : state->bars) {
+                    if (bar.type == TerrainActors::BAR){
+                        terrain_elements.emplace_back(std::make_unique<ShortBar>(bar.x,
+                                                                                 bar.y,
+                                                                                 bar.angle,
+                                                                                 txt_pool,
+                                                                                 camera));
+                    } else {
+                        terrain_elements.emplace_back(std::make_unique<LongBar>(bar.x,
+                                                                                bar.y,
+                                                                                bar.angle,
+                                                                                txt_pool,
+                                                                                camera));
+                    }
+                }
+
+                terrain_elements.emplace_back(std::make_unique<Water>(0, 600, txt_pool, camera));
+                continue;
+            }
+
             default:
                 break;
         }
     }
 }
 
-void EventLoop::update_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                               Animation& water_animation) {
-    water_animation.update();
-
-    for (int i = 0; i < 5; i++) {
-        water_animation.render((*game_renderer), camera.calcRect(0, 600 + i * 22, 1280, 40), 1240,
-                               0);
-    }
-}
-
 void EventLoop::run() {
     runned = true;
+
     Window window(1280, 720);
     TexturesPool txt_pool(window.get_renderer());
 
@@ -148,8 +172,6 @@ void EventLoop::run() {
     TextPrinter state_printer(18, txt_pool);
 
     audio_player.play_background_music();
-
-    Animation water_animation(txt_pool.get_actor_texture(Actors::WATER), 11, 3);
 
     input.start();
 
@@ -161,7 +183,7 @@ void EventLoop::run() {
     while (!quit) {
         window.clear_textures();
 
-        window.render_stage(txt_pool, camera);
+        window.render_background(txt_pool);
         process_game_states(turn_start, txt_pool);
 
         turn_time = std::chrono::steady_clock::now() - turn_start;
@@ -172,7 +194,8 @@ void EventLoop::run() {
         proyectiles.render_actors(window.get_renderer());
         proyectiles.print_actors_state(window.get_renderer(), state_printer);
 
-        update_terrain(window.get_renderer(), water_animation);
+        update_terrain();
+        render_terrain(window.get_renderer());
 
         window.present_textures();
 

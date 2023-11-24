@@ -8,8 +8,6 @@
 #define NOT_POPPED_COUNT 254
 #define CONNECTION_ERROR 255
 
-#define NULL_ARG ""
-
 #define MAX_DESCR_CHARS 64
 
 #define NOT_YOUR_TURN 0
@@ -79,6 +77,23 @@ enum class Actions {
 
 };
 
+enum class TerrainActors {
+    GRADIENT,
+    BAR,
+    LONG_BAR,
+    BACKGROUND,
+    WATER
+};
+
+enum class TerrainInclinations{
+    HORIZONTAL,
+    VERTICAL,
+    INCLINED_RIGHT,
+    INCLINED_LEFT,
+    UPWARDS_RIGHT,
+    UPWARDS_LEFT
+};
+
 enum class Projectiles {
     BAZOOKA_PROYECTILE,
     BANANA_PROYECTILE,
@@ -103,11 +118,6 @@ enum class Effects { NORMAL_EXPLOSION, FRAGMENT_EXPLOSION };
 
 enum class Actors {
     WORM = 0x0,
-    GRADIENT,
-    BRIDGE,
-    LONG_BRIDGE,
-    BACKGROUND,
-    WATER,
     JUMPING_WORM,
     BACKFLIP_WORM,
     DYING_WORM,
@@ -149,6 +159,7 @@ enum class StatesTag {
     INFO_GAME_L,
     PLAYER_COUNT_L,
     PLAYER_L,
+    LEVEL_BUILD,
     BATTLEFIELD_G,
     PLAYER_G,
     PROJECTILE_G,

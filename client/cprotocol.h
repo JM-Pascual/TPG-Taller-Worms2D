@@ -17,6 +17,7 @@
 class States;
 class GameInfoL;
 class ProjectileStateG;
+class LevelStateG;
 class PlayerStateG;
 class WormStateG;
 
@@ -49,6 +50,8 @@ private:
     void recvString64(std::string& str);
 
     std::shared_ptr<GameInfoL> recvGameInfo();
+
+    std::shared_ptr<LevelStateG> recvLevelBuild();
 
     std::shared_ptr<PlayerStateG> recvPlayerGame();
 
