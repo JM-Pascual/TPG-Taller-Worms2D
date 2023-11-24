@@ -7,24 +7,27 @@
 #include "proyectile.h"
 
 
-#define BAZOOKA_AMMO uint8_t(255)  // Se supone que tiene que ser infinita
-#define GREEN_GRENADE_AMMO uint8_t(255)
-#define BANANA_AMMO uint8_t(5)
-#define DYNAMITE_AMMO uint8_t(5)
-#define MORTAR_AMMO uint8_t(10)
-#define RED_GRENADE_AMMO uint8_t(10)
-#define TELEPORT_AMMO uint8_t(255)
-#define AIRSTRIKE_AMMO uint8_t(2)
-#define BASEBALL_BAT_AMMO uint8_t(255)
 
-#define AIRSTRIKE_ROCKETS uint8_t(6)
-#define AIRSTRIKE_ROCKET_SEPARATION 0.6f
-#define AIRSTRIKE_ROCKET_X_DEVIATION 3.2F
-#define AIRSTRIKE_ROCKET_Y_POSITION 22
+#define BAZOOKA_AMMO Config::yamlNode["bazooka_ammo"].as<int>()
+#define GREEN_GRENADE_AMMO Config::yamlNode["green_grenade_ammo"].as<int>()
+#define BANANA_AMMO Config::yamlNode["banana_ammo"].as<int>()
+#define DYNAMITE_AMMO Config::yamlNode["dynamite_ammo"].as<int>()
+#define MORTAR_AMMO Config::yamlNode["mortar_ammo"].as<int>()
+#define RED_GRENADE_AMMO Config::yamlNode["red_grenade_ammo"].as<int>()
 
-#define BAT_DAMAGE uint8_t(10)
-#define BAT_POWER uint8_t(50)
-#define BAT_RANGE uint8_t(4)
+
+#define TELEPORT_AMMO Config::yamlNode["teleport_ammo"].as<int>()
+#define AIRSTRIKE_AMMO Config::yamlNode["air_strike_ammo"].as<int>()
+#define BASEBALL_BAT_AMMO Config::yamlNode["baseball_bat_ammo"].as<int>()
+
+#define AIRSTRIKE_ROCKETS Config::yamlNode["air_strike_rockets"].as<int>()
+#define AIRSTRIKE_ROCKET_SEPARATION Config::yamlNode["air_strike_rocket_separation"].as<float>()
+#define AIRSTRIKE_ROCKET_X_DEVIATION Config::yamlNode["air_strike_rocket_deviation_x"].as<float>()
+#define AIRSTRIKE_ROCKET_Y_POSITION Config::yamlNode["air_strike_rocket_y_position"].as<int>()
+
+#define BAT_DAMAGE Config::yamlNode["baseball_bat_damage"].as<int>()
+#define BAT_POWER Config::yamlNode["baseball_bat_power"].as<int>()
+#define BAT_RANGE Config::yamlNode["baseball_bat_range"].as<int>()
 
 class Worm;
 class Game;
@@ -37,6 +40,7 @@ protected:
 public:
     explicit Gadget(uint8_t ammo);
     virtual void shoot(Battlefield& battlefield, Worm& worm) = 0;
+    void infiniteAmmo();
     ~Gadget() = default;
 
     friend class Player;

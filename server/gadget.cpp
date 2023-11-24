@@ -7,6 +7,7 @@
 
 Gadget::Gadget(uint8_t ammo) : ammo(ammo) {}
 
+void Gadget::infiniteAmmo() { ammo = 255; }
 
 //~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
 
@@ -14,7 +15,7 @@ Bazooka::Bazooka(): Gadget(BAZOOKA_AMMO) {}
 
 
 void Bazooka::shoot(Battlefield& battlefield, Worm& worm) {
-    if (--ammo <= 0) {
+    if (ammo == 0) {
         return;
     }
 
@@ -25,6 +26,8 @@ void Bazooka::shoot(Battlefield& battlefield, Worm& worm) {
     battlefield.add_projectile(projectile);
 
     worm.use_chargeable_weapon(projectile);
+
+    --ammo;
 }
 
 //~~~~~~~~~~~~~~~~~~~ Mortar ~~~~~~~~~~~~~~~~~~~~
@@ -32,7 +35,7 @@ void Bazooka::shoot(Battlefield& battlefield, Worm& worm) {
 Mortar::Mortar() : Gadget(MORTAR_AMMO){}
 
 void Mortar::shoot(Battlefield &battlefield, Worm &worm) {
-    if (--ammo <= 0) {
+    if (ammo == 0) {
         return;
     }
     b2Vec2 projectile_position = worm.set_bullet_direction();
@@ -42,6 +45,8 @@ void Mortar::shoot(Battlefield &battlefield, Worm &worm) {
     battlefield.add_projectile(mortar_rocket);
 
     worm.use_chargeable_weapon(mortar_rocket);
+
+    --ammo;
 }
 
 //~~~~~~~~~~~~~~~~~~~ Green_grenade ~~~~~~~~~~~~~~~~~~~~
@@ -49,7 +54,7 @@ void Mortar::shoot(Battlefield &battlefield, Worm &worm) {
 GreenGrenade::GreenGrenade(): Gadget(GREEN_GRENADE_AMMO) {}
 
 void GreenGrenade::shoot(Battlefield& battlefield, Worm& worm) {
-    if (--ammo <= 0) {
+    if (ammo == 0) {
         return;
     }
 
@@ -61,6 +66,8 @@ void GreenGrenade::shoot(Battlefield& battlefield, Worm& worm) {
     battlefield.add_projectile(green_grenade);
 
     worm.use_chargeable_weapon(green_grenade);
+
+    --ammo;
 }
 
 //~~~~~~~~~~~~~~~~~~~ Red_grenade ~~~~~~~~~~~~~~~~~~~~
@@ -68,7 +75,7 @@ void GreenGrenade::shoot(Battlefield& battlefield, Worm& worm) {
 RedGrenade::RedGrenade(): Gadget(RED_GRENADE_AMMO) {}
 
 void RedGrenade::shoot(Battlefield& battlefield, Worm& worm) {
-    if (--ammo <= 0) {
+    if (ammo == 0) {
         return;
     }
 
@@ -80,6 +87,8 @@ void RedGrenade::shoot(Battlefield& battlefield, Worm& worm) {
     battlefield.add_projectile(red_grenade);
 
     worm.use_chargeable_weapon(red_grenade);
+
+    --ammo;
 }
 
 //~~~~~~~~~~~~~~~~~~~ Banana ~~~~~~~~~~~~~~~~~~~~
@@ -87,7 +96,7 @@ void RedGrenade::shoot(Battlefield& battlefield, Worm& worm) {
 BananaGrenade::BananaGrenade(): Gadget(BANANA_AMMO) {}
 
 void BananaGrenade::shoot(Battlefield& battlefield, Worm& worm) {
-    if (--ammo <= 0) {
+    if (ammo == 0) {
         return;
     }
 
@@ -99,6 +108,8 @@ void BananaGrenade::shoot(Battlefield& battlefield, Worm& worm) {
     battlefield.add_projectile(banana);
 
     worm.use_chargeable_weapon(banana);
+
+    --ammo;
 }
 
 //~~~~~~~~~~~~~~~~~~~ DynamiteGrenade ~~~~~~~~~~~~~~~~~~~~
@@ -106,7 +117,7 @@ void BananaGrenade::shoot(Battlefield& battlefield, Worm& worm) {
 DynamiteGrenade::DynamiteGrenade(): Gadget(DYNAMITE_AMMO) {}
 
 void DynamiteGrenade::shoot(Battlefield& battlefield, Worm& worm) {
-    if (--ammo <= 0) {
+    if (ammo == 0) {
         return;
     }
 
@@ -118,6 +129,8 @@ void DynamiteGrenade::shoot(Battlefield& battlefield, Worm& worm) {
     battlefield.add_projectile(dynamite);
 
     worm.use_positional_weapon(dynamite);
+
+    --ammo;
 }
 
 
@@ -126,10 +139,12 @@ void DynamiteGrenade::shoot(Battlefield& battlefield, Worm& worm) {
 Teleport::Teleport() : Gadget(TELEPORT_AMMO){}
 
 void Teleport::shoot(Battlefield& battlefield, Worm& worm) {
-    if (--ammo <= 0) {
+    if (ammo == 0) {
         return;
     }
     worm.change_position();
+
+    --ammo;
 }
 
 //~~~~~~~~~~~~~~~~~~~ AirStrike ~~~~~~~~~~~~~~~~~~~~
@@ -137,7 +152,7 @@ void Teleport::shoot(Battlefield& battlefield, Worm& worm) {
 AirStrike::AirStrike() : Gadget(AIRSTRIKE_AMMO){}
 
 void AirStrike::shoot(Battlefield& battlefield, Worm& worm) {
-    if (--ammo <= 0) {
+    if (ammo == 0) {
         return;
     }
 
@@ -153,6 +168,8 @@ void AirStrike::shoot(Battlefield& battlefield, Worm& worm) {
                 std::make_shared<BazookaRocket>(battlefield, destination);
         battlefield.add_projectile(projectile);
     }
+
+    --ammo;
 }
 
 //~~~~~~~~~~~~~~~~~~~ BaseballBat ~~~~~~~~~~~~~~~~~~~~
@@ -160,10 +177,13 @@ void AirStrike::shoot(Battlefield& battlefield, Worm& worm) {
 BaseballBat::BaseballBat() : Gadget(BASEBALL_BAT_AMMO) {}
 
 void BaseballBat::shoot(Battlefield &battlefield, Worm &worm) {
-    if (--ammo <= 0) {
+    if (ammo == 0) {
         return;
     }
     bat(battlefield,worm);
+
+    --ammo;
+
 }
 
 void BaseballBat::bat(Battlefield& battlefield, Worm& worm) {

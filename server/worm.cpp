@@ -292,13 +292,6 @@ void Worm::applyWindResistance(const float& wind_force) {}
 
 float Worm::distance_to_body(b2Body *body_) { return (body_->GetWorldCenter() - body->GetWorldCenter()).Length();}
 
-b2Vec2 Worm::forward_bound(b2Vec2 bound) {
-    return body->GetPosition() + facing_factor() * bound;
-}
-b2Vec2 Worm::backward_bound(b2Vec2 bound) {
-    return body->GetPosition() - facing_factor() * bound;
-}
-
 b2Vec2 Worm::position() {
     return body->GetWorldCenter();
 }

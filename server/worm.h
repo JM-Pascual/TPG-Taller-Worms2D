@@ -23,7 +23,6 @@
 #define MAX_POWER Config::yamlNode["max_power"].as<int>()
 #define ANGLE_VARIATION (b2_pi / 64)
 
-#define CATEGORY_BITS 0x002
 
 #define INCLINACION_MAX (b2_pi / 2)
 #define INCLINACION_MIN (-b2_pi / 2)
@@ -118,8 +117,7 @@ public:
     b2Vec2 position();
 
     float distance_to_body(b2Body* body_);
-    b2Vec2 forward_bound(b2Vec2 bound);
-    b2Vec2 backward_bound(b2Vec2 bound);
+
 
     bool is_facing_right();
 
