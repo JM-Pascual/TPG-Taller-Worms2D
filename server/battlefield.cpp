@@ -1,7 +1,5 @@
 #include "battlefield.h"
 
-#include <yaml-cpp/yaml.h>
-
 #include "Player.h"
 #include "proyectile.h"
 #include "worm_handler.h"
