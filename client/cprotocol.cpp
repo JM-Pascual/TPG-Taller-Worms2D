@@ -108,6 +108,9 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
         case StatesTag::WORM_G:
             return recvWormGame();
 
+        case StatesTag::CRATE:
+            return recvCrate();
+
         default:
             return std::make_shared<PlayerCountL>(recvUint8());  // ToDo placeholder para un default
     }
@@ -187,4 +190,10 @@ std::shared_ptr<ProjectileStateG> ClientSide::Protocol::recvProjectileGame() {
     auto proyectile_type = (WeaponsAndTools)recvUint8();
     bool impacted = recvBool();
     return std::make_shared<ProjectileStateG>(id, x, y, proyectile_type, impacted, angle);
+}
+
+std::shared_ptr<CrateState> ClientSide::Protocol::recvCrate() {
+    float x = meter_to_pixel_x(recvFloat());
+    float y = meter_to_pixel_y(recvFloat());
+    return std::make_shared<CrateState>(x, y);
 }

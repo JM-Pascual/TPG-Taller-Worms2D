@@ -56,6 +56,8 @@ private:
 
     std::shared_ptr<WormStateG> recvWormGame();
 
+    std::shared_ptr<CrateState> recvCrate();
+
 public:
     // Envia data chequeando si se cierra el socket
     void send(const void* data, unsigned int sz);

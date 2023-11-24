@@ -18,6 +18,8 @@ public:
     void collision_reaction() override;
 
     void applyWindResistance(const float& wind_force) override {}
+
+    friend class InfoParser;
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include "../common/States.h"
 
 #include "Player.h"
+#include "crate.h"
 #include "proyectile.h"
 #include "worm_handler.h"
 

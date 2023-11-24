@@ -178,6 +178,12 @@ void ServerSide::Protocol::sendBattlefield(const std::shared_ptr<States>& state)
     send(&p->wind_force, sizeof(uint8_t));
 }
 
+void ServerSide::Protocol::sendCrate(const std::shared_ptr<States>& state) {
+    std::shared_ptr<CrateState> p = std::dynamic_pointer_cast<CrateState>(state);
+    send(&p->tag, sizeof(uint8_t));
+    sendPosition(p->pos);
+}
+
 void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
     switch (state->tag) {
         case StatesTag::GAMES_COUNT_L:
@@ -204,6 +210,10 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
 
         case StatesTag::WORM_G:
             sendWormState(state);
+            break;
+
+        case StatesTag::CRATE:
+            sendCrate(state);
             break;
 
         case StatesTag::PROJECTILE_G:

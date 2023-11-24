@@ -41,6 +41,9 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                 continue;
             }
 
+            case StatesTag::CRATE:
+                break;
+
             case StatesTag::WORM_G: {
                 auto state = std::dynamic_pointer_cast<WormStateG>(raw_state);
                 if (!players.actor_loaded(state->id)) {

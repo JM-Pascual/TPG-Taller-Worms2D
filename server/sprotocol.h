@@ -59,6 +59,8 @@ private:
 
     void sendBattlefield(const std::shared_ptr<States>& state);
 
+    void sendCrate(const std::shared_ptr<States>& state);
+
 public:
     void sendStates(const std::shared_ptr<States>& state);
     /*

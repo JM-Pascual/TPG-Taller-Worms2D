@@ -153,7 +153,8 @@ enum class StatesTag {
     PLAYER_G,
     PROJECTILE_G,
     PLAYER_TURN,
-    WORM_G
+    WORM_G,
+    CRATE
 };
 
 #endif
