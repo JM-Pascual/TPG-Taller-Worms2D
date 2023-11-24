@@ -81,6 +81,20 @@ libqt6multimedia6 libqt5multimedia5-plugins
 sudo apt install libgtest-dev libyaml-cpp-dev libyaml-cpp0.7 -y
 ```
 
+## Ejecucion de la aplicacion
+
+
+```console
+git clone git@github.com:JM-Pascual/TPG-Taller-Worms2D.git
+cd TPG-Taller-Worms2D
+mkdir build
+cd build
+cmake ..
+make -j4
+../target/worms2dsv 8080 #servidor
+../target/worms2d 127.0.0.1 8080 #cliente
+```
+
 ### Disclaimer
 
 Se utilizo el [socket](https://github.com/eldipa/sockets-en-cpp), [queues y thread](https://github.com/eldipa/hands-on-threads/tree/master/libs) provistos por la catedra Veiga de Taller de Programacion I UBA. Bajo licencia GPL v2.
