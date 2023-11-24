@@ -178,6 +178,19 @@ void ServerSide::Protocol::sendBattlefield(const std::shared_ptr<States>& state)
     send(&p->wind_force, sizeof(uint8_t));
 }
 
+void ServerSide::Protocol::sendLevelBuild(const std::shared_ptr<States>& lb) {
+    std::shared_ptr<LevelStateG> p = std::dynamic_pointer_cast<LevelStateG>(lb);
+    send(&p->tag, sizeof(uint8_t));
+    send(&p->amount_of_bars, sizeof(uint8_t));
+
+    for (const auto& bar: p->bars) {
+        send(&bar.type, sizeof(uint8_t));
+        sendFloat(bar.x);
+        sendFloat(bar.y);
+        sendFloat(bar.angle);
+    }
+}
+
 void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
     switch (state->tag) {
         case StatesTag::GAMES_COUNT_L:
@@ -214,6 +227,9 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
             sendTurn(state);
             break;
 
+        case StatesTag::LEVEL_BUILD:
+            sendLevelBuild(state);
+            break;
         default:
             break;
     }

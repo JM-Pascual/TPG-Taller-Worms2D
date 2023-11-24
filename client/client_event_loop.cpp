@@ -136,14 +136,14 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                 //Charge all the bars as terrain
                 for (auto & bar : state->bars) {
                     if (bar.type == TerrainActors::BAR){
-                        terrain_elements.emplace_back(std::make_unique<ShortBar>(bar.pos.x,
-                                                                                 bar.pos.y,
+                        terrain_elements.emplace_back(std::make_unique<ShortBar>(bar.x,
+                                                                                 bar.y,
                                                                                  bar.angle,
                                                                                  txt_pool,
                                                                                  camera));
                     } else {
-                        terrain_elements.emplace_back(std::make_unique<LongBar>(bar.pos.x,
-                                                                                bar.pos.y,
+                        terrain_elements.emplace_back(std::make_unique<LongBar>(bar.x,
+                                                                                bar.y,
                                                                                 bar.angle,
                                                                                 txt_pool,
                                                                                 camera));

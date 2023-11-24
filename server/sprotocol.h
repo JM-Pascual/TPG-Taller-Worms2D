@@ -51,6 +51,8 @@ private:
 
     void sendPlayerLobby(const std::shared_ptr<States>& count);
 
+    void sendLevelBuild(const std::shared_ptr<States>& lb);
+
     void sendProjectileState(const std::shared_ptr<States>& ps);
 
     void sendFloat(float number);

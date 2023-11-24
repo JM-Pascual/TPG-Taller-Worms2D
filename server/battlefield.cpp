@@ -1,9 +1,5 @@
 #include "battlefield.h"
 
-#include <algorithm>
-
-#include "../common/States.h"
-
 #include "Player.h"
 #include "proyectile.h"
 #include "worm_handler.h"
@@ -11,7 +7,6 @@
 Battlefield::Battlefield() : projectile_count(0), level_holder(*this) {
     level_holder.add_bar(0, 0, 0, true);
 }
-
 
 void Battlefield::updateProjectilesTimer() {
     for (auto& projectile: projectiles) {

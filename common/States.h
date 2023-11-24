@@ -57,10 +57,11 @@ public:
 // --------------- LEVEL BUILDING STATE ----------------------
 
 struct BarDto{
-    BarDto(b2Vec2 vec2, float d, TerrainActors actors);
-    const b2Vec2 pos;
-    const float angle;
+    BarDto(TerrainActors bar_type, float x, float y, float angle);
     TerrainActors type;
+    float x;
+    float y;
+    const float angle;
 };
 
 class LevelStateG: public States {

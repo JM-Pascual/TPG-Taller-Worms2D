@@ -108,6 +108,9 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
         case StatesTag::WORM_G:
             return recvWormGame();
 
+        case StatesTag::LEVEL_BUILD:
+            return recvLevelBuild();
+
         default:
             return std::make_shared<PlayerCountL>(recvUint8());  // ToDo placeholder para un default
     }
@@ -187,4 +190,13 @@ std::shared_ptr<ProjectileStateG> ClientSide::Protocol::recvProjectileGame() {
     auto proyectile_type = (WeaponsAndTools)recvUint8();
     bool impacted = recvBool();
     return std::make_shared<ProjectileStateG>(id, x, y, proyectile_type, impacted, angle);
+}
+
+std::shared_ptr<LevelStateG> ClientSide::Protocol::recvLevelBuild() {
+    uint8_t amount_of_bars = recvUint8();
+    std::vector<BarDto> bars;
+    for (size_t i = 0; i < amount_of_bars; i++) {
+        bars.push_back({(TerrainActors)recvUint8(), recvFloat(), recvFloat(), recvFloat()});
+    }
+    return (std::make_shared<LevelStateG>(amount_of_bars, std::move(bars)));
 }

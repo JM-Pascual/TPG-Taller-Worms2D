@@ -33,6 +33,8 @@ public:
 
     void broadcastLobby();
 
+    void broadcastLevelLayout();
+
     void broadcastGame(uint8_t id_of_active_player);
 
     void remove_closed_clients(uint8_t& ready_count,
