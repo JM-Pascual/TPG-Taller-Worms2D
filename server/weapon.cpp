@@ -9,6 +9,15 @@ Weapon::Weapon(uint8_t ammo): ammo(ammo) {}
 
 void Weapon::infiniteAmmo() { ammo = 255; }
 
+void Weapon::addAmmo(const uint8_t& _ammo) {
+    if ((int)(ammo + _ammo) >= 255) {
+        ammo = 255;
+        return;
+    }
+
+    ammo += _ammo;
+}
+
 //~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
 
 Bazooka::Bazooka(): Weapon(BAZOOKA_AMMO) {}

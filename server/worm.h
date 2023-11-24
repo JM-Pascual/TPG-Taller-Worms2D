@@ -79,6 +79,7 @@ public:
 
     void stop_all();
 
+    void reloadAmmo(const uint8_t& ammo) override;
 
     void change_aim_direction();
     void change_fire_power();

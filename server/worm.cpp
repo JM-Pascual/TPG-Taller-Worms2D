@@ -50,6 +50,8 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Weapon>*& selected_weapon,
 // Todo puede ser que pueda poner todo en un mismo metodo para ahorrarme un if pero no se si es
 // necesario
 
+void Worm::reloadAmmo(const uint8_t& ammo) { selected_weapon->get()->addAmmo(ammo); }
+
 void Worm::move() {
     if (not body) {
         return;

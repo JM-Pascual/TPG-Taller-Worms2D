@@ -16,8 +16,6 @@ protected:
     bool collided;
 
 
-
-
 public:
     explicit Entity(Battlefield& battlefield);
 
@@ -34,6 +32,8 @@ public:
     virtual void start_falling();
 
     virtual void recibe_life_modification(const float& life_variation);
+
+    virtual void reloadAmmo(const uint8_t& ammo) {}
 
     virtual bool multiple_contact();  // Todo lo vamos a tener que sacar
 

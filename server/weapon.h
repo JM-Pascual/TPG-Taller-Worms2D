@@ -30,6 +30,8 @@ public:
 
     void infiniteAmmo();
 
+    void addAmmo(const uint8_t& _ammo);
+
     virtual ~Weapon() = default;
 
     friend class Player;
