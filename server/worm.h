@@ -67,6 +67,9 @@ private:
     const bool& allow_multiple_jump;
     const bool& immortal_worms;
 
+    bool drown;
+
+
 
     int facing_factor();
 
@@ -120,6 +123,7 @@ public:
 
 
     bool is_facing_right();
+    void use_tool();
 
     virtual ~Worm() = default;
 

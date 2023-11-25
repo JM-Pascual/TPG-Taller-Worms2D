@@ -110,6 +110,8 @@ public:
     const float aim_inclination_degrees;
     const bool charging_weapon;
     const float life;
+    const bool drown;
+    const bool using_tool;
 
 
     explicit WormStateG(const uint8_t& id, const float& x, const float& y,
@@ -117,7 +119,7 @@ public:
                         const bool& is_walking,const bool& is_jumping, const bool& is_backflipping,
                         const bool& facing_right, const bool& was_hit,
                         const float& aim_inclination_degrees, const bool& charging_weapon,
-                        const float& life);
+                        const float& life,const bool& drown,const bool& using_tool);
 
     ~WormStateG() override = default;
 };

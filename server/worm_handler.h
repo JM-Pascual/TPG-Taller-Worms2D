@@ -55,6 +55,7 @@ public:
                               const uint8_t& worm_index);
 
     void checkDeadWorms();
+    void check_drown_worms();
 
     void allWorms1HP();
 

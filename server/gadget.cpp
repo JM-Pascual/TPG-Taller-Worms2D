@@ -165,6 +165,7 @@ void Teleport::shoot(Battlefield& battlefield, Worm& worm) {
         return;
     }
     worm.change_position();
+    worm.use_tool();
 
     --ammo;
 }
@@ -190,7 +191,7 @@ void AirStrike::shoot(Battlefield& battlefield, Worm& worm) {
                 std::make_shared<BazookaRocket>(battlefield, destination);
         battlefield.add_projectile(projectile);
     }
-
+    worm.use_tool();
     --ammo;
 }
 
@@ -205,7 +206,6 @@ void BaseballBat::shoot(Battlefield &battlefield, Worm &worm) {
     bat(battlefield,worm);
 
     --ammo;
-
 }
 
 void BaseballBat::bat(Battlefield& battlefield, Worm& worm) {
