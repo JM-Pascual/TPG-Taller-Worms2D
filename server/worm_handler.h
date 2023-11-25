@@ -5,8 +5,8 @@
 #include <memory>
 #include <mutex>
 
-#include <stdint.h>
 #include <box2d/b2_math.h>
+#include <stdint.h>
 
 #include "../common/const.h"
 
@@ -23,11 +23,11 @@ private:
 
     std::shared_ptr<Worm> turn_worm;
 
-    void getTurnWorm(const uint8_t& id, const uint8_t& worm_index);
-
 
 public:
     explicit WormHandler(std::map<uint8_t, std::unique_ptr<Player>>& players);
+
+    void updateTurnWorm(const uint8_t& id, const uint8_t& worm_index);
 
     void stop_turn_worm();
 
@@ -62,9 +62,9 @@ public:
 
     void makePlayerWormsImmortal(const uint8_t& id);
 
-    void killRandomWorm();
-
     void playerInfiniteAmmo(const uint8_t& id);
+
+    void WW3Cheat();
 
     const bool allWormsStayStill();
 };

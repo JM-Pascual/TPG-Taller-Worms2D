@@ -82,29 +82,34 @@ const TurnReset TurnHandler::advanceTurn(const uint8_t& players_quantity) {
 }
 
 const ActualTurn TurnHandler::updateTurn(const std::chrono::duration<float>& elapsed) {
+    auto reset_timer = TurnReset::NOT_RESET;
+
     if (not infinite_turn_cheat_activated) {
-        switch (this->need_to_update(players.size(), elapsed)) {
-
-            case TurnReset::TIMER_RESET: {
-                worm_handler.clearDamagedState();
-                battlefield.newWindForce(no_wind_cheat_activated);
-                broadcaster.broadcast_turn(player_turn);
-                break;
-            }
-
-            case TurnReset::WAIT_TURN_END: {
-                broadcaster.broadcast_turn(player_turn, BLOCK_PLAYERS_INPUT);
-                break;
-            }
-
-            default:  // NO RESET
-                break;
-        }
+        reset_timer = this->need_to_update(players.size(), elapsed);
     }
 
     auto it = players.begin();
     std::advance(it, player_turn);
     uint8_t player_id = it->first;
+
+    switch (reset_timer) {
+
+        case TurnReset::TIMER_RESET: {
+            worm_handler.clearDamagedState();
+            worm_handler.updateTurnWorm(player_id, it->second->worm_turn);
+            battlefield.newWindForce(no_wind_cheat_activated);
+            broadcaster.broadcast_turn(player_turn);
+            break;
+        }
+
+        case TurnReset::WAIT_TURN_END: {
+            broadcaster.broadcast_turn(player_turn, BLOCK_PLAYERS_INPUT);
+            break;
+        }
+
+        default:  // NO RESET
+            break;
+    }
 
     // Evita que rompa en caso de que un worm se suicide junto a sus companieros
     if (it->second->worm_turn > (it->second->worms.size() - 1)) {
