@@ -75,3 +75,14 @@
 
   blast_radius_teleport: 0
   epicenter_damage_teleport: 0
+
+  min_health_first_aid: 10
+  max_health_first_aid: 50
+
+  min_ammo_ammo_box: 3
+  max_ammo_ammo_box: 10
+
+  min_damage_trap: 10
+  max_damage_trap: 100
+
+  crate_length: 0.8

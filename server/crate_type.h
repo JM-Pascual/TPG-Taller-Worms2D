@@ -3,16 +3,16 @@
 
 #include <box2d/box2d.h>
 
-#define MIN_HEALTH_FIRST_AID 10
-#define MAX_HEALTH_FIRST_AID 50
+#define MIN_HEALTH_FIRST_AID Config::yamlNode["min_health_first_aid"].as<int>()
+#define MAX_HEALTH_FIRST_AID Config::yamlNode["max_health_first_aid"].as<int>()
 
-#define MIN_AMMO_AMMO_BOX 3
-#define MAX_AMMO_AMMO_BOX 10
+#define MIN_AMMO_AMMO_BOX Config::yamlNode["min_ammo_ammo_box"].as<int>()
+#define MAX_AMMO_AMMO_BOX Config::yamlNode["max_ammo_ammo_box"].as<int>()
 
-#define MIN_DAMAGE_TRAP 10
-#define MAX_DAMAGE_TRAP 100
+#define MIN_DAMAGE_TRAP Config::yamlNode["min_damage_trap"].as<int>()
+#define MAX_DAMAGE_TRAP Config::yamlNode["max_damage_trap"].as<int>()
 
-#define CRATE_LENGTH 0.8
+#define CRATE_LENGTH Config::yamlNode["crate_length"].as<int>()
 
 class Battlefield;
 
