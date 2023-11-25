@@ -16,8 +16,6 @@
 
 class Battlefield;
 
-enum class _CrateType_ { FIRST_AID, AMMO_BOX, TRAP };
-
 class CrateType {
 public:
     virtual void collision_reaction(b2Body*& crate_body, Battlefield& battlefield) = 0;

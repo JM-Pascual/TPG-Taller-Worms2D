@@ -3,6 +3,8 @@
 
 #include <memory>
 
+#include "../common/const.h"
+
 #include "crate_type.h"
 #include "entity.h"
 
@@ -11,7 +13,9 @@ class Battlefield;
 class Crate: public Entity {
 private:
     std::unique_ptr<CrateType> type;
+    _CrateType_ _type;
     bool falling;
+    bool was_opened;
 
 public:
     const uint8_t crate_id;
@@ -24,7 +28,11 @@ public:
 
     void applyWindResistance(const float& wind_force) override {}
 
+    const bool wasOpened();
+
     friend class InfoParser;
+
+    ~Crate();
 };
 
 #endif

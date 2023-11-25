@@ -5,11 +5,18 @@
 #include "battlefield.h"
 
 Crate::Crate(Battlefield& battlefield, const uint8_t& id):
-        Entity(battlefield), type(nullptr), falling(true), crate_id(id) {
+        Entity(battlefield),
+        type(nullptr),
+        _type(_CrateType_::TRAP),
+        falling(true),
+        was_opened(false),
+        crate_id(id) {
     auto rng = std::random_device();
     std::uniform_int_distribution<> random(0, 2);
 
-    switch ((_CrateType_)random(rng)) {
+    _type = (_CrateType_)random(rng);
+
+    switch (_type) {
         case _CrateType_::FIRST_AID:
             type = std::make_unique<FirstAid>();
             break;
@@ -42,6 +49,17 @@ Crate::Crate(Battlefield& battlefield, const uint8_t& id):
     body->CreateFixture(&fixtureDef);
 }
 
-void Crate::collision_reaction() { type->collision_reaction(body, battlefield); }
+void Crate::collision_reaction() {
+    if (was_opened) {
+        return;
+    }
+
+    type->collision_reaction(body, battlefield);
+    was_opened = true;
+}
 
 void Crate::stop_falling() { falling = false; }
+
+const bool Crate::wasOpened() { return was_opened; }
+
+Crate::~Crate() { battlefield.destroy_body(this->body); }

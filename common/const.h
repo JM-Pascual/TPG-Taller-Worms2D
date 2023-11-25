@@ -17,6 +17,8 @@
 
 enum class SWIndex { INTRO, MENU, GAME_SEARCH, HELP, LOBBY };
 
+enum class _CrateType_ { FIRST_AID, AMMO_BOX, TRAP };
+
 enum class Direction { LEFT = 0, RIGHT = 1 };
 
 enum class IsMoving { NO = 0, YES = 1 };

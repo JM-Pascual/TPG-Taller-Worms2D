@@ -27,9 +27,9 @@ void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states,
 
     std::transform(game.battlefield.crates.begin(), game.battlefield.crates.end(),
                    std::back_inserter(states), [](const auto& crate) {
-                       return std::make_shared<CrateState>(crate->body->GetPosition().x,
-                                                           crate->body->GetPosition().y,
-                                                           crate->falling, crate->crate_id);
+                       return std::make_shared<CrateState>(
+                               crate->body->GetPosition().x, crate->body->GetPosition().y,
+                               crate->falling, crate->was_opened, crate->_type, crate->crate_id);
                    });
 
     states.push_back(

@@ -59,6 +59,8 @@ public:
 
     void createCrate();
 
+    const void clearOpenedCrates();
+
     const bool noProjectiles();
 
     ~Battlefield() = default;

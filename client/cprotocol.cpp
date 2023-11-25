@@ -196,6 +196,8 @@ std::shared_ptr<CrateState> ClientSide::Protocol::recvCrate() {
     float x = meter_to_pixel_x(recvFloat());
     float y = meter_to_pixel_y(recvFloat());
     bool falling = recvBool();
+    bool was_opened = recvBool();
+    _CrateType_ type = (_CrateType_)recvUint8();
     uint8_t id = recvUint8();
-    return std::make_shared<CrateState>(x, y, falling, id);
+    return std::make_shared<CrateState>(x, y, falling, was_opened, type, id);
 }

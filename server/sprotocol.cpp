@@ -183,6 +183,8 @@ void ServerSide::Protocol::sendCrate(const std::shared_ptr<States>& state) {
     send(&p->tag, sizeof(uint8_t));
     sendPosition(p->pos);
     send(&p->falling, sizeof(uint8_t));
+    send(&p->was_opened, sizeof(uint8_t));
+    send(&p->type, sizeof(uint8_t));
     send(&p->id, sizeof(uint8_t));
 }
 
