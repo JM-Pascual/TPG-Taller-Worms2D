@@ -237,3 +237,6 @@ Dynamite::Dynamite(Battlefield& battlefield, b2Vec2 position, float explosion_de
                 EPICENTER_DAMAGE_DYNAMITE, WeaponsAndTools::DYNAMITE) {}
 
 
+Holy::Holy(Battlefield &battlefield, b2Vec2 position, float explosion_delay):
+        Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_HOLY_GRENADE,
+                EPICENTER_DAMAGE_HOLY_GRENADE, WeaponsAndTools::HOLY_GRENADE) {}

@@ -14,6 +14,7 @@
 #define DYNAMITE_AMMO Config::yamlNode["dynamite_ammo"].as<int>()
 #define MORTAR_AMMO Config::yamlNode["mortar_ammo"].as<int>()
 #define RED_GRENADE_AMMO Config::yamlNode["red_grenade_ammo"].as<int>()
+#define HOLY_GRENADE_AMMO Config::yamlNode["holy_grenade_ammo"].as<int>()
 
 
 #define TELEPORT_AMMO Config::yamlNode["teleport_ammo"].as<int>()
@@ -62,6 +63,15 @@ public:
     RedGrenade();
     void shoot(Battlefield& battlefield, Worm& worm) override;
     virtual ~RedGrenade() = default;
+};
+
+//~~~~~~~~~~~~~~~~~~~ HolyGrenade ~~~~~~~~~~~~~~~~~~~~
+
+class HolyGrenade: public Gadget {
+public:
+    HolyGrenade();
+    void shoot(Battlefield& battlefield, Worm& worm) override;
+    virtual ~HolyGrenade() = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ Banana ~~~~~~~~~~~~~~~~~~~~

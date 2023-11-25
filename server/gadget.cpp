@@ -112,6 +112,28 @@ void BananaGrenade::shoot(Battlefield& battlefield, Worm& worm) {
     --ammo;
 }
 
+
+//~~~~~~~~~~~~~~~~~~~ HolyGrenade ~~~~~~~~~~~~~~~~~~~~
+
+HolyGrenade::HolyGrenade() : Gadget(HOLY_GRENADE_AMMO) {}
+
+void HolyGrenade::shoot(Battlefield &battlefield, Worm &worm) {
+    if (ammo == 0) {
+        return;
+    }
+
+    b2Vec2 projectile_position = worm.set_bullet_direction();
+    DelayAmount explosion_delay = worm.grenade_explosion_delay();
+
+    std::shared_ptr<Projectile> holy_grenade =
+            std::make_shared<Holy>(battlefield, projectile_position, float(explosion_delay));
+    battlefield.add_projectile(holy_grenade);
+
+    worm.use_positional_weapon(holy_grenade);
+
+    --ammo;
+}
+
 //~~~~~~~~~~~~~~~~~~~ DynamiteGrenade ~~~~~~~~~~~~~~~~~~~~
 
 DynamiteGrenade::DynamiteGrenade(): Gadget(DYNAMITE_AMMO) {}
@@ -222,3 +244,5 @@ void BaseballBat::applyBlastImpulse(b2Body *body_, b2Vec2 blastCenter, b2Vec2 ap
     entity->recibe_life_modification(-BAT_DAMAGE);
     entity->start_falling();
 }
+
+

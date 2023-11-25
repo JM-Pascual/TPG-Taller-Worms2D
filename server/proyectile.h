@@ -22,16 +22,19 @@
 #define BLAST_RADIUS_BANANA Config::yamlNode["blast_radius_banana"].as<int>()
 #define BLAST_RADIUS_DYNAMITE Config::yamlNode["blast_radius_dynamite"].as<int>()
 #define BLAST_RADIUS_AIR_STRIKE Config::yamlNode["blast_radius_air_strike"].as<int>()
+#define BLAST_RADIUS_HOLY_GRENADE Config::yamlNode["blast_radius_holy_grenade"].as<int>()
 
 #define EPICENTER_DAMAGE_BAZOOKA Config::yamlNode["epicenter_damage_bazooka"].as<int>()
 #define EPICENTER_DAMAGE_MORTAR Config::yamlNode["epicenter_damage_mortar"].as<int>()
 #define EPICENTER_DAMAGE_MORTAR_FRAGMENT \
     Config::yamlNode["epicenter_damage_mortar_fragment"].as<int>()
+
 #define EPICENTER_DAMAGE_GREEN_GRENADE Config::yamlNode["epicenter_damage_green_grenade"].as<int>()
 #define EPICENTER_DAMAGE_RED_GRENADE Config::yamlNode["epicenter_damage_red_grenade"].as<int>()
 #define EPICENTER_DAMAGE_BANANA Config::yamlNode["epicenter_damage_banana"].as<int>()
 #define EPICENTER_DAMAGE_DYNAMITE Config::yamlNode["epicenter_damage_dynamite"].as<int>()
 #define EPICENTER_DAMAGE_AIR_STRIKE Config::yamlNode["epicenter_damage_air_strike"].as<int>()
+#define EPICENTER_DAMAGE_HOLY_GRENADE Config::yamlNode["epicenter_damage_holy_grenade"].as<int>()
 
 #define FRAGMENTS_AMOUNT Config::yamlNode["fragments_amount"].as<int>()
 #define FRAGMENT_POWER Config::yamlNode["fragment_power"].as<int>()
@@ -158,6 +161,12 @@ class Dynamite: public Grenade {
 public:
     Dynamite(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
 };
+
+class Holy: public Grenade {
+public:
+    Holy(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
+};
+
 
 
 #endif  // WORMS2D_PROYECTILE_H
