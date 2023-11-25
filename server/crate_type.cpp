@@ -8,9 +8,8 @@
 
 
 FirstAid::FirstAid() {
-    auto rng = std::mt19937(std::random_device{}());
-    auto random =
-            std::uniform_real_distribution<uint8_t>(MIN_HEALTH_FIRST_AID, MAX_HEALTH_FIRST_AID);
+    auto rng = std::random_device();
+    std::uniform_int_distribution<> random(MIN_HEALTH_FIRST_AID, MAX_HEALTH_FIRST_AID);
 
     health_quantity = random(rng);
 }
@@ -32,8 +31,8 @@ void FirstAid::collision_reaction(b2Body*& crate_body, Battlefield& battlefield)
 }
 
 AmmoBox::AmmoBox() {
-    auto rng = std::mt19937(std::random_device{}());
-    auto random = std::uniform_real_distribution<uint8_t>(MIN_AMMO_AMMO_BOX, MAX_AMMO_AMMO_BOX);
+    auto rng = std::random_device();
+    std::uniform_int_distribution<> random(MIN_AMMO_AMMO_BOX, MAX_AMMO_AMMO_BOX);
 
     ammo_quantity = random(rng);
 }
@@ -54,8 +53,8 @@ void AmmoBox::collision_reaction(b2Body*& crate_body, Battlefield& battlefield) 
 }
 
 Trap::Trap() {
-    auto rng = std::mt19937(std::random_device{}());
-    auto random = std::uniform_real_distribution<uint8_t>(MIN_DAMAGE_TRAP, MAX_DAMAGE_TRAP);
+    auto rng = std::random_device();
+    std::uniform_int_distribution<> random(MIN_DAMAGE_TRAP, MAX_DAMAGE_TRAP);
 
     epicenter_dmg = random(rng);
 }

@@ -19,6 +19,7 @@ class GameInfoL;
 class ProjectileStateG;
 class PlayerStateG;
 class WormStateG;
+class CrateState;
 
 namespace ClientSide {
 class Protocol {

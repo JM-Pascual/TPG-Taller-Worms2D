@@ -6,11 +6,10 @@
 
 Crate::Crate(Battlefield& battlefield, const uint8_t& id):
         Entity(battlefield), type(nullptr), crate_id(id) {
-    auto rng = std::mt19937(std::random_device{}());
-    auto random =
-            std::uniform_real_distribution<_CrateType_>(_CrateType_::FIRST_AID, _CrateType_::TRAP);
+    auto rng = std::random_device();
+    std::uniform_int_distribution<> random(0, 2);
 
-    switch (random(rng)) {
+    switch ((_CrateType_)random(rng)) {
         case _CrateType_::FIRST_AID:
             type = std::make_unique<FirstAid>();
             break;
