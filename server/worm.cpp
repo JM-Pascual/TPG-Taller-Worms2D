@@ -72,7 +72,9 @@ void Worm::stop() {
 
     b2Vec2 vel = body->GetLinearVelocity();
     vel.x = 0;
+    vel.y = 0;
     body->SetLinearVelocity(vel);
+    body->SetAwake(false);
 }
 
 void Worm::jump(const JumpDir& direction) {
