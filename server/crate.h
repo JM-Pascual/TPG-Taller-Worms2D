@@ -13,7 +13,9 @@ private:
     std::unique_ptr<CrateType> type;
 
 public:
-    explicit Crate(Battlefield& battlefield);
+    const uint8_t crate_id;
+
+    explicit Crate(Battlefield& battlefield, const uint8_t& id);
 
     void collision_reaction() override;
 

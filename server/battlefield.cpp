@@ -66,4 +66,4 @@ void Battlefield::destroy_dead_entities() { engine.destroy_dead_entities(); }
 
 const bool Battlefield::noProjectiles() { return projectiles.empty(); }
 
-void Battlefield::createCrate() { crates.push_back(std::make_shared<Crate>(*this)); }
+void Battlefield::createCrate() { crates.push_back(std::make_shared<Crate>(*this, crate_count++)); }

@@ -30,8 +30,10 @@ public:
 class CrateState: public States {
 public:
     const b2Vec2 pos;
+    const uint8_t id;
 
-    CrateState(const float& x, const float& y): States(StatesTag::CRATE), pos(x, y) {}
+    CrateState(const float& x, const float& y, const uint8_t& id):
+            States(StatesTag::CRATE), pos(x, y), id(id) {}
 };
 
 class GameInfoL: public States {

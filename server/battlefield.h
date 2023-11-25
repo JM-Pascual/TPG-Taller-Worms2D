@@ -31,12 +31,13 @@ private:
     Level_holder level_holder;
 
     std::vector<std::shared_ptr<Crate>> crates;
+    uint8_t crate_count;
 
     void updateProjectilesTimer();
     void post_action_explosion();
 
 public:
-    Battlefield(): projectile_count(0), level_holder(*this) {}
+    Battlefield(): projectile_count(0), level_holder(*this), crate_count(0) {}
 
     std::map<uint8_t, std::shared_ptr<Projectile>>& getProjectiles();
 
