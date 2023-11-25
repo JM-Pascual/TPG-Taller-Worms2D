@@ -30,7 +30,7 @@ b2Vec2 Bar::get_bar_position() {
     return (body->GetPosition());
 }
 
-TerrainActors Bar::get_bar_type() {
+TerrainActors Bar::get_bar_type() const {
     if (width == BAR_WIDTH_LONG) return TerrainActors::LONG_BAR;
     else return TerrainActors::BAR;
 }

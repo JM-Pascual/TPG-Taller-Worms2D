@@ -20,7 +20,7 @@ private:
     float width;
     float angle;
     b2Vec2 get_bar_position();
-    TerrainActors get_bar_type();
+    TerrainActors get_bar_type() const;
 
     [[nodiscard]] float get_bar_width() const;
     [[nodiscard]] float get_bar_height() const;

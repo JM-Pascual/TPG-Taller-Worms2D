@@ -30,8 +30,10 @@ void TexturesPool::load_draw_textures() {
     load_texture_into_map(DATA_PATH "/worms/worm-bazooka-draw.png", draw_textures, WeaponsDraw::WORM_DRAW_BAZOOKA, false);
     load_texture_into_map(DATA_PATH "/worms/worm-dynamite-draw.png", draw_textures, WeaponsDraw::WORM_DRAW_DYNAMITE);
     load_texture_into_map(DATA_PATH "/worms/worm-ggrenade-draw.png", draw_textures, WeaponsDraw::WORM_DRAW_GREEN_GRENADE);
+    load_texture_into_map(DATA_PATH "/worms/worm-rgrenade-draw.png", draw_textures, WeaponsDraw::WORM_DRAW_RED_GRENADE);
     load_texture_into_map(DATA_PATH "/worms/worm-banana-draw.png", draw_textures, WeaponsDraw::WORM_DRAW_BANANA);
     load_texture_into_map(DATA_PATH "/worms/worm-mortar-draw.png", draw_textures, WeaponsDraw::WORM_DRAW_MORTAR);
+    load_texture_into_map(DATA_PATH "/worms/worm-airstrike-draw.png", draw_textures, WeaponsDraw::WORM_DRAW_AIR_STRIKE);
 }
 
 void TexturesPool::load_aiming_textures() {
@@ -39,8 +41,10 @@ void TexturesPool::load_aiming_textures() {
     load_texture_into_map(DATA_PATH "/worms/worm-bazooka-aim.png", aim_textures, WeaponAiming::WORM_AIM_BAZOOKA);
     load_texture_into_map(DATA_PATH "/worms/worm-dynamite-aim.png", aim_textures, WeaponAiming::WORM_AIM_DYNAMITE);
     load_texture_into_map(DATA_PATH "/worms/worm-ggrenade-aim.png", aim_textures, WeaponAiming::WORM_AIM_GREEN_GRENADE);
+    load_texture_into_map(DATA_PATH "/worms/worm-rgrenade-aim.png", aim_textures, WeaponAiming::WORM_AIM_RED_GRENADE);
     load_texture_into_map(DATA_PATH "/worms/worm-banana-aim.png", aim_textures, WeaponAiming::WORM_AIM_BANANA);
     load_texture_into_map(DATA_PATH "/worms/worm-mortar-aim.png", aim_textures, WeaponAiming::WORM_AIM_MORTAR);
+    load_texture_into_map(DATA_PATH "/worms/worm-airstrike-aim.png", aim_textures, WeaponAiming::WORM_AIM_AIR_STRIKE);
 }
 
 void TexturesPool::load_projectile_textures() {
@@ -49,6 +53,7 @@ void TexturesPool::load_projectile_textures() {
     load_texture_into_map(DATA_PATH "/weapons/mortar-missile.png", projectile_textures, Projectiles::MORTAR_PROYECTILE, false);
     load_texture_into_map(DATA_PATH "/weapons/mortar-fragment.png", projectile_textures, Projectiles::MORTAR_FRAGMENT);
     load_texture_into_map(DATA_PATH "/weapons/green-grenade-projectile.png", projectile_textures, Projectiles::GREEN_GRENADE_PROYECTILE);
+    load_texture_into_map(DATA_PATH "/weapons/red-grenade-projectile.png", projectile_textures, Projectiles::RED_GRENADE_PROYECTILE);
     load_texture_into_map(DATA_PATH "/weapons/spinning-banana.png", projectile_textures, Projectiles::BANANA_PROYECTILE);
     load_texture_into_map(DATA_PATH "/weapons/dynamite-projectile.png", projectile_textures, Projectiles::DYNAMITE_PROYECTILE);
 }

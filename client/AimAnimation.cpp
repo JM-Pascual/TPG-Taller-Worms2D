@@ -14,8 +14,14 @@ void AimAnimation::load_all_aim_textures(TexturesPool& pool) {
     weapon_aim_textures.insert({WeaponsAndTools::GREEN_GRENADE,
                                 (pool.get_aim_texture(WeaponAiming::WORM_AIM_GREEN_GRENADE))});
 
+    weapon_aim_textures.insert({WeaponsAndTools::RED_GRENADE,
+                                (pool.get_aim_texture(WeaponAiming::WORM_AIM_RED_GRENADE))});
+
     weapon_aim_textures.insert({WeaponsAndTools::BANANA,
                                 (pool.get_aim_texture(WeaponAiming::WORM_AIM_BANANA))});
+
+    weapon_aim_textures.insert({WeaponsAndTools::AIR_STRIKE,
+                                (pool.get_aim_texture(WeaponAiming::WORM_AIM_AIR_STRIKE))});
 }
 
 AimAnimation::AimAnimation(TexturesPool& pool): crosshair_texture(pool.get_actor_texture(Actors::CROSSHAIR)),
@@ -28,7 +34,7 @@ AimAnimation::AimAnimation(TexturesPool& pool): crosshair_texture(pool.get_actor
 void AimAnimation::render(WeaponsAndTools current_weapon, SDL2pp::Renderer& renderer,
                           SDL2pp::Rect dest, SDL_RendererFlip flipType, double angle) {
 
-    if (current_weapon != WeaponsAndTools::DYNAMITE){
+    if (current_weapon != WeaponsAndTools::DYNAMITE && current_weapon != WeaponsAndTools::AIR_STRIKE) {
         renderer.Copy(
                 (*weapon_aim_textures.at(current_weapon)),
                 SDL2pp::Rect(0,
