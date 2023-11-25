@@ -67,6 +67,9 @@ private:
     const bool& allow_multiple_jump;
     const bool& immortal_worms;
 
+    bool drown;
+
+
 
     int facing_factor();
 

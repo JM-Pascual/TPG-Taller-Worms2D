@@ -198,3 +198,15 @@ void WormHandler::killRandomWorm() {
 }
 
 void WormHandler::playerInfiniteAmmo(const uint8_t& id) { players.at(id)->infiniteAmmo(); }
+
+void WormHandler::check_drown_worms() {
+    for (const auto& [id, player]: players) {
+        for (const auto&  worm : player->worms){
+            if(worm->position().y <= 4){
+                worm->drown = true;
+                worm->life = 0;
+            }
+        }
+    }
+}
+

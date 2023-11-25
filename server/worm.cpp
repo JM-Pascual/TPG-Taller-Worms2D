@@ -28,6 +28,7 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
         pos_y_before_falling(0.0f),
         allow_multiple_jump(allow_multiple_jump),
         immortal_worms(immortal_worms),
+        drown(false),
         id(id) {
     b2BodyDef wormDef;
     wormDef.type = b2_dynamicBody;
@@ -72,9 +73,9 @@ void Worm::stop() {
 
     b2Vec2 vel = body->GetLinearVelocity();
     vel.x = 0;
-    vel.y = 0;
+    //vel.y = 0;
     body->SetLinearVelocity(vel);
-    body->SetAwake(false);
+    //body->SetAwake(false);
 }
 
 void Worm::jump(const JumpDir& direction) {
@@ -193,7 +194,12 @@ bool Worm::is_dead() {
     return dead;
 }
 
-void Worm::collision_reaction() {}
+void Worm::collision_reaction() {
+   // body->SetLinearVelocity(b2Vec2(0,body->GetLinearVelocity().y));
+   //if(not my_turn){
+       //body->SetAwake(true);
+   //}
+}
 
 void Worm::destroyBody() {
     battlefield.destroy_body(body);
