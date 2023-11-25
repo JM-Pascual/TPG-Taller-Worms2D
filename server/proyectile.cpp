@@ -171,8 +171,6 @@ AirStrikeRocket::AirStrikeRocket(Battlefield &battlefield, b2Vec2 position) :
 
 }
 
-
-
 //~~~~~~~~~~~~~~~~~~~ Grenade ~~~~~~~~~~~~~~~~~~~~
 
 Grenade::Grenade(Battlefield& battlefield, b2Vec2 position, float explosion_delay,

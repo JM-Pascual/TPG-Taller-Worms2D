@@ -23,18 +23,18 @@ Player::Player():
     weapons.insert({WeaponsAndTools::GREEN_GRENADE, std::make_unique<GreenGrenade>()});
     weapons.insert({WeaponsAndTools::RED_GRENADE, std::make_unique<RedGrenade>()});
     weapons.insert({WeaponsAndTools::BANANA, std::make_unique<BananaGrenade>()});
-    weapons.insert({WeaponsAndTools::HOLY_GRENADE, std::make_unique<Bazooka>()});
+    weapons.insert({WeaponsAndTools::HOLY_GRENADE, std::make_unique<HolyGrenade>()});
     weapons.insert({WeaponsAndTools::DYNAMITE, std::make_unique<DynamiteGrenade>()});
-    weapons.insert({WeaponsAndTools::BASEBALL_BAT, std::make_unique<Bazooka>()});
-    weapons.insert({WeaponsAndTools::AIR_STRIKE, std::make_unique<Bazooka>()});
-    weapons.insert({WeaponsAndTools::TELEPORT, std::make_unique<Bazooka>()});
+    weapons.insert({WeaponsAndTools::BASEBALL_BAT, std::make_unique<BaseballBat>()});
+    weapons.insert({WeaponsAndTools::AIR_STRIKE, std::make_unique<AirStrike>()});
+    weapons.insert({WeaponsAndTools::TELEPORT, std::make_unique<Teleport>()});
 
     selected_weapon = &weapons.at(WeaponsAndTools::BAZOOKA);
 }
 
 uint8_t Player::calcAvgLife() {
     float life_sum =
-            std::accumulate(worms.begin(), worms.end(), 0,
+            std::accumulate(worms.begin(), worms.end(), 0.0f,
                             [](const float& sum, const auto& worm) { return sum + worm->life; });
 
     return (uint8_t)(life_sum / worms.size());
