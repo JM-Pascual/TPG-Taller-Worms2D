@@ -34,6 +34,12 @@ void BroadCaster::broadcastLobby() {
     broadcast(states);
 }
 
+void BroadCaster::broadcastLevelLayout() {
+    std::list<std::shared_ptr<States>> states;
+    infoParser.makeLevelState(states);
+    broadcast(states);
+}
+
 void BroadCaster::broadcastGame(uint8_t id_of_active_player) {
     std::list<std::shared_ptr<States>> states;
     infoParser.makeGameState(states, id_of_active_player);
@@ -69,7 +75,6 @@ void BroadCaster::removeLobbyPlayer(const uint8_t& player_id) {
     std::lock_guard<std::mutex> lock(m);
     broadcast_map.erase(player_id);
 }
-
 void BroadCaster::broadcast_turn(const uint8_t& player_turn, const bool& block_input) {
     std::lock_guard<std::mutex> lock(m);
 

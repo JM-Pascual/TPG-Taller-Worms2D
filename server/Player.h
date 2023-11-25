@@ -10,10 +10,10 @@
 #include "../common/const.h"
 
 #include "entity.h"
-#include "weapon.h"
+#include "gadget.h"
 #include "worm.h"
 
-class Weapon;
+class Gadget;
 class Battlefield;
 class Projectile;
 class BroadCaster;
@@ -22,8 +22,8 @@ class Player {
 private:
     bool ready;
     bool is_playing;
-    std::map<WeaponsAndTools, std::unique_ptr<Weapon>> weapons;
-    std::unique_ptr<Weapon>* selected_weapon;
+    std::map<WeaponsAndTools, std::unique_ptr<Gadget>> weapons;
+    std::unique_ptr<Gadget>* selected_weapon;
     WeaponsAndTools selected_gadget_type;
     uint8_t worm_turn;
 

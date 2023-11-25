@@ -21,20 +21,25 @@
 #define BLAST_RADIUS_RED_GRENADE Config::yamlNode["blast_radius_red_grenade"].as<int>()
 #define BLAST_RADIUS_BANANA Config::yamlNode["blast_radius_banana"].as<int>()
 #define BLAST_RADIUS_DYNAMITE Config::yamlNode["blast_radius_dynamite"].as<int>()
-
+#define BLAST_RADIUS_AIR_STRIKE Config::yamlNode["blast_radius_air_strike"].as<int>()
+#define BLAST_RADIUS_HOLY_GRENADE Config::yamlNode["blast_radius_holy_grenade"].as<int>()
 
 #define EPICENTER_DAMAGE_BAZOOKA Config::yamlNode["epicenter_damage_bazooka"].as<int>()
 #define EPICENTER_DAMAGE_MORTAR Config::yamlNode["epicenter_damage_mortar"].as<int>()
 #define EPICENTER_DAMAGE_MORTAR_FRAGMENT \
     Config::yamlNode["epicenter_damage_mortar_fragment"].as<int>()
+
 #define EPICENTER_DAMAGE_GREEN_GRENADE Config::yamlNode["epicenter_damage_green_grenade"].as<int>()
 #define EPICENTER_DAMAGE_RED_GRENADE Config::yamlNode["epicenter_damage_red_grenade"].as<int>()
 #define EPICENTER_DAMAGE_BANANA Config::yamlNode["epicenter_damage_banana"].as<int>()
 #define EPICENTER_DAMAGE_DYNAMITE Config::yamlNode["epicenter_damage_dynamite"].as<int>()
-
+#define EPICENTER_DAMAGE_AIR_STRIKE Config::yamlNode["epicenter_damage_air_strike"].as<int>()
+#define EPICENTER_DAMAGE_HOLY_GRENADE Config::yamlNode["epicenter_damage_holy_grenade"].as<int>()
 
 #define FRAGMENTS_AMOUNT Config::yamlNode["fragments_amount"].as<int>()
 #define FRAGMENT_POWER Config::yamlNode["fragment_power"].as<int>()
+
+#define ROCKET_DELAY Config::yamlNode["rocket_delay"].as<float>()
 
 
 #define DEGTORAD 180 / b2_pi
@@ -48,12 +53,14 @@ protected:
     WeaponsAndTools type;
     int blast_radius;
     int epicenter_damage;
+    float explosion_delay;
+    std::chrono::time_point<std::chrono::steady_clock> grenade_timer;
 
     void applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
 
 public:
     Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radius, int epicenter_damage,
-               WeaponsAndTools type);
+               WeaponsAndTools type, float explosion_delay);
 
     void set_power(b2Vec2 power);
     std::shared_ptr<ProjectileStateG> get_proyectile_state(const uint8_t& proyectile_id);
@@ -81,7 +88,7 @@ public:
            WeaponsAndTools type);
     void collision_reaction() override;
     void applyWindResistance(const float& wind_force) override;
-    void updateTimer() override {}
+    void updateTimer() override;
     void second_collision_reaction() override{};
 
     virtual ~Rocket() = default;
@@ -112,27 +119,28 @@ public:
     virtual ~MortarFragment() = default;
 };
 
+class AirStrikeRocket: public Rocket {
+public:
+    AirStrikeRocket(Battlefield& battlefield, b2Vec2 position);
+    void applyWindResistance(const float &wind_force) override{};
+    virtual ~AirStrikeRocket() = default;
+};
 
 class Grenade: public Projectile {
-protected:
-    float explosion_delay;
-    std::chrono::time_point<std::chrono::steady_clock> grenade_timer;
-
 public:
-    Grenade(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay,
+    Grenade(Battlefield& battlefield, b2Vec2 position, float explosion_delay,
             uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type);
     void collision_reaction() override;
     void applyWindResistance(const float& wind_force) override;
     void updateTimer() override;
     void second_collision_reaction() override{};
-    // bool multiple_contact() override;
     virtual ~Grenade() = default;
 };
 
 
 class Green: public Grenade {
 public:
-    Green(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+    Green(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
 };
 
 class Red: public Grenade {
@@ -140,19 +148,25 @@ private:
     int fragments;
 
 public:
-    Red(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+    Red(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
     void second_collision_reaction() override;
 };
 
 class Banana: public Grenade {
 public:
-    Banana(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+    Banana(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
 };
 
 class Dynamite: public Grenade {
 public:
-    Dynamite(Battlefield& battlefield, b2Vec2 position, uint8_t explosion_delay);
+    Dynamite(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
 };
+
+class Holy: public Grenade {
+public:
+    Holy(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
+};
+
 
 
 #endif  // WORMS2D_PROYECTILE_H

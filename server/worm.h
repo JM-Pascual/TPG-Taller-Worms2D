@@ -23,7 +23,6 @@
 #define MAX_POWER Config::yamlNode["max_power"].as<int>()
 #define ANGLE_VARIATION (b2_pi / 64)
 
-#define CATEGORY_BITS 0x002
 
 #define INCLINACION_MAX (b2_pi / 2)
 #define INCLINACION_MIN (-b2_pi / 2)
@@ -35,7 +34,7 @@
 #define MAX_FALLING_DAMAGE Config::yamlNode["max_falling_damage"].as<float>()
 #define FALL_DMG_AMP Config::yamlNode["fall_damage_amplification"].as<int>()
 
-class Weapon;
+class Gadget;
 class Projectile;
 
 class Worm: public Entity {
@@ -47,6 +46,7 @@ private:
     bool is_jumping;
     bool is_backflipping;
     bool falling;
+    bool using_tool;
 
     bool aiming;
     float aim_inclination_degrees;  // Radianes
@@ -55,7 +55,10 @@ private:
     bool charging_shoot;
     float weapon_power;
 
-    std::unique_ptr<Weapon>*& selected_weapon;
+    DelayAmount weapon_delay;
+    b2Vec2 clicked_position;
+
+    std::unique_ptr<Gadget>*& selected_weapon;
     WeaponsAndTools& weapon_type;
 
     bool was_damaged;
@@ -64,12 +67,13 @@ private:
     const bool& allow_multiple_jump;
     const bool& immortal_worms;
 
+
     int facing_factor();
 
 public:
     const uint8_t id;
 
-    explicit Worm(Battlefield& battlefield, std::unique_ptr<Weapon>*& selected_weapon,
+    explicit Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
                   WeaponsAndTools& type, const uint8_t& id, const bool& allow_multiple_jump,
                   const bool& immortal_worms);
 
@@ -80,6 +84,12 @@ public:
     void stop_all();
 
 
+    b2Vec2 set_bullet_direction();
+    b2Vec2 set_bullet_power();
+    b2Vec2 set_bullet_angle();
+    void change_bullet_explosion_delay(DelayAmount delay);
+    void change_clicked_position(b2Vec2 new_position);
+
     void change_aim_direction();
     void change_fire_power();
     void shoot();
@@ -87,15 +97,15 @@ public:
     void stop_falling() override;
     void start_falling() override;
 
-    b2Vec2 set_bullet_direction();
-    b2Vec2 set_bullet_power();
-    float set_bullet_angle();
-    uint8_t set_bullet_explosion_delay();
 
     void recibe_life_modification(const float& life_variation) override;
-    void shoot_aim_weapon(std::shared_ptr<Projectile> projectile);
-    void use_throwable(std::shared_ptr<Projectile> throwable);
-    // void use_clickeable_gadget();
+    void use_chargeable_weapon(const std::shared_ptr<Projectile>& projectile);
+    void use_positional_weapon(const std::shared_ptr<Projectile>& throwable);
+
+
+    void change_position();
+    b2Vec2 clicked_position_();
+    DelayAmount grenade_explosion_delay();
 
     bool is_dead() override;
     void collision_reaction() override;
@@ -103,6 +113,13 @@ public:
     void destroyBody();
 
     void applyWindResistance(const float& wind_force) override;
+
+    b2Vec2 position();
+
+    float distance_to_body(b2Body* body_);
+
+
+    bool is_facing_right();
 
     virtual ~Worm() = default;
 

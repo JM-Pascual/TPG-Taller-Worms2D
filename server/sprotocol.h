@@ -10,8 +10,9 @@
 #include "../common/socket.h"
 #include "box2d/b2_math.h"
 
-class States;
+#define PPM 33.33f  // pixel per meter ratio.
 
+class States;
 
 namespace ServerSide {
 class Protocol {
@@ -51,6 +52,8 @@ private:
 
     void sendPlayerLobby(const std::shared_ptr<States>& count);
 
+    void sendLevelBuild(const std::shared_ptr<States>& lb);
+
     void sendProjectileState(const std::shared_ptr<States>& ps);
 
     void sendFloat(float number);
@@ -58,6 +61,9 @@ private:
     void sendTurn(const std::shared_ptr<States>& state);
 
     void sendBattlefield(const std::shared_ptr<States>& state);
+
+    float pixel_to_meter_x(float pixel_position);
+    float pixel_to_meter_y(float pixel_position);
 
 public:
     void sendStates(const std::shared_ptr<States>& state);
@@ -97,6 +103,12 @@ public:
         Recibe un string de maximo 64 caracteres
     */
     void recvString64(std::string& desc);
+
+
+    float recvFloat();
+
+
+    void recvPosition(b2Vec2& position);
     /*
         Recibe la id del game al que se quiere conectar el cliente
     */

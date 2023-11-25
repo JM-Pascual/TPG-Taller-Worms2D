@@ -147,6 +147,21 @@ public:
     ~Delay() = default;
 };
 
+// ---------------------- USE CLICKABLE ---------------------------
+
+class UseClickable: public PlayerAction {
+private:
+    b2Vec2 position;
+
+public:
+    explicit UseClickable(ServerSide::Protocol& protocol, const uint8_t& id);
+
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+                 TurnHandler& turn_handler) override;
+
+    ~UseClickable() = default;
+};
+
 // ------------------- CHANGE GADGET ---------------------------
 
 class ChangeGadget: public PlayerAction {

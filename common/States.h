@@ -5,8 +5,9 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
-#include <stdint.h>
+#include <cstdint>
 
 #include "box2d/b2_math.h"
 
@@ -34,11 +35,11 @@ public:
     const uint8_t player_count;
     const uint8_t game_id;
 
-    explicit GameInfoL(const std::string& desc, const std::string& map, const uint8_t& p_count,
+    explicit GameInfoL(std::string  desc, std::string  map, const uint8_t& p_count,
                        const uint8_t& id):
             States(StatesTag::INFO_GAME_L),
-            description(desc),
-            map(map),
+            description(std::move(desc)),
+            map(std::move(map)),
             player_count(p_count),
             game_id(id) {}
 };
@@ -52,6 +53,29 @@ public:
     explicit PlayerStateL(const bool& ready, const uint8_t& id):
             States(StatesTag::PLAYER_L), ready(ready), id(id) {}
 };
+
+// --------------- LEVEL BUILDING STATE ----------------------
+
+struct BarDto{
+    BarDto(TerrainActors bar_type, float x, float y, float angle);
+    TerrainActors type;
+    float x;
+    float y;
+    const float angle;
+};
+
+class LevelStateG: public States {
+public:
+    uint8_t amount_of_bars;
+    std::vector<BarDto> bars;
+
+    explicit LevelStateG(const uint8_t& amount_of_bars, std::vector<BarDto> bars):
+            States(StatesTag::LEVEL_BUILD),
+            amount_of_bars(amount_of_bars),
+            bars(std::move(bars)) {}
+};
+
+// --------------- TEAM STATE ----------------------
 
 class PlayerStateG: public States {
 public:
@@ -68,6 +92,8 @@ public:
             avg_life(avg_life),
             gadgets(std::move(weapon_ammo)) {}
 };
+
+// --------------- WORM STATES ----------------------
 
 class WormStateG: public States {
 public:
@@ -95,6 +121,8 @@ public:
 
     ~WormStateG() override = default;
 };
+
+// --------------- BATTLEFIELD STATE ----------------------
 
 class BattlefieldState: public States {
 public:

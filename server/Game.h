@@ -50,7 +50,9 @@ private:
     GameLoop gameloop;
     bool need_to_join_loop;
 
-    void notifyLobbyState();
+    void notify_lobby_state();
+
+    void notify_level_layout();
 
     bool non_locking_is_playing();
 

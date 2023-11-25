@@ -6,6 +6,7 @@
 #include <mutex>
 
 #include <stdint.h>
+#include <box2d/b2_math.h>
 
 #include "../common/const.h"
 
@@ -36,6 +37,7 @@ public:
     void update_physics();
     void update_weapon();
 
+
     // temp protocol
     void player_start_moving(const Direction& direction, const uint8_t& id,
                              const uint8_t& worm_index);
@@ -46,6 +48,8 @@ public:
     void player_stop_aiming(const uint8_t& id, const uint8_t& worm_index);
     void player_start_charging(const uint8_t& id, const uint8_t& worm_index);
     void player_shoot(const uint8_t& id, const uint8_t& worm_index);
+    void player_use_clickable(b2Vec2 position, const uint8_t& id, const uint8_t& worm_index);
+    void player_set_delay(DelayAmount delay, const uint8_t& id, const uint8_t& worm_index);
 
     void player_change_gadget(const WeaponsAndTools& gadget, const uint8_t& id,
                               const uint8_t& worm_index);

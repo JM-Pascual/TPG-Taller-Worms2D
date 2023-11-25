@@ -64,14 +64,21 @@
   blast_radius_red_grenade: 2
   epicenter_damage_red_grenade: 30
 
-  blast_radius_holy_grenade: 0 
-  epicenter_damage_holy_grenade: 0
+  blast_radius_holy_grenade: 8
+  epicenter_damage_holy_grenade: 110
 
-  blast_radius_baseball_bat: 0
-  epicenter_damage_baseball_bat: 0
+  baseball_bat_range: 4
+  baseball_bat_damage: 10
+  baseball_bat_power: 50
 
-  blast_radius_air_strike: 0
-  epicenter_damage_air_strike: 0
+  blast_radius_air_strike: 2
+  epicenter_damage_air_strike: 40
+  air_strike_rockets: 6
+  air_strike_rocket_separation: 0.6
+  air_strike_rocket_deviation_x: 3.2
+  air_strike_rocket_y_position: 22
 
   blast_radius_teleport: 0
   epicenter_damage_teleport: 0
+
+  rocket_delay : 10

@@ -17,6 +17,7 @@
 class States;
 class GameInfoL;
 class ProjectileStateG;
+class LevelStateG;
 class PlayerStateG;
 class WormStateG;
 
@@ -50,11 +51,16 @@ private:
 
     std::shared_ptr<GameInfoL> recvGameInfo();
 
+    std::shared_ptr<LevelStateG> recvLevelBuild();
+
     std::shared_ptr<PlayerStateG> recvPlayerGame();
 
     std::shared_ptr<ProjectileStateG> recvProjectileGame();
 
     std::shared_ptr<WormStateG> recvWormGame();
+
+
+
 
 public:
     // Envia data chequeando si se cierra el socket

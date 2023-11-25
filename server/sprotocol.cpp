@@ -77,6 +77,22 @@ void ServerSide::Protocol::recvString64(std::string& desc) {
     desc = std::string(str_net.data());
 }
 
+
+float ServerSide::Protocol::recvFloat() {
+    uint32_t raw_bits;
+    recv(&raw_bits, sizeof(uint32_t));
+    raw_bits = ntohl(raw_bits);
+    float float_value;
+    memcpy(&float_value, &raw_bits, sizeof(uint32_t));
+    return float_value;
+}
+
+
+void ServerSide::Protocol::recvPosition(b2Vec2& position) {
+    position.x = pixel_to_meter_x(recvFloat());
+    position.y = pixel_to_meter_y(recvFloat());
+}
+
 // ------------------------------ SEND -----------------------------------
 
 void ServerSide::Protocol::sendFloat(float number) {
@@ -178,6 +194,19 @@ void ServerSide::Protocol::sendBattlefield(const std::shared_ptr<States>& state)
     send(&p->wind_force, sizeof(uint8_t));
 }
 
+void ServerSide::Protocol::sendLevelBuild(const std::shared_ptr<States>& lb) {
+    std::shared_ptr<LevelStateG> p = std::dynamic_pointer_cast<LevelStateG>(lb);
+    send(&p->tag, sizeof(uint8_t));
+    send(&p->amount_of_bars, sizeof(uint8_t));
+
+    for (const auto& bar: p->bars) {
+        send(&bar.type, sizeof(uint8_t));
+        sendFloat(bar.x);
+        sendFloat(bar.y);
+        sendFloat(bar.angle);
+    }
+}
+
 void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
     switch (state->tag) {
         case StatesTag::GAMES_COUNT_L:
@@ -214,7 +243,20 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
             sendTurn(state);
             break;
 
+        case StatesTag::LEVEL_BUILD:
+            sendLevelBuild(state);
+            break;
         default:
             break;
     }
 }
+
+
+float ServerSide::Protocol::pixel_to_meter_x(float pixel_position) {
+    return (pixel_position / PPM);
+}
+
+float ServerSide::Protocol::pixel_to_meter_y(float pixel_position) {
+    return ((720 - pixel_position) / PPM );
+}
+

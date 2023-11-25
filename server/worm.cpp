@@ -2,9 +2,9 @@
 
 #include "battlefield.h"
 #include "proyectile.h"
-#include "weapon.h"
+#include "gadget.h"
 
-Worm::Worm(Battlefield& battlefield, std::unique_ptr<Weapon>*& selected_weapon,
+Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
            WeaponsAndTools& type, const uint8_t& id, const bool& allow_multiple_jump,
            const bool& immortal_worms):
         Entity(battlefield),
@@ -14,11 +14,14 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Weapon>*& selected_weapon,
         is_jumping(false),
         is_backflipping(false),
         falling(false),
+        using_tool(false),
         aiming(false),
         aim_inclination_degrees(0),
         aim_direction(ADSAngleDir::UP),
         charging_shoot(false),
         weapon_power(0),
+        weapon_delay(DelayAmount::FIVE),
+        clicked_position(0, 0),
         selected_weapon(selected_weapon),
         weapon_type(type),
         was_damaged(false),
@@ -45,6 +48,7 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Weapon>*& selected_weapon,
     // que pueda colisionar con los gusanos
 
     body->CreateFixture(&fixtureDef);
+
 }
 
 // Todo puede ser que pueda poner todo en un mismo metodo para ahorrarme un if pero no se si es
@@ -68,7 +72,9 @@ void Worm::stop() {
 
     b2Vec2 vel = body->GetLinearVelocity();
     vel.x = 0;
+    vel.y = 0;
     body->SetLinearVelocity(vel);
+    body->SetAwake(false);
 }
 
 void Worm::jump(const JumpDir& direction) {
@@ -116,14 +122,28 @@ void Worm::change_aim_direction() {
     }
 }
 
-
 void Worm::change_fire_power() {
     if (charging_shoot && weapon_power <= MAX_POWER) {
         weapon_power += POWER_RAISE;
     }
 }
 
-void Worm::shoot() { (*selected_weapon)->execute(battlefield, *this); }
+void Worm::change_position() {
+    body->SetTransform(clicked_position, 0);
+    body->SetAwake(true);
+}
+
+void Worm::shoot() { (*selected_weapon)->shoot(battlefield, *this); }
+
+void Worm::use_chargeable_weapon(const std::shared_ptr<Projectile>& projectile) {
+    projectile->set_power(set_bullet_power());
+}
+
+void Worm::use_positional_weapon(const std::shared_ptr<Projectile>& throwable) {
+    throwable->set_power(b2Vec2(0, 0));
+}
+
+
 
 b2Vec2 Worm::set_bullet_power() {
     // Fuerza que se le aplica a la bala
@@ -142,20 +162,26 @@ b2Vec2 Worm::set_bullet_direction() {
     bullet_position.y = (body->GetPosition().y + (ARM_LENGHT * sinf(aim_inclination_degrees)));
     return bullet_position;
 }
+//todo cambiar nombre
+b2Vec2 Worm::set_bullet_angle() { return b2Vec2( facing_factor() * cosf(aim_inclination_degrees),sinf(aim_inclination_degrees)); }
 
-float Worm::set_bullet_angle() { return b2Atan2(set_bullet_power().y, set_bullet_power().x); }
-
-uint8_t Worm::set_bullet_explosion_delay() {
-    return 3;  // bullet_explosion_delete;
+void Worm::change_bullet_explosion_delay(DelayAmount delay) {
+    weapon_delay = delay;
 }
 
-void Worm::shoot_aim_weapon(std::shared_ptr<Projectile> projectile) {
-    projectile->set_power(set_bullet_power());
+void Worm::change_clicked_position(b2Vec2 new_position) {
+    using_tool = true;
+    clicked_position = new_position;
 }
 
-void Worm::use_throwable(std::shared_ptr<Projectile> throwable) {
-    throwable->set_power(b2Vec2(0, 0));
+b2Vec2 Worm::clicked_position_() {
+    return clicked_position;
 }
+
+DelayAmount Worm::grenade_explosion_delay() {
+    return weapon_delay;
+}
+
 
 int Worm::facing_factor() { return (std::pow(-1, 1 - facing_right)); }
 
@@ -265,3 +291,20 @@ void Worm::recibe_life_modification(const float& life_variation) {
 }
 
 void Worm::applyWindResistance(const float& wind_force) {}
+
+float Worm::distance_to_body(b2Body *body_) { return (body_->GetWorldCenter() - body->GetWorldCenter()).Length();}
+
+b2Vec2 Worm::position() {
+    return body->GetWorldCenter();
+}
+
+bool Worm::is_facing_right() {
+    return facing_right;
+}
+
+
+
+
+
+
+

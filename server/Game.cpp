@@ -12,7 +12,7 @@
 
 bool Game::non_locking_is_playing() { return (!players.empty() && players.size() == ready_count); }
 
-void Game::notifyLobbyState() { broadcaster.broadcastLobby(); }
+void Game::notify_lobby_state() { broadcaster.broadcastLobby(); }
 
 Queue<std::shared_ptr<PlayerAction>>& Game::get_action_queue() {
     return this->gameloop.get_action_queue();
@@ -33,7 +33,7 @@ void Game::add_client_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& s
 
     broadcaster.add_queue(id, state_queue);
     players.insert(std::make_pair(id, std::make_unique<Player>()));
-    notifyLobbyState();
+    notify_lobby_state();
 }
 
 void Game::removeLobbyPlayer(const uint8_t& player_id) {
@@ -49,7 +49,7 @@ void Game::removeLobbyPlayer(const uint8_t& player_id) {
     players.erase(player_id);
     broadcaster.removeLobbyPlayer(player_id);
 
-    notifyLobbyState();
+    notify_lobby_state();
 }
 
 bool Game::isEmpty() {
@@ -71,11 +71,12 @@ void Game::set_player_ready(const uint8_t id) {
         ready_count += std::pow(-1, 1 - players.at(id)->ready);
     }
 
-    notifyLobbyState();
+    notify_lobby_state();
 
     // Inicio el gl si estan todos listos y no esta iniciado ya
     if (not gameloop.is_alive() && this->non_locking_is_playing()) {
         spawnWorms();
+        broadcaster.broadcastLevelLayout();
         gameloop.start();
         need_to_join_loop = true;
     }
@@ -108,7 +109,6 @@ std::shared_ptr<GameInfoL> Game::getInfo() {
     std::lock_guard<std::mutex> lock(m);
     return std::make_shared<GameInfoL>(description, map_name, players.size(), game_id);
 }
-
 Game::~Game() {
     spdlog::get("server")->debug("Joineando gameloop");
     if (need_to_join_loop) {
