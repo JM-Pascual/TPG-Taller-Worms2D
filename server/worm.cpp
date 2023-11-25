@@ -1,8 +1,8 @@
 #include "worm.h"
 
 #include "battlefield.h"
-#include "proyectile.h"
 #include "gadget.h"
+#include "proyectile.h"
 
 Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
            WeaponsAndTools& type, const uint8_t& id, const bool& allow_multiple_jump,
@@ -48,7 +48,6 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
     // que pueda colisionar con los gusanos
 
     body->CreateFixture(&fixtureDef);
-
 }
 
 // Todo puede ser que pueda poner todo en un mismo metodo para ahorrarme un if pero no se si es
@@ -59,10 +58,10 @@ void Worm::move() {
         return;
     }
 
-    b2Vec2 vel = body->GetLinearVelocity();
-    vel.x = 0.2f * (std::pow(-1, 1 - facing_right) / TICK_RATE) *
-            400;                   // todo no se porque si encapsulo no funciona
-    body->SetLinearVelocity(vel);  // Esto tengo que ver si esta bien, se ve cuando lo corra
+    if (body->GetLinearVelocity().LengthSquared() < 10) {
+        this->body->ApplyLinearImpulseToCenter(
+                b2Vec2(80 * std::pow(-1, 1 - facing_right) / TICK_RATE, 0), true);
+    }
 }
 
 void Worm::stop() {
@@ -72,7 +71,6 @@ void Worm::stop() {
 
     b2Vec2 vel = body->GetLinearVelocity();
     vel.x = 0;
-    vel.y = 0;
     body->SetLinearVelocity(vel);
     body->SetAwake(false);
 }
@@ -92,7 +90,7 @@ void Worm::jump(const JumpDir& direction) {
             is_jumping = true;
             break;
         case (JumpDir::BACK):
-            body->ApplyLinearImpulseToCenter(b2Vec2(std::pow(-1, facing_right) * 20, 25), true);
+            body->ApplyLinearImpulseToCenter(b2Vec2(std::pow(-1, facing_right) * 10, 35), true);
             is_backflipping = true;
             break;
     }
@@ -144,7 +142,6 @@ void Worm::use_positional_weapon(const std::shared_ptr<Projectile>& throwable) {
 }
 
 
-
 b2Vec2 Worm::set_bullet_power() {
     // Fuerza que se le aplica a la bala
     //  f_x = fuerza_total * cos(ang_rad * pi/180)
@@ -162,25 +159,21 @@ b2Vec2 Worm::set_bullet_direction() {
     bullet_position.y = (body->GetPosition().y + (ARM_LENGHT * sinf(aim_inclination_degrees)));
     return bullet_position;
 }
-//todo cambiar nombre
-b2Vec2 Worm::set_bullet_angle() { return b2Vec2( facing_factor() * cosf(aim_inclination_degrees),sinf(aim_inclination_degrees)); }
-
-void Worm::change_bullet_explosion_delay(DelayAmount delay) {
-    weapon_delay = delay;
+// todo cambiar nombre
+b2Vec2 Worm::set_bullet_angle() {
+    return b2Vec2(facing_factor() * cosf(aim_inclination_degrees), sinf(aim_inclination_degrees));
 }
+
+void Worm::change_bullet_explosion_delay(DelayAmount delay) { weapon_delay = delay; }
 
 void Worm::change_clicked_position(b2Vec2 new_position) {
     using_tool = true;
     clicked_position = new_position;
 }
 
-b2Vec2 Worm::clicked_position_() {
-    return clicked_position;
-}
+b2Vec2 Worm::clicked_position_() { return clicked_position; }
 
-DelayAmount Worm::grenade_explosion_delay() {
-    return weapon_delay;
-}
+DelayAmount Worm::grenade_explosion_delay() { return weapon_delay; }
 
 
 int Worm::facing_factor() { return (std::pow(-1, 1 - facing_right)); }
@@ -193,7 +186,20 @@ bool Worm::is_dead() {
     return dead;
 }
 
-void Worm::collision_reaction() {}
+void Worm::collision_reaction() {
+    Query_callback queryCallback;
+    b2AABB aabb{};
+    aabb.lowerBound = body->GetWorldCenter() - b2Vec2(WIDTH / 2, HEIGHT / 2);
+    aabb.upperBound = body->GetWorldCenter() + b2Vec2(WIDTH / 2, HEIGHT / 2);
+    battlefield.add_query_AABB(&queryCallback, aabb);
+
+    // check which of these bodies have their center of mass within the blast radius
+    for (int i = 0; i < queryCallback.found_bodies_size(); i++) {
+        b2Body* body_ = queryCallback.found_bodie_at(i);
+
+        reinterpret_cast<Entity*>(body_->GetUserData().pointer)->stop_falling(0);
+    }
+}
 
 void Worm::destroyBody() {
     battlefield.destroy_body(body);
@@ -212,6 +218,7 @@ Worm::Worm(Worm&& o):
         aim_direction(o.aim_direction),
         charging_shoot(o.charging_shoot),
         weapon_power(o.weapon_power),
+        weapon_delay(o.weapon_delay),
         selected_weapon(o.selected_weapon),
         weapon_type(o.weapon_type),
         pos_y_before_falling(o.pos_y_before_falling),
@@ -232,6 +239,7 @@ Worm::Worm(Worm&& o):
 
     o.charging_shoot = false;
     o.weapon_power = 0.0f;
+    o.weapon_delay = DelayAmount::FIVE;
     o.selected_weapon = nullptr;
 
     o.pos_y_before_falling = 0.0f;
@@ -292,19 +300,10 @@ void Worm::recibe_life_modification(const float& life_variation) {
 
 void Worm::applyWindResistance(const float& wind_force) {}
 
-float Worm::distance_to_body(b2Body *body_) { return (body_->GetWorldCenter() - body->GetWorldCenter()).Length();}
-
-b2Vec2 Worm::position() {
-    return body->GetWorldCenter();
+float Worm::distance_to_body(b2Body* body_) {
+    return (body_->GetWorldCenter() - body->GetWorldCenter()).Length();
 }
 
-bool Worm::is_facing_right() {
-    return facing_right;
-}
+b2Vec2 Worm::position() { return body->GetWorldCenter(); }
 
-
-
-
-
-
-
+bool Worm::is_facing_right() { return facing_right; }
