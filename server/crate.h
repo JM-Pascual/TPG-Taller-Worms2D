@@ -11,6 +11,7 @@ class Battlefield;
 class Crate: public Entity {
 private:
     std::unique_ptr<CrateType> type;
+    bool falling;
 
 public:
     const uint8_t crate_id;
@@ -18,6 +19,8 @@ public:
     explicit Crate(Battlefield& battlefield, const uint8_t& id);
 
     void collision_reaction() override;
+
+    void stop_falling() override;
 
     void applyWindResistance(const float& wind_force) override {}
 

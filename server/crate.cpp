@@ -5,7 +5,7 @@
 #include "battlefield.h"
 
 Crate::Crate(Battlefield& battlefield, const uint8_t& id):
-        Entity(battlefield), type(nullptr), crate_id(id) {
+        Entity(battlefield), type(nullptr), falling(true), crate_id(id) {
     auto rng = std::random_device();
     std::uniform_int_distribution<> random(0, 2);
 
@@ -43,3 +43,5 @@ Crate::Crate(Battlefield& battlefield, const uint8_t& id):
 }
 
 void Crate::collision_reaction() { type->collision_reaction(body, battlefield); }
+
+void Crate::stop_falling() { falling = false; }

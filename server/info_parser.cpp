@@ -29,7 +29,7 @@ void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states,
                    std::back_inserter(states), [](const auto& crate) {
                        return std::make_shared<CrateState>(crate->body->GetPosition().x,
                                                            crate->body->GetPosition().y,
-                                                           crate->crate_id);
+                                                           crate->falling, crate->crate_id);
                    });
 
     states.push_back(

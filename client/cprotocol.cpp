@@ -195,6 +195,7 @@ std::shared_ptr<ProjectileStateG> ClientSide::Protocol::recvProjectileGame() {
 std::shared_ptr<CrateState> ClientSide::Protocol::recvCrate() {
     float x = meter_to_pixel_x(recvFloat());
     float y = meter_to_pixel_y(recvFloat());
+    bool falling = recvBool();
     uint8_t id = recvUint8();
-    return std::make_shared<CrateState>(x, y, id);
+    return std::make_shared<CrateState>(x, y, falling, id);
 }
