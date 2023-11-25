@@ -111,6 +111,8 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                         case WeaponsAndTools::BASEBALL_BAT:
                             break;
                         case WeaponsAndTools::AIR_STRIKE:
+                            proyectiles.add_actor(state->id, std::make_shared<AirStrikeProjectile>(
+                                                                     state, txt_pool, camera));
                             break;
                         case WeaponsAndTools::TELEPORT:
                             break;

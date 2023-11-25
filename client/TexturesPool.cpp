@@ -56,6 +56,7 @@ void TexturesPool::load_projectile_textures() {
     load_texture_into_map(DATA_PATH "/weapons/red-grenade-projectile.png", projectile_textures, Projectiles::RED_GRENADE_PROYECTILE);
     load_texture_into_map(DATA_PATH "/weapons/spinning-banana.png", projectile_textures, Projectiles::BANANA_PROYECTILE);
     load_texture_into_map(DATA_PATH "/weapons/dynamite-projectile.png", projectile_textures, Projectiles::DYNAMITE_PROYECTILE);
+    load_texture_into_map(DATA_PATH "/weapons/airstrike-projectile.png", projectile_textures, Projectiles::AIR_STRIKE_PROYECTILE);
 }
 
 void TexturesPool::load_effect_textures() {

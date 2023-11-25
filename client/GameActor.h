@@ -414,4 +414,42 @@ public:
                      TextPrinter& state_printer) override {}
 };
 
+// ----------------------- AIR STRIKE ----------------------
+
+class AirStrikeProjectile: public Projectile {
+private:
+    Animation on_air;
+    Animation impact;
+
+    float current_angle;
+public:
+    AirStrikeProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
+                     Camera& camera):
+            Projectile(initial_state, pool, camera),
+            on_air(pool.get_projectile_texture(Projectiles::AIR_STRIKE_PROYECTILE), 1, 1),
+            impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
+            current_angle(0) {}
+
+    void update(std::shared_ptr<States>& actor_state) override {
+        auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
+        position = state->pos;
+        impacted = state->impacted;
+        current_angle = state->angle;
+        impact.update(!impacted);
+    }
+
+    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        if (impacted) {
+            impact.render((*game_renderer), rect);
+        } else {
+            on_air.render((*game_renderer), rect, 0, 0, SDL_FLIP_NONE,
+                          (-1 * (current_angle * 180) / M_PI));
+        }
+    }
+
+    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                     TextPrinter& state_printer) override {}
+};
+
 #endif  // GAMEACTOR_H
