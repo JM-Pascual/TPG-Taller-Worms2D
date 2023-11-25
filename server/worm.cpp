@@ -33,34 +33,32 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
     wormDef.type = b2_dynamicBody;
     wormDef.position.Set(22.0f, 21.6f);  // Ahora la harcodeo, pero tiene que cambiar
     wormDef.allowSleep = true;
-    wormDef.userData.pointer = reinterpret_cast<uintptr_t>(this);  // Todo ver si funciona
+    wormDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
     body = battlefield.add_body(wormDef);
-    b2PolygonShape wormBox;
-    wormBox.SetAsBox(WIDTH / 2, HEIGHT / 2);
+    b2CircleShape wormBox;
+    wormBox.m_radius = 0.5f;
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &wormBox;
-    fixtureDef.density = 4.0f;
-    fixtureDef.friction = 0.8;
-
-    // fixtureDef.filter.groupIndex = -1; //Todo tengo que ver como seteo cada una de las balas para
-    // que pueda colisionar con los gusanos
+    fixtureDef.density = 1.0f;
+    fixtureDef.friction = 1.0f;
+    fixtureDef.restitution = 0.0f;
 
     body->CreateFixture(&fixtureDef);
+    body->SetAngularDamping(1.0f);
 }
-
-// Todo puede ser que pueda poner todo en un mismo metodo para ahorrarme un if pero no se si es
-// necesario
 
 void Worm::move() {
     if (not body) {
         return;
     }
 
+    body->GetFixtureList()->SetFriction(0.0f);
+
     if (body->GetLinearVelocity().LengthSquared() < 10) {
         this->body->ApplyLinearImpulseToCenter(
-                b2Vec2(80 * std::pow(-1, 1 - facing_right) / TICK_RATE, 0), true);
+                b2Vec2(20 * std::pow(-1, 1 - facing_right) / TICK_RATE, 0), true);
     }
 }
 
@@ -72,7 +70,6 @@ void Worm::stop() {
     b2Vec2 vel = body->GetLinearVelocity();
     vel.x = 0;
     body->SetLinearVelocity(vel);
-    body->SetAwake(false);
 }
 
 void Worm::jump(const JumpDir& direction) {
@@ -86,11 +83,11 @@ void Worm::jump(const JumpDir& direction) {
 
     switch (direction) {
         case (JumpDir::FRONT):
-            body->ApplyLinearImpulseToCenter(b2Vec2((facing_factor() * 20), 20), true);
+            body->ApplyLinearImpulseToCenter(b2Vec2((facing_factor() * 5), 5), true);
             is_jumping = true;
             break;
         case (JumpDir::BACK):
-            body->ApplyLinearImpulseToCenter(b2Vec2(std::pow(-1, facing_right) * 10, 35), true);
+            body->ApplyLinearImpulseToCenter(b2Vec2(std::pow(-1, facing_right) * 2, 7), true);
             is_backflipping = true;
             break;
     }
@@ -197,7 +194,7 @@ void Worm::collision_reaction() {
     for (int i = 0; i < queryCallback.found_bodies_size(); i++) {
         b2Body* body_ = queryCallback.found_bodie_at(i);
 
-        reinterpret_cast<Entity*>(body_->GetUserData().pointer)->stop_falling(0);
+        reinterpret_cast<Entity*>(body_->GetUserData().pointer)->stop_falling();
     }
 }
 
@@ -262,10 +259,15 @@ void Worm::stop_falling() {
     }
 
     auto vel = body->GetLinearVelocity();
+    body->GetFixtureList()->SetFriction(1.0f);
 
     if (vel.y < MIN_Y_VELOCITY) {
         is_jumping = false;
         is_backflipping = false;
+
+        if (not is_walking) {
+            body->SetAwake(false);
+        }
     }
 
     if (body->GetLinearVelocity().LengthSquared() < MIN_SQUARED_VELOCITY) {
