@@ -24,7 +24,7 @@ Para el proyecto se emplearon una serie de bibliotecas las cuales se listan como
 
 ```console
 sudo apt install doxygen
-git clone --depth 1 --branch v2.4.1 git@github.com:erincatto/box2d.git
+git clone git@github.com:erincatto/box2d.git
 cd box2d
 mkdir build
 cd build
@@ -43,8 +43,7 @@ Para desarrollo del juego se utilizo la versión 0.18 de libsdl2pp. Para su corr
 
 Acto seguido instalamos algunas dependencias que deberemos linkear para compilar el proyecto. 
 ```console
-sudo apt-get install libjpeg-dev libpng-dev libfreetype-dev libopusfile-dev
-libflac-dev libxmp-dev libfluidsynth-dev libwavpack-dev cmake libmodplug-dev libsdl2-dev
+sudo apt-get install libjpeg-dev libpng-dev libfreetype-dev libopusfile-dev libflac-dev libxmp-dev libfluidsynth-dev libwavpack-dev cmake libmodplug-dev libsdl2-dev
 ```
 
 Luego, con cada uno de los zip de la primera parte seguimos el siguiente proceso de compilado e instalado:
@@ -72,9 +71,7 @@ sudo make install #importante el hacerlo como sudo
 - QT
 
 ```console
-sudo apt install qmake6 qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-tools-dev
-qt6-tools-dev-tools qt6-wayland qt6-wayland-dev qt6-wayland-dev-tools
-libqt6multimedia6 libqt5multimedia5-plugins
+sudo apt install qmake6 qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-tools-dev qt6-tools-dev-tools qt6-wayland qt6-wayland-dev qt6-wayland-dev-tools libqt6multimedia6 libqt5multimedia5-plugins
 ```
 
 - libYAML & GoogleTests
