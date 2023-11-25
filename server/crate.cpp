@@ -38,7 +38,7 @@ Crate::Crate(Battlefield& battlefield, const uint8_t& id):
     fixtureDef.density = 4.0f;
     fixtureDef.friction = 0.8;
 
-    body->SetGravityScale(0.5);
+    body->SetGravityScale(0.25);
     body->CreateFixture(&fixtureDef);
 }
 

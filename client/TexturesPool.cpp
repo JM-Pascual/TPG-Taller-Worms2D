@@ -194,6 +194,14 @@ void TexturesPool::load_level_textures() {
     actors_textures.insert({Actors::BRIDGE, std::make_shared<SDL2pp::Texture>((*renderer),SDL2pp::Surface(DATA_PATH "/stage/bridge.png")
                                                                                                 .SetColorKey(true, 0x000000))});
     actors_textures[Actors::BRIDGE]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    actors_textures.insert({Actors::CRATE, std::make_shared<SDL2pp::Texture>((*renderer),SDL2pp::Surface(DATA_PATH "/stage/mystery-crate-floor.png")
+                                                                                                  .SetColorKey(true, 0x000000))});
+    actors_textures[Actors::CRATE]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    actors_textures.insert({Actors::CRATE_FALLING, std::make_shared<SDL2pp::Texture>((*renderer),SDL2pp::Surface(DATA_PATH "/stage/mystery-crate-falling3.png")
+                                                                                              .SetColorKey(true, 0x000000))});
+    actors_textures[Actors::CRATE_FALLING]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
 void TexturesPool::load_tombstones_textures() {

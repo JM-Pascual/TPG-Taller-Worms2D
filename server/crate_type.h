@@ -12,7 +12,7 @@
 #define MIN_DAMAGE_TRAP Config::yamlNode["min_damage_trap"].as<int>()
 #define MAX_DAMAGE_TRAP Config::yamlNode["max_damage_trap"].as<int>()
 
-#define CRATE_LENGTH Config::yamlNode["crate_length"].as<int>()
+#define CRATE_LENGTH Config::yamlNode["crate_length"].as<float>()
 
 class Battlefield;
 

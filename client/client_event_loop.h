@@ -45,6 +45,7 @@ private:
     /// Holders for actors in the game
     ActorHolder players;
     ActorHolder proyectiles;
+    ActorHolder crates;
 
     /// Queues for the states and actions
     Queue<std::shared_ptr<States>> game_state_queue;

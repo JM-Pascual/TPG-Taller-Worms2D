@@ -377,4 +377,42 @@ public:
                      TextPrinter& state_printer) override {}
 };
 
+// ----------------------- CRATE INTERFACE ----------------------
+
+class Crate: public GameActor {
+private:
+    Animation falling;
+    Animation on_floor;
+
+    bool still_falling;
+public:
+    Crate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool,
+                       Camera& camera) :
+            GameActor(initial_state->pos.x, initial_state->pos.y, camera),
+            falling(pool.get_actor_texture(Actors::CRATE_FALLING), 27, 2, true),
+            on_floor(pool.get_actor_texture(Actors::CRATE), 15, 1, false),
+            still_falling(true){}
+
+    void update(std::shared_ptr<States> &actor_state) override {
+        auto state = std::dynamic_pointer_cast<CrateState>(actor_state);
+        position = state->pos;
+        still_falling = state->falling;
+        falling.update(!still_falling);
+        on_floor.update(still_falling);
+    }
+
+    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        if (still_falling) {
+            SDL2pp::Rect rect_falling = camera.calcRect(position.x, position.y, 70, 74);
+            falling.render((*game_renderer), rect_falling, 0, 0, SDL_FLIP_NONE);
+        } else {
+            SDL2pp::Rect rect_floor = camera.calcRect(position.x, position.y, 60, 60);
+            on_floor.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
+        }
+    }
+
+    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                     TextPrinter& state_printer) override {}
+};
+
 #endif  // GAMEACTOR_H

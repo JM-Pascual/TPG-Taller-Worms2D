@@ -41,8 +41,16 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                 continue;
             }
 
-            case StatesTag::CRATE:
-                break;
+            case StatesTag::CRATE:{
+                auto state = std::dynamic_pointer_cast<CrateState>(raw_state);
+                if (!crates.actor_loaded(state->id)) {
+                    crates.add_actor(state->id,
+                                     std::make_shared<Crate>(state, txt_pool, camera));
+                } else {
+                    crates.update_actor_state(state->id, raw_state);
+                }
+                continue;
+            }
 
             case StatesTag::WORM_G: {
                 auto state = std::dynamic_pointer_cast<WormStateG>(raw_state);
@@ -135,8 +143,8 @@ void EventLoop::update_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_ren
     water_animation.update();
 
     for (int i = 0; i < 5; i++) {
-        water_animation.render((*game_renderer), camera.calcRect(0, 600 + i * 22, 1280, 40), 1240,
-                               0);
+        water_animation.render((*game_renderer), camera.calcRect(0, 600 + i * 22, 1280, 40),
+                               1240, 0);
     }
 }
 
@@ -174,6 +182,7 @@ void EventLoop::run() {
         players.print_actors_state(window.get_renderer(), state_printer);
         proyectiles.render_actors(window.get_renderer());
         proyectiles.print_actors_state(window.get_renderer(), state_printer);
+        crates.render_actors(window.get_renderer());
 
         update_terrain(window.get_renderer(), water_animation);
 

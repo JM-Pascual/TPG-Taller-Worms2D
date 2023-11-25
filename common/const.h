@@ -107,6 +107,8 @@ enum class Actors {
     BRIDGE,
     LONG_BRIDGE,
     BACKGROUND,
+    CRATE,
+    CRATE_FALLING,
     WATER,
     JUMPING_WORM,
     BACKFLIP_WORM,
