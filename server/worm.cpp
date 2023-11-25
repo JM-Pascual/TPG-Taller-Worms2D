@@ -73,7 +73,7 @@ void Worm::stop() {
 
     b2Vec2 vel = body->GetLinearVelocity();
     vel.x = 0;
-    //vel.y = 0;
+    vel.y = 0;
     body->SetLinearVelocity(vel);
     //body->SetAwake(false);
 }
@@ -306,6 +306,10 @@ b2Vec2 Worm::position() {
 
 bool Worm::is_facing_right() {
     return facing_right;
+}
+
+void Worm::use_tool() {
+    using_tool = true;
 }
 
 

@@ -123,6 +123,7 @@ public:
 
 
     bool is_facing_right();
+    void use_tool();
 
     virtual ~Worm() = default;
 

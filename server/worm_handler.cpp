@@ -105,6 +105,7 @@ void WormHandler::update_weapon() {
     if (turn_worm->charging_shoot) {
         turn_worm->change_fire_power();
     }
+    turn_worm->using_tool = false;
 }
 
 
