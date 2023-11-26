@@ -267,3 +267,5 @@ void Worm::recibe_life_modification(const float& life_variation) {
 }
 
 void Worm::applyWindResistance(const float& wind_force) {}
+
+void Worm::open_crate(bool& open) { open = true; }

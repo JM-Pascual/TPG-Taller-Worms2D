@@ -39,6 +39,8 @@ public:
 
     virtual bool is_dead();
 
+    virtual void open_crate(bool& open) {}
+
     virtual void collision_reaction() = 0;
 
     ~Entity() = default;

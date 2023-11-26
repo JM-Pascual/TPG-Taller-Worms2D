@@ -44,6 +44,7 @@ void GameLoop::run() {
         game.worm_handler.checkDeadWorms();
 
         game.battlefield.destroy_dead_entities();
+        game.battlefield.clearOpenedCrates();
         game.battlefield.remove_collided_projectiles();
 
         game.battlefield.step(game.worm_handler);

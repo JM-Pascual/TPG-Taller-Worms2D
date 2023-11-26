@@ -18,7 +18,8 @@ class Battlefield;
 
 class CrateType {
 public:
-    virtual void collision_reaction(b2Body*& crate_body, Battlefield& battlefield) = 0;
+    virtual void collision_reaction(b2Body*& crate_body, Battlefield& battlefield,
+                                    bool& was_opened) = 0;
 };
 
 class FirstAid: public CrateType {
@@ -28,7 +29,8 @@ private:
 public:
     FirstAid();
 
-    void collision_reaction(b2Body*& crate_body, Battlefield& battlefield) override;
+    void collision_reaction(b2Body*& crate_body, Battlefield& battlefield,
+                            bool& was_opened) override;
 };
 
 class AmmoBox: public CrateType {
@@ -38,7 +40,8 @@ private:
 public:
     AmmoBox();
 
-    void collision_reaction(b2Body*& crate_body, Battlefield& battlefield) override;
+    void collision_reaction(b2Body*& crate_body, Battlefield& battlefield,
+                            bool& was_opened) override;
 };
 
 class Trap: public CrateType {
@@ -48,7 +51,8 @@ private:
 public:
     Trap();
 
-    void collision_reaction(b2Body*& crate_body, Battlefield& battlefield) override;
+    void collision_reaction(b2Body*& crate_body, Battlefield& battlefield,
+                            bool& was_opened) override;
 };
 
 #endif

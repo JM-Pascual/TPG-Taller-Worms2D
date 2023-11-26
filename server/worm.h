@@ -103,6 +103,8 @@ public:
 
     void destroyBody();
 
+    void open_crate(bool& open) override;
+
     void applyWindResistance(const float& wind_force) override;
 
     virtual ~Worm() = default;

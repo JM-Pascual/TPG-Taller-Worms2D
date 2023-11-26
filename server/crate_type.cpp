@@ -14,7 +14,7 @@ FirstAid::FirstAid() {
     health_quantity = random(rng);
 }
 
-void FirstAid::collision_reaction(b2Body*& crate_body, Battlefield& battlefield) {
+void FirstAid::collision_reaction(b2Body*& crate_body, Battlefield& battlefield, bool& was_opened) {
     Query_callback queryCallback;
     b2AABB aabb;
     aabb.lowerBound = crate_body->GetPosition() - b2Vec2(CRATE_LENGTH / 2, CRATE_LENGTH / 2);
@@ -25,8 +25,10 @@ void FirstAid::collision_reaction(b2Body*& crate_body, Battlefield& battlefield)
     for (int i = 0; i < queryCallback.found_bodies_size(); i++) {
         b2Body* body_ = queryCallback.found_bodie_at(i);
 
-        reinterpret_cast<Entity*>(body_->GetUserData().pointer)
-                ->recibe_life_modification(health_quantity);
+        auto entity = reinterpret_cast<Entity*>(body_->GetUserData().pointer);
+
+        entity->recibe_life_modification(health_quantity);
+        entity->open_crate(was_opened);
     }
 }
 
@@ -37,7 +39,7 @@ AmmoBox::AmmoBox() {
     ammo_quantity = random(rng);
 }
 
-void AmmoBox::collision_reaction(b2Body*& crate_body, Battlefield& battlefield) {
+void AmmoBox::collision_reaction(b2Body*& crate_body, Battlefield& battlefield, bool& was_opened) {
     Query_callback queryCallback;
     b2AABB aabb;
     aabb.lowerBound = crate_body->GetPosition() - b2Vec2(CRATE_LENGTH / 2, CRATE_LENGTH / 2);
@@ -48,7 +50,10 @@ void AmmoBox::collision_reaction(b2Body*& crate_body, Battlefield& battlefield) 
     for (int i = 0; i < queryCallback.found_bodies_size(); i++) {
         b2Body* body_ = queryCallback.found_bodie_at(i);
 
-        reinterpret_cast<Entity*>(body_->GetUserData().pointer)->reloadAmmo(ammo_quantity);
+        auto entity = reinterpret_cast<Entity*>(body_->GetUserData().pointer);
+
+        entity->reloadAmmo(ammo_quantity);
+        entity->open_crate(was_opened);
     }
 }
 
@@ -59,7 +64,7 @@ Trap::Trap() {
     epicenter_dmg = random(rng);
 }
 
-void Trap::collision_reaction(b2Body*& crate_body, Battlefield& battlefield) {
+void Trap::collision_reaction(b2Body*& crate_body, Battlefield& battlefield, bool& was_opened) {
     Query_callback queryCallback;
     b2AABB aabb;
     aabb.lowerBound = crate_body->GetPosition() - b2Vec2(CRATE_LENGTH * 2, CRATE_LENGTH * 2);
@@ -69,8 +74,19 @@ void Trap::collision_reaction(b2Body*& crate_body, Battlefield& battlefield) {
     // check which of these bodies have their center of mass within the blast radius
     for (int i = 0; i < queryCallback.found_bodies_size(); i++) {
         b2Body* body_ = queryCallback.found_bodie_at(i);
+        b2Vec2 bodyCom = body_->GetWorldCenter();
 
-        reinterpret_cast<Entity*>(body_->GetUserData().pointer)
-                ->recibe_life_modification(-epicenter_dmg);
+        b2Vec2 blastDir = bodyCom - crate_body->GetWorldCenter();
+
+        if (blastDir.Length() >= CRATE_LENGTH * 2)
+            continue;
+
+        auto distance = (blastDir).Normalize();
+
+        float damage = epicenter_dmg * ((CRATE_LENGTH * 2) - distance) / (CRATE_LENGTH * 2);
+        auto entity = reinterpret_cast<Entity*>(body_->GetUserData().pointer);
+        entity->apply_explosion(damage * blastDir);
+        entity->recibe_life_modification(-damage);
+        entity->open_crate(was_opened);
     }
 }

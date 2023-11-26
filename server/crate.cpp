@@ -54,8 +54,7 @@ void Crate::collision_reaction() {
         return;
     }
 
-    type->collision_reaction(body, battlefield);
-    was_opened = true;
+    type->collision_reaction(body, battlefield, was_opened);
 }
 
 void Crate::stop_falling() { falling = false; }
