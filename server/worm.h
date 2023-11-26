@@ -19,7 +19,7 @@
 
 #define ARM_LENGHT Config::yamlNode["arm_length"].as<float>()
 
-#define POWER_RAISE Config::yamlNode["power_raise"].as<int>()
+#define POWER_RAISE Config::yamlNode["power_raise"].as<float>()
 #define MAX_POWER Config::yamlNode["max_power"].as<int>()
 #define ANGLE_VARIATION (b2_pi / 64)
 
@@ -27,8 +27,11 @@
 #define INCLINACION_MAX (b2_pi / 2)
 #define INCLINACION_MIN (-b2_pi / 2)
 
-#define MIN_SQUARED_VELOCITY 0.0001
-#define MIN_Y_VELOCITY 0.001
+#define MIN_SQUARED_VELOCITY 0.1
+#define MIN_Y_VELOCITY 1
+#define MIN_X_VELOCITY 1
+
+#define REFRESH_WALK 10
 
 #define MIN_FALLING_DAMAGE_HEIGHT Config::yamlNode["min_falling_damage"].as<float>()
 #define MAX_FALLING_DAMAGE Config::yamlNode["max_falling_damage"].as<float>()
@@ -36,6 +39,7 @@
 
 class Gadget;
 class Projectile;
+class TurnHandler;
 
 class Worm: public Entity {
 private:
@@ -67,6 +71,8 @@ private:
     const bool& allow_multiple_jump;
     const bool& immortal_worms;
 
+    bool drown;
+
 
     int facing_factor();
 
@@ -83,6 +89,7 @@ public:
 
     void stop_all();
 
+    void reloadAmmo(const uint8_t& ammo) override;
 
     b2Vec2 set_bullet_direction();
     b2Vec2 set_bullet_power();
@@ -91,8 +98,8 @@ public:
     void change_clicked_position(b2Vec2 new_position);
 
     void change_aim_direction();
-    void change_fire_power();
-    void shoot();
+    void change_fire_power(TurnHandler& turn_handler);
+    void shoot(TurnHandler& turn_handler);
 
     void stop_falling() override;
     void start_falling() override;
@@ -112,6 +119,8 @@ public:
 
     void destroyBody();
 
+    void open_crate(bool& open) override;
+
     void applyWindResistance(const float& wind_force) override;
 
     b2Vec2 position();
@@ -120,6 +129,7 @@ public:
 
 
     bool is_facing_right();
+    void use_tool();
 
     virtual ~Worm() = default;
 

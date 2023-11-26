@@ -2,6 +2,7 @@
 #define CLIENT_H
 
 #include <atomic>
+#include <list>
 #include <memory>
 
 #include <SDL2pp/SDL2pp.hh>
@@ -51,6 +52,7 @@ private:
     TerrainHolder terrain_elements;
     ActorHolder players;
     ActorHolder proyectiles;
+    ActorHolder crates;
 
     /// Queues for the states and actions
     Queue<std::shared_ptr<States>> game_state_queue;

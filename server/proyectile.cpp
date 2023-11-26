@@ -71,21 +71,25 @@ void Projectile::collide() {
 void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 applyPoint,
                                    float blastPower) {
 
+    //float radio1  = body->GetFixtureList()->GetShape()->m_radius;
+    //float radio2  = body_->GetFixtureList()->GetShape()->m_radius;
+    //float dist  = radio1 + radio2;
+
     b2Vec2 blastDir = applyPoint - blastCenter;
     float distance = blastDir.Normalize();
 
-    float impulseMag;
-    if (distance == 0) {
-        return;
-    }
-    float invDistance = 1 / distance;
-    impulseMag = blastPower * invDistance;
+    //float impulseMag;
+
+    //float invDistance = 1 / distance;
+    //impulseMag = blastPower * invDistance;
+    //D * (R - o) / R
+    float damage = blastPower * (blast_radius - distance) / blast_radius;
 
     Entity* entity = reinterpret_cast<Entity*>(body_->GetUserData().pointer);
 
-    b2Vec2 final_impulse = impulseMag * blastDir;
+    b2Vec2 final_impulse = damage * blastDir;
     entity->apply_explosion(final_impulse);
-    entity->recibe_life_modification(-impulseMag);
+    entity->recibe_life_modification(-damage);
 }
 
 

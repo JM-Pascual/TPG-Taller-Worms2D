@@ -139,6 +139,8 @@ void ServerSide::Protocol::sendWormState(const std::shared_ptr<States>& state) {
     this->sendFloat(p->aim_inclination_degrees);
     send(&p->charging_weapon, sizeof(bool));
     this->sendFloat(p->life);
+    send(&p->drown, sizeof(bool));
+    send(&p->using_tool, sizeof(bool));
 }
 
 void ServerSide::Protocol::sendGameInfo(const std::shared_ptr<States>& count) {
@@ -207,11 +209,22 @@ void ServerSide::Protocol::sendLevelBuild(const std::shared_ptr<States>& lb) {
     }
 }
 
+void ServerSide::Protocol::sendCrate(const std::shared_ptr<States>& state) {
+    std::shared_ptr<CrateState> p = std::dynamic_pointer_cast<CrateState>(state);
+    send(&p->tag, sizeof(uint8_t));
+    sendPosition(p->pos);
+    send(&p->falling, sizeof(uint8_t));
+    send(&p->was_opened, sizeof(uint8_t));
+    send(&p->type, sizeof(uint8_t));
+    send(&p->id, sizeof(uint8_t));
+}
+
 void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
     switch (state->tag) {
         case StatesTag::GAMES_COUNT_L:
         case StatesTag::PLAYER_COUNT_L:
         case StatesTag::GAME_NOT_JOINABLE:
+        case StatesTag::PROJECTILE_COUNT:
             sendCount(state);
             break;
 
@@ -233,6 +246,10 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
 
         case StatesTag::WORM_G:
             sendWormState(state);
+            break;
+
+        case StatesTag::CRATE:
+            sendCrate(state);
             break;
 
         case StatesTag::PROJECTILE_G:
@@ -257,6 +274,5 @@ float ServerSide::Protocol::pixel_to_meter_x(float pixel_position) {
 }
 
 float ServerSide::Protocol::pixel_to_meter_y(float pixel_position) {
-    return ((720 - pixel_position) / PPM );
+    return ((720 - pixel_position) / PPM);
 }
-

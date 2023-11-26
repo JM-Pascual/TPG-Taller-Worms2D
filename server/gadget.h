@@ -7,7 +7,6 @@
 #include "proyectile.h"
 
 
-
 #define BAZOOKA_AMMO Config::yamlNode["bazooka_ammo"].as<int>()
 #define GREEN_GRENADE_AMMO Config::yamlNode["green_grenade_ammo"].as<int>()
 #define BANANA_AMMO Config::yamlNode["banana_ammo"].as<int>()
@@ -33,15 +32,17 @@
 class Worm;
 class Game;
 class Battlefield;
+class TurnHandler;
 
-class Gadget{
+class Gadget {
 protected:
     uint8_t ammo;
 
 public:
     explicit Gadget(uint8_t ammo);
-    virtual void shoot(Battlefield& battlefield, Worm& worm) = 0;
+    virtual void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) = 0;
     void infiniteAmmo();
+    void addAmmo(const uint8_t& ammo);
     ~Gadget() = default;
 
     friend class Player;
@@ -52,7 +53,7 @@ public:
 class GreenGrenade: public Gadget {
 public:
     GreenGrenade();
-    void shoot(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     virtual ~GreenGrenade() = default;
 };
 
@@ -61,7 +62,7 @@ public:
 class RedGrenade: public Gadget {
 public:
     RedGrenade();
-    void shoot(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     virtual ~RedGrenade() = default;
 };
 
@@ -70,7 +71,7 @@ public:
 class HolyGrenade: public Gadget {
 public:
     HolyGrenade();
-    void shoot(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     virtual ~HolyGrenade() = default;
 };
 
@@ -79,7 +80,7 @@ public:
 class BananaGrenade: public Gadget {
 public:
     BananaGrenade();
-    void shoot(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     virtual ~BananaGrenade() = default;
 };
 
@@ -88,7 +89,7 @@ public:
 class DynamiteGrenade: public Gadget {
 public:
     DynamiteGrenade();
-    void shoot(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     virtual ~DynamiteGrenade() = default;
 };
 
@@ -98,7 +99,7 @@ public:
 class Bazooka: public Gadget {
 public:
     Bazooka();
-    void shoot(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     virtual ~Bazooka() = default;
 };
 
@@ -107,7 +108,7 @@ public:
 class Mortar: public Gadget {
 public:
     Mortar();
-    void shoot(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     virtual ~Mortar() = default;
 };
 
@@ -116,7 +117,7 @@ public:
 class Teleport: public Gadget {
 public:
     Teleport();
-    void shoot(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     virtual ~Teleport() = default;
 };
 
@@ -125,7 +126,8 @@ public:
 class AirStrike: public Gadget {
 public:
     AirStrike();
-    void shoot(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
+    void shootCheat(Battlefield& battlefield, float& destination);
     virtual ~AirStrike() = default;
 };
 
@@ -135,10 +137,12 @@ public:
 class BaseballBat: public Gadget {
 private:
     void bat(Battlefield& battlefield, Worm& worm);
-    void applyBlastImpulse(b2Body *body_, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower, b2Vec2 direction);
+    void applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower,
+                           b2Vec2 direction);
+
 public:
     BaseballBat();
-    void shoot(Battlefield& battlefield, Worm& worm) override;
+    void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
 
     virtual ~BaseballBat() = default;
 };

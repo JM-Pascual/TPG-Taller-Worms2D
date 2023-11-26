@@ -15,6 +15,8 @@
 
 enum class SWIndex { INTRO, MENU, GAME_SEARCH, HELP, LOBBY };
 
+enum class _CrateType_ { FIRST_AID, AMMO_BOX, TRAP };
+
 enum class Direction { LEFT = 0, RIGHT = 1 };
 
 enum class IsMoving { NO = 0, YES = 1 };
@@ -83,10 +85,12 @@ enum class TerrainActors {
     LONG_BAR,
     BACKGROUND,
     WATER,
-    AIR_JET
+    AIR_JET,
+    CRATE,
+    CRATE_FALLING
 };
 
-enum class TerrainInclinations{
+enum class TerrainInclinations {
     HORIZONTAL,
     VERTICAL,
     INCLINED_RIGHT,
@@ -116,7 +120,7 @@ enum class Tombstones {
     TOMBSTONE_6
 };
 
-enum class Effects { NORMAL_EXPLOSION, FRAGMENT_EXPLOSION };
+enum class Effects { NORMAL_EXPLOSION, FRAGMENT_EXPLOSION, CRATE_HEAL, CRATE_AMMO };
 
 enum class Actors {
     WORM = 0x0,
@@ -164,9 +168,11 @@ enum class StatesTag {
     LEVEL_BUILD,
     BATTLEFIELD_G,
     PLAYER_G,
+    PROJECTILE_COUNT,
     PROJECTILE_G,
     PLAYER_TURN,
-    WORM_G
+    WORM_G,
+    CRATE
 };
 
 #endif

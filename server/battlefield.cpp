@@ -1,21 +1,24 @@
 #include "battlefield.h"
 
+#include <string>
+
 #include "Player.h"
+#include "crate.h"
 #include "proyectile.h"
 #include "worm_handler.h"
 
-Battlefield::Battlefield() : projectile_count(0), level_holder(*this) {
+Battlefield::Battlefield(): projectile_count(0), level_holder(*this), crate_count(0) {
     std::string level_selected = "beach";
-    //Concat "_bars" to the level name
+    // Concat "_bars" to the level name
     level_selected += "_bars";
-    for (const auto& element : Config::levelLayoutNode[0][level_selected]) {
+    for (const auto& element: Config::levelLayoutNode[0][level_selected]) {
         // Extract values from the YAML node
         auto x = element[0].as<float>();
         auto y = element[1].as<float>();
         auto angle = element[2].as<float>();
         auto is_long = element[3].as<bool>();
 
-        level_holder.add_bar(x, y, (angle*M_PI), is_long);
+        level_holder.add_bar(x, y, (angle * M_PI), is_long);
     }
 }
 
@@ -43,13 +46,11 @@ void Battlefield::add_query_AABB(b2QueryCallback* callback, const b2AABB& aabb) 
     engine.add_query_AABB(callback, aabb);
 }
 
-void Battlefield::step(WormHandler& worm_handler) {
+void Battlefield::step() {
     updateProjectilesTimer();
     engine.clean_dead_entities();
     engine.step();
     post_action_explosion();
-    worm_handler.update_physics();
-    worm_handler.update_weapon();
 }
 
 void Battlefield::newWindForce(const bool& no_wind_cheat_activated) {
@@ -73,4 +74,12 @@ void Battlefield::remove_collided_projectiles() {
 
 void Battlefield::destroy_dead_entities() { engine.destroy_dead_entities(); }
 
-bool Battlefield::noProjectiles() { return projectiles.empty(); }
+const bool Battlefield::noProjectiles() { return projectiles.empty(); }
+
+void Battlefield::createCrate() { crates.push_back(std::make_shared<Crate>(*this, crate_count++)); }
+
+const void Battlefield::clearOpenedCrates() {
+    crates.erase(std::remove_if(crates.begin(), crates.end(),
+                                [](auto& crate) { return crate->wasOpened(); }),
+                 crates.end());
+}

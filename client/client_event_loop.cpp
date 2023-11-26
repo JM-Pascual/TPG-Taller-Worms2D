@@ -25,16 +25,57 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
     cheat_menu->hide();
 }
 
+void EventLoop::update_terrain() {
+    for (auto& terrain: terrain_elements) {
+        terrain->update();
+    }
+}
+
+void EventLoop::render_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) {
+    for (auto& terrain: terrain_elements) {
+        terrain->render(game_renderer);
+    }
+}
+
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
                                     TexturesPool& txt_pool) {
     std::shared_ptr<States> raw_state = nullptr;
-    for (int j = 0; j < MAX_PLAYERS + WORMS_QUANTITY; j++) {
+    int expected_states = MAX_PLAYERS + WORMS_QUANTITY;
+    for (int j = 0; j < expected_states; j++) {
         if (not game_state_queue.try_pop(raw_state)) {
             continue;
         }
 
         switch (raw_state->tag) {
             case StatesTag::PLAYER_G: {
+                continue;
+            }
+
+            case StatesTag::CRATE: {
+                auto state = std::dynamic_pointer_cast<CrateState>(raw_state);
+                if (!crates.actor_loaded(state->id)) {
+                    switch (state->type) {
+
+                        case _CrateType_::FIRST_AID:
+                            crates.add_actor(state->id,
+                                             std::make_shared<HealCrate>(state, txt_pool, camera));
+                            break;
+                        case _CrateType_::AMMO_BOX:
+                            crates.add_actor(state->id,
+                                             std::make_shared<AmmoCrate>(state, txt_pool, camera));
+                            break;
+                        case _CrateType_::TRAP:
+                            crates.add_actor(state->id,
+                                             std::make_shared<TrapCrate>(state, txt_pool, camera));
+                            break;
+                    }
+                } else {
+                    if (state->was_opened) {
+                        crates.remove_actor(state->id, raw_state);
+                    } else {
+                        crates.update_actor_state(state->id, raw_state);
+                    }
+                }
                 continue;
             }
 
@@ -56,6 +97,10 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                 }
                 continue;
             }
+
+            case StatesTag::PROJECTILE_COUNT:
+                expected_states += std::dynamic_pointer_cast<ProjectileCount>(raw_state)->quantity;
+                continue;
 
             case StatesTag::PROJECTILE_G: {
                 auto state = std::dynamic_pointer_cast<ProjectileStateG>(raw_state);
@@ -182,6 +227,7 @@ void EventLoop::run() {
         players.print_actors_state(window.get_renderer(), state_printer);
         proyectiles.render_actors(window.get_renderer());
         proyectiles.print_actors_state(window.get_renderer(), state_printer);
+        crates.render_actors(window.get_renderer());
 
         terrain_elements.update_terrain();
         terrain_elements.render_terrain(window.get_renderer());

@@ -99,6 +99,9 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
         case StatesTag::PLAYER_G:
             return recvPlayerGame();
 
+        case StatesTag::PROJECTILE_COUNT:
+            return std::make_shared<ProjectileCount>(recvUint8());
+
         case StatesTag::PROJECTILE_G:
             return recvProjectileGame();
 
@@ -110,6 +113,8 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
 
         case StatesTag::LEVEL_BUILD:
             return recvLevelBuild();
+        case StatesTag::CRATE:
+            return recvCrate();
 
         default:
             return std::make_shared<PlayerCountL>(recvUint8());  // ToDo placeholder para un default
@@ -176,10 +181,12 @@ std::shared_ptr<WormStateG> ClientSide::Protocol::recvWormGame() {
     float aim_inclination = recvFloat();
     bool charging_weapon = recvBool();
     float life = recvFloat();
+    bool drown = recvBool();
+    bool using_tool = recvBool();
 
     return std::make_shared<WormStateG>(id, x, y, equipped_weapon, on_turn_time, is_wa, is_jumping,
                                         is_backflipping, direction, was_hit, aim_inclination,
-                                        charging_weapon, life);
+                                        charging_weapon, life, drown, using_tool);
 }
 
 std::shared_ptr<ProjectileStateG> ClientSide::Protocol::recvProjectileGame() {
@@ -196,9 +203,18 @@ std::shared_ptr<LevelStateG> ClientSide::Protocol::recvLevelBuild() {
     uint8_t amount_of_bars = recvUint8();
     std::vector<BarDto> bars;
     for (size_t i = 0; i < amount_of_bars; i++) {
-        bars.push_back({(TerrainActors)recvUint8(),
-                        meter_to_pixel_x(recvFloat()), meter_to_pixel_y(recvFloat()),
-                        recvFloat()});
+        bars.push_back({(TerrainActors)recvUint8(), meter_to_pixel_x(recvFloat()),
+                        meter_to_pixel_y(recvFloat()), recvFloat()});
     }
     return (std::make_shared<LevelStateG>(amount_of_bars, std::move(bars)));
+}
+
+std::shared_ptr<CrateState> ClientSide::Protocol::recvCrate() {
+    float x = meter_to_pixel_x(recvFloat());
+    float y = meter_to_pixel_y(recvFloat());
+    bool falling = recvBool();
+    bool was_opened = recvBool();
+    _CrateType_ type = (_CrateType_)recvUint8();
+    uint8_t id = recvUint8();
+    return std::make_shared<CrateState>(x, y, falling, was_opened, type, id);
 }

@@ -5,17 +5,18 @@
 #include <map>
 #include <memory>
 #include <mutex>
+#include <vector>
 
 #include <stdint.h>
 
 #include "engine.h"
 #include "level_holder.h"
 
-
 class Projectile;
 class States;
 class Player;
 class WormHandler;
+class Crate;
 
 class Battlefield {
 private:
@@ -29,8 +30,12 @@ private:
     Engine engine;
     LevelHolder level_holder;
 
+    std::vector<std::shared_ptr<Crate>> crates;
+    uint8_t crate_count;
+
     void updateProjectilesTimer();
     void post_action_explosion();
+
 public:
     Battlefield();
 
@@ -42,7 +47,7 @@ public:
 
     void add_query_AABB(b2QueryCallback* callback, const b2AABB& aabb);
 
-    void step(WormHandler& worm_handler);
+    void step();
 
     void newWindForce(const bool& no_wind_cheat_activated);
 
@@ -52,7 +57,11 @@ public:
 
     void destroy_dead_entities();
 
-    bool noProjectiles();
+    void createCrate();
+
+    const void clearOpenedCrates();
+
+    const bool noProjectiles();
 
     ~Battlefield() = default;
 

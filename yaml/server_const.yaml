@@ -22,8 +22,8 @@
   worm_width: 0.9
   worm_height: 1.2
   arm_length: 1.45  #(${worm_width} / 2) + 1
-  power_raise: 1
-  max_power: 5
+  power_raise: 0.43
+  max_power: 7
   min_falling_damage: 2.0
   max_falling_damage: 25.0
   fall_damage_amplification: 3
@@ -82,3 +82,13 @@
   epicenter_damage_teleport: 0
 
   rocket_delay : 10
+  min_health_first_aid: 10
+  max_health_first_aid: 50
+
+  min_ammo_ammo_box: 3
+  max_ammo_ammo_box: 10
+
+  min_damage_trap: 10
+  max_damage_trap: 100
+
+  crate_length: 0.8

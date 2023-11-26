@@ -42,14 +42,17 @@ void GameLoop::run() {
         game.broadcaster.broadcastGame(turn_id.player_id);
         // Le llega por el broadcast_game_state los jugadores que estan muertos(booleano)
         //
+        game.worm_handler.check_drown_worms();
         game.worm_handler.checkDeadWorms();
         game.battlefield.destroy_dead_entities();
+        game.battlefield.clearOpenedCrates();
         game.battlefield.remove_collided_projectiles();
 
-        game.battlefield.step(game.worm_handler);
+        game.battlefield.step();
+        game.worm_handler.update_physics();
+        game.worm_handler.update_weapon(turn_handler);
 
         game.broadcaster.remove_closed_clients(game.ready_count, game.players);
-
 
 
         std::chrono::time_point<std::chrono::steady_clock> after = std::chrono::steady_clock::now();

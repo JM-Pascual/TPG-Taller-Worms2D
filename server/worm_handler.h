@@ -5,13 +5,14 @@
 #include <memory>
 #include <mutex>
 
-#include <stdint.h>
 #include <box2d/b2_math.h>
+#include <stdint.h>
 
 #include "../common/const.h"
 
 class Player;
 class Worm;
+class TurnHandler;
 
 class WormHandler {
 private:
@@ -23,11 +24,11 @@ private:
 
     std::shared_ptr<Worm> turn_worm;
 
-    void getTurnWorm(const uint8_t& id, const uint8_t& worm_index);
-
 
 public:
     explicit WormHandler(std::map<uint8_t, std::unique_ptr<Player>>& players);
+
+    void updateTurnWorm(const uint8_t& id, const uint8_t& worm_index);
 
     void stop_turn_worm();
 
@@ -35,7 +36,7 @@ public:
 
     void clearDamagedState();
     void update_physics();
-    void update_weapon();
+    void update_weapon(TurnHandler& turn_handler);
 
 
     // temp protocol
@@ -47,7 +48,7 @@ public:
                              const uint8_t& worm_index);
     void player_stop_aiming(const uint8_t& id, const uint8_t& worm_index);
     void player_start_charging(const uint8_t& id, const uint8_t& worm_index);
-    void player_shoot(const uint8_t& id, const uint8_t& worm_index);
+    void player_shoot(const uint8_t& id, const uint8_t& worm_index, TurnHandler& turn_handler);
     void player_use_clickable(b2Vec2 position, const uint8_t& id, const uint8_t& worm_index);
     void player_set_delay(DelayAmount delay, const uint8_t& id, const uint8_t& worm_index);
 
@@ -55,6 +56,7 @@ public:
                               const uint8_t& worm_index);
 
     void checkDeadWorms();
+    void check_drown_worms();
 
     void allWorms1HP();
 
@@ -62,9 +64,9 @@ public:
 
     void makePlayerWormsImmortal(const uint8_t& id);
 
-    void killRandomWorm();
-
     void playerInfiniteAmmo(const uint8_t& id);
+
+    void WW3Cheat();
 
     const bool allWormsStayStill();
 };
