@@ -52,6 +52,7 @@ const TurnReset TurnHandler::advanceTurn(const uint8_t& players_quantity) {
         return TurnReset::WAIT_TURN_END;
     }
 
+    worm_handler.clearDamagedState();
     for (++player_turn; player_turn <= players_quantity; ++player_turn) {
         // Dejamos q se pase de index para que se resetee a 0
         if (player_turn == players_quantity) {
@@ -99,7 +100,6 @@ const ActualTurn TurnHandler::updateTurn(const std::chrono::duration<float>& ela
     switch (reset_timer) {
 
         case TurnReset::TIMER_RESET: {
-            worm_handler.clearDamagedState();
             worm_handler.updateTurnWorm(player_id, it->second->worm_turn);
             battlefield.newWindForce(no_wind_cheat_activated);
             broadcaster.broadcast_turn(player_turn);

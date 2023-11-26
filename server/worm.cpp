@@ -43,11 +43,11 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &wormBox;
     fixtureDef.density = 1.0f;
-    fixtureDef.friction = 1.0f;
+    fixtureDef.friction = 0.3f;
     fixtureDef.restitution = 0.0f;
 
     body->CreateFixture(&fixtureDef);
-    body->SetAngularDamping(1.0f);
+    body->SetAngularDamping(10.0f);
 }
 
 void Worm::reloadAmmo(const uint8_t& ammo) { selected_weapon->get()->addAmmo(ammo); }
@@ -57,12 +57,12 @@ void Worm::move() {
         return;
     }
 
-    body->GetFixtureList()->SetFriction(0.0f);
-
-    if (body->GetLinearVelocity().LengthSquared() < 10) {
+    if (body->GetLinearVelocity().LengthSquared() < REFRESH_WALK) {
         this->body->ApplyLinearImpulseToCenter(
                 b2Vec2(20 * std::pow(-1, 1 - facing_right) / TICK_RATE, 0), true);
     }
+
+    start_falling();
 }
 
 void Worm::stop() {
@@ -84,6 +84,8 @@ void Worm::jump(const JumpDir& direction) {
         return;
     }
 
+    start_falling();
+
     switch (direction) {
         case (JumpDir::FRONT):
             body->ApplyLinearImpulseToCenter(b2Vec2((facing_factor() * 5), 5), true);
@@ -94,8 +96,6 @@ void Worm::jump(const JumpDir& direction) {
             is_backflipping = true;
             break;
     }
-
-    start_falling();
 }
 
 void Worm::change_aim_direction() {
@@ -276,16 +276,18 @@ void Worm::stop_falling() {
     }
 
     auto vel = body->GetLinearVelocity();
-    body->GetFixtureList()->SetFriction(1.0f);
+
+    if (vel.x < MIN_X_VELOCITY) {
+        if ((is_walking ^ falling) && not was_damaged && not is_backflipping && not is_jumping) {
+            body->SetAwake(false);
+        }
+    }
 
     if (vel.y < MIN_Y_VELOCITY) {
         is_jumping = false;
         is_backflipping = false;
-
-        if (not is_walking) {
-            body->SetAwake(false);
-        }
     }
+
 
     if (body->GetLinearVelocity().LengthSquared() < MIN_SQUARED_VELOCITY) {
         falling = false;

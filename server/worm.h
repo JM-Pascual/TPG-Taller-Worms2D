@@ -28,7 +28,10 @@
 #define INCLINACION_MIN (-b2_pi / 2)
 
 #define MIN_SQUARED_VELOCITY 0.0001
-#define MIN_Y_VELOCITY 0.001
+#define MIN_Y_VELOCITY 0.1
+#define MIN_X_VELOCITY 0.1
+
+#define REFRESH_WALK 10
 
 #define MIN_FALLING_DAMAGE_HEIGHT Config::yamlNode["min_falling_damage"].as<float>()
 #define MAX_FALLING_DAMAGE Config::yamlNode["max_falling_damage"].as<float>()
