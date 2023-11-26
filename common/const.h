@@ -162,7 +162,8 @@ enum class StatesTag {
     PROJECTILE_G,
     PLAYER_TURN,
     WORM_G,
-    CRATE
+    CRATE,
+    CRATE_COUNT
 };
 
 #endif

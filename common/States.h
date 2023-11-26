@@ -207,6 +207,13 @@ public:
     ~ProjectileCount() override = default;
 };
 
+class CrateCount: public CountState {
+public:
+    explicit CrateCount(const uint8_t& quantity): CountState(StatesTag::CRATE_COUNT, quantity) {}
+
+    ~CrateCount() override = default;
+};
+
 class GameNotJoinable: public CountState {
 public:
     /*

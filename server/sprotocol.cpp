@@ -225,6 +225,7 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
         case StatesTag::PLAYER_COUNT_L:
         case StatesTag::GAME_NOT_JOINABLE:
         case StatesTag::PROJECTILE_COUNT:
+        case StatesTag::CRATE_COUNT:
             sendCount(state);
             break;
 

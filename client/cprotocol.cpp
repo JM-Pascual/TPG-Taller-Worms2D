@@ -113,8 +113,12 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
 
         case StatesTag::LEVEL_BUILD:
             return recvLevelBuild();
+
         case StatesTag::CRATE:
             return recvCrate();
+
+        case StatesTag::CRATE_COUNT:
+            return std::make_shared<CrateCount>(recvUint8());
 
         default:
             return std::make_shared<PlayerCountL>(recvUint8());  // ToDo placeholder para un default

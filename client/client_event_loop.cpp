@@ -40,7 +40,7 @@ void EventLoop::render_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_ren
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
                                     TexturesPool& txt_pool) {
     std::shared_ptr<States> raw_state = nullptr;
-    int expected_states = MAX_PLAYERS + WORMS_QUANTITY;
+    int expected_states = MAX_PLAYERS + WORMS_QUANTITY + 3;  //+ proj_count + crate_count + level
     for (int j = 0; j < expected_states; j++) {
         if (not game_state_queue.try_pop(raw_state)) {
             continue;
@@ -50,6 +50,10 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
             case StatesTag::PLAYER_G: {
                 continue;
             }
+
+            case StatesTag::CRATE_COUNT:
+                expected_states += std::dynamic_pointer_cast<CrateCount>(raw_state)->quantity;
+                continue;
 
             case StatesTag::CRATE: {
                 auto state = std::dynamic_pointer_cast<CrateState>(raw_state);

@@ -33,6 +33,9 @@ void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states,
             std::make_shared<BattlefieldState>((uint8_t)game.battlefield.engine.wind_force));
 
     // CRATES
+
+    states.push_back(std::make_shared<CrateCount>(game.battlefield.crates.size()));
+
     std::transform(game.battlefield.crates.begin(), game.battlefield.crates.end(),
                    std::back_inserter(states), [](const auto& crate) {
                        return std::make_shared<CrateState>(
