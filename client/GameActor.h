@@ -50,6 +50,7 @@ private:
     Animation walking;
     Animation jumping;
     Animation backflipping;
+
     DeathAnimation dead;
 
     WeaponAnimation weapon_animation;
@@ -454,6 +455,129 @@ public:
 
     void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
                      TextPrinter& state_printer) override {}
+};
+
+// ----------------------- CRATE INTERFACE ----------------------
+
+class Crate: public GameActor {
+protected:
+    Animation falling;
+    Animation on_floor;
+
+    bool still_falling;
+    bool was_opened;
+
+public:
+    Crate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool, Camera& camera):
+            GameActor(initial_state->pos.x, initial_state->pos.y, camera),
+            falling(pool.get_level_texture(TerrainActors::CRATE_FALLING), 27, 2, true),
+            on_floor(pool.get_level_texture(TerrainActors::CRATE), 15, 1, false),
+            still_falling(true),
+            was_opened(false) {}
+
+    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                     TextPrinter& state_printer) override {}
+};
+
+// ----------------------- TRAP CRATE ----------------------
+
+class TrapCrate: public Crate {
+private:
+    Animation opening;
+
+public:
+    TrapCrate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool, Camera& camera):
+            Crate(initial_state, pool, camera),
+            opening(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false) {}
+
+    void update(std::shared_ptr<States>& actor_state) override {
+        auto state = std::dynamic_pointer_cast<CrateState>(actor_state);
+        position = state->pos;
+        still_falling = state->falling;
+        was_opened = state->was_opened;
+        falling.update(!still_falling);
+        on_floor.update(still_falling);
+        opening.update(!was_opened);
+    }
+
+    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        if (still_falling) {
+            SDL2pp::Rect rect_falling = camera.calcRect(position.x, position.y, 70, 74);
+            falling.render((*game_renderer), rect_falling, 0, 0, SDL_FLIP_NONE);
+        } else if (was_opened) {
+            SDL2pp::Rect rect_floor = camera.calcRect(position.x, position.y, 60, 60);
+            opening.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
+        } else {
+            SDL2pp::Rect rect_floor = camera.calcRect(position.x, position.y, 60, 60);
+            on_floor.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
+        }
+    }
+};
+
+class HealCrate: public Crate {
+private:
+    Animation opening;
+
+public:
+    HealCrate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool, Camera& camera):
+            Crate(initial_state, pool, camera),
+            opening(pool.get_effect_texture(Effects::CRATE_HEAL), 13, 2, false) {}
+
+    void update(std::shared_ptr<States>& actor_state) override {
+        auto state = std::dynamic_pointer_cast<CrateState>(actor_state);
+        position = state->pos;
+        still_falling = state->falling;
+        was_opened = state->was_opened;
+        falling.update(!still_falling);
+        on_floor.update(still_falling);
+        opening.update(!was_opened);
+    }
+
+    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        if (still_falling) {
+            SDL2pp::Rect rect_falling = camera.calcRect(position.x, position.y, 70, 74);
+            falling.render((*game_renderer), rect_falling, 0, 0, SDL_FLIP_NONE);
+        } else if (was_opened) {
+            SDL2pp::Rect rect_floor = camera.calcRect(position.x, (position.y - 30), 60, 60);
+            opening.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
+        } else {
+            SDL2pp::Rect rect_floor = camera.calcRect(position.x, position.y, 60, 60);
+            on_floor.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
+        }
+    }
+};
+
+class AmmoCrate: public Crate {
+private:
+    Animation opening;
+
+public:
+    AmmoCrate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool, Camera& camera):
+            Crate(initial_state, pool, camera),
+            opening(pool.get_effect_texture(Effects::CRATE_AMMO), 21, 2, false) {}
+
+    void update(std::shared_ptr<States>& actor_state) override {
+        auto state = std::dynamic_pointer_cast<CrateState>(actor_state);
+        position = state->pos;
+        still_falling = state->falling;
+        was_opened = state->was_opened;
+        falling.update(!still_falling);
+        on_floor.update(still_falling);
+        opening.update(!was_opened);
+    }
+
+    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        if (still_falling) {
+            SDL2pp::Rect rect_falling = camera.calcRect(position.x, position.y, 70, 74);
+            falling.render((*game_renderer), rect_falling, 0, 0, SDL_FLIP_NONE);
+        } else if (was_opened) {
+            SDL2pp::Rect rect_floor = camera.calcRect(position.x, (position.y - 30), 60, 60);
+            opening.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
+        } else {
+            SDL2pp::Rect rect_floor = camera.calcRect(position.x, position.y, 60, 60);
+            on_floor.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
+        }
+    }
 };
 
 #endif  // GAMEACTOR_H

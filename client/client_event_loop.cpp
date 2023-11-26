@@ -25,18 +25,6 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
     cheat_menu->hide();
 }
 
-void EventLoop::update_terrain() {
-    for (auto& terrain: terrain_elements) {
-        terrain->update();
-    }
-}
-
-void EventLoop::render_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) {
-    for (auto& terrain: terrain_elements) {
-        terrain->render(game_renderer);
-    }
-}
-
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
                                     TexturesPool& txt_pool) {
     std::shared_ptr<States> raw_state = nullptr;
