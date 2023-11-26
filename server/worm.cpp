@@ -32,7 +32,12 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
         id(id) {
     b2BodyDef wormDef;
     wormDef.type = b2_dynamicBody;
-    wormDef.position.Set(22.0f, 21.6f);  // Ahora la harcodeo, pero tiene que cambiar
+
+    auto rng = std::random_device();
+    std::mt19937 gen(rng());
+    std::uniform_int_distribution<> random(10, 20);
+
+    wormDef.position.Set(random(gen), 21.6f);  // Ahora la harcodeo, pero tiene que cambiar
     wormDef.allowSleep = true;
     wormDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
@@ -278,7 +283,8 @@ void Worm::stop_falling() {
     auto vel = body->GetLinearVelocity();
 
     if (vel.x < MIN_X_VELOCITY) {
-        if ((is_walking ^ falling) && not was_damaged && not is_backflipping && not is_jumping) {
+        if ((not is_walking || not falling) && not was_damaged && not is_backflipping &&
+            not is_jumping) {
             body->SetAwake(false);
         }
     }

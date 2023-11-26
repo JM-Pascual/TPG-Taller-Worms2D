@@ -29,7 +29,7 @@
 
 #define MIN_SQUARED_VELOCITY 0.1
 #define MIN_Y_VELOCITY 1
-#define MIN_X_VELOCITY 1
+#define MIN_X_VELOCITY 10
 
 #define REFRESH_WALK 10
 
