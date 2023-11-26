@@ -158,6 +158,20 @@ void TexturesPool::load_effect_textures() {
                                                                       .SetColorKey(true, 0x000000))});
 
     effect_textures[Effects::FRAGMENT_EXPLOSION]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    effect_textures.insert({Effects::CRATE_HEAL,
+                            std::make_shared<SDL2pp::Texture>((*renderer),
+                                                              SDL2pp::Surface(DATA_PATH "/stage/heal-crate-effect.png")
+                                                                      .SetColorKey(true, 0x000000))});
+
+    effect_textures[Effects::CRATE_HEAL]->SetBlendMode(SDL_BLENDMODE_BLEND);
+
+    effect_textures.insert({Effects::CRATE_AMMO,
+                            std::make_shared<SDL2pp::Texture>((*renderer),
+                                                              SDL2pp::Surface(DATA_PATH "/stage/ammo-crate-effect.png")
+                                                                      .SetColorKey(true, 0x000000))});
+
+    effect_textures[Effects::CRATE_AMMO]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
 void TexturesPool::load_combat_textures() {

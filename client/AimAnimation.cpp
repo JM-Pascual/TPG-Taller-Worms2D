@@ -70,7 +70,7 @@ void AimAnimation::render(WeaponsAndTools current_weapon, SDL2pp::Renderer& rend
             );
         }
 
-        power_charge_animation->render(renderer, SDL2pp::Rect(dest.x, dest.y -35, 35, 60),0, 0);
+        power_charge_animation->render(renderer, SDL2pp::Rect(dest.x, dest.y -35, 35, 60), 0, 0);
 
     } else {
         renderer.Copy(

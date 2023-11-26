@@ -101,7 +101,7 @@ enum class Tombstones {
     TOMBSTONE_6
 };
 
-enum class Effects { NORMAL_EXPLOSION, FRAGMENT_EXPLOSION };
+enum class Effects { NORMAL_EXPLOSION, FRAGMENT_EXPLOSION, CRATE_HEAL, CRATE_AMMO};
 
 enum class Actors {
     WORM = 0x0,

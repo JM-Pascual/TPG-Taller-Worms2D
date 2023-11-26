@@ -44,10 +44,27 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
             case StatesTag::CRATE:{
                 auto state = std::dynamic_pointer_cast<CrateState>(raw_state);
                 if (!crates.actor_loaded(state->id)) {
-                    crates.add_actor(state->id,
-                                     std::make_shared<Crate>(state, txt_pool, camera));
+                    switch(state->type){
+
+                        case _CrateType_::FIRST_AID:
+                            crates.add_actor(state->id,
+                                             std::make_shared<HealCrate>(state, txt_pool, camera));
+                            break;
+                        case _CrateType_::AMMO_BOX:
+                            crates.add_actor(state->id,
+                                             std::make_shared<AmmoCrate>(state, txt_pool, camera));
+                            break;
+                        case _CrateType_::TRAP:
+                            crates.add_actor(state->id,
+                                             std::make_shared<TrapCrate>(state, txt_pool, camera));
+                            break;
+                    }
                 } else {
-                    crates.update_actor_state(state->id, raw_state);
+                    if (state->was_opened){
+                        crates.remove_actor(state->id, raw_state);
+                    } else {
+                        crates.update_actor_state(state->id, raw_state);
+                    }
                 }
                 continue;
             }
