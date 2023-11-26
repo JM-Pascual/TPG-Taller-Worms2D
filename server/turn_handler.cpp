@@ -143,3 +143,9 @@ void TurnHandler::activateNoWind() {
     no_wind_cheat_activated = !no_wind_cheat_activated;
     battlefield.newWindForce(no_wind_cheat_activated);
 }
+
+void TurnHandler::supplyRun() {
+    for (size_t i = 0; i < 7; i++) {
+        battlefield.createCrate();
+    }
+}

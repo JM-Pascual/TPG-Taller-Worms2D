@@ -123,7 +123,7 @@ color: rgb(255, 58, 255)</string>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="madnessButton">
+           <widget class="QPushButton" name="supplyRunButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -141,7 +141,7 @@ color: rgb(255, 58, 255)</string>
 color: rgb(255, 58, 255)</string>
             </property>
             <property name="text">
-             <string>Madness</string>
+             <string>Supply Run</string>
             </property>
            </widget>
           </item>

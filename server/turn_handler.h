@@ -79,6 +79,8 @@ public:
     void activateInfiniteTurn();
 
     void activateNoWind();
+
+    void supplyRun();
 };
 
 #endif

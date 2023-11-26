@@ -14,6 +14,10 @@
 
 #define CRATE_LENGTH Config::yamlNode["crate_length"].as<float>()
 
+#define MIN_X_CRATE_SPAWN Config::yamlNode["min_x_crate_spawn"].as<float>()
+#define MAX_X_CRATE_SPAWN Config::yamlNode["max_x_crate_spawn"].as<float>()
+#define Y_CRATE_SPAWN Config::yamlNode["y_crate_spawn"].as<float>()
+
 class Battlefield;
 
 class CrateType {

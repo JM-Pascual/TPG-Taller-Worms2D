@@ -50,7 +50,7 @@ std::shared_ptr<PlayerAction> ServerSide::Parser::makePlayerAction(const Actions
             return std::make_shared<InfiniteAmmoCheat>(id);
 
         case Actions::MADNESS:
-            return std::make_shared<MadnessCheat>(id);
+            return std::make_shared<SupplyRunCheat>(id);
 
         case Actions::IMMORTAL_WORM:
             return std::make_shared<ImmortalWorm>(id);

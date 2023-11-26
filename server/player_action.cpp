@@ -227,15 +227,17 @@ void InfiniteAmmoCheat::execute(WormHandler& worm_handler, const uint8_t& turn_i
     worm_handler.playerInfiniteAmmo(turn_id);
 }
 
-// ----------------------- MadnessCheat ----------------------
+// ----------------------- SupplyRunCheat ----------------------
 
-MadnessCheat::MadnessCheat(const uint8_t& id): PlayerAction(id) {}
+SupplyRunCheat::SupplyRunCheat(const uint8_t& id): PlayerAction(id) {}
 
-void MadnessCheat::execute(WormHandler& worm_handler, const uint8_t& turn_id,
-                           const uint8_t& worm_index, TurnHandler& turn_handler) {
+void SupplyRunCheat::execute(WormHandler& worm_handler, const uint8_t& turn_id,
+                             const uint8_t& worm_index, TurnHandler& turn_handler) {
     if (turn_id != this->id) {
         return;
     }
+
+    turn_handler.supplyRun();
 }
 
 // ----------------------- ImmortalWorm ----------------------

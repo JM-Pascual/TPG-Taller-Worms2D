@@ -31,22 +31,27 @@ Crate::Crate(Battlefield& battlefield, const uint8_t& id):
             break;
     }
 
+    std::uniform_real_distribution<float> crate_pos(MIN_X_CRATE_SPAWN, MAX_X_CRATE_SPAWN);
+
     b2BodyDef crateDef;
     crateDef.type = b2_dynamicBody;
-    crateDef.position.Set(22.0f, 21.6f);  // Ahora la harcodeo, pero tiene que cambiar
+
+    auto crate_x = crate_pos(gen);
+    crateDef.position.Set(crate_x, Y_CRATE_SPAWN);
     crateDef.allowSleep = true;
-    crateDef.userData.pointer = reinterpret_cast<uintptr_t>(this);  // Todo ver si funciona
+    crateDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
     body = battlefield.add_body(crateDef);
     b2PolygonShape crateBox;
     crateBox.SetAsBox(CRATE_LENGTH / 2, CRATE_LENGTH / 2);
 
     b2FixtureDef fixtureDef;
+    fixtureDef.filter.groupIndex = -3;
     fixtureDef.shape = &crateBox;
     fixtureDef.density = 4.0f;
     fixtureDef.friction = 0.8;
 
-    body->SetGravityScale(0.25);
+    body->SetGravityScale(0.15);
     body->CreateFixture(&fixtureDef);
 }
 

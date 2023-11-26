@@ -27,8 +27,8 @@ void CheatMenu::loadHandlers() {
         this->button_sound.play();
     });
 
-    connect(ui->madnessButton, &QPushButton::clicked, this, [this]() {
-        this->action_queue.push(std::make_shared<MadnessCheat>());
+    connect(ui->supplyRunButton, &QPushButton::clicked, this, [this]() {
+        this->action_queue.push(std::make_shared<SupplyRunCheat>());
         this->button_sound.play();
     });
 
