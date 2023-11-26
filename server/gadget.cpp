@@ -10,6 +10,16 @@ Gadget::Gadget(uint8_t ammo): ammo(ammo) {}
 
 void Gadget::infiniteAmmo() { ammo = 255; }
 
+void Gadget::addAmmo(const uint8_t& _ammo) {
+    int __ammo = ammo + _ammo;
+    if (__ammo >= 255) {
+        ammo = 255;
+        return;
+    }
+
+    ammo += _ammo;
+}
+
 //~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
 
 Bazooka::Bazooka(): Gadget(BAZOOKA_AMMO) {}

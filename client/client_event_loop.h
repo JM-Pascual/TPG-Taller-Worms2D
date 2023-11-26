@@ -2,6 +2,7 @@
 #define CLIENT_H
 
 #include <atomic>
+#include <list>
 #include <memory>
 
 #include <SDL2pp/SDL2pp.hh>
@@ -50,6 +51,7 @@ private:
     std::list<std::unique_ptr<LevelActor>> terrain_elements;
     ActorHolder players;
     ActorHolder proyectiles;
+    ActorHolder crates;
 
     /// Queues for the states and actions
     Queue<std::shared_ptr<States>> game_state_queue;
@@ -61,6 +63,7 @@ private:
 
     void update_terrain();
     void render_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_renderer);
+
 public:
     /*
         Construye el cliente con su protocolo

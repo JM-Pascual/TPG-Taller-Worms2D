@@ -78,6 +78,10 @@ const TurnReset TurnHandler::advanceTurn(const uint8_t& players_quantity) {
         }
     }
 
+    if (not(++turn_number % 3)) {
+        battlefield.createCrate();
+    }
+
     return TurnReset::TIMER_RESET;
 }
 

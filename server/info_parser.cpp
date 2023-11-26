@@ -7,6 +7,7 @@
 
 #include "Game.h"
 #include "Player.h"
+#include "crate.h"
 #include "proyectile.h"
 
 void InfoParser::makeLobbyState(std::list<std::shared_ptr<States>>& states) {
@@ -31,9 +32,15 @@ void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states,
     states.push_back(
             std::make_shared<BattlefieldState>((uint8_t)game.battlefield.engine.wind_force));
 
+    // CRATES
+    std::transform(game.battlefield.crates.begin(), game.battlefield.crates.end(),
+                   std::back_inserter(states), [](const auto& crate) {
+                       return std::make_shared<CrateState>(
+                               crate->body->GetPosition().x, crate->body->GetPosition().y,
+                               crate->falling, crate->was_opened, crate->_type, crate->crate_id);
+                   });
 
     // PROJECTILES
-
     states.push_back(std::make_shared<ProjectileCount>(game.battlefield.projectiles.size()));
 
     std::transform(game.battlefield.projectiles.begin(), game.battlefield.projectiles.end(),

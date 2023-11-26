@@ -10,10 +10,10 @@
 #include "box2d/b2_math.h"
 
 #include "Animation.h"
-#include "death_animation.h"
 #include "TexturesPool.h"
 #include "WeaponAnimation.h"
 #include "camera.h"
+#include "death_animation.h"
 #include "text_printer.h"
 
 // ----------------------- ACTOR INTERFACE ----------------------
@@ -22,12 +22,13 @@ class GameActor {
 protected:
     b2Vec2 position;
     Camera& camera;
+
 public:
     GameActor(const float& x, const float& y, Camera& camera): position(x, y), camera(camera) {}
     virtual void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) = 0;
     virtual void update(std::shared_ptr<States>& actor_state) = 0;
     virtual void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                     TextPrinter& state_printer) = 0;
+                             TextPrinter& state_printer) = 0;
     virtual ~GameActor() = default;
 };
 
@@ -98,7 +99,7 @@ public:
     void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 32, 60);
 
-        if (on_turn_time){
+        if (on_turn_time) {
             if (is_jumping) {
                 jumping.render((*game_renderer), render_rect, 0, 0,
                                facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
@@ -108,7 +109,7 @@ public:
             } else if (is_walking) {
                 walking.render((*game_renderer), render_rect, 0, 0,
                                facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-            } else if (life_points_remaining == 0){
+            } else if (life_points_remaining == 0) {
                 SDL2pp::Rect death_render_rect = camera.calcRect(position.x, position.y, 60, 60);
                 dead.render((*game_renderer), death_render_rect);
             } else {
@@ -123,13 +124,12 @@ public:
 
 
     void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                           TextPrinter& state_printer) override {
-        if (!on_turn_time){
+                     TextPrinter& state_printer) override {
+        if (!on_turn_time) {
             SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 32, 60);
             state_printer.print_text((*game_renderer), std::to_string(int(life_points_remaining)),
-                                     render_rect.x +8, render_rect.y -30, true);
+                                     render_rect.x + 8, render_rect.y - 30, true);
         }
-
     }
 
     ~Worm() override = default;
@@ -199,7 +199,7 @@ private:
 
 public:
     MortarProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
-                      Camera& camera):
+                     Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::MORTAR_PROYECTILE), 1, 1),
             impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
@@ -238,7 +238,7 @@ private:
 
 public:
     MortarFragment(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
-                     Camera& camera):
+                   Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::MORTAR_FRAGMENT), 6, 1, true),
             impact(pool.get_effect_texture(Effects::FRAGMENT_EXPLOSION), 11, 1, false),
@@ -274,6 +274,7 @@ private:
     Animation impact;
 
     float current_angle;
+
 public:
     GreenGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
                            Camera& camera):
@@ -312,9 +313,10 @@ private:
     Animation impact;
 
     float current_angle;
+
 public:
     RedGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
-                           Camera& camera):
+                         Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::RED_GRENADE_PROYECTILE), 1, 1),
             impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
@@ -350,9 +352,10 @@ private:
     Animation impact;
 
     float current_angle;
+
 public:
     BananaProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
-                           Camera& camera):
+                     Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::BANANA_PROYECTILE), 1, 1),
             impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
@@ -386,12 +389,13 @@ class DynamiteProjectile: public Projectile {
 private:
     Animation countdown;
     Animation explosion;
+
 public:
     DynamiteProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
-                     Camera& camera):
+                       Camera& camera):
             Projectile(initial_state, pool, camera),
             countdown(pool.get_projectile_texture(Projectiles::DYNAMITE_PROYECTILE), 126),
-            explosion(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false){}
+            explosion(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false) {}
 
     void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
@@ -403,9 +407,9 @@ public:
 
     void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
-        if (impacted){
+        if (impacted) {
             explosion.render((*game_renderer), rect);
-        } else{
+        } else {
             countdown.render((*game_renderer), rect);
         }
     }

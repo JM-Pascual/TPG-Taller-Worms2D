@@ -27,6 +27,24 @@ public:
     virtual ~States() = default;
 };
 
+class CrateState: public States {
+public:
+    const b2Vec2 pos;
+    const bool falling;
+    const bool was_opened;
+    const _CrateType_ type;
+    const uint8_t id;
+
+    CrateState(const float& x, const float& y, const bool& falling, const bool& was_opened,
+               const _CrateType_& type, const uint8_t& id):
+            States(StatesTag::CRATE),
+            pos(x, y),
+            falling(falling),
+            was_opened(was_opened),
+            type(type),
+            id(id) {}
+};
+
 class GameInfoL: public States {
 public:
     const std::string description;

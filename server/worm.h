@@ -86,6 +86,7 @@ public:
 
     void stop_all();
 
+    void reloadAmmo(const uint8_t& ammo) override;
 
     b2Vec2 set_bullet_direction();
     b2Vec2 set_bullet_power();
@@ -114,6 +115,8 @@ public:
     void collision_reaction() override;
 
     void destroyBody();
+
+    void open_crate(bool& open) override;
 
     void applyWindResistance(const float& wind_force) override;
 

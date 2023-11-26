@@ -5,17 +5,18 @@
 #include <map>
 #include <memory>
 #include <mutex>
+#include <vector>
 
 #include <stdint.h>
 
 #include "engine.h"
 #include "level_holder.h"
 
-
 class Projectile;
 class States;
 class Player;
 class WormHandler;
+class Crate;
 
 class Battlefield {
 private:
@@ -28,6 +29,9 @@ private:
 
     Engine engine;
     LevelHolder level_holder;
+
+    std::vector<std::shared_ptr<Crate>> crates;
+    uint8_t crate_count;
 
     void updateProjectilesTimer();
     void post_action_explosion();
@@ -53,7 +57,11 @@ public:
 
     void destroy_dead_entities();
 
-    bool noProjectiles();
+    void createCrate();
+
+    const void clearOpenedCrates();
+
+    const bool noProjectiles();
 
     ~Battlefield() = default;
 

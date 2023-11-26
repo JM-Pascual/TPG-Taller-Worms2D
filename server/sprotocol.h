@@ -64,6 +64,7 @@ private:
 
     float pixel_to_meter_x(float pixel_position);
     float pixel_to_meter_y(float pixel_position);
+    void sendCrate(const std::shared_ptr<States>& state);
 
 public:
     void sendStates(const std::shared_ptr<States>& state);

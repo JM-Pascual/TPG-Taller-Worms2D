@@ -50,6 +50,8 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
     body->SetAngularDamping(1.0f);
 }
 
+void Worm::reloadAmmo(const uint8_t& ammo) { selected_weapon->get()->addAmmo(ammo); }
+
 void Worm::move() {
     if (not body) {
         return;
@@ -326,3 +328,4 @@ bool Worm::is_facing_right() { return facing_right; }
 void Worm::use_tool() { using_tool = true; }
 
 b2Vec2 Worm::position() { return body->GetWorldCenter(); }
+void Worm::open_crate(bool& open) { open = true; }

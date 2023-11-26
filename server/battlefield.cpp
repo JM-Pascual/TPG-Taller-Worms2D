@@ -3,10 +3,11 @@
 #include <string>
 
 #include "Player.h"
+#include "crate.h"
 #include "proyectile.h"
 #include "worm_handler.h"
 
-Battlefield::Battlefield(): projectile_count(0), level_holder(*this) {
+Battlefield::Battlefield(): projectile_count(0), level_holder(*this), crate_count(0) {
     std::string level_selected = "beach";
     // Concat "_bars" to the level name
     level_selected += "_bars";
@@ -73,4 +74,12 @@ void Battlefield::remove_collided_projectiles() {
 
 void Battlefield::destroy_dead_entities() { engine.destroy_dead_entities(); }
 
-bool Battlefield::noProjectiles() { return projectiles.empty(); }
+const bool Battlefield::noProjectiles() { return projectiles.empty(); }
+
+void Battlefield::createCrate() { crates.push_back(std::make_shared<Crate>(*this, crate_count++)); }
+
+const void Battlefield::clearOpenedCrates() {
+    crates.erase(std::remove_if(crates.begin(), crates.end(),
+                                [](auto& crate) { return crate->wasOpened(); }),
+                 crates.end());
+}

@@ -113,6 +113,8 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
 
         case StatesTag::LEVEL_BUILD:
             return recvLevelBuild();
+        case StatesTag::CRATE:
+            return recvCrate();
 
         default:
             return std::make_shared<PlayerCountL>(recvUint8());  // ToDo placeholder para un default
@@ -205,4 +207,14 @@ std::shared_ptr<LevelStateG> ClientSide::Protocol::recvLevelBuild() {
                         meter_to_pixel_y(recvFloat()), recvFloat()});
     }
     return (std::make_shared<LevelStateG>(amount_of_bars, std::move(bars)));
+}
+
+std::shared_ptr<CrateState> ClientSide::Protocol::recvCrate() {
+    float x = meter_to_pixel_x(recvFloat());
+    float y = meter_to_pixel_y(recvFloat());
+    bool falling = recvBool();
+    bool was_opened = recvBool();
+    _CrateType_ type = (_CrateType_)recvUint8();
+    uint8_t id = recvUint8();
+    return std::make_shared<CrateState>(x, y, falling, was_opened, type, id);
 }
