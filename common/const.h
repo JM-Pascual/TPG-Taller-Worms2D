@@ -82,7 +82,8 @@ enum class TerrainActors {
     BAR,
     LONG_BAR,
     BACKGROUND,
-    WATER
+    WATER,
+    AIR_JET
 };
 
 enum class TerrainInclinations{
