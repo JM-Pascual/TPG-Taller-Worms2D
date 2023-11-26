@@ -45,6 +45,7 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
     fixtureDef.density = 1.0f;
     fixtureDef.friction = 1.0f;
     fixtureDef.restitution = 0.0f;
+    fixtureDef.filter.groupIndex = -2;
 
     body->CreateFixture(&fixtureDef);
     body->SetAngularDamping(1.0f);
