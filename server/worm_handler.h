@@ -12,6 +12,7 @@
 
 class Player;
 class Worm;
+class TurnHandler;
 
 class WormHandler {
 private:
@@ -35,7 +36,7 @@ public:
 
     void clearDamagedState();
     void update_physics();
-    void update_weapon();
+    void update_weapon(TurnHandler& turn_handler);
 
 
     // temp protocol
@@ -47,7 +48,7 @@ public:
                              const uint8_t& worm_index);
     void player_stop_aiming(const uint8_t& id, const uint8_t& worm_index);
     void player_start_charging(const uint8_t& id, const uint8_t& worm_index);
-    void player_shoot(const uint8_t& id, const uint8_t& worm_index);
+    void player_shoot(const uint8_t& id, const uint8_t& worm_index, TurnHandler& turn_handler);
     void player_use_clickable(b2Vec2 position, const uint8_t& id, const uint8_t& worm_index);
     void player_set_delay(DelayAmount delay, const uint8_t& id, const uint8_t& worm_index);
 

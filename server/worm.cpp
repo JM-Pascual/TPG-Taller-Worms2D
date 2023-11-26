@@ -118,9 +118,19 @@ void Worm::change_aim_direction() {
     }
 }
 
-void Worm::change_fire_power() {
-    if (charging_shoot && weapon_power <= MAX_POWER) {
+void Worm::change_fire_power(TurnHandler& turn_handler) {
+    if (charging_shoot) {
         weapon_power += POWER_RAISE;
+
+        if (weapon_power >= MAX_POWER) {
+            aiming = false;
+            charging_shoot = false;
+
+            shoot(turn_handler);
+
+            weapon_power = 0;
+            weapon_delay = DelayAmount::FIVE;
+        }
     }
 }
 
@@ -129,7 +139,11 @@ void Worm::change_position() {
     body->SetAwake(true);
 }
 
-void Worm::shoot() { (*selected_weapon)->shoot(battlefield, *this); }
+void Worm::shoot(TurnHandler& turn_handler) {
+    if (weapon_power > 0) {
+        (*selected_weapon)->shoot(battlefield, *this, turn_handler);
+    }
+}
 
 void Worm::use_chargeable_weapon(const std::shared_ptr<Projectile>& projectile) {
     projectile->set_power(set_bullet_power());

@@ -19,7 +19,7 @@
 
 #define ARM_LENGHT Config::yamlNode["arm_length"].as<float>()
 
-#define POWER_RAISE Config::yamlNode["power_raise"].as<int>()
+#define POWER_RAISE Config::yamlNode["power_raise"].as<float>()
 #define MAX_POWER Config::yamlNode["max_power"].as<int>()
 #define ANGLE_VARIATION (b2_pi / 64)
 
@@ -36,6 +36,7 @@
 
 class Gadget;
 class Projectile;
+class TurnHandler;
 
 class Worm: public Entity {
 private:
@@ -70,7 +71,6 @@ private:
     bool drown;
 
 
-
     int facing_factor();
 
 public:
@@ -94,8 +94,8 @@ public:
     void change_clicked_position(b2Vec2 new_position);
 
     void change_aim_direction();
-    void change_fire_power();
-    void shoot();
+    void change_fire_power(TurnHandler& turn_handler);
+    void shoot(TurnHandler& turn_handler);
 
     void stop_falling() override;
     void start_falling() override;

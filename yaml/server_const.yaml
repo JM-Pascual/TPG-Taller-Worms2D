@@ -22,8 +22,8 @@
   worm_width: 0.9
   worm_height: 1.2
   arm_length: 1.45  #(${worm_width} / 2) + 1
-  power_raise: 1
-  max_power: 5
+  power_raise: 0.43
+  max_power: 7
   min_falling_damage: 2.0
   max_falling_damage: 25.0
   fall_damage_amplification: 3

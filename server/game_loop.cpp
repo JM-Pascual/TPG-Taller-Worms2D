@@ -47,10 +47,11 @@ void GameLoop::run() {
         game.battlefield.destroy_dead_entities();
         game.battlefield.remove_collided_projectiles();
 
-        game.battlefield.step(game.worm_handler);
+        game.battlefield.step();
+        game.worm_handler.update_physics();
+        game.worm_handler.update_weapon(turn_handler);
 
         game.broadcaster.remove_closed_clients(game.ready_count, game.players);
-
 
 
         std::chrono::time_point<std::chrono::steady_clock> after = std::chrono::steady_clock::now();

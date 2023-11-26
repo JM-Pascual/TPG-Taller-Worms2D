@@ -31,6 +31,7 @@ private:
 
     void updateProjectilesTimer();
     void post_action_explosion();
+
 public:
     Battlefield();
 
@@ -42,7 +43,7 @@ public:
 
     void add_query_AABB(b2QueryCallback* callback, const b2AABB& aabb);
 
-    void step(WormHandler& worm_handler);
+    void step();
 
     void newWindForce(const bool& no_wind_cheat_activated);
 

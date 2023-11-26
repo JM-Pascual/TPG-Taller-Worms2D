@@ -125,9 +125,7 @@ void Shoot::execute(WormHandler& worm_handler, const uint8_t& turn_id, const uin
         return;
     }
 
-    worm_handler.player_shoot(id, worm_index);
-
-    turn_handler.use_stop_action();
+    worm_handler.player_shoot(id, worm_index, turn_handler);
 }
 
 // ---------------------------- DELAY ------------------
@@ -166,7 +164,7 @@ void UseClickable::execute(WormHandler& worm_handler, const uint8_t& turn_id,
     }
 
     worm_handler.player_use_clickable(position, id, worm_index);
-    worm_handler.player_shoot(id, worm_index);
+    worm_handler.player_shoot(id, worm_index, turn_handler);
 
     turn_handler.use_stop_action();
 }

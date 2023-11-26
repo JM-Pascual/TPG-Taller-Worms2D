@@ -3,9 +3,10 @@
 #include <memory>
 
 #include "battlefield.h"
+#include "turn_handler.h"
 #include "worm.h"
 
-Gadget::Gadget(uint8_t ammo) : ammo(ammo) {}
+Gadget::Gadget(uint8_t ammo): ammo(ammo) {}
 
 void Gadget::infiniteAmmo() { ammo = 255; }
 
@@ -14,7 +15,7 @@ void Gadget::infiniteAmmo() { ammo = 255; }
 Bazooka::Bazooka(): Gadget(BAZOOKA_AMMO) {}
 
 
-void Bazooka::shoot(Battlefield& battlefield, Worm& worm) {
+void Bazooka::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) {
     if (ammo == 0) {
         return;
     }
@@ -27,14 +28,16 @@ void Bazooka::shoot(Battlefield& battlefield, Worm& worm) {
 
     worm.use_chargeable_weapon(projectile);
 
+    turn_handler.use_stop_action();
+
     --ammo;
 }
 
 //~~~~~~~~~~~~~~~~~~~ Mortar ~~~~~~~~~~~~~~~~~~~~
 
-Mortar::Mortar() : Gadget(MORTAR_AMMO){}
+Mortar::Mortar(): Gadget(MORTAR_AMMO) {}
 
-void Mortar::shoot(Battlefield &battlefield, Worm &worm) {
+void Mortar::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) {
     if (ammo == 0) {
         return;
     }
@@ -46,6 +49,8 @@ void Mortar::shoot(Battlefield &battlefield, Worm &worm) {
 
     worm.use_chargeable_weapon(mortar_rocket);
 
+    turn_handler.use_stop_action();
+
     --ammo;
 }
 
@@ -53,7 +58,7 @@ void Mortar::shoot(Battlefield &battlefield, Worm &worm) {
 
 GreenGrenade::GreenGrenade(): Gadget(GREEN_GRENADE_AMMO) {}
 
-void GreenGrenade::shoot(Battlefield& battlefield, Worm& worm) {
+void GreenGrenade::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) {
     if (ammo == 0) {
         return;
     }
@@ -67,6 +72,8 @@ void GreenGrenade::shoot(Battlefield& battlefield, Worm& worm) {
 
     worm.use_chargeable_weapon(green_grenade);
 
+    turn_handler.use_stop_action();
+
     --ammo;
 }
 
@@ -74,7 +81,7 @@ void GreenGrenade::shoot(Battlefield& battlefield, Worm& worm) {
 
 RedGrenade::RedGrenade(): Gadget(RED_GRENADE_AMMO) {}
 
-void RedGrenade::shoot(Battlefield& battlefield, Worm& worm) {
+void RedGrenade::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) {
     if (ammo == 0) {
         return;
     }
@@ -88,6 +95,8 @@ void RedGrenade::shoot(Battlefield& battlefield, Worm& worm) {
 
     worm.use_chargeable_weapon(red_grenade);
 
+    turn_handler.use_stop_action();
+
     --ammo;
 }
 
@@ -95,7 +104,7 @@ void RedGrenade::shoot(Battlefield& battlefield, Worm& worm) {
 
 BananaGrenade::BananaGrenade(): Gadget(BANANA_AMMO) {}
 
-void BananaGrenade::shoot(Battlefield& battlefield, Worm& worm) {
+void BananaGrenade::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) {
     if (ammo == 0) {
         return;
     }
@@ -109,15 +118,17 @@ void BananaGrenade::shoot(Battlefield& battlefield, Worm& worm) {
 
     worm.use_chargeable_weapon(banana);
 
+    turn_handler.use_stop_action();
+
     --ammo;
 }
 
 
 //~~~~~~~~~~~~~~~~~~~ HolyGrenade ~~~~~~~~~~~~~~~~~~~~
 
-HolyGrenade::HolyGrenade() : Gadget(HOLY_GRENADE_AMMO) {}
+HolyGrenade::HolyGrenade(): Gadget(HOLY_GRENADE_AMMO) {}
 
-void HolyGrenade::shoot(Battlefield &battlefield, Worm &worm) {
+void HolyGrenade::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) {
     if (ammo == 0) {
         return;
     }
@@ -131,6 +142,8 @@ void HolyGrenade::shoot(Battlefield &battlefield, Worm &worm) {
 
     worm.use_positional_weapon(holy_grenade);
 
+    turn_handler.use_stop_action();
+
     --ammo;
 }
 
@@ -138,7 +151,7 @@ void HolyGrenade::shoot(Battlefield &battlefield, Worm &worm) {
 
 DynamiteGrenade::DynamiteGrenade(): Gadget(DYNAMITE_AMMO) {}
 
-void DynamiteGrenade::shoot(Battlefield& battlefield, Worm& worm) {
+void DynamiteGrenade::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) {
     if (ammo == 0) {
         return;
     }
@@ -152,38 +165,42 @@ void DynamiteGrenade::shoot(Battlefield& battlefield, Worm& worm) {
 
     worm.use_positional_weapon(dynamite);
 
+    turn_handler.use_stop_action();
+
     --ammo;
 }
 
 
 //~~~~~~~~~~~~~~~~~~~ Teleport ~~~~~~~~~~~~~~~~~~~~
 
-Teleport::Teleport() : Gadget(TELEPORT_AMMO){}
+Teleport::Teleport(): Gadget(TELEPORT_AMMO) {}
 
-void Teleport::shoot(Battlefield& battlefield, Worm& worm) {
+void Teleport::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) {
     if (ammo == 0) {
         return;
     }
     worm.change_position();
     worm.use_tool();
 
+    turn_handler.use_stop_action();
+
     --ammo;
 }
 
 //~~~~~~~~~~~~~~~~~~~ AirStrike ~~~~~~~~~~~~~~~~~~~~
 
-AirStrike::AirStrike() : Gadget(AIRSTRIKE_AMMO){}
+AirStrike::AirStrike(): Gadget(AIRSTRIKE_AMMO) {}
 
-void AirStrike::shoot(Battlefield& battlefield, Worm& worm) {
+void AirStrike::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) {
     if (ammo == 0) {
         return;
     }
 
     b2Vec2 destination = worm.clicked_position_();
-    destination.y =  AIRSTRIKE_ROCKET_Y_POSITION; //Es una altura constante
+    destination.y = AIRSTRIKE_ROCKET_Y_POSITION;  // Es una altura constante
     destination.x = destination.x - AIRSTRIKE_ROCKET_X_DEVIATION;
 
-    for(int i  = 0; i < AIRSTRIKE_ROCKETS ; i++){
+    for (int i = 0; i < AIRSTRIKE_ROCKETS; i++) {
 
         destination.x += AIRSTRIKE_ROCKET_SEPARATION;
 
@@ -192,18 +209,34 @@ void AirStrike::shoot(Battlefield& battlefield, Worm& worm) {
         battlefield.add_projectile(projectile);
     }
     worm.use_tool();
+    turn_handler.use_stop_action();
+
     --ammo;
+}
+
+void AirStrike::shootCheat(Battlefield& battlefield, float& destination) {
+    b2Vec2 dest(destination, 0);
+
+    for (int i = 0; i < AIRSTRIKE_ROCKETS; i++) {
+
+        dest.x += AIRSTRIKE_ROCKET_SEPARATION;
+
+        std::shared_ptr<Projectile> projectile = std::make_shared<BazookaRocket>(battlefield, dest);
+        battlefield.add_projectile(projectile);
+    }
 }
 
 //~~~~~~~~~~~~~~~~~~~ BaseballBat ~~~~~~~~~~~~~~~~~~~~
 
-BaseballBat::BaseballBat() : Gadget(BASEBALL_BAT_AMMO) {}
+BaseballBat::BaseballBat(): Gadget(BASEBALL_BAT_AMMO) {}
 
-void BaseballBat::shoot(Battlefield &battlefield, Worm &worm) {
+void BaseballBat::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) {
     if (ammo == 0) {
         return;
     }
-    bat(battlefield,worm);
+    bat(battlefield, worm);
+
+    turn_handler.use_stop_action();
 
     --ammo;
 }
@@ -224,11 +257,13 @@ void BaseballBat::bat(Battlefield& battlefield, Worm& worm) {
         if (worm.distance_to_body(body_) >= BAT_RANGE)
             continue;
 
-        applyBlastImpulse(body_, worm.position(), body_->GetWorldCenter() , BAT_POWER, worm.set_bullet_angle());
+        applyBlastImpulse(body_, worm.position(), body_->GetWorldCenter(), BAT_POWER,
+                          worm.set_bullet_angle());
     }
 }
 
-void BaseballBat::applyBlastImpulse(b2Body *body_, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower, b2Vec2 direction) {
+void BaseballBat::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 applyPoint,
+                                    float blastPower, b2Vec2 direction) {
 
     b2Vec2 blastDir = applyPoint - blastCenter;
     float distance = blastDir.Normalize();
@@ -244,5 +279,3 @@ void BaseballBat::applyBlastImpulse(b2Body *body_, b2Vec2 blastCenter, b2Vec2 ap
     entity->recibe_life_modification(-BAT_DAMAGE);
     entity->start_falling();
 }
-
-
