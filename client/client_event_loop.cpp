@@ -40,7 +40,8 @@ void EventLoop::render_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_ren
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
                                     TexturesPool& txt_pool) {
     std::shared_ptr<States> raw_state = nullptr;
-    for (int j = 0; j < MAX_PLAYERS + WORMS_QUANTITY; j++) {
+    int expected_states = MAX_PLAYERS + WORMS_QUANTITY;
+    for (int j = 0; j < expected_states; j++) {
         if (not game_state_queue.try_pop(raw_state)) {
             continue;
         }
@@ -68,6 +69,10 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                 }
                 continue;
             }
+
+            case StatesTag::PROJECTILE_COUNT:
+                expected_states += std::dynamic_pointer_cast<ProjectileCount>(raw_state)->quantity;
+                continue;
 
             case StatesTag::PROJECTILE_G: {
                 auto state = std::dynamic_pointer_cast<ProjectileStateG>(raw_state);
@@ -135,20 +140,14 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
             case StatesTag::LEVEL_BUILD: {
                 auto state = std::dynamic_pointer_cast<LevelStateG>(raw_state);
 
-                //Charge all the bars as terrain
-                for (auto & bar : state->bars) {
-                    if (bar.type == TerrainActors::BAR){
-                        terrain_elements.emplace_back(std::make_unique<ShortBar>(bar.x,
-                                                                                 bar.y,
-                                                                                 bar.angle,
-                                                                                 txt_pool,
-                                                                                 camera));
+                // Charge all the bars as terrain
+                for (auto& bar: state->bars) {
+                    if (bar.type == TerrainActors::BAR) {
+                        terrain_elements.emplace_back(std::make_unique<ShortBar>(
+                                bar.x, bar.y, bar.angle, txt_pool, camera));
                     } else {
-                        terrain_elements.emplace_back(std::make_unique<LongBar>(bar.x,
-                                                                                bar.y,
-                                                                                bar.angle,
-                                                                                txt_pool,
-                                                                                camera));
+                        terrain_elements.emplace_back(std::make_unique<LongBar>(
+                                bar.x, bar.y, bar.angle, txt_pool, camera));
                     }
                 }
 

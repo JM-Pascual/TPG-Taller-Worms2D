@@ -141,7 +141,6 @@ void ServerSide::Protocol::sendWormState(const std::shared_ptr<States>& state) {
     this->sendFloat(p->life);
     send(&p->drown, sizeof(bool));
     send(&p->using_tool, sizeof(bool));
-
 }
 
 void ServerSide::Protocol::sendGameInfo(const std::shared_ptr<States>& count) {
@@ -215,6 +214,7 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
         case StatesTag::GAMES_COUNT_L:
         case StatesTag::PLAYER_COUNT_L:
         case StatesTag::GAME_NOT_JOINABLE:
+        case StatesTag::PROJECTILE_COUNT:
             sendCount(state);
             break;
 
@@ -260,6 +260,5 @@ float ServerSide::Protocol::pixel_to_meter_x(float pixel_position) {
 }
 
 float ServerSide::Protocol::pixel_to_meter_y(float pixel_position) {
-    return ((720 - pixel_position) / PPM );
+    return ((720 - pixel_position) / PPM);
 }
-

@@ -77,15 +77,9 @@ enum class Actions {
 
 };
 
-enum class TerrainActors {
-    GRADIENT,
-    BAR,
-    LONG_BAR,
-    BACKGROUND,
-    WATER
-};
+enum class TerrainActors { GRADIENT, BAR, LONG_BAR, BACKGROUND, WATER };
 
-enum class TerrainInclinations{
+enum class TerrainInclinations {
     HORIZONTAL,
     VERTICAL,
     INCLINED_RIGHT,
@@ -162,6 +156,7 @@ enum class StatesTag {
     LEVEL_BUILD,
     BATTLEFIELD_G,
     PLAYER_G,
+    PROJECTILE_COUNT,
     PROJECTILE_G,
     PLAYER_TURN,
     WORM_G

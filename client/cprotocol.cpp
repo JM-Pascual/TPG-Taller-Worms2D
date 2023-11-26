@@ -99,6 +99,9 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
         case StatesTag::PLAYER_G:
             return recvPlayerGame();
 
+        case StatesTag::PROJECTILE_COUNT:
+            return std::make_shared<ProjectileCount>(recvUint8());
+
         case StatesTag::PROJECTILE_G:
             return recvProjectileGame();
 
@@ -198,9 +201,8 @@ std::shared_ptr<LevelStateG> ClientSide::Protocol::recvLevelBuild() {
     uint8_t amount_of_bars = recvUint8();
     std::vector<BarDto> bars;
     for (size_t i = 0; i < amount_of_bars; i++) {
-        bars.push_back({(TerrainActors)recvUint8(),
-                        meter_to_pixel_x(recvFloat()), meter_to_pixel_y(recvFloat()),
-                        recvFloat()});
+        bars.push_back({(TerrainActors)recvUint8(), meter_to_pixel_x(recvFloat()),
+                        meter_to_pixel_y(recvFloat()), recvFloat()});
     }
     return (std::make_shared<LevelStateG>(amount_of_bars, std::move(bars)));
 }

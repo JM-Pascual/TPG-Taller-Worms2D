@@ -1,13 +1,12 @@
 #ifndef STATES_H
 #define STATES_H
 
+#include <cstdint>
 #include <map>
 #include <memory>
 #include <string>
 #include <utility>
 #include <vector>
-
-#include <cstdint>
 
 #include "box2d/b2_math.h"
 
@@ -35,7 +34,7 @@ public:
     const uint8_t player_count;
     const uint8_t game_id;
 
-    explicit GameInfoL(std::string  desc, std::string  map, const uint8_t& p_count,
+    explicit GameInfoL(std::string desc, std::string map, const uint8_t& p_count,
                        const uint8_t& id):
             States(StatesTag::INFO_GAME_L),
             description(std::move(desc)),
@@ -56,7 +55,7 @@ public:
 
 // --------------- LEVEL BUILDING STATE ----------------------
 
-struct BarDto{
+struct BarDto {
     BarDto(TerrainActors bar_type, float x, float y, float angle);
     TerrainActors type;
     float x;
@@ -70,9 +69,7 @@ public:
     std::vector<BarDto> bars;
 
     explicit LevelStateG(const uint8_t& amount_of_bars, std::vector<BarDto> bars):
-            States(StatesTag::LEVEL_BUILD),
-            amount_of_bars(amount_of_bars),
-            bars(std::move(bars)) {}
+            States(StatesTag::LEVEL_BUILD), amount_of_bars(amount_of_bars), bars(std::move(bars)) {}
 };
 
 // --------------- TEAM STATE ----------------------
@@ -84,8 +81,8 @@ public:
     const uint8_t avg_life;
     const std::unique_ptr<AmmoLeft> gadgets;
 
-    explicit PlayerStateG(const bool& is_playing, const uint8_t& id,
-                          const uint8_t& avg_life, std::unique_ptr<AmmoLeft> weapon_ammo):
+    explicit PlayerStateG(const bool& is_playing, const uint8_t& id, const uint8_t& avg_life,
+                          std::unique_ptr<AmmoLeft> weapon_ammo):
             States(StatesTag::PLAYER_G),
             id(id),
             is_playing(is_playing),
@@ -116,10 +113,10 @@ public:
 
     explicit WormStateG(const uint8_t& id, const float& x, const float& y,
                         const WeaponsAndTools& equipped_weapon, bool on_turn_time,
-                        const bool& is_walking,const bool& is_jumping, const bool& is_backflipping,
+                        const bool& is_walking, const bool& is_jumping, const bool& is_backflipping,
                         const bool& facing_right, const bool& was_hit,
                         const float& aim_inclination_degrees, const bool& charging_weapon,
-                        const float& life,const bool& drown,const bool& using_tool);
+                        const float& life, const bool& drown, const bool& using_tool);
 
     ~WormStateG() override = default;
 };
@@ -182,6 +179,14 @@ public:
             CountState(StatesTag::PLAYER_COUNT_L, quantity) {}
 
     ~PlayerCountL() override = default;
+};
+
+class ProjectileCount: public CountState {
+public:
+    explicit ProjectileCount(const uint8_t& quantity):
+            CountState(StatesTag::PROJECTILE_COUNT, quantity) {}
+
+    ~ProjectileCount() override = default;
 };
 
 class GameNotJoinable: public CountState {
