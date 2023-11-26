@@ -87,7 +87,7 @@ void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 app
 
     Entity* entity = reinterpret_cast<Entity*>(body_->GetUserData().pointer);
 
-    b2Vec2 final_impulse = damage * blastDir;
+    b2Vec2 final_impulse = damage * 0.5f * blastDir;
     entity->apply_explosion(final_impulse);
     entity->recibe_life_modification(-damage);
 }
@@ -173,6 +173,7 @@ AirStrikeRocket::AirStrikeRocket(Battlefield &battlefield, b2Vec2 position) :
         Rocket(battlefield, position, BLAST_RADIUS_AIR_STRIKE,
                EPICENTER_DAMAGE_AIR_STRIKE, WeaponsAndTools::AIR_STRIKE) {
 
+    body->GetFixtureList()->SetDensity(40.0f);
 }
 
 //~~~~~~~~~~~~~~~~~~~ Grenade ~~~~~~~~~~~~~~~~~~~~
