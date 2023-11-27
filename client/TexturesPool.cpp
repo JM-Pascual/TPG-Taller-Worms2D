@@ -21,12 +21,14 @@ void TexturesPool::load_texture_into_map(
 
 void TexturesPool::load_general_worm_textures() {
     /// Loads all the body actors_textures and enables alpha blending
-    load_texture_into_map(DATA_PATH "/worms/worm-left.png", actors_textures, Actors::WORM);
+    load_texture_into_map(DATA_PATH "/worms/worm-left.png", actors_textures,
+                          Actors::WORM);
     load_texture_into_map(DATA_PATH "/worms/worm-jump-up.png", actors_textures,
                           Actors::JUMPING_WORM);
     load_texture_into_map(DATA_PATH "/worms/worm-backflip.png", actors_textures,
                           Actors::BACKFLIP_WORM);
-    load_texture_into_map(DATA_PATH "/worms/worm-death.png", actors_textures, Actors::DYING_WORM);
+    load_texture_into_map(DATA_PATH "/worms/worm-death.png", actors_textures,
+                          Actors::DYING_WORM);
 }
 
 void TexturesPool::load_draw_textures() {
@@ -41,10 +43,16 @@ void TexturesPool::load_draw_textures() {
                           WeaponsDraw::WORM_DRAW_RED_GRENADE);
     load_texture_into_map(DATA_PATH "/worms/worm-banana-draw.png", draw_textures,
                           WeaponsDraw::WORM_DRAW_BANANA);
+    load_texture_into_map(DATA_PATH "/worms/worm-holyg-draw.png", draw_textures,
+                          WeaponsDraw::WORM_DRAW_HOLY_GRENADE);
     load_texture_into_map(DATA_PATH "/worms/worm-mortar-draw.png", draw_textures,
                           WeaponsDraw::WORM_DRAW_MORTAR);
+    load_texture_into_map(DATA_PATH "/worms/worm-bat-draw.png", draw_textures,
+                          WeaponsDraw::WORM_DRAW_BASEBALL_BAT);
     load_texture_into_map(DATA_PATH "/worms/worm-airstrike-draw.png", draw_textures,
                           WeaponsDraw::WORM_DRAW_AIR_STRIKE);
+    load_texture_into_map(DATA_PATH "/worms/worm-teleport-draw.png", draw_textures,
+                          WeaponsDraw::WORM_DRAW_TELEPORT);
 }
 
 void TexturesPool::load_aiming_textures() {
@@ -59,10 +67,16 @@ void TexturesPool::load_aiming_textures() {
                           WeaponAiming::WORM_AIM_RED_GRENADE);
     load_texture_into_map(DATA_PATH "/worms/worm-banana-aim.png", aim_textures,
                           WeaponAiming::WORM_AIM_BANANA);
+    load_texture_into_map(DATA_PATH "/worms/worm-holyg-aim.png", aim_textures,
+                          WeaponAiming::WORM_AIM_HOLY_GRENADE);
     load_texture_into_map(DATA_PATH "/worms/worm-mortar-aim.png", aim_textures,
                           WeaponAiming::WORM_AIM_MORTAR);
+    load_texture_into_map(DATA_PATH "/worms/worm-bat-aim.png", aim_textures,
+                          WeaponAiming::WORM_AIM_BASEBALL_BAT);
     load_texture_into_map(DATA_PATH "/worms/worm-airstrike-aim.png", aim_textures,
                           WeaponAiming::WORM_AIM_AIR_STRIKE);
+    load_texture_into_map(DATA_PATH "/worms/worm-teleport-aim.png", aim_textures,
+                          WeaponAiming::WORM_AIM_TELEPORT);
 }
 
 void TexturesPool::load_projectile_textures() {
@@ -79,8 +93,12 @@ void TexturesPool::load_projectile_textures() {
                           Projectiles::RED_GRENADE_PROYECTILE);
     load_texture_into_map(DATA_PATH "/weapons/spinning-banana.png", projectile_textures,
                           Projectiles::BANANA_PROYECTILE);
+    load_texture_into_map(DATA_PATH "/weapons/holy-grenade-projectile.png", projectile_textures,
+                          Projectiles::HOLY_GRENADE_PROYECTILE);
     load_texture_into_map(DATA_PATH "/weapons/dynamite-projectile.png", projectile_textures,
                           Projectiles::DYNAMITE_PROYECTILE);
+    load_texture_into_map(DATA_PATH "/weapons/airstrike-projectile.png", projectile_textures,
+                          Projectiles::AIR_STRIKE_PROYECTILE);
 }
 
 void TexturesPool::load_effect_textures() {
@@ -88,16 +106,24 @@ void TexturesPool::load_effect_textures() {
                           Effects::NORMAL_EXPLOSION);
     load_texture_into_map(DATA_PATH "/weapons/mortar-fragment-explosion.png", effect_textures,
                           Effects::FRAGMENT_EXPLOSION);
-
     load_texture_into_map(DATA_PATH "/stage/heal-crate-effect.png", effect_textures,
                           Effects::CRATE_HEAL);
-
     load_texture_into_map(DATA_PATH "/stage/ammo-crate-effect.png", effect_textures,
                           Effects::CRATE_AMMO);
 }
 
+void TexturesPool::load_tool_use_textures() {
+    load_texture_into_map(DATA_PATH "/weapons/worm-leaving-teleport.png", tool_usage_textures,
+                          ToolUsage::TELEPORT_USE);
+    load_texture_into_map(DATA_PATH "/weapons/worm-airstrike-call.png", tool_usage_textures,
+                          ToolUsage::AIR_STRIKE_CALL);
+    load_texture_into_map(DATA_PATH "/weapons/worm-bat-swing.png", tool_usage_textures,
+                          ToolUsage::BASEBALL_SWING);
+}
+
 void TexturesPool::load_combat_textures() {
-    load_texture_into_map(DATA_PATH "/weapons/crosshair.png", actors_textures, Actors::CROSSHAIR);
+    load_texture_into_map(DATA_PATH "/weapons/crosshair.png", actors_textures,
+                          Actors::CROSSHAIR);
     load_texture_into_map(DATA_PATH "/miscellaneous/font-background.png", actors_textures,
                           Actors::STATE_SIGN);
     load_texture_into_map(DATA_PATH "/weapons/loading-shot.png", actors_textures,
@@ -119,27 +145,14 @@ void TexturesPool::load_level_textures() {
     load_texture_into_map(DATA_PATH "/stage/bar.png", level_actors_textures, TerrainActors::BAR);
     load_texture_into_map(DATA_PATH "/stage/long-bar.png", level_actors_textures,
                           TerrainActors::LONG_BAR);
+    load_texture_into_map(DATA_PATH "/stage/airjet.png", level_actors_textures,
+                          TerrainActors::AIR_JET);
     load_texture_into_map(DATA_PATH "/blue-water-sprites/blue_water.png", level_actors_textures,
                           TerrainActors::WATER);
     load_texture_into_map(DATA_PATH "/stage/mystery-crate-floor.png", level_actors_textures,
                           TerrainActors::CRATE);
     load_texture_into_map(DATA_PATH "/stage/mystery-crate-falling3.png", level_actors_textures,
                           TerrainActors::CRATE_FALLING);
-
-    // actors_textures.insert(
-    //         {Actors::CRATE,
-    //          std::make_shared<SDL2pp::Texture>(
-    //                  (*renderer), SDL2pp::Surface(DATA_PATH "/stage/mystery-crate-floor.png")
-    //                                       .SetColorKey(true, 0x000000))});
-    // actors_textures[Actors::CRATE]->SetBlendMode(SDL_BLENDMODE_BLEND);
-
-    // actors_textures.insert(
-    //         {Actors::CRATE_FALLING,
-    //          std::make_shared<SDL2pp::Texture>(
-    //                  (*renderer), SDL2pp::Surface(DATA_PATH
-    //                  "/stage/mystery-crate-falling3.png")
-    //                                       .SetColorKey(true, 0x000000))});
-    // actors_textures[Actors::CRATE_FALLING]->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
 void TexturesPool::load_tombstones_textures() {
@@ -164,6 +177,7 @@ TexturesPool::TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer):
     load_worm_textures();
     load_combat_textures();
     load_projectile_textures();
+    load_tool_use_textures();
     load_effect_textures();
     load_tombstones_textures();
 }
@@ -189,6 +203,11 @@ std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_draw_texture(
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_projectile_texture(
         Projectiles projectile_texture_to_fetch) {
     return (projectile_textures[projectile_texture_to_fetch]);
+}
+
+std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_tool_usage_texture(
+        ToolUsage tool_use_texture_to_fetch) {
+    return (tool_usage_textures.at(tool_use_texture_to_fetch));
 }
 
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_effect_texture(

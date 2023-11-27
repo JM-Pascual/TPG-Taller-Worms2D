@@ -148,7 +148,7 @@ void Worm::change_position() {
 }
 
 void Worm::shoot(TurnHandler& turn_handler) {
-    if (weapon_power > 0) {
+    if (weapon_power >= 0) {
         (*selected_weapon)->shoot(battlefield, *this, turn_handler);
     }
 }

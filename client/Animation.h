@@ -1,6 +1,8 @@
 /*
  * Created by Federico Manuel Gomez Peter
  * Date: 17/05/18.
+ * Modified by Juan Manuel Pascual Osorio
+ * Date: 11/23
  */
 #ifndef ANIMATION_H_
 #define ANIMATION_H_
