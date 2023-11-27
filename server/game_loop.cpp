@@ -27,23 +27,9 @@ void GameLoop::run() {
             c->execute(game.worm_handler, turn_id.player_id, turn_id.worm_index, turn_handler);
         }
 
-
-        /*
-         * Step -> Hago el step y marco como !alive las entidades físicas relacionadas
-         * Hago el broad_cast para comunicar el estado a de todas las entidaddes del juego
-         * Elimino las entidades de box2d
-         * Elimino las entidades físicas relacionadas, que estan marcadas con !alive si no estan
-         * vivas
-         * */
-
-        // dormir(tiempo del tick del sv - tiempo que tarde en llegar acá)
-
-        // Le llega por el broadcast_game_state los jugadores que estan muertos(booleano)
-        game.broadcaster.broadcastGame(turn_id.player_id);
-        // Le llega por el broadcast_game_state los jugadores que estan muertos(booleano)
-        //
-        game.worm_handler.checkDeadWorms();
         game.worm_handler.check_drown_worms();
+        game.broadcaster.broadcastGame(turn_id.player_id);
+        game.worm_handler.checkDeadWorms();
         game.battlefield.destroy_dead_entities();
         game.battlefield.clearOpenedCrates();
         game.battlefield.remove_collided_projectiles();

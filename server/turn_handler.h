@@ -41,6 +41,7 @@ private:
 
     std::map<uint8_t, std::unique_ptr<Player>>& players;
     uint8_t current_players_quantity;
+    uint8_t current_player_worms_quantity;
 
     bool player_stop_action;
 
@@ -65,6 +66,7 @@ public:
             elapsed_time(0),
             players(players),
             current_players_quantity(0),
+            current_player_worms_quantity(0),
             player_stop_action(false),
             infinite_turn_cheat_activated(false),
             no_wind_cheat_activated(false),

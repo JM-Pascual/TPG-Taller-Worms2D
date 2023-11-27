@@ -189,6 +189,7 @@ void WormHandler::check_drown_worms() {
             if (worm->position().y <= 4) {
                 worm->drown = true;
                 worm->life = 0.0f;
+                worm->was_damaged = true;
             }
         }
     }
