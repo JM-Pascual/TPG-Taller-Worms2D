@@ -181,7 +181,7 @@ std::shared_ptr<WormStateG> ClientSide::Protocol::recvWormGame() {
     bool is_jumping = recvBool();
     bool is_backflipping = recvBool();
     bool direction = recvBool();
-    bool was_hit = recvBool();
+    bool falling = recvBool();
     float aim_inclination = recvFloat();
     bool charging_weapon = recvBool();
     float life = recvFloat();
@@ -189,7 +189,7 @@ std::shared_ptr<WormStateG> ClientSide::Protocol::recvWormGame() {
     bool using_tool = recvBool();
 
     return std::make_shared<WormStateG>(id, x, y, equipped_weapon, on_turn_time, is_wa, is_jumping,
-                                        is_backflipping, direction, was_hit, aim_inclination,
+                                        is_backflipping, direction, falling, aim_inclination,
                                         charging_weapon, life, drown, using_tool);
 }
 

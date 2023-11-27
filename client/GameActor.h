@@ -42,7 +42,7 @@ private:
     bool is_jumping;
     bool is_backflipping;
     bool facing_right;
-    bool was_hit;
+    bool falling;
     float life_points_remaining;
 
     float aim_inclination_degrees;
@@ -63,7 +63,7 @@ public:
             is_jumping(initial_state->is_jumping),
             is_backflipping(initial_state->is_backflipping),
             facing_right(initial_state->facing_right),
-            was_hit(initial_state->was_hit),
+            falling(initial_state->falling),
             life_points_remaining(initial_state->life),
             aim_inclination_degrees(initial_state->aim_inclination_degrees),
 
@@ -82,7 +82,7 @@ public:
         is_jumping = state->is_jumping;
         is_backflipping = state->is_backflipping;
         facing_right = state->facing_right;
-        was_hit = state->was_hit;
+        falling = state->falling;
         aim_inclination_degrees = state->aim_inclination_degrees;
         life_points_remaining = state->life;
 

@@ -37,6 +37,7 @@ private:
     std::atomic<bool> quit;
     std::atomic<bool> my_turn;
     std::atomic<bool> runned;
+    std::atomic<bool> mouse_priority;
     ClientSide::Protocol protocol;
     ClientSide::Receiver recv;
     ClientSide::Sender send;
@@ -58,11 +59,17 @@ private:
     Queue<std::shared_ptr<States>> lobby_state_queue;
     Queue<std::shared_ptr<Action>> action_queue;
 
+    CameraPriority camera_priority;
+
     void process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
                              TexturesPool& txt_pool);
 
     void update_terrain();
     void render_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_renderer);
+
+    void viewWorm(const std::shared_ptr<WormStateG>& worm);
+
+    void viewProjectile(const std::shared_ptr<ProjectileStateG>& proj);
 
 public:
     /*

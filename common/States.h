@@ -120,7 +120,7 @@ public:
     const bool is_jumping;
     const bool is_backflipping;
     const bool facing_right;
-    const bool was_hit;
+    const bool falling;
 
     const float aim_inclination_degrees;
     const bool charging_weapon;
@@ -132,7 +132,7 @@ public:
     explicit WormStateG(const uint8_t& id, const float& x, const float& y,
                         const WeaponsAndTools& equipped_weapon, bool on_turn_time,
                         const bool& is_walking, const bool& is_jumping, const bool& is_backflipping,
-                        const bool& facing_right, const bool& was_hit,
+                        const bool& facing_right, const bool& falling,
                         const float& aim_inclination_degrees, const bool& charging_weapon,
                         const float& life, const bool& drown, const bool& using_tool);
 

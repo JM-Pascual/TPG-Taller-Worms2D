@@ -135,7 +135,7 @@ void ServerSide::Protocol::sendWormState(const std::shared_ptr<States>& state) {
     send(&p->is_jumping, sizeof(bool));
     send(&p->is_backflipping, sizeof(bool));
     send(&p->facing_right, sizeof(bool));
-    send(&p->was_hit, sizeof(bool));
+    send(&p->falling, sizeof(bool));
     this->sendFloat(p->aim_inclination_degrees);
     send(&p->charging_weapon, sizeof(bool));
     this->sendFloat(p->life);
