@@ -12,6 +12,7 @@
 #include "../common/thread.h"
 
 #include "ActorHolder.h"
+#include "TerrainHolder.h"
 #include "GameActor.h"
 #include "LevelActors.h"
 #include "TexturesPool.h"
@@ -49,7 +50,7 @@ private:
     std::unique_ptr<CheatMenu>& cheat_menu;
 
     /// Holders for actors in the game
-    std::list<std::unique_ptr<LevelActor>> terrain_elements;
+    TerrainHolder terrain_elements;
     ActorHolder players;
     ActorHolder proyectiles;
     ActorHolder crates;
@@ -82,7 +83,7 @@ public:
     */
     void run() override;
 
-    ~EventLoop();
+    ~EventLoop() override;
 
     friend class MainWindow;
     friend class GameFrame;

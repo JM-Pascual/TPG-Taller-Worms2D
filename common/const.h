@@ -79,7 +79,16 @@ enum class Actions {
 
 };
 
-enum class TerrainActors { GRADIENT, BAR, LONG_BAR, BACKGROUND, WATER, CRATE, CRATE_FALLING };
+enum class TerrainActors {
+    GRADIENT,
+    BAR,
+    LONG_BAR,
+    BACKGROUND,
+    WATER,
+    AIR_JET,
+    CRATE,
+    CRATE_FALLING
+};
 
 enum class TerrainInclinations {
     HORIZONTAL,
@@ -98,7 +107,8 @@ enum class Projectiles {
     HOLY_GRENADE_PROYECTILE,
     MORTAR_PROYECTILE,
     MORTAR_FRAGMENT,
-    RED_GRENADE_PROYECTILE
+    RED_GRENADE_PROYECTILE,
+    AIR_STRIKE_PROYECTILE
 };
 
 enum class Tombstones {
@@ -108,6 +118,12 @@ enum class Tombstones {
     TOMBSTONE_4,
     TOMBSTONE_5,
     TOMBSTONE_6
+};
+
+enum class ToolUsage{
+    AIR_STRIKE_CALL,
+    TELEPORT_USE,
+    BASEBALL_SWING
 };
 
 enum class Effects { NORMAL_EXPLOSION, FRAGMENT_EXPLOSION, CRATE_HEAL, CRATE_AMMO };

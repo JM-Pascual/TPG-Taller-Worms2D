@@ -1,6 +1,6 @@
-#include "WeaponAnimation.h"
+#include "WeaponAnimationHolder.h"
 
-void WeaponAnimation::load_all_draw_animations(TexturesPool& pool) {
+void WeaponAnimationHolder::load_all_draw_animations(TexturesPool& pool) {
     weapon_draw_animations.insert({
             WeaponsAndTools::BAZOOKA, std::make_unique<Animation>(
                                               pool.get_draw_texture(WeaponsDraw::WORM_DRAW_BAZOOKA)
@@ -37,34 +37,52 @@ void WeaponAnimation::load_all_draw_animations(TexturesPool& pool) {
                                                             , 10, 2, false)});
 
     weapon_draw_animations.insert({
+            WeaponsAndTools::HOLY_GRENADE, std::make_unique<Animation>(
+                                             pool.get_draw_texture(
+                                                     WeaponsDraw::WORM_DRAW_HOLY_GRENADE)
+                                                     , 10, 2, false)});
+
+    weapon_draw_animations.insert({
+            WeaponsAndTools::BASEBALL_BAT, std::make_unique<Animation>(
+                                                 pool.get_draw_texture(
+                                                         WeaponsDraw::WORM_DRAW_BASEBALL_BAT)
+                                                         , 10, 2, false)});
+
+    weapon_draw_animations.insert({
             WeaponsAndTools::AIR_STRIKE, std::make_unique<Animation>(
                                              pool.get_draw_texture(
                                                      WeaponsDraw::WORM_DRAW_AIR_STRIKE)
                                                      , 10, 2, false)});
+
+    weapon_draw_animations.insert({
+            WeaponsAndTools::TELEPORT, std::make_unique<Animation>(
+                                                 pool.get_draw_texture(
+                                                         WeaponsDraw::WORM_DRAW_TELEPORT)
+                                                         , 10, 2, false)});
 }
 
-WeaponAnimation::WeaponAnimation(TexturesPool& pool) :
+WeaponAnimationHolder::WeaponAnimationHolder(TexturesPool& pool) :
         current_weapon(WeaponsAndTools::BAZOOKA),
         aim_animations(pool), weapon_drawn_frames_counter(0) {
     this->load_all_draw_animations(pool);
 }
 
-void WeaponAnimation::update_weapon(WeaponsAndTools equipped_weapon) {
-    current_weapon = equipped_weapon;
-}
-
-void WeaponAnimation::update(float new_inclination_degrees, bool charging_power,
+void WeaponAnimationHolder::update(float new_inclination_degrees, bool charging_power,
                              WeaponsAndTools equipped_weapon, bool weapon_currently_stored) {
     if (weapon_currently_stored){
         weapon_drawn_frames_counter = 0;
     }
-    update_weapon(equipped_weapon);
+    current_weapon = equipped_weapon;
     weapon_draw_animations[current_weapon]->update(weapon_currently_stored);
     aim_animations.update(new_inclination_degrees, charging_power);
 }
 
-void WeaponAnimation::render(SDL2pp::Renderer& renderer, SDL2pp::Rect dest,
+void WeaponAnimationHolder::render(SDL2pp::Renderer& renderer, SDL2pp::Rect dest,
                                  SDL_RendererFlip flipType, double angle) {
+
+    if (current_weapon == WeaponsAndTools::BASEBALL_BAT){
+        dest.SetW(48);
+    }
 
     if (weapon_drawn_frames_counter < 14 /* 7*2 */){
         weapon_draw_animations[current_weapon]->render(renderer, dest, 0, 0, flipType);

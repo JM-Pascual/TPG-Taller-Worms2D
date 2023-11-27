@@ -11,7 +11,8 @@
 
 #include "Animation.h"
 #include "TexturesPool.h"
-#include "WeaponAnimation.h"
+#include "ToolAnimationHolder.h"
+#include "WeaponAnimationHolder.h"
 #include "camera.h"
 #include "death_animation.h"
 #include "text_printer.h"
@@ -44,6 +45,7 @@ private:
     bool is_backflipping;
     bool facing_right;
     bool falling;
+    bool using_tool;
     float life_points_remaining;
 
     float aim_inclination_degrees;
@@ -51,9 +53,12 @@ private:
     Animation walking;
     Animation jumping;
     Animation backflipping;
+
     DeathAnimation dead;
 
-    WeaponAnimation weapon_animation;
+    WeaponAnimationHolder weapon_animations;
+
+    ToolAnimationHolder tool_usage_animations;
 
 public:
     explicit Worm(std::shared_ptr<WormStateG>& initial_state, TexturesPool& pool, Camera& camera):
@@ -65,6 +70,7 @@ public:
             is_backflipping(initial_state->is_backflipping),
             facing_right(initial_state->facing_right),
             falling(initial_state->falling),
+            using_tool(initial_state->using_tool),
             life_points_remaining(initial_state->life),
             aim_inclination_degrees(initial_state->aim_inclination_degrees),
 
@@ -72,7 +78,8 @@ public:
             jumping(pool.get_actor_texture(Actors::JUMPING_WORM), 5, 5, false),
             backflipping(pool.get_actor_texture(Actors::BACKFLIP_WORM), 22, 1, false),
             dead(pool, 0),
-            weapon_animation(pool) {}
+            weapon_animations(pool),
+            tool_usage_animations(pool) {}
 
     inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<WormStateG>(actor_state);
@@ -84,6 +91,7 @@ public:
         is_backflipping = state->is_backflipping;
         facing_right = state->facing_right;
         falling = state->falling;
+        using_tool = state->using_tool;
         aim_inclination_degrees = state->aim_inclination_degrees;
         life_points_remaining = state->life;
 
@@ -93,8 +101,10 @@ public:
         dead.update((life_points_remaining > 0));
 
         bool charging_weapon = state->charging_weapon;
-        weapon_animation.update(aim_inclination_degrees, charging_weapon, equipped_weapon,
-                                (is_walking || is_jumping || is_backflipping));
+
+        weapon_animations.update(aim_inclination_degrees, charging_weapon, equipped_weapon,
+                                 (is_walking || is_jumping || is_backflipping));
+        tool_usage_animations.update(state);
     }
 
     inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
@@ -116,9 +126,12 @@ public:
             } else if (is_walking) {
                 walking.render((*game_renderer), render_rect, 0, 0,
                                facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+            } else if (tool_usage_animations.currently_animating_tool()) {
+                tool_usage_animations.render((*game_renderer), camera, 0, 0,
+                                             facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
             } else {
-                weapon_animation.render((*game_renderer), render_rect,
-                                        facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+                weapon_animations.render((*game_renderer), render_rect,
+                                         facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
             }
         } else {
             walking.render((*game_renderer), render_rect, 0, 0,
@@ -387,6 +400,45 @@ public:
                             TextPrinter& state_printer) override {}
 };
 
+// ----------------------- HOLY GRENADE ----------------------
+
+class HolyGrenadeProjectile: public Projectile {
+private:
+    Animation on_air;
+    Animation impact;
+
+    float current_angle;
+
+public:
+    explicit HolyGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
+                                   TexturesPool& pool, Camera& camera):
+            Projectile(initial_state, pool, camera),
+            on_air(pool.get_projectile_texture(Projectiles::HOLY_GRENADE_PROYECTILE), 1, 1),
+            impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
+            current_angle(0) {}
+
+    inline void update(std::shared_ptr<States>& actor_state) override {
+        auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
+        position = state->pos;
+        impacted = state->impacted;
+        current_angle = state->angle;
+        impact.update(!impacted);
+    }
+
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        if (impacted) {
+            impact.render((*game_renderer), rect);
+        } else {
+            on_air.render((*game_renderer), rect, 0, 0, SDL_FLIP_NONE,
+                          (-1 * (current_angle * 180) / M_PI));
+        }
+    }
+
+    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                            TextPrinter& state_printer) override {}
+};
+
 // ----------------------- DYNAMITE ----------------------
 
 class DynamiteProjectile: public Projectile {
@@ -420,6 +472,171 @@ public:
 
     inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
                             TextPrinter& state_printer) override {}
+};
+
+// ----------------------- AIR STRIKE ----------------------
+
+class AirStrikeProjectile: public Projectile {
+private:
+    Animation on_air;
+    Animation impact;
+
+    float current_angle;
+
+public:
+    explicit AirStrikeProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
+                                 TexturesPool& pool, Camera& camera):
+            Projectile(initial_state, pool, camera),
+            on_air(pool.get_projectile_texture(Projectiles::AIR_STRIKE_PROYECTILE), 1, 1),
+            impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
+            current_angle(0) {}
+
+    inline void update(std::shared_ptr<States>& actor_state) override {
+        auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
+        position = state->pos;
+        impacted = state->impacted;
+        current_angle = state->angle;
+        impact.update(!impacted);
+    }
+
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        if (impacted) {
+            impact.render((*game_renderer), rect);
+        } else {
+            on_air.render((*game_renderer), rect, 0, 0, SDL_FLIP_NONE,
+                          (-1 * (current_angle * 180) / M_PI));
+        }
+    }
+
+    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                            TextPrinter& state_printer) override {}
+};
+
+// ----------------------- CRATE INTERFACE ----------------------
+
+class Crate: public GameActor {
+protected:
+    Animation falling;
+    Animation on_floor;
+
+    bool still_falling;
+    bool was_opened;
+
+public:
+    explicit Crate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool, Camera& camera):
+            GameActor(initial_state->pos.x, initial_state->pos.y, camera),
+            falling(pool.get_level_texture(TerrainActors::CRATE_FALLING), 27, 2, true),
+            on_floor(pool.get_level_texture(TerrainActors::CRATE), 15, 1, false),
+            still_falling(true),
+            was_opened(false) {}
+
+    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                            TextPrinter& state_printer) override {}
+};
+
+// ----------------------- TRAP CRATE ----------------------
+
+class TrapCrate: public Crate {
+private:
+    Animation opening;
+
+public:
+    explicit TrapCrate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool,
+                       Camera& camera):
+            Crate(initial_state, pool, camera),
+            opening(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false) {}
+
+    inline void update(std::shared_ptr<States>& actor_state) override {
+        auto state = std::dynamic_pointer_cast<CrateState>(actor_state);
+        position = state->pos;
+        still_falling = state->falling;
+        was_opened = state->was_opened;
+        falling.update(!still_falling);
+        on_floor.update(still_falling);
+        opening.update(!was_opened);
+    }
+
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        if (still_falling) {
+            SDL2pp::Rect rect_falling = camera.calcRect(position.x, position.y, 70, 74);
+            falling.render((*game_renderer), rect_falling, 0, 0, SDL_FLIP_NONE);
+        } else if (was_opened) {
+            SDL2pp::Rect rect_floor = camera.calcRect(position.x, position.y, 60, 60);
+            opening.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
+        } else {
+            SDL2pp::Rect rect_floor = camera.calcRect(position.x, position.y, 60, 60);
+            on_floor.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
+        }
+    }
+};
+
+class HealCrate: public Crate {
+private:
+    Animation opening;
+
+public:
+    explicit HealCrate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool,
+                       Camera& camera):
+            Crate(initial_state, pool, camera),
+            opening(pool.get_effect_texture(Effects::CRATE_HEAL), 13, 2, false) {}
+
+    inline void update(std::shared_ptr<States>& actor_state) override {
+        auto state = std::dynamic_pointer_cast<CrateState>(actor_state);
+        position = state->pos;
+        still_falling = state->falling;
+        was_opened = state->was_opened;
+        falling.update(!still_falling);
+        on_floor.update(still_falling);
+        opening.update(!was_opened);
+    }
+
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        if (still_falling) {
+            SDL2pp::Rect rect_falling = camera.calcRect(position.x, position.y, 70, 74);
+            falling.render((*game_renderer), rect_falling, 0, 0, SDL_FLIP_NONE);
+        } else if (was_opened) {
+            SDL2pp::Rect rect_floor = camera.calcRect(position.x, (position.y - 30), 60, 60);
+            opening.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
+        } else {
+            SDL2pp::Rect rect_floor = camera.calcRect(position.x, position.y, 60, 60);
+            on_floor.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
+        }
+    }
+};
+
+class AmmoCrate: public Crate {
+private:
+    Animation opening;
+
+public:
+    explicit AmmoCrate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool,
+                       Camera& camera):
+            Crate(initial_state, pool, camera),
+            opening(pool.get_effect_texture(Effects::CRATE_AMMO), 21, 2, false) {}
+
+    inline void update(std::shared_ptr<States>& actor_state) override {
+        auto state = std::dynamic_pointer_cast<CrateState>(actor_state);
+        position = state->pos;
+        still_falling = state->falling;
+        was_opened = state->was_opened;
+        falling.update(!still_falling);
+        on_floor.update(still_falling);
+        opening.update(!was_opened);
+    }
+
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        if (still_falling) {
+            SDL2pp::Rect rect_falling = camera.calcRect(position.x, position.y, 70, 74);
+            falling.render((*game_renderer), rect_falling, 0, 0, SDL_FLIP_NONE);
+        } else if (was_opened) {
+            SDL2pp::Rect rect_floor = camera.calcRect(position.x, (position.y - 30), 60, 60);
+            opening.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
+        } else {
+            SDL2pp::Rect rect_floor = camera.calcRect(position.x, position.y, 60, 60);
+            on_floor.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
+        }
+    }
 };
 
 #endif  // GAMEACTOR_H

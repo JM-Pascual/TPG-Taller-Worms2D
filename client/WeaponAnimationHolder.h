@@ -8,7 +8,7 @@
 #include "AimAnimation.h"
 #include "TexturesPool.h"
 
-class WeaponAnimation {
+class WeaponAnimationHolder {
 private:
     /** Current weapon. */
     WeaponsAndTools current_weapon;
@@ -19,18 +19,15 @@ private:
     /** Indicates if the weapon was already animated thw draw. */
     unsigned int weapon_drawn_frames_counter;
 
-    void update_weapon(WeaponsAndTools equipped_weapon);
-
     void load_all_draw_animations(TexturesPool& pool);
 public:
-    explicit WeaponAnimation(TexturesPool& pool);
+    explicit WeaponAnimationHolder(TexturesPool& pool);
 
     void update(float new_inclination_degrees, bool charging_power,
                 WeaponsAndTools equipped_weapon, bool weapon_currently_stored);
 
     void render(SDL2pp::Renderer &renderer, SDL2pp::Rect dest,
-                SDL_RendererFlip flipType = SDL_FLIP_HORIZONTAL,
-                double angle = 0.0);
+                SDL_RendererFlip flipType = SDL_FLIP_HORIZONTAL, double angle = 0.0);
 };
 
 
