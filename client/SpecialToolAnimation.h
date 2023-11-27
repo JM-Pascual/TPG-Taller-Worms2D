@@ -24,19 +24,18 @@ protected:
     unsigned int currentFrame;
     /** Delay between frames. */
     unsigned int delay;
-    /** Whether the animation should loop or not. */
-    bool loop_animation;
     /** Counter for the animation. */
     unsigned int counter;
-    /** Bool that defines if a game state activated the tool. */
-    bool activated;
+    /** Bool that defines if a game state currently_animating_tool the tool. */
+    bool currently_animating_tool;
 public:
     SpecialToolAnimation(std::shared_ptr<SDL2pp::Texture> &texture,
                          unsigned int frames_in_texture, unsigned int delay_in_animation,
                          bool loop) : texture(texture), numFrames(frames_in_texture),
             size(this->texture->GetHeight() / numFrames),
-            currentFrame(0), delay(delay_in_animation), loop_animation(loop),
-            counter(0), activated(false) {
+            currentFrame(0), delay(delay_in_animation),
+            counter(0),
+            currently_animating_tool(false) {
         assert(this->numFrames > 0);
         assert(this->size > 0);
     }
@@ -46,6 +45,9 @@ public:
     virtual void render(SDL2pp::Renderer& renderer, Camera& camera, int non_squared_width,
                         int non_squared_height, SDL_RendererFlip flipType, double angle) = 0;
 
+    bool animation_ongoing(){
+        return currently_animating_tool;
+    }
 
 };
 
@@ -60,23 +62,23 @@ public:
             initial_position(0,0), teleport_position(0,0){}
 
     void update_tool_animation(std::shared_ptr<WormStateG> &worm_state) override {
-        if (!activated && worm_state->using_tool){
-            activated = true;
+        if (!currently_animating_tool && worm_state->using_tool){
+            currently_animating_tool = true;
             teleport_position = worm_state->pos;
-        } else if (!activated){
+        } else if (!currently_animating_tool){
             initial_position = worm_state->pos;
             this->currentFrame = 0;
         } else {
             counter++;
+            teleport_position = worm_state->pos;
             if (counter < delay) {
                 return;
             } else {
                 if (currentFrame < numFrames-1) {
                     this->currentFrame++;
-                } else if (loop_animation) {
-                    this->currentFrame = 0;
                 } else {
-                    return; //Stuck in the last frame
+                    currently_animating_tool = false;
+                    return; //Last frame, end of animation
                 }
                 counter = 0;
             }
