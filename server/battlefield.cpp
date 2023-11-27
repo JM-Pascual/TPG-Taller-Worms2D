@@ -51,6 +51,7 @@ void Battlefield::step() {
     engine.clean_dead_entities();
     engine.step();
     post_action_explosion();
+    update_drown_projectiles();
 }
 
 void Battlefield::newWindForce(const bool& no_wind_cheat_activated) {
@@ -82,4 +83,10 @@ const void Battlefield::clearOpenedCrates() {
     crates.erase(std::remove_if(crates.begin(), crates.end(),
                                 [](auto& crate) { return crate->wasOpened(); }),
                  crates.end());
+}
+
+void Battlefield::update_drown_projectiles() {
+    for (auto& projectile: projectiles) {
+        projectile.second->drowning();
+    }
 }

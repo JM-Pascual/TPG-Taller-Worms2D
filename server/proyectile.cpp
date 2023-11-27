@@ -92,7 +92,16 @@ void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 app
     entity->recibe_life_modification(-damage);
 }
 
+void Projectile::drowning() {
+    if(body->GetPosition().y <= 4){
+        if (body->GetPosition().x < 0 || body->GetPosition().x > 60) {
+            dead = true;
 
+        } else {
+            body->SetLinearVelocity( 0.7f * body->GetLinearVelocity());
+        }
+    }
+}
 //~~~~~~~~~~~~~~~~~~~ Rocket ~~~~~~~~~~~~~~~~~~~~
 
 Rocket::Rocket(Battlefield& battlefield, b2Vec2 position,int blast_radius, int epicenter_damage, WeaponsAndTools type):
