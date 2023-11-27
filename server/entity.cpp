@@ -2,23 +2,12 @@
 
 #include "battlefield.h"
 
-Entity::Entity(Battlefield& battlefield):
-        dead(false), body(nullptr), battlefield(battlefield), collided(false) {}
-
-void Entity::start_contact() {}
-
-void Entity::end_contact() {}
-
-bool Entity::multiple_contact() {
-    if (not collided) {
-        collided = true;
-        return false;
-    }
-    return collided;
-}
+Entity::Entity(Battlefield& battlefield): dead(false), body(nullptr), battlefield(battlefield) {}
 
 void Entity::stop_falling() {}
+
 void Entity::start_falling() {}
+
 void Entity::recibe_life_modification(const float& life_variation) {}
 
 bool Entity::is_dead() { return dead; }
@@ -26,3 +15,5 @@ bool Entity::is_dead() { return dead; }
 void Entity::apply_explosion(b2Vec2 final_impulse) {
     body->ApplyLinearImpulseToCenter(final_impulse, true);
 }
+
+Entity::~Entity() { battlefield.destroy_body(body); }

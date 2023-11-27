@@ -60,7 +60,6 @@ void BroadCaster::remove_closed_clients(uint8_t& ready_count,
                 continue;
             }
 
-            players.at(id)->destroyAllWormBodies();
             players.erase(id);
 
             ready_count--;

@@ -18,7 +18,7 @@ protected:
     Camera& camera;
 
 public:
-    LevelActor(float x, float y, Camera& camera): position(x, y), camera(camera) {}
+    explicit LevelActor(float x, float y, Camera& camera): position(x, y), camera(camera) {}
     virtual void render(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) = 0;
     virtual void update() = 0;
     virtual ~LevelActor() = default;
@@ -33,17 +33,18 @@ private:
     float inclination;
 
 public:
-    ShortBar(float x, float y, float inclination_degrees, TexturesPool& pool, Camera& camera):
+    explicit ShortBar(float x, float y, float inclination_degrees, TexturesPool& pool,
+                      Camera& camera):
             LevelActor(x, y, camera),
             texture(pool.get_level_texture(TerrainActors::BAR)),
             inclination(inclination_degrees) {}
 
-    void render(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+    inline void render(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 70, 20);
         game_renderer->Copy((*texture), SDL2pp::NullOpt, render_rect, inclination);
     }
 
-    void update() override {}
+    inline void update() override {}
 };
 
 // ----------------------- LONG BAR ----------------------
@@ -54,17 +55,18 @@ private:
     float inclination;
 
 public:
-    LongBar(float x, float y, float inclination_degrees, TexturesPool& pool, Camera& camera):
+    explicit LongBar(float x, float y, float inclination_degrees, TexturesPool& pool,
+                     Camera& camera):
             LevelActor(x, y, camera),
             texture(pool.get_level_texture(TerrainActors::LONG_BAR)),
             inclination(inclination_degrees) {}
 
-    void render(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+    inline void render(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 140, 20);
         game_renderer->Copy((*texture), SDL2pp::NullOpt, render_rect, inclination);
     }
 
-    void update() override {}
+    inline void update() override {}
 };
 
 // ----------------------- WATER ----------------------
@@ -74,13 +76,13 @@ private:
     Animation waves_animation;
 
 public:
-    Water(float x, float y, TexturesPool& pool, Camera& camera):
+    explicit Water(float x, float y, TexturesPool& pool, Camera& camera):
             LevelActor(x, y, camera),
             waves_animation(Animation(pool.get_level_texture(TerrainActors::WATER), 11, 3)) {}
 
-    void update() override { waves_animation.update(); }
+    inline void update() override { waves_animation.update(); }
 
-    void render(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+    inline void render(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         waves_animation.render((*game_renderer), camera.calcRect(0, 600, 1280, 40), 1240, 0);
     }
 };
@@ -96,15 +98,15 @@ protected:
     bool was_opened;
 
 public:
-    Crate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool, Camera& camera):
+    explicit Crate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool, Camera& camera):
             GameActor(initial_state->pos.x, initial_state->pos.y, camera),
             falling(pool.get_level_texture(TerrainActors::CRATE_FALLING), 27, 2, true),
             on_floor(pool.get_level_texture(TerrainActors::CRATE), 15, 1, false),
             still_falling(true),
             was_opened(false) {}
 
-    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                     TextPrinter& state_printer) override {}
+    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                            TextPrinter& state_printer) override {}
 };
 
 // ----------------------- TRAP CRATE ----------------------
@@ -114,11 +116,12 @@ private:
     Animation opening;
 
 public:
-    TrapCrate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool, Camera& camera):
+    explicit TrapCrate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool,
+                       Camera& camera):
             Crate(initial_state, pool, camera),
             opening(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false) {}
 
-    void update(std::shared_ptr<States>& actor_state) override {
+    inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<CrateState>(actor_state);
         position = state->pos;
         still_falling = state->falling;
@@ -128,7 +131,7 @@ public:
         opening.update(!was_opened);
     }
 
-    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         if (still_falling) {
             SDL2pp::Rect rect_falling = camera.calcRect(position.x, position.y, 70, 74);
             falling.render((*game_renderer), rect_falling, 0, 0, SDL_FLIP_NONE);
@@ -147,11 +150,12 @@ private:
     Animation opening;
 
 public:
-    HealCrate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool, Camera& camera):
+    explicit HealCrate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool,
+                       Camera& camera):
             Crate(initial_state, pool, camera),
             opening(pool.get_effect_texture(Effects::CRATE_HEAL), 13, 2, false) {}
 
-    void update(std::shared_ptr<States>& actor_state) override {
+    inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<CrateState>(actor_state);
         position = state->pos;
         still_falling = state->falling;
@@ -161,7 +165,7 @@ public:
         opening.update(!was_opened);
     }
 
-    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         if (still_falling) {
             SDL2pp::Rect rect_falling = camera.calcRect(position.x, position.y, 70, 74);
             falling.render((*game_renderer), rect_falling, 0, 0, SDL_FLIP_NONE);
@@ -180,11 +184,12 @@ private:
     Animation opening;
 
 public:
-    AmmoCrate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool, Camera& camera):
+    explicit AmmoCrate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool,
+                       Camera& camera):
             Crate(initial_state, pool, camera),
             opening(pool.get_effect_texture(Effects::CRATE_AMMO), 21, 2, false) {}
 
-    void update(std::shared_ptr<States>& actor_state) override {
+    inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<CrateState>(actor_state);
         position = state->pos;
         still_falling = state->falling;
@@ -194,7 +199,7 @@ public:
         opening.update(!was_opened);
     }
 
-    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         if (still_falling) {
             SDL2pp::Rect rect_falling = camera.calcRect(position.x, position.y, 70, 74);
             falling.render((*game_renderer), rect_falling, 0, 0, SDL_FLIP_NONE);

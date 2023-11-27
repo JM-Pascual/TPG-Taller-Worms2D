@@ -37,8 +37,6 @@ private:
 public:
     Player();
 
-    void destroyAllWormBodies();
-
     uint8_t calcAvgLife();
 
     void set_ready();

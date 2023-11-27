@@ -9,7 +9,7 @@ Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radi
         blast_radius(blast_radius),
         epicenter_damage(epicenter_damage),
         explosion_delay(explosion_delay),
-        grenade_timer(std::chrono::steady_clock::now()){
+        grenade_timer(std::chrono::steady_clock::now()) {
 
     b2BodyDef projectile_body;
     projectile_body.type = b2_dynamicBody;
@@ -26,7 +26,7 @@ Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radi
     fixtureDef.density = 1.0f;
     fixtureDef.restitution = 0.2f;
 
-    fixtureDef.filter.groupIndex = -1; // Para que no colisione con los demás proyectiles
+    fixtureDef.filter.groupIndex = -1;  // Para que no colisione con los demás proyectiles
 
     body->CreateFixture(&fixtureDef);
 }
@@ -71,18 +71,18 @@ void Projectile::collide() {
 void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 applyPoint,
                                    float blastPower) {
 
-    //float radio1  = body->GetFixtureList()->GetShape()->m_radius;
-    //float radio2  = body_->GetFixtureList()->GetShape()->m_radius;
-    //float dist  = radio1 + radio2;
+    // float radio1  = body->GetFixtureList()->GetShape()->m_radius;
+    // float radio2  = body_->GetFixtureList()->GetShape()->m_radius;
+    // float dist  = radio1 + radio2;
 
     b2Vec2 blastDir = applyPoint - blastCenter;
     float distance = blastDir.Normalize();
 
-    //float impulseMag;
+    // float impulseMag;
 
-    //float invDistance = 1 / distance;
-    //impulseMag = blastPower * invDistance;
-    //D * (R - o) / R
+    // float invDistance = 1 / distance;
+    // impulseMag = blastPower * invDistance;
+    // D * (R - o) / R
     float damage = blastPower * (blast_radius - distance) / blast_radius;
 
     Entity* entity = reinterpret_cast<Entity*>(body_->GetUserData().pointer);
@@ -95,8 +95,9 @@ void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 app
 
 //~~~~~~~~~~~~~~~~~~~ Rocket ~~~~~~~~~~~~~~~~~~~~
 
-Rocket::Rocket(Battlefield& battlefield, b2Vec2 position,int blast_radius, int epicenter_damage, WeaponsAndTools type):
-        Projectile(battlefield, position, blast_radius, epicenter_damage,type, ROCKET_DELAY) {}
+Rocket::Rocket(Battlefield& battlefield, b2Vec2 position, int blast_radius, int epicenter_damage,
+               WeaponsAndTools type):
+        Projectile(battlefield, position, blast_radius, epicenter_damage, type, ROCKET_DELAY) {}
 
 void Rocket::collision_reaction() {
     if (not dead) {
@@ -109,9 +110,7 @@ void Rocket::applyWindResistance(const float& wind_force) {
     this->body->ApplyForce(b2Vec2(wind_force, 0), this->body->GetWorldCenter(), true);
 }
 
-void Rocket::apply_explosion(b2Vec2 final_impulse) {
-    Entity::apply_explosion(b2Vec2(0,0));
-}
+void Rocket::apply_explosion(b2Vec2 final_impulse) { Entity::apply_explosion(b2Vec2(0, 0)); }
 
 void Rocket::updateTimer() {
     if (dead) {
@@ -122,7 +121,7 @@ void Rocket::updateTimer() {
             std::chrono::steady_clock::now() - grenade_timer;
     grenade_timer = std::chrono::steady_clock::now();
     explosion_delay -= elapsed_seconds.count();
-    if ( !dead && explosion_delay <= 0) {
+    if (explosion_delay <= 0) {
         collide();
         dead = true;
     }
@@ -130,29 +129,34 @@ void Rocket::updateTimer() {
 
 //~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
 
-BazookaRocket::BazookaRocket(Battlefield &battlefield, b2Vec2 position) : Rocket(battlefield, position, BLAST_RADIUS_BAZOOKA, EPICENTER_DAMAGE_BAZOOKA,WeaponsAndTools::BAZOOKA) {}
+BazookaRocket::BazookaRocket(Battlefield& battlefield, b2Vec2 position):
+        Rocket(battlefield, position, BLAST_RADIUS_BAZOOKA, EPICENTER_DAMAGE_BAZOOKA,
+               WeaponsAndTools::BAZOOKA) {}
 
 
 //~~~~~~~~~~~~~~~~~~~ Mortar ~~~~~~~~~~~~~~~~~~~~
 
-MortarRocket::MortarRocket(Battlefield &battlefield, b2Vec2 position) : Rocket(battlefield, position, BLAST_RADIUS_MORTAR, EPICENTER_DAMAGE_MORTAR, WeaponsAndTools::MORTAR
-), fragments(FRAGMENT_POWER) {}
+MortarRocket::MortarRocket(Battlefield& battlefield, b2Vec2 position):
+        Rocket(battlefield, position, BLAST_RADIUS_MORTAR, EPICENTER_DAMAGE_MORTAR,
+               WeaponsAndTools::MORTAR),
+        fragments(FRAGMENT_POWER) {}
 
 void MortarRocket::second_collision_reaction() {
-    if(not collided){
+    if (not dead) {
         return;
     }
+
     for (int i = 0; i < fragments; i++) {
 
         float angle = (i / (float)fragments) * 360 * DEGTORAD;
-        b2Vec2 rayDir( sinf(angle), cosf(angle) );
+        b2Vec2 rayDir(sinf(angle), cosf(angle));
 
         b2Vec2 position;
         position.x = body->GetPosition().x;
         position.y = body->GetPosition().y + 1.0f;
 
         std::shared_ptr<Projectile> projectile =
-                std::make_shared<MortarFragment>(battlefield, position,rayDir);
+                std::make_shared<MortarFragment>(battlefield, position, rayDir);
         battlefield.add_projectile(projectile);
     }
 }
@@ -160,18 +164,18 @@ void MortarRocket::second_collision_reaction() {
 
 //~~~~~~~~~~~~~~~~~~~ MortarFragment ~~~~~~~~~~~~~~~~~~~~
 
-MortarFragment::MortarFragment(Battlefield &battlefield, b2Vec2 position, b2Vec2 direction) :
+MortarFragment::MortarFragment(Battlefield& battlefield, b2Vec2 position, b2Vec2 direction):
         Rocket(battlefield, position, BLAST_RADIUS_MORTAR_FRAGMENT,
                EPICENTER_DAMAGE_MORTAR_FRAGMENT, WeaponsAndTools::MORTAR_FRAGMENT) {
 
-    body->ApplyLinearImpulseToCenter(direction,true);
+    body->ApplyLinearImpulseToCenter(direction, true);
 }
 
 //~~~~~~~~~~~~~~~~~~~ AirStrikeRocket ~~~~~~~~~~~~~~~~~~~~
 
-AirStrikeRocket::AirStrikeRocket(Battlefield &battlefield, b2Vec2 position) :
-        Rocket(battlefield, position, BLAST_RADIUS_AIR_STRIKE,
-               EPICENTER_DAMAGE_AIR_STRIKE, WeaponsAndTools::AIR_STRIKE) {
+AirStrikeRocket::AirStrikeRocket(Battlefield& battlefield, b2Vec2 position):
+        Rocket(battlefield, position, BLAST_RADIUS_AIR_STRIKE, EPICENTER_DAMAGE_AIR_STRIKE,
+               WeaponsAndTools::AIR_STRIKE) {
 
     body->GetFixtureList()->SetDensity(40.0f);
 }
@@ -180,7 +184,7 @@ AirStrikeRocket::AirStrikeRocket(Battlefield &battlefield, b2Vec2 position) :
 
 Grenade::Grenade(Battlefield& battlefield, b2Vec2 position, float explosion_delay,
                  uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type):
-        Projectile(battlefield, position, blast_radius, epicenter_damage, type, explosion_delay){}
+        Projectile(battlefield, position, blast_radius, epicenter_damage, type, explosion_delay) {}
 
 void Grenade::collision_reaction() {}
 
@@ -206,25 +210,26 @@ Green::Green(Battlefield& battlefield, b2Vec2 position, float explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_GREEN_GRENADE,
                 EPICENTER_DAMAGE_GREEN_GRENADE, WeaponsAndTools::GREEN_GRENADE) {}
 
-Red::Red(Battlefield &battlefield, b2Vec2 position, float explosion_delay):
+Red::Red(Battlefield& battlefield, b2Vec2 position, float explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_RED_GRENADE,
-                EPICENTER_DAMAGE_RED_GRENADE, WeaponsAndTools::RED_GRENADE), fragments(FRAGMENTS_AMOUNT) {}
+                EPICENTER_DAMAGE_RED_GRENADE, WeaponsAndTools::RED_GRENADE),
+        fragments(FRAGMENTS_AMOUNT) {}
 
 void Red::second_collision_reaction() {
-    if(not dead){
+    if (not dead) {
         return;
     }
     for (int i = 0; i < fragments; i++) {
 
         float angle = (i / (float)fragments) * 360 * DEGTORAD;
-        b2Vec2 rayDir( sinf(angle), cosf(angle) );
+        b2Vec2 rayDir(sinf(angle), cosf(angle));
 
         b2Vec2 position;
         position.x = body->GetPosition().x;
         position.y = body->GetPosition().y + 1.0f;
 
         std::shared_ptr<Projectile> projectile =
-                std::make_shared<MortarFragment>(battlefield, position,rayDir);
+                std::make_shared<MortarFragment>(battlefield, position, rayDir);
         battlefield.add_projectile(projectile);
     }
 }
@@ -240,6 +245,6 @@ Dynamite::Dynamite(Battlefield& battlefield, b2Vec2 position, float explosion_de
                 EPICENTER_DAMAGE_DYNAMITE, WeaponsAndTools::DYNAMITE) {}
 
 
-Holy::Holy(Battlefield &battlefield, b2Vec2 position, float explosion_delay):
+Holy::Holy(Battlefield& battlefield, b2Vec2 position, float explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_HOLY_GRENADE,
                 EPICENTER_DAMAGE_HOLY_GRENADE, WeaponsAndTools::HOLY_GRENADE) {}

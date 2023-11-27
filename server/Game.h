@@ -59,8 +59,8 @@ private:
     void spawnWorms();
 
 public:
-    Game(std::string desc, const std::string& map, const uint8_t& game_id,
-         Queue<uint8_t>& erase_id_queue):
+    explicit inline Game(std::string desc, const std::string& map, const uint8_t& game_id,
+                         Queue<uint8_t>& erase_id_queue):
             ready_count(0),
             worm_counter(0),
             description(std::move(desc)),

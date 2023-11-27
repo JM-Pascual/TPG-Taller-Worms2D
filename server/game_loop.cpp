@@ -30,9 +30,7 @@ void GameLoop::run() {
         game.worm_handler.check_drown_worms();
         game.broadcaster.broadcastGame(turn_id.player_id);
         game.worm_handler.checkDeadWorms();
-        game.battlefield.destroy_dead_entities();
-        game.battlefield.clearOpenedCrates();
-        game.battlefield.remove_collided_projectiles();
+        game.battlefield.remove_dead_objects();
 
         game.battlefield.step();
         game.worm_handler.update_physics();

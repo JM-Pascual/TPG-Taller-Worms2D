@@ -45,8 +45,6 @@ public:
     void add_query_AABB(b2QueryCallback* callback, const b2AABB& aabb);
     void step();
     void destroy_body(b2Body* bodyDef);
-    void destroy_dead_entities();
-    void clean_dead_entities();
 
     void newWindForce(const bool& no_wind_cheat_activated);
 

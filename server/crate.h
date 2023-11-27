@@ -12,7 +12,7 @@ class Battlefield;
 
 class Crate: public Entity {
 private:
-    std::unique_ptr<CrateType> type;
+    std::shared_ptr<CrateType> type;
     _CrateType_ _type;
     bool falling;
     bool was_opened;
@@ -26,7 +26,7 @@ public:
 
     void stop_falling() override;
 
-    void applyWindResistance(const float& wind_force) override {}
+    inline void applyWindResistance(const float& wind_force) override {}
 
     const bool wasOpened();
 

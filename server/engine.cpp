@@ -10,10 +10,7 @@ Engine::Engine():
     random_distribution = std::uniform_real_distribution<float>(MIN_WIND, MAX_WIND);
 }
 
-void Engine::create_battlefield() {
-
-    world->SetContactListener(listener);
-}
+void Engine::create_battlefield() { world->SetContactListener(listener); }
 
 b2Body* Engine::add_body(b2BodyDef& bodyDef) { return world->CreateBody(&bodyDef); }
 
@@ -25,16 +22,6 @@ void Engine::step() {
 }
 
 void Engine::destroy_body(b2Body* body) { world->DestroyBody(body); }
-
-void Engine::destroy_dead_entities() {
-    // Sin lock ya que el gameloop es el unico hilo que opera con dead_list
-
-    for (auto& entity: listener->dead_list) {
-        world->DestroyBody(entity->body);
-    }
-}
-
-void Engine::clean_dead_entities() { listener->dead_list.clear(); }
 
 void Engine::add_query_AABB(b2QueryCallback* callback, const b2AABB& aabb) {
     world->QueryAABB(callback, aabb);

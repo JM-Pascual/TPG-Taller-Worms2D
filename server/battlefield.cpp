@@ -48,7 +48,6 @@ void Battlefield::add_query_AABB(b2QueryCallback* callback, const b2AABB& aabb) 
 
 void Battlefield::step() {
     updateProjectilesTimer();
-    engine.clean_dead_entities();
     engine.step();
     post_action_explosion();
 }
@@ -61,7 +60,7 @@ void Battlefield::add_projectile(std::shared_ptr<Projectile>& proyectile) {
     projectiles.insert({projectile_count++, proyectile});
 }
 
-void Battlefield::remove_collided_projectiles() {
+void Battlefield::remove_dead_objects() {
     auto it = projectiles.cbegin();
     while (it != projectiles.cend()) {
         if (it->second->is_dead()) {
@@ -70,16 +69,12 @@ void Battlefield::remove_collided_projectiles() {
         }
         ++it;
     }
-}
 
-void Battlefield::destroy_dead_entities() { engine.destroy_dead_entities(); }
-
-const bool Battlefield::noProjectiles() { return projectiles.empty(); }
-
-void Battlefield::createCrate() { crates.push_back(std::make_shared<Crate>(*this, crate_count++)); }
-
-const void Battlefield::clearOpenedCrates() {
     crates.erase(std::remove_if(crates.begin(), crates.end(),
                                 [](auto& crate) { return crate->wasOpened(); }),
                  crates.end());
 }
+
+const bool Battlefield::noProjectiles() { return projectiles.empty(); }
+
+void Battlefield::createCrate() { crates.push_back(std::make_shared<Crate>(*this, crate_count++)); }

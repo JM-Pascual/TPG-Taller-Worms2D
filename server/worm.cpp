@@ -221,11 +221,6 @@ void Worm::collision_reaction() {
     }
 }
 
-void Worm::destroyBody() {
-    battlefield.destroy_body(body);
-    body = nullptr;
-}
-
 Worm::Worm(Worm&& o):
         Entity(o.battlefield),
         life(o.life),

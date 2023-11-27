@@ -24,7 +24,8 @@ protected:
     Camera& camera;
 
 public:
-    GameActor(const float& x, const float& y, Camera& camera): position(x, y), camera(camera) {}
+    explicit GameActor(const float& x, const float& y, Camera& camera):
+            position(x, y), camera(camera) {}
     virtual void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) = 0;
     virtual void update(std::shared_ptr<States>& actor_state) = 0;
     virtual void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
@@ -55,7 +56,7 @@ private:
     WeaponAnimation weapon_animation;
 
 public:
-    Worm(std::shared_ptr<WormStateG>& initial_state, TexturesPool& pool, Camera& camera):
+    explicit Worm(std::shared_ptr<WormStateG>& initial_state, TexturesPool& pool, Camera& camera):
             GameActor(initial_state->pos.x, initial_state->pos.y, camera),
             equipped_weapon(initial_state->weapon),
             on_turn_time(initial_state->on_turn_time),
@@ -73,7 +74,7 @@ public:
             dead(pool, 0),
             weapon_animation(pool) {}
 
-    void update(std::shared_ptr<States>& actor_state) override {
+    inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<WormStateG>(actor_state);
         position = state->pos;
         on_turn_time = state->on_turn_time;
@@ -96,7 +97,7 @@ public:
                                 (is_walking || is_jumping || is_backflipping));
     }
 
-    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 32, 60);
 
         if (life_points_remaining == 0.0f) {
@@ -126,8 +127,8 @@ public:
     }
 
 
-    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                     TextPrinter& state_printer) override {
+    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                            TextPrinter& state_printer) override {
         if (!on_turn_time) {
             SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 32, 60);
             state_printer.print_text((*game_renderer), std::to_string(int(life_points_remaining)),
@@ -146,8 +147,8 @@ protected:
     bool impacted;
 
 public:
-    Projectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
-               Camera& camera):
+    explicit Projectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
+                        Camera& camera):
             GameActor(initial_state->pos.x, initial_state->pos.y, camera), impacted(false) {}
 };
 
@@ -162,14 +163,14 @@ private:
     float current_angle;
 
 public:
-    BazookaProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
-                      Camera& camera):
+    explicit BazookaProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
+                               Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::BAZOOKA_PROYECTILE), 1, 1),
             impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
             current_angle(0) {}
 
-    void update(std::shared_ptr<States>& actor_state) override {
+    inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
         position = state->pos;
         impacted = state->impacted;
@@ -177,7 +178,7 @@ public:
         impact.update(!impacted);
     }
 
-    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         if (impacted) {
             impact.render((*game_renderer), rect);
@@ -187,8 +188,8 @@ public:
         }
     }
 
-    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                     TextPrinter& state_printer) override {}
+    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                            TextPrinter& state_printer) override {}
 };
 
 // ----------------------- MORTAR PROYECTILE ----------------------
@@ -201,14 +202,14 @@ private:
     float current_angle;
 
 public:
-    MortarProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
-                     Camera& camera):
+    explicit MortarProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
+                              Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::MORTAR_PROYECTILE), 1, 1),
             impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
             current_angle(0) {}
 
-    void update(std::shared_ptr<States>& actor_state) override {
+    inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
         position = state->pos;
         impacted = state->impacted;
@@ -216,7 +217,7 @@ public:
         impact.update(!impacted);
     }
 
-    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         if (impacted) {
             impact.render((*game_renderer), rect);
@@ -226,8 +227,8 @@ public:
         }
     }
 
-    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                     TextPrinter& state_printer) override {}
+    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                            TextPrinter& state_printer) override {}
 };
 
 // ----------------------- MORTAR FRAGMENT ----------------------
@@ -240,14 +241,14 @@ private:
     float current_angle;
 
 public:
-    MortarFragment(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
-                   Camera& camera):
+    explicit MortarFragment(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
+                            Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::MORTAR_FRAGMENT), 6, 1, true),
             impact(pool.get_effect_texture(Effects::FRAGMENT_EXPLOSION), 11, 1, false),
             current_angle(0) {}
 
-    void update(std::shared_ptr<States>& actor_state) override {
+    inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
         position = state->pos;
         impacted = state->impacted;
@@ -255,7 +256,7 @@ public:
         impact.update(!impacted);
     }
 
-    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         if (impacted) {
             impact.render((*game_renderer), rect);
@@ -265,8 +266,8 @@ public:
         }
     }
 
-    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                     TextPrinter& state_printer) override {}
+    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                            TextPrinter& state_printer) override {}
 };
 
 // ----------------------- GREEN GRENADE ----------------------
@@ -279,14 +280,14 @@ private:
     float current_angle;
 
 public:
-    GreenGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
-                           Camera& camera):
+    explicit GreenGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
+                                    TexturesPool& pool, Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::GREEN_GRENADE_PROYECTILE), 1, 1),
             impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
             current_angle(0) {}
 
-    void update(std::shared_ptr<States>& actor_state) override {
+    inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
         position = state->pos;
         impacted = state->impacted;
@@ -294,7 +295,7 @@ public:
         impact.update(!impacted);
     }
 
-    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         if (impacted) {
             impact.render((*game_renderer), rect);
@@ -304,8 +305,8 @@ public:
         }
     }
 
-    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                     TextPrinter& state_printer) override {}
+    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                            TextPrinter& state_printer) override {}
 };
 
 // ----------------------- RED GRENADE ----------------------
@@ -318,14 +319,14 @@ private:
     float current_angle;
 
 public:
-    RedGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
-                         Camera& camera):
+    explicit RedGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
+                                  TexturesPool& pool, Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::RED_GRENADE_PROYECTILE), 1, 1),
             impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
             current_angle(0) {}
 
-    void update(std::shared_ptr<States>& actor_state) override {
+    inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
         position = state->pos;
         impacted = state->impacted;
@@ -333,7 +334,7 @@ public:
         impact.update(!impacted);
     }
 
-    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         if (impacted) {
             impact.render((*game_renderer), rect);
@@ -343,8 +344,8 @@ public:
         }
     }
 
-    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                     TextPrinter& state_printer) override {}
+    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                            TextPrinter& state_printer) override {}
 };
 
 // ----------------------- BANANA ----------------------
@@ -357,14 +358,14 @@ private:
     float current_angle;
 
 public:
-    BananaProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
-                     Camera& camera):
+    explicit BananaProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
+                              Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::BANANA_PROYECTILE), 1, 1),
             impact(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
             current_angle(0) {}
 
-    void update(std::shared_ptr<States>& actor_state) override {
+    inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
         position = state->pos;
         impacted = state->impacted;
@@ -372,7 +373,7 @@ public:
         impact.update(!impacted);
     }
 
-    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         if (impacted) {
             impact.render((*game_renderer), rect);
@@ -382,8 +383,8 @@ public:
         }
     }
 
-    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                     TextPrinter& state_printer) override {}
+    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                            TextPrinter& state_printer) override {}
 };
 
 // ----------------------- DYNAMITE ----------------------
@@ -394,13 +395,13 @@ private:
     Animation explosion;
 
 public:
-    DynamiteProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
-                       Camera& camera):
+    explicit DynamiteProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
+                                TexturesPool& pool, Camera& camera):
             Projectile(initial_state, pool, camera),
             countdown(pool.get_projectile_texture(Projectiles::DYNAMITE_PROYECTILE), 126),
             explosion(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false) {}
 
-    void update(std::shared_ptr<States>& actor_state) override {
+    inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
         position = state->pos;
         countdown.update();
@@ -408,7 +409,7 @@ public:
         explosion.update(!impacted);
     }
 
-    void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         if (impacted) {
             explosion.render((*game_renderer), rect);
@@ -417,8 +418,8 @@ public:
         }
     }
 
-    void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                     TextPrinter& state_printer) override {}
+    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                            TextPrinter& state_printer) override {}
 };
 
 #endif  // GAMEACTOR_H

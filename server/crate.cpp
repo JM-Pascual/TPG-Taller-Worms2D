@@ -19,15 +19,15 @@ Crate::Crate(Battlefield& battlefield, const uint8_t& id):
 
     switch (_type) {
         case _CrateType_::FIRST_AID:
-            type = std::make_unique<FirstAid>();
+            type = std::make_shared<FirstAid>();
             break;
 
         case _CrateType_::AMMO_BOX:
-            type = std::make_unique<AmmoBox>();
+            type = std::make_shared<AmmoBox>();
             break;
 
         case _CrateType_::TRAP:
-            type = std::make_unique<Trap>();
+            type = std::make_shared<Trap>();
             break;
     }
 
@@ -61,6 +61,10 @@ void Crate::collision_reaction() {
     }
 
     type->collision_reaction(body, battlefield, was_opened);
+
+    if (was_opened) {
+        dead = true;
+    }
 }
 
 void Crate::stop_falling() {
@@ -70,4 +74,4 @@ void Crate::stop_falling() {
 
 const bool Crate::wasOpened() { return was_opened; }
 
-Crate::~Crate() { battlefield.destroy_body(this->body); }
+Crate::~Crate() {}

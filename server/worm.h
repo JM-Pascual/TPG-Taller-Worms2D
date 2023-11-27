@@ -117,8 +117,6 @@ public:
     bool is_dead() override;
     void collision_reaction() override;
 
-    void destroyBody();
-
     void open_crate(bool& open) override;
 
     void applyWindResistance(const float& wind_force) override;

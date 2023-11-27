@@ -27,7 +27,7 @@ private:
     void broadcast(const std::list<std::shared_ptr<States>>& game_states);
 
 public:
-    explicit BroadCaster(Game& game): infoParser(game) {}
+    explicit inline BroadCaster(Game& game): infoParser(game) {}
 
     void add_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue);
 
