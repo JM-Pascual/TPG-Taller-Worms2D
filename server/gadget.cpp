@@ -150,7 +150,7 @@ void HolyGrenade::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_
             std::make_shared<Holy>(battlefield, projectile_position, float(explosion_delay));
     battlefield.add_projectile(holy_grenade);
 
-    worm.use_positional_weapon(holy_grenade);
+    worm.use_chargeable_weapon(holy_grenade);
 
     turn_handler.use_stop_action();
 
@@ -246,6 +246,7 @@ void BaseballBat::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_
     }
     bat(battlefield, worm);
 
+    worm.use_tool();
     turn_handler.use_stop_action();
 
     --ammo;
