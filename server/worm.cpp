@@ -245,7 +245,7 @@ Worm::Worm(Worm&& o):
         immortal_worms(o.immortal_worms),
         id(o.id) {
 
-    o.life = 0;
+    o.life = 0.0f;
 
     o.facing_right = false;
     o.is_walking = false;
@@ -320,8 +320,8 @@ void Worm::recibe_life_modification(const float& life_variation) {
 
     life += life_variation;
 
-    if (life < 0) {
-        life = 0;
+    if (life < 1) {
+        life = 0.0f;
     }
 }
 

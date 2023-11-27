@@ -99,6 +99,12 @@ public:
     void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 32, 60);
 
+        if (life_points_remaining == 0.0f) {
+            SDL2pp::Rect death_render_rect = camera.calcRect(position.x, position.y, 60, 60);
+            dead.render((*game_renderer), death_render_rect);
+            return;
+        }
+
         if (on_turn_time) {
             if (is_jumping) {
                 jumping.render((*game_renderer), render_rect, 0, 0,
@@ -109,9 +115,6 @@ public:
             } else if (is_walking) {
                 walking.render((*game_renderer), render_rect, 0, 0,
                                facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-            } else if (life_points_remaining == 0) {
-                SDL2pp::Rect death_render_rect = camera.calcRect(position.x, position.y, 60, 60);
-                dead.render((*game_renderer), death_render_rect);
             } else {
                 weapon_animation.render((*game_renderer), render_rect,
                                         facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);

@@ -63,7 +63,10 @@ void Crate::collision_reaction() {
     type->collision_reaction(body, battlefield, was_opened);
 }
 
-void Crate::stop_falling() { falling = false; }
+void Crate::stop_falling() {
+    falling = false;
+    body->SetAwake(false);
+}
 
 const bool Crate::wasOpened() { return was_opened; }
 

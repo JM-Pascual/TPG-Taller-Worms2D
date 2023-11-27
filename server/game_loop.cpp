@@ -42,8 +42,8 @@ void GameLoop::run() {
         game.broadcaster.broadcastGame(turn_id.player_id);
         // Le llega por el broadcast_game_state los jugadores que estan muertos(booleano)
         //
-        game.worm_handler.check_drown_worms();
         game.worm_handler.checkDeadWorms();
+        game.worm_handler.check_drown_worms();
         game.battlefield.destroy_dead_entities();
         game.battlefield.clearOpenedCrates();
         game.battlefield.remove_collided_projectiles();

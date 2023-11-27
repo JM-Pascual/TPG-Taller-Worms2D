@@ -89,7 +89,7 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                 if (!players.actor_loaded(state->id)) {
                     players.add_actor(state->id, std::make_shared<Worm>(state, txt_pool, camera));
                 } else {
-                    if (std::dynamic_pointer_cast<WormStateG>(raw_state)->life == 0) {
+                    if (state->life == 0.0f) {
                         players.remove_actor(state->id, raw_state);
                     } else {
                         players.update_actor_state(state->id, raw_state);
