@@ -51,8 +51,7 @@ qt_add_resources(QT_RES client/resources/images.qrc)
 qt_add_resources(QT_RES client/resources/sounds.qrc)
 qt_add_resources(QT_RES client/resources/cheat_images.qrc)
 
-add_executable(client_exe ${COMMON_SRC} ${QT_CLIENT_SRC} ${QT_RES}
-        client/Window.cpp)
+add_executable(client_exe ${COMMON_SRC} ${QT_CLIENT_SRC} ${QT_RES})
 
 target_include_directories(client_exe PUBLIC ${SDL2_INCLUDE_DIRS})
 target_include_directories(client_exe PUBLIC ${SDL2_IMAGE_INCLUDE_DIRS})

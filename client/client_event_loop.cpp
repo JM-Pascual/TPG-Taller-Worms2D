@@ -12,10 +12,11 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
         quit(false),
         my_turn(false),
         runned(false),
+        mouse_priority(false),
         protocol(hostname, servname),
         recv(this->protocol, game_state_queue, lobby_state_queue, runned),
         send(this->protocol, this->action_queue),
-        input(this->action_queue, quit, my_turn, camera),
+        input(this->action_queue, quit, my_turn, camera, mouse_priority),
         cheat_menu(cheat_menu) {
     spdlog::get("client")->debug("Iniciando hilo receptor en el cliente");
     recv.start();
@@ -40,7 +41,7 @@ void EventLoop::render_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_ren
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
                                     TexturesPool& txt_pool) {
     std::shared_ptr<States> raw_state = nullptr;
-    int expected_states = MAX_PLAYERS + WORMS_QUANTITY;
+    int expected_states = MAX_PLAYERS + WORMS_QUANTITY + 3;  //+ proj_count + crate_count + level
     for (int j = 0; j < expected_states; j++) {
         if (not game_state_queue.try_pop(raw_state)) {
             continue;
@@ -51,22 +52,51 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                 continue;
             }
 
+            case StatesTag::CRATE_COUNT:
+                expected_states += std::dynamic_pointer_cast<CrateCount>(raw_state)->quantity;
+                continue;
+
+            case StatesTag::CRATE: {
+                auto state = std::dynamic_pointer_cast<CrateState>(raw_state);
+                if (!crates.actor_loaded(state->id)) {
+                    switch (state->type) {
+
+                        case _CrateType_::FIRST_AID:
+                            crates.add_actor(state->id,
+                                             std::make_shared<HealCrate>(state, txt_pool, camera));
+                            break;
+                        case _CrateType_::AMMO_BOX:
+                            crates.add_actor(state->id,
+                                             std::make_shared<AmmoCrate>(state, txt_pool, camera));
+                            break;
+                        case _CrateType_::TRAP:
+                            crates.add_actor(state->id,
+                                             std::make_shared<TrapCrate>(state, txt_pool, camera));
+                            break;
+                    }
+                } else {
+                    if (state->was_opened) {
+                        crates.remove_actor(state->id, raw_state);
+                    } else {
+                        crates.update_actor_state(state->id, raw_state);
+                    }
+                }
+                continue;
+            }
+
             case StatesTag::WORM_G: {
                 auto state = std::dynamic_pointer_cast<WormStateG>(raw_state);
                 if (!players.actor_loaded(state->id)) {
                     players.add_actor(state->id, std::make_shared<Worm>(state, txt_pool, camera));
                 } else {
-                    if (std::dynamic_pointer_cast<WormStateG>(raw_state)->life == 0) {
+                    if (state->life == 0.0f) {
                         players.remove_actor(state->id, raw_state);
                     } else {
                         players.update_actor_state(state->id, raw_state);
                     }
                 }
 
-                if (state->is_walking) {
-                    camera.fixActor(state->pos.x, state->pos.y, 32, 60);
-                    // audio_player.playAudio("test");
-                }
+                viewWorm(state);
                 continue;
             }
 
@@ -122,12 +152,13 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                     }
 
                 } else {
-                    if (std::dynamic_pointer_cast<ProjectileStateG>(raw_state)->impacted) {
+                    if (state->impacted) {
                         proyectiles.remove_actor(state->id, raw_state);
                     } else {
                         proyectiles.update_actor_state(state->id, raw_state);
                     }
                 }
+                viewProjectile(state);
                 continue;
             }
 
@@ -194,6 +225,7 @@ void EventLoop::run() {
         players.print_actors_state(window.get_renderer(), state_printer);
         proyectiles.render_actors(window.get_renderer());
         proyectiles.print_actors_state(window.get_renderer(), state_printer);
+        crates.render_actors(window.get_renderer());
 
         update_terrain();
         render_terrain(window.get_renderer());
@@ -217,6 +249,72 @@ void EventLoop::run() {
     }
 
     cheat_menu->close();
+}
+
+void EventLoop::viewWorm(const std::shared_ptr<WormStateG>& worm) {
+    if (camera_priority.priority == Priority::PROJECTILE) {
+        return;
+    }
+
+    if ((camera_priority.id == worm->id) || (camera_priority.priority == Priority::NONE) ||
+        (not players.actor_loaded(camera_priority.id))) {
+
+        camera_priority.priority = Priority::WORM;
+        camera_priority.id = worm->id;
+
+        if (worm->on_turn_time && not mouse_priority) {
+            camera.fixActor(worm->pos.x, worm->pos.y, 32, 60);
+        }
+
+
+        if (worm->is_backflipping) {
+            // audio_player.playAudio("test");
+            return;
+
+        } else if (worm->is_jumping) {
+            // audio_player.playAudio("test");
+            return;
+
+        } else if (worm->is_walking) {
+            // audio_player.playAudio("test");
+            return;
+
+        } else if (worm->charging_weapon) {
+            // audio_player.playAudio("test");
+            return;
+
+        } else if (worm->using_tool) {
+            // audio_player.playAudio("test");
+            return;
+
+        } else if (worm->falling) {
+            camera.fixActor(worm->pos.x, worm->pos.y, 32, 60);
+            // audio_player.playAudio("test");
+            return;
+        }
+
+        camera_priority.priority = Priority::NONE;
+    }
+}
+
+void EventLoop::viewProjectile(const std::shared_ptr<ProjectileStateG>& proj) {
+    if (camera_priority.priority == Priority::WORM) {
+        return;
+    }
+
+    if ((camera_priority.id == proj->id) || (camera_priority.priority == Priority::NONE)) {
+
+        camera_priority.priority = Priority::PROJECTILE;
+        camera_priority.id = proj->id;
+
+        if (not proj->impacted) {
+            camera.fixActor(proj->pos.x, proj->pos.y, 60, 60);
+            // audio_player.playAudio("test");
+            return;
+        }
+
+        camera_priority.priority = Priority::NONE;
+    }
 }
 
 EventLoop::~EventLoop() {

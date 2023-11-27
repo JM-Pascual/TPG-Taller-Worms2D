@@ -207,14 +207,14 @@ public:
     ~InfiniteAmmoCheat() = default;
 };
 
-class MadnessCheat: public PlayerAction {
+class SupplyRunCheat: public PlayerAction {
 public:
-    explicit MadnessCheat(const uint8_t& id);
+    explicit SupplyRunCheat(const uint8_t& id);
 
     void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
                  TurnHandler& turn_handler) override;
 
-    ~MadnessCheat() = default;
+    ~SupplyRunCheat() = default;
 };
 
 class ImmortalWorm: public PlayerAction {

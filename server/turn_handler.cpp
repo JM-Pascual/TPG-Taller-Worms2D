@@ -52,6 +52,7 @@ const TurnReset TurnHandler::advanceTurn(const uint8_t& players_quantity) {
         return TurnReset::WAIT_TURN_END;
     }
 
+    worm_handler.clearDamagedState();
     for (++player_turn; player_turn <= players_quantity; ++player_turn) {
         // Dejamos q se pase de index para que se resetee a 0
         if (player_turn == players_quantity) {
@@ -78,6 +79,10 @@ const TurnReset TurnHandler::advanceTurn(const uint8_t& players_quantity) {
         }
     }
 
+    if (not(++turn_number % 3)) {
+        battlefield.createCrate();
+    }
+
     return TurnReset::TIMER_RESET;
 }
 
@@ -95,7 +100,6 @@ const ActualTurn TurnHandler::updateTurn(const std::chrono::duration<float>& ela
     switch (reset_timer) {
 
         case TurnReset::TIMER_RESET: {
-            worm_handler.clearDamagedState();
             worm_handler.updateTurnWorm(player_id, it->second->worm_turn);
             battlefield.newWindForce(no_wind_cheat_activated);
             broadcaster.broadcast_turn(player_turn);
@@ -138,4 +142,10 @@ void TurnHandler::activateInfiniteTurn() {
 void TurnHandler::activateNoWind() {
     no_wind_cheat_activated = !no_wind_cheat_activated;
     battlefield.newWindForce(no_wind_cheat_activated);
+}
+
+void TurnHandler::supplyRun() {
+    for (size_t i = 0; i < 7; i++) {
+        battlefield.createCrate();
+    }
 }

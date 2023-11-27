@@ -6,10 +6,11 @@
 #include "camera.h"
 
 IHandler::IHandler(Queue<std::shared_ptr<Action>>& actionQ, std::atomic<bool>& quit,
-                   std::atomic<bool>& my_turn, Camera& camera):
+                   std::atomic<bool>& my_turn, Camera& camera, std::atomic<bool>& mouse_priority):
         action_queue(actionQ),
         quit(quit),
         my_turn(my_turn),
+        mouse_priority(mouse_priority),
         camera(camera),
         clickable_gadget(false),
         grenade_selected(false) {}
@@ -20,6 +21,7 @@ void IHandler::run() {
 
     while (not quit) {
         while (SDL_PollEvent(&event)) {
+            mouse_priority = false;
             if (event.type == SDL_QUIT) {
                 quit = true;
 
@@ -41,19 +43,19 @@ void IHandler::run() {
 
             } else if (not kb_priority) {
                 if (event.type == SDL_MOUSEMOTION) {
+                    mouse_priority = true;
                     camera.fixMouse(event.motion.x, event.motion.y);
 
                 } else if (event.type == SDL_MOUSEBUTTONDOWN) {
                     if (clickable_gadget) {
                         auto rec = camera.realRect(event.motion.x, event.motion.y);
-                        action_queue.push(
-                                std::make_shared<UseClickable>(rec.x, rec.y));
-                        }
+                        action_queue.push(std::make_shared<UseClickable>(rec.x, rec.y));
                     }
                 }
             }
         }
     }
+}
 
 
 void IHandler::keyUp(const SDL_Keycode& key) {

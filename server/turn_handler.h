@@ -47,6 +47,8 @@ private:
     bool infinite_turn_cheat_activated;
     bool no_wind_cheat_activated;
 
+    unsigned int turn_number;
+
     const TurnReset need_to_update(const uint8_t players_quantity,
                                    const std::chrono::duration<float>& elapsed);
 
@@ -65,7 +67,8 @@ public:
             current_players_quantity(0),
             player_stop_action(false),
             infinite_turn_cheat_activated(false),
-            no_wind_cheat_activated(false) {}
+            no_wind_cheat_activated(false),
+            turn_number(1) {}
 
     const ActualTurn updateTurn(const std::chrono::duration<float>& elapsed);
 
@@ -76,6 +79,8 @@ public:
     void activateInfiniteTurn();
 
     void activateNoWind();
+
+    void supplyRun();
 };
 
 #endif

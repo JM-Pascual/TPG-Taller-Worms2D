@@ -6,6 +6,7 @@
 
 #include "Player.h"
 #include "gadget.h"
+#include "turn_handler.h"
 #include "worm.h"
 
 WormHandler::WormHandler(std::map<uint8_t, std::unique_ptr<Player>>& players): players(players) {}
@@ -49,12 +50,13 @@ void WormHandler::player_start_charging(const uint8_t& id, const uint8_t& worm_i
     turn_worm->charging_shoot = true;
 }
 
-void WormHandler::player_shoot(const uint8_t& id, const uint8_t& worm_index) {
+void WormHandler::player_shoot(const uint8_t& id, const uint8_t& worm_index,
+                               TurnHandler& turn_handler) {
 
     turn_worm->aiming = false;
     turn_worm->charging_shoot = false;
 
-    turn_worm->shoot();
+    turn_worm->shoot(turn_handler);
 
     turn_worm->weapon_power = 0;
     turn_worm->weapon_delay = DelayAmount::FIVE;
@@ -84,7 +86,7 @@ void WormHandler::clearDamagedState() {
     }
 }
 
-void WormHandler::update_weapon() {
+void WormHandler::update_weapon(TurnHandler& turn_handler) {
     if (not turn_worm) {
         return;
     }
@@ -93,7 +95,7 @@ void WormHandler::update_weapon() {
         turn_worm->change_aim_direction();
     }
     if (turn_worm->charging_shoot) {
-        turn_worm->change_fire_power();
+        turn_worm->change_fire_power(turn_handler);
     }
     turn_worm->using_tool = false;
 }
@@ -133,7 +135,7 @@ void WormHandler::checkDeadWorms() {
 
         auto it = player->worms.cbegin();
         while (it != player->worms.cend()) {
-            if ((*it)->life == 0) {
+            if ((*it)->life == 0.0f) {
                 (*it)->destroyBody();
                 it = player->worms.erase(it);
 
@@ -186,7 +188,7 @@ void WormHandler::check_drown_worms() {
         for (const auto& worm: player->worms) {
             if (worm->position().y <= 4) {
                 worm->drown = true;
-                worm->life = 0;
+                worm->life = 0.0f;
             }
         }
     }
@@ -201,7 +203,6 @@ void WormHandler::WW3Cheat() {
 
     for (size_t i = 0; i < 5; i++) {
         auto x = random(rng);
-        turn_worm->clicked_position.x = x;
-        fake_airstrike.shoot(turn_worm->battlefield, (*turn_worm));
+        fake_airstrike.shootCheat(turn_worm->battlefield, x);
     }
 }

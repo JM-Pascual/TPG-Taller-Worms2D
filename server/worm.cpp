@@ -32,7 +32,12 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
         id(id) {
     b2BodyDef wormDef;
     wormDef.type = b2_dynamicBody;
-    wormDef.position.Set(22.0f, 21.6f);  // Ahora la harcodeo, pero tiene que cambiar
+
+    auto rng = std::random_device();
+    std::mt19937 gen(rng());
+    std::uniform_int_distribution<> random(10, 20);
+
+    wormDef.position.Set(random(gen), 21.6f);  // Ahora la harcodeo, pero tiene que cambiar
     wormDef.allowSleep = true;
     wormDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
@@ -43,25 +48,27 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &wormBox;
     fixtureDef.density = 1.0f;
-    fixtureDef.friction = 1.0f;
+    fixtureDef.friction = 0.3f;
     fixtureDef.restitution = 0.0f;
     fixtureDef.filter.groupIndex = -2;
 
     body->CreateFixture(&fixtureDef);
-    body->SetAngularDamping(1.0f);
+    body->SetAngularDamping(10.0f);
 }
+
+void Worm::reloadAmmo(const uint8_t& ammo) { selected_weapon->get()->addAmmo(ammo); }
 
 void Worm::move() {
     if (not body) {
         return;
     }
 
-    body->GetFixtureList()->SetFriction(0.0f);
-
-    if (body->GetLinearVelocity().LengthSquared() < 10) {
+    if (body->GetLinearVelocity().LengthSquared() < REFRESH_WALK) {
         this->body->ApplyLinearImpulseToCenter(
                 b2Vec2(20 * std::pow(-1, 1 - facing_right) / TICK_RATE, 0), true);
     }
+
+    start_falling();
 }
 
 void Worm::stop() {
@@ -83,6 +90,8 @@ void Worm::jump(const JumpDir& direction) {
         return;
     }
 
+    start_falling();
+
     switch (direction) {
         case (JumpDir::FRONT):
             body->ApplyLinearImpulseToCenter(b2Vec2((facing_factor() * 5), 5), true);
@@ -93,8 +102,6 @@ void Worm::jump(const JumpDir& direction) {
             is_backflipping = true;
             break;
     }
-
-    start_falling();
 }
 
 void Worm::change_aim_direction() {
@@ -119,9 +126,19 @@ void Worm::change_aim_direction() {
     }
 }
 
-void Worm::change_fire_power() {
-    if (charging_shoot && weapon_power <= MAX_POWER) {
+void Worm::change_fire_power(TurnHandler& turn_handler) {
+    if (charging_shoot) {
         weapon_power += POWER_RAISE;
+
+        if (weapon_power >= MAX_POWER) {
+            aiming = false;
+            charging_shoot = false;
+
+            shoot(turn_handler);
+
+            weapon_power = 0;
+            weapon_delay = DelayAmount::FIVE;
+        }
     }
 }
 
@@ -130,7 +147,11 @@ void Worm::change_position() {
     body->SetAwake(true);
 }
 
-void Worm::shoot() { (*selected_weapon)->shoot(battlefield, *this); }
+void Worm::shoot(TurnHandler& turn_handler) {
+    if (weapon_power > 0) {
+        (*selected_weapon)->shoot(battlefield, *this, turn_handler);
+    }
+}
 
 void Worm::use_chargeable_weapon(const std::shared_ptr<Projectile>& projectile) {
     projectile->set_power(set_bullet_power());
@@ -225,7 +246,7 @@ Worm::Worm(Worm&& o):
         immortal_worms(o.immortal_worms),
         id(o.id) {
 
-    o.life = 0;
+    o.life = 0.0f;
 
     o.facing_right = false;
     o.is_walking = false;
@@ -261,16 +282,19 @@ void Worm::stop_falling() {
     }
 
     auto vel = body->GetLinearVelocity();
-    body->GetFixtureList()->SetFriction(1.0f);
+
+    if (vel.x < MIN_X_VELOCITY) {
+        if ((not is_walking || not falling) && not was_damaged && not is_backflipping &&
+            not is_jumping) {
+            body->SetAwake(false);
+        }
+    }
 
     if (vel.y < MIN_Y_VELOCITY) {
         is_jumping = false;
         is_backflipping = false;
-
-        if (not is_walking) {
-            body->SetAwake(false);
-        }
     }
+
 
     if (body->GetLinearVelocity().LengthSquared() < MIN_SQUARED_VELOCITY) {
         falling = false;
@@ -297,8 +321,8 @@ void Worm::recibe_life_modification(const float& life_variation) {
 
     life += life_variation;
 
-    if (life < 0) {
-        life = 0;
+    if (life < 1) {
+        life = 0.0f;
     }
 }
 
@@ -313,3 +337,4 @@ bool Worm::is_facing_right() { return facing_right; }
 void Worm::use_tool() { using_tool = true; }
 
 b2Vec2 Worm::position() { return body->GetWorldCenter(); }
+void Worm::open_crate(bool& open) { open = true; }

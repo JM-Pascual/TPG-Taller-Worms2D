@@ -7,3 +7,5 @@ frame_duration: 33
 music_volume: 15
 
 effect_volume: 40
+
+camera_sens: 2.0

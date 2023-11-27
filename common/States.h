@@ -27,6 +27,24 @@ public:
     virtual ~States() = default;
 };
 
+class CrateState: public States {
+public:
+    const b2Vec2 pos;
+    const bool falling;
+    const bool was_opened;
+    const _CrateType_ type;
+    const uint8_t id;
+
+    CrateState(const float& x, const float& y, const bool& falling, const bool& was_opened,
+               const _CrateType_& type, const uint8_t& id):
+            States(StatesTag::CRATE),
+            pos(x, y),
+            falling(falling),
+            was_opened(was_opened),
+            type(type),
+            id(id) {}
+};
+
 class GameInfoL: public States {
 public:
     const std::string description;
@@ -102,7 +120,7 @@ public:
     const bool is_jumping;
     const bool is_backflipping;
     const bool facing_right;
-    const bool was_hit;
+    const bool falling;
 
     const float aim_inclination_degrees;
     const bool charging_weapon;
@@ -114,7 +132,7 @@ public:
     explicit WormStateG(const uint8_t& id, const float& x, const float& y,
                         const WeaponsAndTools& equipped_weapon, bool on_turn_time,
                         const bool& is_walking, const bool& is_jumping, const bool& is_backflipping,
-                        const bool& facing_right, const bool& was_hit,
+                        const bool& facing_right, const bool& falling,
                         const float& aim_inclination_degrees, const bool& charging_weapon,
                         const float& life, const bool& drown, const bool& using_tool);
 
@@ -187,6 +205,13 @@ public:
             CountState(StatesTag::PROJECTILE_COUNT, quantity) {}
 
     ~ProjectileCount() override = default;
+};
+
+class CrateCount: public CountState {
+public:
+    explicit CrateCount(const uint8_t& quantity): CountState(StatesTag::CRATE_COUNT, quantity) {}
+
+    ~CrateCount() override = default;
 };
 
 class GameNotJoinable: public CountState {

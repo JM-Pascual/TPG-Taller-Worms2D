@@ -209,11 +209,11 @@ public:
     ~InfiniteAmmoCheat() = default;
 };
 
-class MadnessCheat: public Action {
+class SupplyRunCheat: public Action {
 public:
-    MadnessCheat(): Action(Actions::MADNESS) {}
+    SupplyRunCheat(): Action(Actions::MADNESS) {}
 
-    ~MadnessCheat() = default;
+    ~SupplyRunCheat() = default;
 };
 
 class ImmortalWorm: public Action {
