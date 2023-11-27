@@ -52,6 +52,7 @@ void Battlefield::step() {
     engine.step();
     post_action_explosion();
     update_drown_projectiles();
+    update_drown_crates();
 }
 
 void Battlefield::newWindForce(const bool& no_wind_cheat_activated) {
@@ -90,3 +91,12 @@ void Battlefield::update_drown_projectiles() {
         projectile.second->drowning();
     }
 }
+
+void Battlefield::update_drown_crates() {
+    for (auto& crate: crates) {
+        crate->wasDrown();
+    }
+}
+
+
+

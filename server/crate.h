@@ -30,6 +30,8 @@ public:
 
     const bool wasOpened();
 
+    const bool wasDrown();
+
     friend class InfoParser;
 
     ~Crate();

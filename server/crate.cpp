@@ -71,3 +71,11 @@ void Crate::stop_falling() {
 const bool Crate::wasOpened() { return was_opened; }
 
 Crate::~Crate() { battlefield.destroy_body(this->body); }
+
+const bool Crate::wasDrown() {
+    if(body->GetPosition().y < 0){
+        was_opened = true;
+        falling = false;
+    }
+    return was_opened;
+}
