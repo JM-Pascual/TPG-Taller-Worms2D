@@ -47,6 +47,8 @@ void TexturesPool::load_draw_textures() {
                           WeaponsDraw::WORM_DRAW_HOLY_GRENADE);
     load_texture_into_map(DATA_PATH "/worms/worm-mortar-draw.png", draw_textures,
                           WeaponsDraw::WORM_DRAW_MORTAR);
+    load_texture_into_map(DATA_PATH "/worms/worm-bat-draw.png", draw_textures,
+                          WeaponsDraw::WORM_DRAW_BASEBALL_BAT);
     load_texture_into_map(DATA_PATH "/worms/worm-airstrike-draw.png", draw_textures,
                           WeaponsDraw::WORM_DRAW_AIR_STRIKE);
     load_texture_into_map(DATA_PATH "/worms/worm-teleport-draw.png", draw_textures,
@@ -69,6 +71,8 @@ void TexturesPool::load_aiming_textures() {
                           WeaponAiming::WORM_AIM_HOLY_GRENADE);
     load_texture_into_map(DATA_PATH "/worms/worm-mortar-aim.png", aim_textures,
                           WeaponAiming::WORM_AIM_MORTAR);
+    load_texture_into_map(DATA_PATH "/worms/worm-bat-aim.png", aim_textures,
+                          WeaponAiming::WORM_AIM_BASEBALL_BAT);
     load_texture_into_map(DATA_PATH "/worms/worm-airstrike-aim.png", aim_textures,
                           WeaponAiming::WORM_AIM_AIR_STRIKE);
     load_texture_into_map(DATA_PATH "/worms/worm-teleport-aim.png", aim_textures,
@@ -113,6 +117,8 @@ void TexturesPool::load_tool_use_textures() {
                           ToolUsage::TELEPORT_USE);
     load_texture_into_map(DATA_PATH "/weapons/worm-airstrike-call.png", tool_usage_textures,
                           ToolUsage::AIR_STRIKE_CALL);
+    load_texture_into_map(DATA_PATH "/weapons/worm-bat-swing.png", tool_usage_textures,
+                          ToolUsage::BASEBALL_SWING);
 }
 
 void TexturesPool::load_combat_textures() {

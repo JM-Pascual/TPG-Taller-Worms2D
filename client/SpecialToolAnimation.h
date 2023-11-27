@@ -45,7 +45,7 @@ public:
     virtual void render(SDL2pp::Renderer& renderer, Camera& camera, int non_squared_width,
                         int non_squared_height, SDL_RendererFlip flipType, double angle) = 0;
 
-    bool animation_ongoing(){
+    bool animation_ongoing() const{
         return currently_animating_tool;
     }
 
@@ -173,5 +173,54 @@ public:
 
     virtual ~AirStrikeCallAnimation() = default;
 };
+
+class BaseballHitAnimation : public SpecialToolAnimation {
+private:
+    b2Vec2 use_position;
+public:
+    BaseballHitAnimation(std::shared_ptr<SDL2pp::Texture> &texture,
+                           unsigned int frames_in_texture, unsigned int delay_in_animation) :
+            SpecialToolAnimation(texture, frames_in_texture, delay_in_animation),
+            use_position(0,0){}
+
+    void update_tool_animation(std::shared_ptr<WormStateG> &worm_state) override {
+        if (!currently_animating_tool && worm_state->using_tool){
+            currently_animating_tool = true;
+        } else if (!currently_animating_tool){
+            this->currentFrame = 0;
+            use_position = worm_state->pos;
+        } else {
+            counter++;
+            if (counter < delay) {
+                return;
+            } else {
+                if (currentFrame < numFrames-1) {
+                    this->currentFrame++;
+                } else {
+                    currently_animating_tool = false;
+                    return; //Last frame, end of animation
+                }
+                counter = 0;
+            }
+        }
+    }
+
+    void render(SDL2pp::Renderer& renderer, Camera& camera, int non_squared_width,
+                int non_squared_height, SDL_RendererFlip flipType, double angle) override {
+        SDL2pp::Rect render_rect_initial = camera.calcRect(use_position.x, use_position.y, 50, 60);
+        renderer.Copy(
+                (*texture),
+                SDL2pp::Rect(0, (this->size) * this->currentFrame,
+                             (this->size + non_squared_width), (this->size + non_squared_height)),
+                render_rect_initial,
+                angle,
+                SDL2pp::NullOpt,
+                flipType
+        );
+    }
+
+    virtual ~BaseballHitAnimation() = default;
+};
+
 
 #endif  // SPECIALTOOLANIMATION_H

@@ -15,6 +15,11 @@ void ToolAnimationHolder::load_all_use_animations(TexturesPool& pool) {
             WeaponsAndTools::AIR_STRIKE, std::make_unique<AirStrikeCallAnimation>(
                                                pool.get_tool_usage_texture(ToolUsage::AIR_STRIKE_CALL)
                                                        , 10, 2)});
+
+    tool_animations.insert({
+            WeaponsAndTools::BASEBALL_BAT, std::make_unique<BaseballHitAnimation>(
+                                                 pool.get_tool_usage_texture(ToolUsage::BASEBALL_SWING)
+                                                         , 32, 0)});
 }
 
 void ToolAnimationHolder::update(std::shared_ptr<WormStateG>& worm_state) {
@@ -32,7 +37,7 @@ void ToolAnimationHolder::render(SDL2pp::Renderer& renderer, Camera& camera, int
                                              non_squared_height, flipType, angle);
 }
 
-bool ToolAnimationHolder::curently_animating_tool() {
+bool ToolAnimationHolder::currently_animating_tool() {
     if (tool_animations.count(currently_equipped_item) != 0){
         return (tool_animations.at(currently_equipped_item)->animation_ongoing());
     } else{

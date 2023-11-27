@@ -43,6 +43,12 @@ void WeaponAnimationHolder::load_all_draw_animations(TexturesPool& pool) {
                                                      , 10, 2, false)});
 
     weapon_draw_animations.insert({
+            WeaponsAndTools::BASEBALL_BAT, std::make_unique<Animation>(
+                                                 pool.get_draw_texture(
+                                                         WeaponsDraw::WORM_DRAW_BASEBALL_BAT)
+                                                         , 10, 2, false)});
+
+    weapon_draw_animations.insert({
             WeaponsAndTools::AIR_STRIKE, std::make_unique<Animation>(
                                              pool.get_draw_texture(
                                                      WeaponsDraw::WORM_DRAW_AIR_STRIKE)
@@ -73,6 +79,10 @@ void WeaponAnimationHolder::update(float new_inclination_degrees, bool charging_
 
 void WeaponAnimationHolder::render(SDL2pp::Renderer& renderer, SDL2pp::Rect dest,
                                  SDL_RendererFlip flipType, double angle) {
+
+    if (current_weapon == WeaponsAndTools::BASEBALL_BAT){
+        dest.SetW(48);
+    }
 
     if (weapon_drawn_frames_counter < 14 /* 7*2 */){
         weapon_draw_animations[current_weapon]->render(renderer, dest, 0, 0, flipType);

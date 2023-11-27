@@ -122,7 +122,8 @@ enum class Tombstones {
 
 enum class ToolUsage{
     AIR_STRIKE_CALL,
-    TELEPORT_USE
+    TELEPORT_USE,
+    BASEBALL_SWING
 };
 
 enum class Effects { NORMAL_EXPLOSION, FRAGMENT_EXPLOSION, CRATE_HEAL, CRATE_AMMO };

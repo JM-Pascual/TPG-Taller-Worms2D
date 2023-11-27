@@ -24,7 +24,7 @@ public:
                 int non_squared_height, SDL_RendererFlip flipType = SDL_FLIP_HORIZONTAL,
                 double angle = 0.0);
 
-    bool curently_animating_tool();
+    bool currently_animating_tool();
 };
 
 

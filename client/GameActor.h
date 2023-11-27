@@ -125,7 +125,7 @@ public:
             } else if (is_walking) {
                 walking.render((*game_renderer), render_rect, 0, 0,
                                facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-            } else if (tool_usage_animations.curently_animating_tool()){
+            } else if (tool_usage_animations.currently_animating_tool()){
                 tool_usage_animations.render((*game_renderer), camera, 0, 0,
                                              facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
             }
