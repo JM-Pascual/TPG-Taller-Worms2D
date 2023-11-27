@@ -13,14 +13,6 @@ Engine::Engine():
 void Engine::create_battlefield() {
 
     world->SetContactListener(listener);
-
-    b2BodyDef groundBodyDef;
-    groundBodyDef.position.Set(0.0f, -10.0f);
-
-    b2Body* groundBody = world->CreateBody(&groundBodyDef);
-    b2PolygonShape groundBox;
-    groundBox.SetAsBox(100.0f / 2, 20.0f / 2);
-    groundBody->CreateFixture(&groundBox, 0.0f);
 }
 
 b2Body* Engine::add_body(b2BodyDef& bodyDef) { return world->CreateBody(&bodyDef); }
