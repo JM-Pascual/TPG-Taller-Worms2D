@@ -24,6 +24,9 @@ void AimAnimation::load_all_aim_textures(TexturesPool& pool) {
 
     weapon_aim_textures.insert({WeaponsAndTools::AIR_STRIKE,
                                 (pool.get_aim_texture(WeaponAiming::WORM_AIM_AIR_STRIKE))});
+
+    weapon_aim_textures.insert({WeaponsAndTools::TELEPORT,
+                                (pool.get_aim_texture(WeaponAiming::WORM_AIM_TELEPORT))});
 }
 
 AimAnimation::AimAnimation(TexturesPool& pool):
@@ -38,7 +41,8 @@ void AimAnimation::render(WeaponsAndTools current_weapon, SDL2pp::Renderer& rend
                           SDL2pp::Rect dest, SDL_RendererFlip flipType, double angle) {
 
     if (current_weapon != WeaponsAndTools::DYNAMITE &&
-        current_weapon != WeaponsAndTools::AIR_STRIKE) {
+        current_weapon != WeaponsAndTools::AIR_STRIKE &&
+        current_weapon != WeaponsAndTools::TELEPORT) {
         renderer.Copy((*weapon_aim_textures.at(current_weapon)),
                       SDL2pp::Rect(0,
                                    std::min((16 * 60 - (60) * int(-1 * ((this->current_inclination /

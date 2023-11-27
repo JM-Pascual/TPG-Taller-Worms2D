@@ -11,7 +11,8 @@
 
 #include "Animation.h"
 #include "TexturesPool.h"
-#include "WeaponAnimation.h"
+#include "WeaponAnimationHolder.h"
+#include "ToolAnimationHolder.h"
 #include "camera.h"
 #include "death_animation.h"
 #include "text_printer.h"
@@ -43,6 +44,7 @@ private:
     bool is_backflipping;
     bool facing_right;
     bool was_hit;
+    bool using_tool;
     float life_points_remaining;
 
     float aim_inclination_degrees;
@@ -53,7 +55,9 @@ private:
 
     DeathAnimation dead;
 
-    WeaponAnimation weapon_animation;
+    WeaponAnimationHolder weapon_animations;
+
+    ToolAnimationHolder tool_usage_animations;
 
 public:
     Worm(std::shared_ptr<WormStateG>& initial_state, TexturesPool& pool, Camera& camera):
@@ -65,6 +69,7 @@ public:
             is_backflipping(initial_state->is_backflipping),
             facing_right(initial_state->facing_right),
             was_hit(initial_state->was_hit),
+            using_tool(initial_state->using_tool),
             life_points_remaining(initial_state->life),
             aim_inclination_degrees(initial_state->aim_inclination_degrees),
 
@@ -72,7 +77,8 @@ public:
             jumping(pool.get_actor_texture(Actors::JUMPING_WORM), 5, 5, false),
             backflipping(pool.get_actor_texture(Actors::BACKFLIP_WORM), 22, 1, false),
             dead(pool, 0),
-            weapon_animation(pool) {}
+            weapon_animations(pool),
+            tool_usage_animations(pool){}
 
     void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<WormStateG>(actor_state);
@@ -84,6 +90,7 @@ public:
         is_backflipping = state->is_backflipping;
         facing_right = state->facing_right;
         was_hit = state->was_hit;
+        using_tool = state->using_tool;
         aim_inclination_degrees = state->aim_inclination_degrees;
         life_points_remaining = state->life;
 
@@ -93,12 +100,20 @@ public:
         dead.update((life_points_remaining > 0));
 
         bool charging_weapon = state->charging_weapon;
-        weapon_animation.update(aim_inclination_degrees, charging_weapon, equipped_weapon,
+
+        weapon_animations.update(aim_inclination_degrees, charging_weapon, equipped_weapon,
                                 (is_walking || is_jumping || is_backflipping));
+        tool_usage_animations.update(state);
     }
 
     void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
         SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 32, 60);
+
+        if (life_points_remaining == 0) {
+            SDL2pp::Rect death_render_rect = camera.calcRect(position.x, position.y, 60, 60);
+            dead.render((*game_renderer), death_render_rect);
+            return;
+        }
 
         if (on_turn_time) {
             if (is_jumping) {
@@ -110,11 +125,12 @@ public:
             } else if (is_walking) {
                 walking.render((*game_renderer), render_rect, 0, 0,
                                facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-            } else if (life_points_remaining == 0) {
-                SDL2pp::Rect death_render_rect = camera.calcRect(position.x, position.y, 60, 60);
-                dead.render((*game_renderer), death_render_rect);
-            } else {
-                weapon_animation.render((*game_renderer), render_rect,
+            } else if (using_tool){
+                tool_usage_animations.render((*game_renderer), camera, 0, 0,
+                                             facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+            }
+            else {
+                weapon_animations.render((*game_renderer), render_rect,
                                         facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
             }
         } else {

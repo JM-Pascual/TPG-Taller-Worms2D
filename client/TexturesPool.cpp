@@ -45,6 +45,8 @@ void TexturesPool::load_draw_textures() {
                           WeaponsDraw::WORM_DRAW_MORTAR);
     load_texture_into_map(DATA_PATH "/worms/worm-airstrike-draw.png", draw_textures,
                           WeaponsDraw::WORM_DRAW_AIR_STRIKE);
+    load_texture_into_map(DATA_PATH "/worms/worm-teleport-draw.png", draw_textures,
+                          WeaponsDraw::WORM_DRAW_TELEPORT);
 }
 
 void TexturesPool::load_aiming_textures() {
@@ -63,6 +65,8 @@ void TexturesPool::load_aiming_textures() {
                           WeaponAiming::WORM_AIM_MORTAR);
     load_texture_into_map(DATA_PATH "/worms/worm-airstrike-aim.png", aim_textures,
                           WeaponAiming::WORM_AIM_AIR_STRIKE);
+    load_texture_into_map(DATA_PATH "/worms/worm-teleport-aim.png", aim_textures,
+                          WeaponAiming::WORM_AIM_TELEPORT);
 }
 
 void TexturesPool::load_projectile_textures() {
@@ -95,6 +99,11 @@ void TexturesPool::load_effect_textures() {
 
     load_texture_into_map(DATA_PATH "/stage/ammo-crate-effect.png", effect_textures,
                           Effects::CRATE_AMMO);
+}
+
+void TexturesPool::load_tool_use_textures() {
+    load_texture_into_map(DATA_PATH "/weapons/worm-leaving-teleport.png", tool_usage_textures,
+                          ToolUsage::TELEPORT_USE);
 }
 
 void TexturesPool::load_combat_textures() {
@@ -152,6 +161,7 @@ TexturesPool::TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer):
     load_worm_textures();
     load_combat_textures();
     load_projectile_textures();
+    load_tool_use_textures();
     load_effect_textures();
     load_tombstones_textures();
 }
@@ -177,6 +187,11 @@ std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_draw_texture(
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_projectile_texture(
         Projectiles projectile_texture_to_fetch) {
     return (projectile_textures[projectile_texture_to_fetch]);
+}
+
+std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_tool_usage_texture(
+        ToolUsage tool_use_texture_to_fetch) {
+    return (tool_usage_textures.at(tool_use_texture_to_fetch));
 }
 
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_effect_texture(
