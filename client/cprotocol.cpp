@@ -165,7 +165,6 @@ std::shared_ptr<PlayerStateG> ClientSide::Protocol::recvPlayerGame() {
     return std::make_shared<PlayerStateG>(is_playing, id, avg_life, std::move(ammo_left));
 }
 
-#include <iostream>
 std::shared_ptr<WormStateG> ClientSide::Protocol::recvWormGame() {
     uint8_t id = recvUint8();
     float x = meter_to_pixel_x(recvFloat());
@@ -183,7 +182,6 @@ std::shared_ptr<WormStateG> ClientSide::Protocol::recvWormGame() {
     bool drown = recvBool();
     bool using_tool = recvBool();
 
-    std::cout << life << std::endl;
 
     return std::make_shared<WormStateG>(id, x, y, equipped_weapon, on_turn_time, is_wa, is_jumping,
                                         is_backflipping, direction, was_hit, aim_inclination,

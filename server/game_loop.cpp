@@ -48,10 +48,7 @@ void GameLoop::run() {
         game.battlefield.remove_collided_projectiles();
 
         game.battlefield.step(game.worm_handler);
-        //game.broadcaster.broadcastGame(turn_id.player_id);
         game.broadcaster.remove_closed_clients(game.ready_count, game.players);
-
-
 
         std::chrono::time_point<std::chrono::steady_clock> after = std::chrono::steady_clock::now();
 

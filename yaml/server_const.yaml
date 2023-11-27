@@ -21,7 +21,7 @@
   initial_life: 100
   worm_width: 0.9
   worm_height: 1.2
-  arm_length: 1.0 #(${worm_width} / 2) + 1 -->  1.45
+  arm_length: 1.45 #(${worm_width} / 2) + 1 -->  1.45
   power_raise: 1
   max_power: 5
   min_falling_damage: 2.0
