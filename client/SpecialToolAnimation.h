@@ -30,8 +30,8 @@ protected:
     bool currently_animating_tool;
 public:
     SpecialToolAnimation(std::shared_ptr<SDL2pp::Texture> &texture,
-                         unsigned int frames_in_texture, unsigned int delay_in_animation,
-                         bool loop) : texture(texture), numFrames(frames_in_texture),
+                         unsigned int frames_in_texture, unsigned int delay_in_animation) :
+            texture(texture), numFrames(frames_in_texture),
             size(this->texture->GetHeight() / numFrames),
             currentFrame(0), delay(delay_in_animation),
             counter(0),
@@ -57,8 +57,8 @@ private:
     b2Vec2 teleport_position;
 public:
     TeleportAnimation(std::shared_ptr<SDL2pp::Texture> &texture,
-                      unsigned int frames_in_texture, unsigned int delay_in_animation, bool loop) :
-            SpecialToolAnimation(texture, frames_in_texture, delay_in_animation, loop),
+                      unsigned int frames_in_texture, unsigned int delay_in_animation) :
+            SpecialToolAnimation(texture, frames_in_texture, delay_in_animation),
             initial_position(0,0), teleport_position(0,0){}
 
     void update_tool_animation(std::shared_ptr<WormStateG> &worm_state) override {
@@ -116,6 +116,62 @@ public:
     }
 
     virtual ~TeleportAnimation() = default;
+};
+
+class AirStrikeCallAnimation : public SpecialToolAnimation {
+private:
+    b2Vec2 call_position;
+    bool on_second_animation; //Bool to perform two iterations for longer animation
+public:
+    AirStrikeCallAnimation(std::shared_ptr<SDL2pp::Texture> &texture,
+                      unsigned int frames_in_texture, unsigned int delay_in_animation) :
+            SpecialToolAnimation(texture, frames_in_texture, delay_in_animation),
+            call_position(0,0), on_second_animation(false){}
+
+    void update_tool_animation(std::shared_ptr<WormStateG> &worm_state) override {
+        if (!currently_animating_tool && worm_state->using_tool){
+            currently_animating_tool = true;
+            call_position = worm_state->pos;
+        } else if (!currently_animating_tool){
+            this->currentFrame = 0;
+        } else {
+            counter++;
+            call_position = worm_state->pos;
+            if (counter < delay) {
+                return;
+            } else {
+                if (currentFrame < numFrames-1) {
+                    this->currentFrame++;
+                } else {
+                    if (on_second_animation){
+                        currently_animating_tool = false;
+                        on_second_animation = false;
+                        return; //Last frame, end of animation
+                    } else {
+                        currentFrame = 0;
+                        on_second_animation = true;
+                    }
+                }
+                counter = 0;
+            }
+        }
+    }
+
+    void render(SDL2pp::Renderer& renderer, Camera& camera, int non_squared_width,
+                int non_squared_height, SDL_RendererFlip flipType, double angle) override {
+        SDL2pp::Rect render_rect_initial = camera.calcRect(call_position.x, call_position.y, 40, 60);
+        renderer.Copy(
+                (*texture),
+                SDL2pp::Rect(0, (this->size) * this->currentFrame,
+                             (this->size + non_squared_width), (this->size + non_squared_height)),
+                render_rect_initial,
+                angle,
+                SDL2pp::NullOpt,
+                flipType
+        );
+    }
+
+    virtual ~AirStrikeCallAnimation() = default;
 };
 
 #endif  // SPECIALTOOLANIMATION_H

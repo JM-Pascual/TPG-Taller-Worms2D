@@ -85,7 +85,8 @@ void TexturesPool::load_projectile_textures() {
                           Projectiles::BANANA_PROYECTILE);
     load_texture_into_map(DATA_PATH "/weapons/dynamite-projectile.png", projectile_textures,
                           Projectiles::DYNAMITE_PROYECTILE);
-    load_texture_into_map(DATA_PATH "/weapons/airstrike-projectile.png", projectile_textures, Projectiles::AIR_STRIKE_PROYECTILE);
+    load_texture_into_map(DATA_PATH "/weapons/airstrike-projectile.png", projectile_textures,
+                          Projectiles::AIR_STRIKE_PROYECTILE);
 }
 
 void TexturesPool::load_effect_textures() {
@@ -104,6 +105,9 @@ void TexturesPool::load_effect_textures() {
 void TexturesPool::load_tool_use_textures() {
     load_texture_into_map(DATA_PATH "/weapons/worm-leaving-teleport.png", tool_usage_textures,
                           ToolUsage::TELEPORT_USE);
+
+    load_texture_into_map(DATA_PATH "/weapons/worm-airstrike-call.png", tool_usage_textures,
+                          ToolUsage::AIR_STRIKE_CALL);
 }
 
 void TexturesPool::load_combat_textures() {

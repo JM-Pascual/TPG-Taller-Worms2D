@@ -9,7 +9,12 @@ void ToolAnimationHolder::load_all_use_animations(TexturesPool& pool) {
     tool_animations.insert({
             WeaponsAndTools::TELEPORT, std::make_unique<TeleportAnimation>(
                                              pool.get_tool_usage_texture(ToolUsage::TELEPORT_USE)
-                                                     , 48, 0, false)});
+                                                     , 48, 0)});
+
+    tool_animations.insert({
+            WeaponsAndTools::AIR_STRIKE, std::make_unique<AirStrikeCallAnimation>(
+                                               pool.get_tool_usage_texture(ToolUsage::AIR_STRIKE_CALL)
+                                                       , 10, 2)});
 }
 
 void ToolAnimationHolder::update(std::shared_ptr<WormStateG>& worm_state) {
