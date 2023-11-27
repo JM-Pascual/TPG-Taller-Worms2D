@@ -22,6 +22,10 @@ void AimAnimation::load_all_aim_textures(TexturesPool& pool) {
     weapon_aim_textures.insert(
             {WeaponsAndTools::BANANA, (pool.get_aim_texture(WeaponAiming::WORM_AIM_BANANA))});
 
+    weapon_aim_textures.insert(
+            {WeaponsAndTools::HOLY_GRENADE, (pool.get_aim_texture(
+                                                    WeaponAiming::WORM_AIM_HOLY_GRENADE))});
+
     weapon_aim_textures.insert({WeaponsAndTools::AIR_STRIKE,
                                 (pool.get_aim_texture(WeaponAiming::WORM_AIM_AIR_STRIKE))});
 

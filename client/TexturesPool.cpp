@@ -21,12 +21,14 @@ void TexturesPool::load_texture_into_map(
 
 void TexturesPool::load_general_worm_textures() {
     /// Loads all the body actors_textures and enables alpha blending
-    load_texture_into_map(DATA_PATH "/worms/worm-left.png", actors_textures, Actors::WORM);
+    load_texture_into_map(DATA_PATH "/worms/worm-left.png", actors_textures,
+                          Actors::WORM);
     load_texture_into_map(DATA_PATH "/worms/worm-jump-up.png", actors_textures,
                           Actors::JUMPING_WORM);
     load_texture_into_map(DATA_PATH "/worms/worm-backflip.png", actors_textures,
                           Actors::BACKFLIP_WORM);
-    load_texture_into_map(DATA_PATH "/worms/worm-death.png", actors_textures, Actors::DYING_WORM);
+    load_texture_into_map(DATA_PATH "/worms/worm-death.png", actors_textures,
+                          Actors::DYING_WORM);
 }
 
 void TexturesPool::load_draw_textures() {
@@ -41,6 +43,8 @@ void TexturesPool::load_draw_textures() {
                           WeaponsDraw::WORM_DRAW_RED_GRENADE);
     load_texture_into_map(DATA_PATH "/worms/worm-banana-draw.png", draw_textures,
                           WeaponsDraw::WORM_DRAW_BANANA);
+    load_texture_into_map(DATA_PATH "/worms/worm-holyg-draw.png", draw_textures,
+                          WeaponsDraw::WORM_DRAW_HOLY_GRENADE);
     load_texture_into_map(DATA_PATH "/worms/worm-mortar-draw.png", draw_textures,
                           WeaponsDraw::WORM_DRAW_MORTAR);
     load_texture_into_map(DATA_PATH "/worms/worm-airstrike-draw.png", draw_textures,
@@ -61,6 +65,8 @@ void TexturesPool::load_aiming_textures() {
                           WeaponAiming::WORM_AIM_RED_GRENADE);
     load_texture_into_map(DATA_PATH "/worms/worm-banana-aim.png", aim_textures,
                           WeaponAiming::WORM_AIM_BANANA);
+    load_texture_into_map(DATA_PATH "/worms/worm-holyg-aim.png", aim_textures,
+                          WeaponAiming::WORM_AIM_HOLY_GRENADE);
     load_texture_into_map(DATA_PATH "/worms/worm-mortar-aim.png", aim_textures,
                           WeaponAiming::WORM_AIM_MORTAR);
     load_texture_into_map(DATA_PATH "/worms/worm-airstrike-aim.png", aim_textures,
@@ -83,6 +89,8 @@ void TexturesPool::load_projectile_textures() {
                           Projectiles::RED_GRENADE_PROYECTILE);
     load_texture_into_map(DATA_PATH "/weapons/spinning-banana.png", projectile_textures,
                           Projectiles::BANANA_PROYECTILE);
+    load_texture_into_map(DATA_PATH "/weapons/holy-grenade-projectile.png", projectile_textures,
+                          Projectiles::HOLY_GRENADE_PROYECTILE);
     load_texture_into_map(DATA_PATH "/weapons/dynamite-projectile.png", projectile_textures,
                           Projectiles::DYNAMITE_PROYECTILE);
     load_texture_into_map(DATA_PATH "/weapons/airstrike-projectile.png", projectile_textures,
@@ -94,10 +102,8 @@ void TexturesPool::load_effect_textures() {
                           Effects::NORMAL_EXPLOSION);
     load_texture_into_map(DATA_PATH "/weapons/mortar-fragment-explosion.png", effect_textures,
                           Effects::FRAGMENT_EXPLOSION);
-
     load_texture_into_map(DATA_PATH "/stage/heal-crate-effect.png", effect_textures,
                           Effects::CRATE_HEAL);
-
     load_texture_into_map(DATA_PATH "/stage/ammo-crate-effect.png", effect_textures,
                           Effects::CRATE_AMMO);
 }
@@ -105,13 +111,13 @@ void TexturesPool::load_effect_textures() {
 void TexturesPool::load_tool_use_textures() {
     load_texture_into_map(DATA_PATH "/weapons/worm-leaving-teleport.png", tool_usage_textures,
                           ToolUsage::TELEPORT_USE);
-
     load_texture_into_map(DATA_PATH "/weapons/worm-airstrike-call.png", tool_usage_textures,
                           ToolUsage::AIR_STRIKE_CALL);
 }
 
 void TexturesPool::load_combat_textures() {
-    load_texture_into_map(DATA_PATH "/weapons/crosshair.png", actors_textures, Actors::CROSSHAIR);
+    load_texture_into_map(DATA_PATH "/weapons/crosshair.png", actors_textures,
+                          Actors::CROSSHAIR);
     load_texture_into_map(DATA_PATH "/miscellaneous/font-background.png", actors_textures,
                           Actors::STATE_SIGN);
     load_texture_into_map(DATA_PATH "/weapons/loading-shot.png", actors_textures,

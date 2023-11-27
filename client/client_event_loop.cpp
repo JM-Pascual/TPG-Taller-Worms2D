@@ -28,7 +28,7 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
                                     TexturesPool& txt_pool) {
     std::shared_ptr<States> raw_state = nullptr;
-    int expected_states = MAX_PLAYERS + WORMS_QUANTITY;
+    int expected_states = MAX_PLAYERS + WORMS_QUANTITY + 5;
     for (int j = 0; j < expected_states; j++) {
         if (not game_state_queue.try_pop(raw_state)) {
             continue;
@@ -120,6 +120,8 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                                                                      state, txt_pool, camera));
                             break;
                         case WeaponsAndTools::HOLY_GRENADE:
+                            proyectiles.add_actor(state->id, std::make_shared<HolyGrenadeProjectile>(
+                                                                     state, txt_pool, camera));
                             break;
                         case WeaponsAndTools::DYNAMITE:
                             proyectiles.add_actor(state->id, std::make_shared<DynamiteProjectile>(

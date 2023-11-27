@@ -37,6 +37,12 @@ void WeaponAnimationHolder::load_all_draw_animations(TexturesPool& pool) {
                                                             , 10, 2, false)});
 
     weapon_draw_animations.insert({
+            WeaponsAndTools::HOLY_GRENADE, std::make_unique<Animation>(
+                                             pool.get_draw_texture(
+                                                     WeaponsDraw::WORM_DRAW_HOLY_GRENADE)
+                                                     , 10, 2, false)});
+
+    weapon_draw_animations.insert({
             WeaponsAndTools::AIR_STRIKE, std::make_unique<Animation>(
                                              pool.get_draw_texture(
                                                      WeaponsDraw::WORM_DRAW_AIR_STRIKE)
