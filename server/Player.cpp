@@ -57,7 +57,7 @@ void Player::spawnWorms(Battlefield& battlefield, const uint8_t worms_quantity,
     for (uint8_t i = 0; i < worms_quantity; i++) {
         worms.push_back(std::make_shared<Worm>(battlefield, selected_weapon, selected_gadget_type,
                                                worm_counter++, allow_multiple_jump,
-                                               immortal_worms,spawn_points.at(i)));
+                                               immortal_worms,spawn_points.at(i), id));
     }
 }
 

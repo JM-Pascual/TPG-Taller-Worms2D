@@ -72,7 +72,7 @@ private:
     const bool& immortal_worms;
 
     bool drown;
-    //int team;
+    uint8_t team;
 
 
     int facing_factor();
@@ -82,7 +82,7 @@ public:
 
     explicit Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
                   WeaponsAndTools& type, const uint8_t& id, const bool& allow_multiple_jump,
-                  const bool& immortal_worms, b2Vec2 position);
+                  const bool& immortal_worms, b2Vec2 position, uint8_t team);
 
     void move();
     void stop();
