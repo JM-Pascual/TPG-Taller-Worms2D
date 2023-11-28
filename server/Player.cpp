@@ -51,16 +51,10 @@ void Player::spawnWorms(Battlefield& battlefield, const uint8_t worms_quantity,
         // Extract values from the YAML node
         auto x = element[0].as<float>();
         auto y = element[1].as<float>();
-        spawn_points.push_back(b2Vec2(x,y));
+        spawn_points.emplace_back(x,y);
     }
 
     for (uint8_t i = 0; i < worms_quantity; i++) {
-        /*
-        b2Vec2 spawn_point;
-        spawn_point.x = Config::spawnLayoutNode[0][id][0].as<float>();
-        spawn_point.y = Config::spawnLayoutNode[0][id][1].as<float>();
-         */
-
         worms.push_back(std::make_shared<Worm>(battlefield, selected_weapon, selected_gadget_type,
                                                worm_counter++, allow_multiple_jump,
                                                immortal_worms,spawn_points.at(i)));

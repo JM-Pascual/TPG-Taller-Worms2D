@@ -72,6 +72,7 @@ private:
     const bool& immortal_worms;
 
     bool drown;
+    //int team;
 
 
     int facing_factor();
