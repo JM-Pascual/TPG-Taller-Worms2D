@@ -145,7 +145,7 @@ public:
         if (!on_turn_time) {
             SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 32, 60);
             state_printer.print_text((*game_renderer), std::to_string(int(life_points_remaining)),
-                                     render_rect.x + 8, render_rect.y - 30, true);
+                                     render_rect.x, render_rect.y, 1, 18, 30, true);
         }
     }
 
@@ -158,7 +158,7 @@ public:
 class Projectile: public GameActor {
 protected:
     bool impacted;
-
+    float time_till_detonation;
 public:
     explicit Projectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
                         Camera& camera):
@@ -305,6 +305,7 @@ public:
         position = state->pos;
         impacted = state->impacted;
         current_angle = state->angle;
+        time_till_detonation = state->time_till_detonation;
         impact.update(!impacted);
     }
 
@@ -319,7 +320,12 @@ public:
     }
 
     inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                            TextPrinter& state_printer) override {}
+                            TextPrinter& state_printer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
+                                                           time_till_detonation)),
+                                 rect.x, rect.y, 10, 15, 15, true);
+    }
 };
 
 // ----------------------- RED GRENADE ----------------------
@@ -344,6 +350,7 @@ public:
         position = state->pos;
         impacted = state->impacted;
         current_angle = state->angle;
+        time_till_detonation = state->time_till_detonation;
         impact.update(!impacted);
     }
 
@@ -358,7 +365,12 @@ public:
     }
 
     inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                            TextPrinter& state_printer) override {}
+                            TextPrinter& state_printer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
+                                                           time_till_detonation)),
+                                 rect.x, rect.y, 12, 15, 15, true);
+    }
 };
 
 // ----------------------- BANANA ----------------------
@@ -383,6 +395,7 @@ public:
         position = state->pos;
         impacted = state->impacted;
         current_angle = state->angle;
+        time_till_detonation = state->time_till_detonation;
         impact.update(!impacted);
     }
 
@@ -397,7 +410,12 @@ public:
     }
 
     inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                            TextPrinter& state_printer) override {}
+                            TextPrinter& state_printer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
+                                                           time_till_detonation)),
+                                 rect.x, rect.y, 12, 15, 15, true);
+    }
 };
 
 // ----------------------- HOLY GRENADE ----------------------
@@ -422,6 +440,7 @@ public:
         position = state->pos;
         impacted = state->impacted;
         current_angle = state->angle;
+        time_till_detonation = state->time_till_detonation;
         impact.update(!impacted);
     }
 
@@ -436,7 +455,12 @@ public:
     }
 
     inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                            TextPrinter& state_printer) override {}
+                            TextPrinter& state_printer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
+                                                           time_till_detonation)),
+                                 rect.x, rect.y, 12, 15, 15, true);
+    }
 };
 
 // ----------------------- DYNAMITE ----------------------
@@ -450,7 +474,7 @@ public:
     explicit DynamiteProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
                                 TexturesPool& pool, Camera& camera):
             Projectile(initial_state, pool, camera),
-            countdown(pool.get_projectile_texture(Projectiles::DYNAMITE_PROYECTILE), 126),
+            countdown(pool.get_projectile_texture(Projectiles::DYNAMITE_PROYECTILE), 126, 2, false),
             explosion(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false) {}
 
     inline void update(std::shared_ptr<States>& actor_state) override {
@@ -458,6 +482,7 @@ public:
         position = state->pos;
         countdown.update();
         impacted = state->impacted;
+        time_till_detonation = state->time_till_detonation;
         explosion.update(!impacted);
     }
 
@@ -471,7 +496,12 @@ public:
     }
 
     inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                            TextPrinter& state_printer) override {}
+                            TextPrinter& state_printer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
+                                                           time_till_detonation)),
+                                 rect.x, rect.y, 12, 15, 15, true);
+    }
 };
 
 // ----------------------- AIR STRIKE ----------------------

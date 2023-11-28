@@ -8,7 +8,6 @@
 #include <arpa/inet.h>
 
 #include "../common/States.h"
-#include "../common/const.h"
 #include "../common/liberror.h"
 
 void ClientSide::Protocol::send(const void* data, unsigned int sz) {
@@ -199,10 +198,12 @@ std::shared_ptr<ProjectileStateG> ClientSide::Protocol::recvProjectileGame() {
     uint8_t id = recvUint8();
     float x = meter_to_pixel_x(recvFloat());
     float y = meter_to_pixel_y(recvFloat());
+    float time_remaining_till_detonation = recvFloat();
     float angle = recvFloat();
     auto proyectile_type = (WeaponsAndTools)recvUint8();
     bool impacted = recvBool();
-    return std::make_shared<ProjectileStateG>(id, x, y, proyectile_type, impacted, angle);
+    return std::make_shared<ProjectileStateG>(id, x, y, time_remaining_till_detonation,
+                                              proyectile_type, impacted, angle);
 }
 
 std::shared_ptr<LevelStateG> ClientSide::Protocol::recvLevelBuild() {

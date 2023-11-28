@@ -154,11 +154,13 @@ class ProjectileStateG: public States {
 public:
     const uint8_t id;
     const b2Vec2 pos;
+    const float time_till_detonation;
     const WeaponsAndTools type;
     const bool impacted;
     const float angle;
 
     explicit ProjectileStateG(const uint8_t& id, const float& x, const float& y,
+                              const float& time_till_detonation,
                               const WeaponsAndTools& type, const bool& impacted,
                               const float& angle);
 

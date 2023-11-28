@@ -8,8 +8,8 @@ Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radi
         type(type),
         blast_radius(blast_radius),
         epicenter_damage(epicenter_damage),
-        explosion_delay(explosion_delay),
-        grenade_timer(std::chrono::steady_clock::now()) {
+        time_till_detonation(explosion_delay),
+        projectile_timer(std::chrono::steady_clock::now()) {
 
     b2BodyDef projectile_body;
     projectile_body.type = b2_dynamicBody;
@@ -37,7 +37,8 @@ std::shared_ptr<ProjectileStateG> Projectile::get_proyectile_state(const uint8_t
     float vel_angle = b2Atan2(body->GetLinearVelocity().y, body->GetLinearVelocity().x);
 
     return std::make_shared<ProjectileStateG>(proyectile_id, body->GetPosition().x,
-                                              body->GetPosition().y, type, dead, vel_angle);
+                                              body->GetPosition().y, this->time_till_detonation,
+                                              type, dead, vel_angle);
 }
 
 void Projectile::set_power(b2Vec2 power) { body->ApplyLinearImpulseToCenter(power, true); }
@@ -127,10 +128,10 @@ void Rocket::updateTimer() {
     }
 
     std::chrono::duration<double> elapsed_seconds =
-            std::chrono::steady_clock::now() - grenade_timer;
-    grenade_timer = std::chrono::steady_clock::now();
-    explosion_delay -= elapsed_seconds.count();
-    if (explosion_delay <= 0) {
+            std::chrono::steady_clock::now() - projectile_timer;
+    projectile_timer = std::chrono::steady_clock::now();
+    time_till_detonation -= elapsed_seconds.count();
+    if (time_till_detonation <= 0) {
         collide();
         dead = true;
     }
@@ -203,10 +204,10 @@ void Grenade::updateTimer() {
     }
 
     std::chrono::duration<double> elapsed_seconds =
-            std::chrono::steady_clock::now() - grenade_timer;
-    grenade_timer = std::chrono::steady_clock::now();
-    explosion_delay -= elapsed_seconds.count();
-    if (explosion_delay <= 0) {
+            std::chrono::steady_clock::now() - projectile_timer;
+    projectile_timer = std::chrono::steady_clock::now();
+    time_till_detonation -= elapsed_seconds.count();
+    if (time_till_detonation <= 0) {
         collide();
         dead = true;
     }

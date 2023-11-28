@@ -135,7 +135,8 @@ enum class Actors {
     DYING_WORM,
     CROSSHAIR,
     POWER_CHARGE_BAR,
-    STATE_SIGN
+    STATE_SIGN,
+    TIMER_SIGN
 };
 
 enum class WeaponsDraw {

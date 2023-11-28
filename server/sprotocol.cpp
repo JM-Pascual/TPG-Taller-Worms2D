@@ -173,6 +173,7 @@ void ServerSide::Protocol::sendProjectileState(const std::shared_ptr<States>& ps
     send(&p->tag, sizeof(uint8_t));
     send(&p->id, sizeof(uint8_t));
     this->sendPosition(p->pos);
+    this->sendFloat(p->time_till_detonation);
     this->sendFloat(p->angle);
     send(&p->type, sizeof(uint8_t));
     send(&p->impacted, sizeof(bool));
