@@ -90,6 +90,11 @@ void Game::spawnWorms() {
         player->spawnWorms(battlefield, min_worms_player, worm_counter);
     }
 
+    // Terminar si no hay worms que falten asignar
+    if (not no_assigned_worms) {
+        return;
+    }
+
     auto it = players.cbegin();
     for (size_t i = 0; i < no_assigned_worms; i++) {
         it->second->spawnWorms(battlefield, 1, worm_counter);
