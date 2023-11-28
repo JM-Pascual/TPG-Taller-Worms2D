@@ -6,7 +6,7 @@
 
 Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
            WeaponsAndTools& type, const uint8_t& id, const bool& allow_multiple_jump,
-           const bool& immortal_worms, b2Vec2 position, uint8_t team):
+           const bool& immortal_worms, const b2Vec2& position, const uint8_t& team):
         Entity(battlefield),
         life(INITIAL_LIFE),
         facing_right(true),
@@ -235,6 +235,7 @@ Worm::Worm(Worm&& o):
         pos_y_before_falling(o.pos_y_before_falling),
         allow_multiple_jump(o.allow_multiple_jump),
         immortal_worms(o.immortal_worms),
+        team(o.team),
         id(o.id) {
 
     o.life = 0.0f;

@@ -39,6 +39,7 @@ private:
     uint8_t ready_count;
 
     uint8_t worm_counter;
+    std::vector<b2Vec2> spawn_points;
 
     const std::string description;
     const std::string map_name;
@@ -69,7 +70,14 @@ public:
             worm_handler(players),
             broadcaster(*this),
             gameloop(*this, this->game_id, erase_id_queue),
-            need_to_join_loop(false) {}
+            need_to_join_loop(false) {
+        for (const auto& element: Config::spawnLayoutNode[0]["beach"]) {
+            // Extract values from the YAML node
+            auto x = element[0].as<float>();
+            auto y = element[1].as<float>();
+            spawn_points.emplace_back(x, y);
+        }
+    }
 
     Queue<std::shared_ptr<PlayerAction>>& get_action_queue();
 

@@ -8,11 +8,11 @@
 #include <box2d/box2d.h>
 
 #include "../common/const.h"
+#include "common/config.h"
 
 #include "entity.h"
 #include "gadget.h"
 #include "worm.h"
-#include "common/config.h"
 
 class Gadget;
 class Battlefield;
@@ -33,7 +33,8 @@ private:
     bool allow_multiple_jump;
     bool immortal_worms;
 
-    void spawnWorms(Battlefield& battlefield, const uint8_t worms_quantity, uint8_t& worm_counter, uint8_t id);
+    void spawnWorms(Battlefield& battlefield, const uint8_t& worms_quantity, uint8_t& worm_counter,
+                    const uint8_t& id, std::vector<b2Vec2>& spawn_points);
 
 public:
     Player();

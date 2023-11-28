@@ -42,22 +42,17 @@ uint8_t Player::calcAvgLife() {
 
 void Player::set_ready() { ready = !ready; }
 
-void Player::spawnWorms(Battlefield& battlefield, const uint8_t worms_quantity,
-                        uint8_t& worm_counter, uint8_t id) {
+void Player::spawnWorms(Battlefield& battlefield, const uint8_t& worms_quantity,
+                        uint8_t& worm_counter, const uint8_t& id,
+                        std::vector<b2Vec2>& spawn_points) {
 
-    std::vector<b2Vec2> spawn_points;
-
-    for (const auto& element: Config::spawnLayoutNode[id][id]) {
-        // Extract values from the YAML node
-        auto x = element[0].as<float>();
-        auto y = element[1].as<float>();
-        spawn_points.emplace_back(x,y);
-    }
 
     for (uint8_t i = 0; i < worms_quantity; i++) {
+        b2Vec2 spawn_point = spawn_points.back();
+        spawn_points.pop_back();
         worms.push_back(std::make_shared<Worm>(battlefield, selected_weapon, selected_gadget_type,
-                                               worm_counter++, allow_multiple_jump,
-                                               immortal_worms,spawn_points.at(i), id));
+                                               worm_counter++, allow_multiple_jump, immortal_worms,
+                                               spawn_point, id));
     }
 }
 
