@@ -93,12 +93,14 @@ void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 app
 }
 
 void Projectile::drowning() {
+
     if(body->GetPosition().y <= 4){
         if (body->GetPosition().x < 0 || body->GetPosition().x > 60) {
             dead = true;
 
         } else {
             body->SetLinearVelocity( 0.7f * body->GetLinearVelocity());
+            explosion_delay -= 0.2f;
         }
     }
 }
