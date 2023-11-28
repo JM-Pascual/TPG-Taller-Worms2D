@@ -16,7 +16,7 @@ private:
     */
 
 public:
-    explicit InfoParser(Game& game): game(game) {}
+    explicit inline InfoParser(Game& game): game(game) {}
 
     void makeLobbyState(std::list<std::shared_ptr<States>>& states);
 

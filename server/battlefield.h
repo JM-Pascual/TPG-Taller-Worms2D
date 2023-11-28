@@ -55,13 +55,9 @@ public:
 
     void add_projectile(std::shared_ptr<Projectile>& proyectile);
 
-    void remove_collided_projectiles();
-
-    void destroy_dead_entities();
+    void remove_dead_objects();
 
     void createCrate();
-
-    const void clearOpenedCrates();
 
     const bool noProjectiles();
 

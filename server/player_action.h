@@ -329,7 +329,7 @@ private:
     Queue<std::shared_ptr<States>>& state_queue;
 
 public:
-    ShowGames(GameBrowser& gb, Queue<std::shared_ptr<States>>& stateQ):
+    explicit ShowGames(GameBrowser& gb, Queue<std::shared_ptr<States>>& stateQ):
             gb(gb), state_queue(stateQ) {}
 
     void execute() override;
@@ -344,7 +344,7 @@ private:
     const uint8_t& game_id;
 
 public:
-    ExitGame(GameBrowser& gb, const uint8_t& player_id, const uint8_t& game_id):
+    explicit ExitGame(GameBrowser& gb, const uint8_t& player_id, const uint8_t& game_id):
             gb(gb), player_id(player_id), game_id(game_id) {}
 
     void execute() override;
@@ -356,7 +356,7 @@ public:
 
 class NullCommand: public PlayerAction, public LobbyAction {
 public:
-    NullCommand(): PlayerAction(0) {}
+    inline NullCommand(): PlayerAction(0) {}
 
     // Comportamiento nulo
     void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,

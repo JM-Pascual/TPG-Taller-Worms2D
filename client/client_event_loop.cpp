@@ -16,7 +16,7 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
         protocol(hostname, servname),
         recv(this->protocol, game_state_queue, lobby_state_queue, runned),
         send(this->protocol, this->action_queue),
-        input(this->action_queue, quit, my_turn, camera, mouse_priority),
+        input(this->action_queue, quit, my_turn, camera, mouse_priority, kb_priority),
         cheat_menu(cheat_menu) {
     spdlog::get("client")->debug("Iniciando hilo receptor en el cliente");
     recv.start();
@@ -24,18 +24,6 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
     send.start();
     cheat_menu = std::make_unique<CheatMenu>(action_queue);
     cheat_menu->hide();
-}
-
-void EventLoop::update_terrain() {
-    for (auto& terrain: terrain_elements) {
-        terrain->update();
-    }
-}
-
-void EventLoop::render_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) {
-    for (auto& terrain: terrain_elements) {
-        terrain->render(game_renderer);
-    }
 }
 
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
@@ -134,6 +122,9 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                                                                      state, txt_pool, camera));
                             break;
                         case WeaponsAndTools::HOLY_GRENADE:
+                            proyectiles.add_actor(state->id,
+                                                  std::make_shared<HolyGrenadeProjectile>(
+                                                          state, txt_pool, camera));
                             break;
                         case WeaponsAndTools::DYNAMITE:
                             proyectiles.add_actor(state->id, std::make_shared<DynamiteProjectile>(
@@ -146,6 +137,9 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                         case WeaponsAndTools::BASEBALL_BAT:
                             break;
                         case WeaponsAndTools::AIR_STRIKE:
+                            proyectiles.add_actor(state->id, std::make_shared<AirStrikeProjectile>(
+                                                                     state, txt_pool, camera));
+                            terrain_elements.change_jet_position(state->pos.x, state->pos.y);
                             break;
                         case WeaponsAndTools::TELEPORT:
                             break;
@@ -174,15 +168,17 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                 // Charge all the bars as terrain
                 for (auto& bar: state->bars) {
                     if (bar.type == TerrainActors::BAR) {
-                        terrain_elements.emplace_back(std::make_unique<ShortBar>(
-                                bar.x, bar.y, bar.angle, txt_pool, camera));
+                        terrain_elements.add_terrain_element(
+                                TerrainActors::BAR,
+                                std::make_unique<ShortBar>(bar.x, bar.y, bar.angle, txt_pool,
+                                                           camera));
                     } else {
-                        terrain_elements.emplace_back(std::make_unique<LongBar>(
-                                bar.x, bar.y, bar.angle, txt_pool, camera));
+                        terrain_elements.add_terrain_element(
+                                TerrainActors::LONG_BAR,
+                                std::make_unique<LongBar>(bar.x, bar.y, bar.angle, txt_pool,
+                                                          camera));
                     }
                 }
-
-                terrain_elements.emplace_back(std::make_unique<Water>(0, 600, txt_pool, camera));
                 continue;
             }
 
@@ -196,13 +192,14 @@ void EventLoop::run() {
     runned = true;
 
     Window window(1280, 720);
+
     TexturesPool txt_pool(window.get_renderer());
 
     SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 
     SDL2pp::SDLTTF ttf;
     TextPrinter state_printer(18, txt_pool);
-
+    terrain_elements.load_base_terrain(txt_pool, camera);
     audio_player.play_background_music();
 
     input.start();
@@ -227,8 +224,8 @@ void EventLoop::run() {
         proyectiles.print_actors_state(window.get_renderer(), state_printer);
         crates.render_actors(window.get_renderer());
 
-        update_terrain();
-        render_terrain(window.get_renderer());
+        terrain_elements.update_terrain();
+        terrain_elements.render_terrain(window.get_renderer());
 
         window.present_textures();
 
@@ -262,7 +259,7 @@ void EventLoop::viewWorm(const std::shared_ptr<WormStateG>& worm) {
         camera_priority.priority = Priority::WORM;
         camera_priority.id = worm->id;
 
-        if (worm->on_turn_time && not mouse_priority) {
+        if ((worm->on_turn_time && not mouse_priority) || (worm->on_turn_time && kb_priority)) {
             camera.fixActor(worm->pos.x, worm->pos.y, 32, 60);
         }
 

@@ -143,7 +143,7 @@ void Worm::change_position() {
 }
 
 void Worm::shoot(TurnHandler& turn_handler) {
-    if (weapon_power > 0) {
+    if (weapon_power >= 0) {
         (*selected_weapon)->shoot(battlefield, *this, turn_handler);
     }
 }
@@ -214,11 +214,6 @@ void Worm::collision_reaction() {
 
         reinterpret_cast<Entity*>(body_->GetUserData().pointer)->stop_falling();
     }
-}
-
-void Worm::destroyBody() {
-    battlefield.destroy_body(body);
-    body = nullptr;
 }
 
 Worm::Worm(Worm&& o):

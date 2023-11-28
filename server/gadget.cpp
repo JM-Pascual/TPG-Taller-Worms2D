@@ -215,7 +215,7 @@ void AirStrike::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_ha
         destination.x += AIRSTRIKE_ROCKET_SEPARATION;
 
         std::shared_ptr<Projectile> projectile =
-                std::make_shared<BazookaRocket>(battlefield, destination);
+                std::make_shared<AirStrikeRocket>(battlefield, destination);
         battlefield.add_projectile(projectile);
     }
     worm.use_tool();
@@ -246,6 +246,7 @@ void BaseballBat::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_
     }
     bat(battlefield, worm);
 
+    worm.use_tool();
     turn_handler.use_stop_action();
 
     --ammo;

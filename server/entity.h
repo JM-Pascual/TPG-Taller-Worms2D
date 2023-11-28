@@ -13,15 +13,9 @@ protected:
     bool dead;
     b2Body* body;
     Battlefield& battlefield;
-    bool collided;
-
 
 public:
     explicit Entity(Battlefield& battlefield);
-
-    void start_contact();
-
-    void end_contact();
 
     virtual void applyWindResistance(const float& wind_force) = 0;
 
@@ -33,17 +27,15 @@ public:
 
     virtual void recibe_life_modification(const float& life_variation);
 
-    virtual void reloadAmmo(const uint8_t& ammo) {}
-
-    virtual bool multiple_contact();  // Todo lo vamos a tener que sacar
+    virtual inline void reloadAmmo(const uint8_t& ammo) {}
 
     virtual bool is_dead();
 
-    virtual void open_crate(bool& open) {}
+    virtual inline void open_crate(bool& open) {}
 
     virtual void collision_reaction() = 0;
 
-    ~Entity() = default;
+    ~Entity();
 
     friend class Engine;
 };

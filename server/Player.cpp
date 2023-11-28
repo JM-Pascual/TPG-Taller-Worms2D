@@ -61,12 +61,6 @@ void Player::spawnWorms(Battlefield& battlefield, const uint8_t worms_quantity,
     }
 }
 
-void Player::destroyAllWormBodies() {
-    for (auto& worm: worms) {
-        worm->destroyBody();
-    }
-}
-
 std::unique_ptr<AmmoLeft> Player::getWeaponsAmmo() {
     auto ammo_left = std::make_unique<AmmoLeft>();
     auto it = weapons.cbegin();

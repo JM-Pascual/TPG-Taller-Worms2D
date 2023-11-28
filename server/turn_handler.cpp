@@ -28,6 +28,11 @@ const TurnReset TurnHandler::need_to_update(const uint8_t players_quantity,
                                         it->second->worms.at(it->second->worm_turn)->was_damaged) {
             return advanceTurn(players_quantity);
         }
+
+        if (it->second->worms.size() != current_player_worms_quantity) {
+            current_player_worms_quantity = it->second->worms.size();
+            return advanceTurn(players_quantity);
+        }
     }
 
     elapsed_time += elapsed;

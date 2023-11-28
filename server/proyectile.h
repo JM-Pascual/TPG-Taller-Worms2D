@@ -65,9 +65,9 @@ public:
     void set_power(b2Vec2 power);
     std::shared_ptr<ProjectileStateG> get_proyectile_state(const uint8_t& proyectile_id);
 
-    void collision_reaction() override {}
+    inline void collision_reaction() override {}
 
-    void applyWindResistance(const float& wind_force) override {}
+    inline void applyWindResistance(const float& wind_force) override {}
 
     virtual void second_collision_reaction() = 0;
     virtual void updateTimer() = 0;
@@ -91,7 +91,7 @@ public:
     void collision_reaction() override;
     void applyWindResistance(const float& wind_force) override;
     void updateTimer() override;
-    void second_collision_reaction() override{};
+    inline void second_collision_reaction() override{};
 
     virtual ~Rocket() = default;
 };
@@ -117,25 +117,25 @@ class MortarFragment: public Rocket {
 private:
 public:
     MortarFragment(Battlefield& battlefield, b2Vec2 position, b2Vec2 direction);
-    void applyWindResistance(const float& wind_force) override{};
+    inline void applyWindResistance(const float& wind_force) override{};
     virtual ~MortarFragment() = default;
 };
 
 class AirStrikeRocket: public Rocket {
 public:
     AirStrikeRocket(Battlefield& battlefield, b2Vec2 position);
-    void applyWindResistance(const float &wind_force) override{};
+    inline void applyWindResistance(const float& wind_force) override{};
     virtual ~AirStrikeRocket() = default;
 };
 
 class Grenade: public Projectile {
 public:
-    Grenade(Battlefield& battlefield, b2Vec2 position, float explosion_delay,
-            uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type);
+    Grenade(Battlefield& battlefield, b2Vec2 position, float explosion_delay, uint8_t blast_radius,
+            uint8_t epicenter_damage, WeaponsAndTools type);
     void collision_reaction() override;
     void applyWindResistance(const float& wind_force) override;
     void updateTimer() override;
-    void second_collision_reaction() override{};
+    inline void second_collision_reaction() override{};
     virtual ~Grenade() = default;
 };
 
@@ -168,7 +168,6 @@ class Holy: public Grenade {
 public:
     Holy(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
 };
-
 
 
 #endif  // WORMS2D_PROYECTILE_H

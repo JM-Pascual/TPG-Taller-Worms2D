@@ -21,7 +21,7 @@ public:
     const uint8_t player_id;
     const uint8_t worm_index;
 
-    ActualTurn(const uint8_t& player_id, const uint8_t& worm_index):
+    explicit inline ActualTurn(const uint8_t& player_id, const uint8_t& worm_index):
             player_id(player_id), worm_index(worm_index) {}
 };
 
@@ -41,6 +41,7 @@ private:
 
     std::map<uint8_t, std::unique_ptr<Player>>& players;
     uint8_t current_players_quantity;
+    uint8_t current_player_worms_quantity;
 
     bool player_stop_action;
 
@@ -55,9 +56,9 @@ private:
     const TurnReset advanceTurn(const uint8_t& players_quantity);
 
 public:
-    explicit TurnHandler(std::map<uint8_t, std::unique_ptr<Player>>& players,
-                         BroadCaster& broadcaster, WormHandler& worm_handler,
-                         Battlefield& battlefield):
+    explicit inline TurnHandler(std::map<uint8_t, std::unique_ptr<Player>>& players,
+                                BroadCaster& broadcaster, WormHandler& worm_handler,
+                                Battlefield& battlefield):
             broadcaster(broadcaster),
             worm_handler(worm_handler),
             battlefield(battlefield),
@@ -65,6 +66,7 @@ public:
             elapsed_time(0),
             players(players),
             current_players_quantity(0),
+            current_player_worms_quantity(0),
             player_stop_action(false),
             infinite_turn_cheat_activated(false),
             no_wind_cheat_activated(false),

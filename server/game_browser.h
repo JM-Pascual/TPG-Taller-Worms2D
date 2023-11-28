@@ -25,7 +25,7 @@ private:
     std::atomic<bool> killed;
 
 public:
-    explicit GBCleaner(GameBrowser& gb): Thread(), gb(gb), killed(false) {}
+    explicit inline GBCleaner(GameBrowser& gb): Thread(), gb(gb), killed(false) {}
 
     void kill();
 

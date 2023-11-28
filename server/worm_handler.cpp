@@ -136,7 +136,6 @@ void WormHandler::checkDeadWorms() {
         auto it = player->worms.cbegin();
         while (it != player->worms.cend()) {
             if ((*it)->life == 0.0f) {
-                (*it)->destroyBody();
                 it = player->worms.erase(it);
 
                 continue;
@@ -189,6 +188,7 @@ void WormHandler::check_drown_worms() {
             if (worm->position().y <= 4) {
                 worm->drown = true;
                 worm->life = 0.0f;
+                worm->was_damaged = true;
             }
         }
     }

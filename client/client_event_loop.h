@@ -14,6 +14,7 @@
 #include "ActorHolder.h"
 #include "GameActor.h"
 #include "LevelActors.h"
+#include "TerrainHolder.h"
 #include "TexturesPool.h"
 #include "Window.h"
 #include "audio_player.h"
@@ -38,6 +39,7 @@ private:
     std::atomic<bool> my_turn;
     std::atomic<bool> runned;
     std::atomic<bool> mouse_priority;
+    std::atomic<bool> kb_priority;
     ClientSide::Protocol protocol;
     ClientSide::Receiver recv;
     ClientSide::Sender send;
@@ -49,7 +51,7 @@ private:
     std::unique_ptr<CheatMenu>& cheat_menu;
 
     /// Holders for actors in the game
-    std::list<std::unique_ptr<LevelActor>> terrain_elements;
+    TerrainHolder terrain_elements;
     ActorHolder players;
     ActorHolder proyectiles;
     ActorHolder crates;
@@ -82,7 +84,7 @@ public:
     */
     void run() override;
 
-    ~EventLoop();
+    ~EventLoop() override;
 
     friend class MainWindow;
     friend class GameFrame;
