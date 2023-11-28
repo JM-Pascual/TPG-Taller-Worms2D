@@ -35,6 +35,8 @@ private:
 
     void updateProjectilesTimer();
     void post_action_explosion();
+    void update_drown_projectiles();
+    void update_drown_crates();
 
 public:
     Battlefield();

@@ -5,7 +5,7 @@ WormStateG::WormStateG(const uint8_t& id, const float& x, const float& y,
                        const bool& is_walking, const bool& is_jumping, const bool& is_backflipping,
                        const bool& facing_right, const bool& falling,
                        const float& aim_inclination_degrees, const bool& charging_weapon,
-                       const float& life, const bool& drown, const bool& using_tool):
+                       const float& life, const bool& drown, const bool& using_tool, const uint8_t team):
         States(StatesTag::WORM_G),
         id(id),
         pos(x, y),
@@ -20,7 +20,8 @@ WormStateG::WormStateG(const uint8_t& id, const float& x, const float& y,
         charging_weapon(charging_weapon),
         life(life),
         drown(drown),
-        using_tool(using_tool) {}
+        using_tool(using_tool),
+        team(team){}
 
 ProjectileStateG::ProjectileStateG(const uint8_t& id, const float& x, const float& y,
                                    const WeaponsAndTools& type, const bool& impacted,

@@ -74,6 +74,8 @@ public:
 
     virtual void collide();
 
+    void drowning();
+
     virtual ~Projectile() = default;
     friend class Game;
 };

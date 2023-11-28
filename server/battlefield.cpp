@@ -50,6 +50,8 @@ void Battlefield::step() {
     updateProjectilesTimer();
     engine.step();
     post_action_explosion();
+    update_drown_projectiles();
+    update_drown_crates();
 }
 
 void Battlefield::newWindForce(const bool& no_wind_cheat_activated) {
@@ -78,3 +80,15 @@ void Battlefield::remove_dead_objects() {
 const bool Battlefield::noProjectiles() { return projectiles.empty(); }
 
 void Battlefield::createCrate() { crates.push_back(std::make_shared<Crate>(*this, crate_count++)); }
+
+void Battlefield::update_drown_projectiles() {
+    for (auto& projectile: projectiles) {
+        projectile.second->drowning();
+    }
+}
+
+void Battlefield::update_drown_crates() {
+    for (auto& crate: crates) {
+        crate->wasDrown();
+    }
+}

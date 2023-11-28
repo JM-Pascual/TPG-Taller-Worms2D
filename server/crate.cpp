@@ -74,4 +74,14 @@ void Crate::stop_falling() {
 
 const bool Crate::wasOpened() { return was_opened; }
 
+const bool Crate::wasDrown() {
+    if(body->GetPosition().y < 0){
+        was_opened = true;
+        falling = false;
+    }
+    return was_opened;
+}
+
 Crate::~Crate() {}
+
+

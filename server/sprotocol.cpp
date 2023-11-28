@@ -141,6 +141,7 @@ void ServerSide::Protocol::sendWormState(const std::shared_ptr<States>& state) {
     this->sendFloat(p->life);
     send(&p->drown, sizeof(bool));
     send(&p->using_tool, sizeof(bool));
+    send(&p->team, sizeof(uint8_t));
 }
 
 void ServerSide::Protocol::sendGameInfo(const std::shared_ptr<States>& count) {

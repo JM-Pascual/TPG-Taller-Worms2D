@@ -12,6 +12,7 @@
 #include "entity.h"
 #include "gadget.h"
 #include "worm.h"
+#include "common/config.h"
 
 class Gadget;
 class Battlefield;
@@ -32,7 +33,7 @@ private:
     bool allow_multiple_jump;
     bool immortal_worms;
 
-    void spawnWorms(Battlefield& battlefield, const uint8_t worms_quantity, uint8_t& worm_counter);
+    void spawnWorms(Battlefield& battlefield, const uint8_t worms_quantity, uint8_t& worm_counter, uint8_t id);
 
 public:
     Player();

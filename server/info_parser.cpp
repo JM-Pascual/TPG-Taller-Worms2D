@@ -68,7 +68,7 @@ void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states,
                                    ((worm->id == id_of_active_worm)), worm->is_walking,
                                    worm->is_jumping, worm->is_backflipping, worm->facing_right,
                                    worm->falling, worm->aim_inclination_degrees,
-                                   worm->charging_shoot, worm->life, worm->drown, worm->using_tool);
+                                   worm->charging_shoot, worm->life, worm->drown, worm->using_tool, worm->team);
                        });
     }
 }
