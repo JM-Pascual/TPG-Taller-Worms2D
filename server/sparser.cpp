@@ -70,7 +70,7 @@ std::shared_ptr<PlayerAction> ServerSide::Parser::makePlayerAction(const Actions
 }
 
 std::shared_ptr<LobbyAction> ServerSide::Parser::makeLobbyAction(
-        const Actions& c, ServerSide::Protocol& protocol, GameBrowser& browser, uint8_t& game_id,
+        const Actions& c, ServerSide::Protocol& protocol, GameBrowser& browser, int16_t& game_id,
         const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue) {
 
     switch (c) {

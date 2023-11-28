@@ -23,7 +23,7 @@ public:
                                                           const uint8_t id);
 
     static std::shared_ptr<LobbyAction> makeLobbyAction(
-            const Actions& c, ServerSide::Protocol&, GameBrowser& browser, uint8_t& game_id,
+            const Actions& c, ServerSide::Protocol&, GameBrowser& browser, int16_t& game_id,
             const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue);
 };
 }  // namespace ServerSide
