@@ -21,16 +21,11 @@ const TurnReset TurnHandler::need_to_update(const uint8_t players_quantity,
         std::advance(it, player_turn);
 
         if (it->second->worm_turn > (it->second->worms.size() - 1)) {
-            it->second->worm_turn = 0;
+            return advanceTurn(players_quantity);
         }
 
         if (it->second->worms.empty() ? true :
                                         it->second->worms.at(it->second->worm_turn)->was_damaged) {
-            return advanceTurn(players_quantity);
-        }
-
-        if (it->second->worms.size() != current_player_worms_quantity) {
-            current_player_worms_quantity = it->second->worms.size();
             return advanceTurn(players_quantity);
         }
     }
@@ -118,11 +113,6 @@ const ActualTurn TurnHandler::updateTurn(const std::chrono::duration<float>& ela
 
         default:  // NO RESET
             break;
-    }
-
-    // Evita que rompa en caso de que un worm se suicide junto a sus companieros
-    if (it->second->worm_turn > (it->second->worms.size() - 1)) {
-        it->second->worm_turn = 0;
     }
 
     return ActualTurn(player_id, it->second->worm_turn);
