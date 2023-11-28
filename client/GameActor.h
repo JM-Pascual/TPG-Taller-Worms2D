@@ -474,7 +474,7 @@ public:
     explicit DynamiteProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
                                 TexturesPool& pool, Camera& camera):
             Projectile(initial_state, pool, camera),
-            countdown(pool.get_projectile_texture(Projectiles::DYNAMITE_PROYECTILE), 126),
+            countdown(pool.get_projectile_texture(Projectiles::DYNAMITE_PROYECTILE), 126, 2, false),
             explosion(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false) {}
 
     inline void update(std::shared_ptr<States>& actor_state) override {
