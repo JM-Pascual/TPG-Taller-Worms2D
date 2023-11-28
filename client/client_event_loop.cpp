@@ -198,7 +198,10 @@ void EventLoop::run() {
     SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 
     SDL2pp::SDLTTF ttf;
-    TextPrinter state_printer(18, txt_pool);
+
+    TextPrinter life_points_printer(15, txt_pool.get_actor_texture(Actors::STATE_SIGN));
+    TextPrinter timer_printer(12, txt_pool.get_actor_texture(Actors::TIMER_SIGN));
+
     terrain_elements.load_base_terrain(txt_pool, camera);
     audio_player.play_background_music();
 
@@ -219,9 +222,9 @@ void EventLoop::run() {
         // tiempo restante turno = (uint8_t)(60 - turn_time)
 
         players.render_actors(window.get_renderer());
-        players.print_actors_state(window.get_renderer(), state_printer);
+        players.print_actors_state(window.get_renderer(), life_points_printer);
         proyectiles.render_actors(window.get_renderer());
-        proyectiles.print_actors_state(window.get_renderer(), state_printer);
+        proyectiles.print_actors_state(window.get_renderer(), timer_printer);
         crates.render_actors(window.get_renderer());
 
         terrain_elements.update_terrain();

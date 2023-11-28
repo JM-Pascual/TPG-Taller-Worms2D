@@ -42,7 +42,7 @@
 #define ROCKET_DELAY Config::yamlNode["rocket_delay"].as<float>()
 
 
-#define DEGTORAD 180 / b2_pi
+#define DEGTORAD (180 / b2_pi)
 
 
 class Battlefield;
@@ -53,8 +53,8 @@ protected:
     WeaponsAndTools type;
     int blast_radius;
     int epicenter_damage;
-    float explosion_delay;
-    std::chrono::time_point<std::chrono::steady_clock> grenade_timer;
+    float time_till_detonation;
+    std::chrono::time_point<std::chrono::steady_clock> projectile_timer;
 
     void applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
 
@@ -91,14 +91,14 @@ public:
     void updateTimer() override;
     inline void second_collision_reaction() override{};
 
-    virtual ~Rocket() = default;
+    ~Rocket() override = default;
 };
 
 
 class BazookaRocket: public Rocket {
 public:
     BazookaRocket(Battlefield& battlefield, b2Vec2 position);
-    virtual ~BazookaRocket() = default;
+    ~BazookaRocket() override = default;
 };
 
 class MortarRocket: public Rocket {
@@ -108,7 +108,7 @@ private:
 public:
     MortarRocket(Battlefield& battlefield, b2Vec2 position);
     void second_collision_reaction() override;
-    virtual ~MortarRocket() = default;
+    ~MortarRocket() override = default;
 };
 
 class MortarFragment: public Rocket {
@@ -116,14 +116,14 @@ private:
 public:
     MortarFragment(Battlefield& battlefield, b2Vec2 position, b2Vec2 direction);
     inline void applyWindResistance(const float& wind_force) override{};
-    virtual ~MortarFragment() = default;
+    ~MortarFragment() override = default;
 };
 
 class AirStrikeRocket: public Rocket {
 public:
     AirStrikeRocket(Battlefield& battlefield, b2Vec2 position);
     inline void applyWindResistance(const float& wind_force) override{};
-    virtual ~AirStrikeRocket() = default;
+    ~AirStrikeRocket() override = default;
 };
 
 class Grenade: public Projectile {
@@ -134,7 +134,7 @@ public:
     void applyWindResistance(const float& wind_force) override;
     void updateTimer() override;
     inline void second_collision_reaction() override{};
-    virtual ~Grenade() = default;
+    ~Grenade() override = default;
 };
 
 

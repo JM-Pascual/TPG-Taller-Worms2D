@@ -23,11 +23,13 @@ WormStateG::WormStateG(const uint8_t& id, const float& x, const float& y,
         using_tool(using_tool) {}
 
 ProjectileStateG::ProjectileStateG(const uint8_t& id, const float& x, const float& y,
+                                   const float& time_till_detonation,
                                    const WeaponsAndTools& type, const bool& impacted,
                                    const float& angle):
         States(StatesTag::PROJECTILE_G),
         id(id),
         pos(x, y),
+        time_till_detonation(time_till_detonation),
         type(type),
         impacted(impacted),
         angle(angle) {}
