@@ -16,7 +16,7 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
         protocol(hostname, servname),
         recv(this->protocol, game_state_queue, lobby_state_queue, runned),
         send(this->protocol, this->action_queue),
-        input(this->action_queue, quit, my_turn, camera, mouse_priority),
+        input(this->action_queue, quit, my_turn, camera, mouse_priority, kb_priority),
         cheat_menu(cheat_menu) {
     spdlog::get("client")->debug("Iniciando hilo receptor en el cliente");
     recv.start();
@@ -122,8 +122,9 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                                                                      state, txt_pool, camera));
                             break;
                         case WeaponsAndTools::HOLY_GRENADE:
-                            proyectiles.add_actor(state->id, std::make_shared<HolyGrenadeProjectile>(
-                                                                     state, txt_pool, camera));
+                            proyectiles.add_actor(state->id,
+                                                  std::make_shared<HolyGrenadeProjectile>(
+                                                          state, txt_pool, camera));
                             break;
                         case WeaponsAndTools::DYNAMITE:
                             proyectiles.add_actor(state->id, std::make_shared<DynamiteProjectile>(
@@ -164,17 +165,18 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
             case StatesTag::LEVEL_BUILD: {
                 auto state = std::dynamic_pointer_cast<LevelStateG>(raw_state);
 
-                //Charge all the bars as terrain
-                for (auto & bar : state->bars) {
-                    if (bar.type == TerrainActors::BAR){
-                        terrain_elements.add_terrain_element(TerrainActors::BAR,
-                                std::make_unique<ShortBar>(bar.x, bar.y,bar.angle,txt_pool,camera));
+                // Charge all the bars as terrain
+                for (auto& bar: state->bars) {
+                    if (bar.type == TerrainActors::BAR) {
+                        terrain_elements.add_terrain_element(
+                                TerrainActors::BAR,
+                                std::make_unique<ShortBar>(bar.x, bar.y, bar.angle, txt_pool,
+                                                           camera));
                     } else {
-                        terrain_elements.add_terrain_element(TerrainActors::LONG_BAR,
-                                                             std::make_unique<LongBar>(bar.x, bar.y,
-                                                                                        bar.angle,
-                                                                                        txt_pool,
-                                                                                        camera));
+                        terrain_elements.add_terrain_element(
+                                TerrainActors::LONG_BAR,
+                                std::make_unique<LongBar>(bar.x, bar.y, bar.angle, txt_pool,
+                                                          camera));
                     }
                 }
                 continue;
@@ -257,7 +259,7 @@ void EventLoop::viewWorm(const std::shared_ptr<WormStateG>& worm) {
         camera_priority.priority = Priority::WORM;
         camera_priority.id = worm->id;
 
-        if (worm->on_turn_time && not mouse_priority) {
+        if ((worm->on_turn_time && not mouse_priority) || (worm->on_turn_time && kb_priority)) {
             camera.fixActor(worm->pos.x, worm->pos.y, 32, 60);
         }
 

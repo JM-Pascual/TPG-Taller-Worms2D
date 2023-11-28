@@ -12,9 +12,9 @@
 #include "../common/thread.h"
 
 #include "ActorHolder.h"
-#include "TerrainHolder.h"
 #include "GameActor.h"
 #include "LevelActors.h"
+#include "TerrainHolder.h"
 #include "TexturesPool.h"
 #include "Window.h"
 #include "audio_player.h"
@@ -39,6 +39,7 @@ private:
     std::atomic<bool> my_turn;
     std::atomic<bool> runned;
     std::atomic<bool> mouse_priority;
+    std::atomic<bool> kb_priority;
     ClientSide::Protocol protocol;
     ClientSide::Receiver recv;
     ClientSide::Sender send;
