@@ -145,7 +145,7 @@ public:
         if (!on_turn_time) {
             SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 32, 60);
             state_printer.print_text((*game_renderer), std::to_string(int(life_points_remaining)),
-                                     render_rect.x, render_rect.y, 18, 40, true);
+                                     render_rect.x, render_rect.y, 1, 18, 30, true);
         }
     }
 
@@ -324,7 +324,7 @@ public:
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
                                                            time_till_detonation)),
-                                 rect.x, rect.y, 15, 15, true);
+                                 rect.x, rect.y, 10, 15, 15, true);
     }
 };
 
@@ -369,7 +369,7 @@ public:
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
                                                            time_till_detonation)),
-                                 rect.x, rect.y, 15, 15, true);
+                                 rect.x, rect.y, 12, 15, 15, true);
     }
 };
 
@@ -414,7 +414,7 @@ public:
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
                                                            time_till_detonation)),
-                                 rect.x, rect.y, 15, 15, true);
+                                 rect.x, rect.y, 12, 15, 15, true);
     }
 };
 
@@ -459,7 +459,7 @@ public:
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
                                                            time_till_detonation)),
-                                 rect.x, rect.y, 15, 15, true);
+                                 rect.x, rect.y, 12, 15, 15, true);
     }
 };
 
@@ -500,7 +500,7 @@ public:
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
                                                            time_till_detonation)),
-                                 rect.x, rect.y, 15, 15, true);
+                                 rect.x, rect.y, 12, 15, 15, true);
     }
 };
 
