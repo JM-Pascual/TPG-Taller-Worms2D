@@ -6,7 +6,7 @@
 
 Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
            WeaponsAndTools& type, const uint8_t& id, const bool& allow_multiple_jump,
-           const bool& immortal_worms):
+           const bool& immortal_worms, b2Vec2 position):
         Entity(battlefield),
         life(INITIAL_LIFE),
         facing_right(true),
@@ -32,12 +32,15 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
         id(id) {
     b2BodyDef wormDef;
     wormDef.type = b2_dynamicBody;
-
+/*
     auto rng = std::random_device();
     std::mt19937 gen(rng());
     std::uniform_int_distribution<> random(10, 20);
 
     wormDef.position.Set(random(gen), 21.6f);  // Ahora la harcodeo, pero tiene que cambiar
+*/
+
+    wormDef.position = position;
     wormDef.allowSleep = true;
     wormDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
 

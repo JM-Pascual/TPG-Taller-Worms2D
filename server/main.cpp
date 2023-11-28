@@ -25,6 +25,7 @@ int main(int argc, char* argv[]) try {
     Config::commonNode = YAML::LoadFile(YAML_PATH "/common_const.yaml");
     Config::yamlNode = YAML::LoadFile(YAML_PATH "/server_const.yaml");
     Config::levelLayoutNode = YAML::LoadFile(YAML_PATH "/level-bars.yaml");
+    Config::spawnLayoutNode = YAML::LoadFile(YAML_PATH "/spawn_points.yaml");
 
     Logger l(LOGNAME, LOGFILE);
     Server sv(SERVNAME);

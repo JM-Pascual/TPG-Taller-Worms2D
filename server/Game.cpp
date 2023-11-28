@@ -87,12 +87,12 @@ void Game::spawnWorms() {
     size_t no_assigned_worms = WORMS_QUANTITY % players.size();
 
     for (auto& [id, player]: players) {
-        player->spawnWorms(battlefield, min_worms_player, worm_counter);
+        player->spawnWorms(battlefield, min_worms_player, worm_counter, id);
     }
 
     auto it = players.cbegin();
     for (size_t i = 0; i < no_assigned_worms; i++) {
-        it->second->spawnWorms(battlefield, 1, worm_counter);
+        it->second->spawnWorms(battlefield, 1, worm_counter,it->first);
         ++it;
     }
 

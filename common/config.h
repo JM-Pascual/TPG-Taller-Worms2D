@@ -12,6 +12,7 @@ public:
     static YAML::Node commonNode;
     static YAML::Node yamlNode;
     static YAML::Node levelLayoutNode;
+    static YAML::Node spawnLayoutNode;
 
     Config(const Config&) = delete;
     Config& operator=(const Config&) = delete;
