@@ -288,5 +288,5 @@ void BaseballBat::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 ap
     b2Vec2 final_impulse = blastPower * direction;
     entity->apply_explosion(final_impulse);
     entity->recibe_life_modification(-BAT_DAMAGE);
-    entity->start_falling();
+    //entity->start_falling();
 }

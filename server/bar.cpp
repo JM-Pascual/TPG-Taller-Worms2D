@@ -48,8 +48,8 @@ float Bar::get_bar_height() const { return (BAR_HEIGHT); }
 void Bar::collision_reaction() {
     Query_callback queryCallback;
     b2AABB aabb{};
-    aabb.lowerBound = get_bar_position() - b2Vec2(width / 2, BAR_HEIGHT / 2);
-    aabb.upperBound = get_bar_position() + b2Vec2(width / 2, BAR_HEIGHT / 2);
+    aabb.lowerBound = get_bar_position() - b2Vec2(width , BAR_HEIGHT*2 );
+    aabb.upperBound = get_bar_position() + b2Vec2(width , BAR_HEIGHT*2 );
     battlefield.add_query_AABB(&queryCallback, aabb);
 
     // check which of these bodies have their center of mass within the blast radius

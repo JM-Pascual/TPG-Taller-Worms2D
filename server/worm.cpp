@@ -63,7 +63,7 @@ void Worm::move() {
                 b2Vec2(20 * std::pow(-1, 1 - facing_right) / TICK_RATE, 0), true);
     }
 
-    start_falling();
+    //start_falling();
 }
 
 void Worm::stop() {
@@ -85,7 +85,7 @@ void Worm::jump(const JumpDir& direction) {
         return;
     }
 
-    start_falling();
+    //start_falling();
 
     switch (direction) {
         case (JumpDir::FRONT):
@@ -277,9 +277,10 @@ void Worm::stop_falling() {
     auto vel = body->GetLinearVelocity();
 
     if (vel.x < MIN_X_VELOCITY) {
-        if ((not is_walking || not falling) && not was_damaged && not is_backflipping &&
-            not is_jumping) {
-            body->SetAwake(false);
+            if(!(is_walking )){
+            if (not was_damaged && not is_backflipping && not is_jumping) {
+                body->SetAwake(false);
+            }
         }
     }
 
