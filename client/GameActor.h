@@ -52,6 +52,8 @@ private:
 
     float aim_inclination_degrees;
 
+    TeamColours team_colour;
+
     Animation walking;
     Animation jumping;
     Animation backflipping;
@@ -80,6 +82,7 @@ public:
             using_tool(initial_state->using_tool),
             life_points_remaining(initial_state->life),
             aim_inclination_degrees(initial_state->aim_inclination_degrees),
+            team_colour(TeamColours(initial_state->team)),
 
             walking(pool.get_actor_texture(Actors::WORM), 15, 1),
             jumping(pool.get_actor_texture(Actors::JUMPING_WORM), 5, 5, false),
@@ -155,8 +158,9 @@ public:
                             TextPrinter& state_printer) override {
         if (!on_turn_time) {
             SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 32, 60);
-            state_printer.print_text((*game_renderer), std::to_string(int(life_points_remaining)),
-                                     render_rect.x, render_rect.y, 1, 18, 30, true);
+            state_printer.print_team_text((*game_renderer),
+                                          std::to_string(int(life_points_remaining)), team_colour,
+                                            render_rect.x, render_rect.y, 1, 18, 30, true);
         }
     }
 
