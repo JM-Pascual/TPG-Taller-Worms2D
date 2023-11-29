@@ -20,3 +20,20 @@ void Contact_listener::PreSolve(b2Contact* contact, const b2Manifold* oldManifol
         dataB->collision_reaction();
     }
 }
+
+
+
+void Contact_listener::EndContact(b2Contact *contact) {
+    auto contact2 = contact->GetFixtureB()->GetBody()->GetUserData().pointer;
+    auto contact1 = contact->GetFixtureA()->GetBody()->GetUserData().pointer;
+
+    auto* dataB = reinterpret_cast<Entity*>(contact2);
+    auto* dataA = reinterpret_cast<Entity*>(contact1);
+
+    if (dataA && dataB) {
+        dataA->start_falling();
+        dataB->start_falling();
+    }
+
+
+}
