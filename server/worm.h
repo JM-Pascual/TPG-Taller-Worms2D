@@ -108,6 +108,8 @@ public:
     void use_chargeable_weapon(const std::shared_ptr<Projectile>& projectile);
     void use_positional_weapon(const std::shared_ptr<Projectile>& throwable);
 
+    b2Vec2 set_projectile_inplace();
+
 
     void change_position();
     b2Vec2 clicked_position_();

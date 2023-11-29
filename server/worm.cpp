@@ -174,6 +174,15 @@ b2Vec2 Worm::set_bullet_direction() {
     bullet_position.y = (body->GetPosition().y + (ARM_LENGHT * sinf(aim_inclination_degrees)));
     return bullet_position;
 }
+
+b2Vec2 Worm::set_projectile_inplace() {
+    b2Vec2 position;
+    position.x = (body->GetPosition().x + (facing_factor()) * ARM_LENGHT);
+    position.y = (body->GetPosition().y);
+
+    return position;
+}
+
 // todo cambiar nombre
 b2Vec2 Worm::set_bullet_angle() {
     return b2Vec2(facing_factor() * cosf(aim_inclination_degrees), sinf(aim_inclination_degrees));
@@ -265,7 +274,7 @@ void Worm::stop_all() {
 }
 
 void Worm::start_falling() {
-    pos_y_before_falling = body->GetPosition().y;
+    //pos_y_before_falling = body->GetPosition().y;
     falling = true;
 }
 
@@ -277,11 +286,9 @@ void Worm::stop_falling() {
     auto vel = body->GetLinearVelocity();
 
     if (vel.x < MIN_X_VELOCITY) {
-            if(!(is_walking )){
-            if (not was_damaged && not is_backflipping && not is_jumping) {
+            if (not is_walking && not was_damaged && not is_backflipping && not is_jumping) {
                 body->SetAwake(false);
             }
-        }
     }
 
     if (vel.y < MIN_Y_VELOCITY) {
@@ -332,3 +339,4 @@ void Worm::use_tool() { using_tool = true; }
 
 b2Vec2 Worm::position() { return body->GetWorldCenter(); }
 void Worm::open_crate(bool& open) { open = true; }
+

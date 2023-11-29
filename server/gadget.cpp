@@ -166,11 +166,11 @@ void DynamiteGrenade::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& t
         return;
     }
 
-    b2Vec2 projectile_position = worm.set_bullet_direction();
+    b2Vec2 dynamite_position = worm.set_projectile_inplace();
     DelayAmount explosion_delay = worm.grenade_explosion_delay();
 
     std::shared_ptr<Projectile> dynamite =
-            std::make_shared<Dynamite>(battlefield, projectile_position, float(explosion_delay));
+            std::make_shared<Dynamite>(battlefield, dynamite_position, float(explosion_delay));
     battlefield.add_projectile(dynamite);
 
     worm.use_positional_weapon(dynamite);
