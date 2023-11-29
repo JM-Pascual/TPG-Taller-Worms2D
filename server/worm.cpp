@@ -143,9 +143,15 @@ void Worm::change_position() {
 }
 
 void Worm::shoot(TurnHandler& turn_handler) {
-    if (weapon_power >= 0) {
-        (*selected_weapon)->shoot(battlefield, *this, turn_handler);
+    if (weapon_power < 0) {
+        return;
     }
+
+    if (is_walking || is_backflipping || is_jumping || falling) {
+        return;
+    }
+
+    (*selected_weapon)->shoot(battlefield, *this, turn_handler);
 }
 
 void Worm::use_chargeable_weapon(const std::shared_ptr<Projectile>& projectile) {
@@ -212,7 +218,7 @@ void Worm::collision_reaction() {
     for (int i = 0; i < queryCallback.found_bodies_size(); i++) {
         b2Body* body_ = queryCallback.found_bodie_at(i);
 
-        if(body_ == body)
+        if (body_ == body)
             continue;
 
         reinterpret_cast<Entity*>(body_->GetUserData().pointer)->stop_falling();
