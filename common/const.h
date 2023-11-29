@@ -149,7 +149,9 @@ enum class SoundEffects {
     WORM_BACKFLIP,
     ROUND_START,
     TIMER_TICK,
-    WORM_ME_MUERO
+    WORM_ME_MUERO,
+    CRATE_LANDED,
+    CRATE_OPENED
 };
 
 enum class Actors {

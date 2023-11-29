@@ -50,6 +50,8 @@ void AudioPlayer::load_effects() {
     key_filepath.emplace_back(SoundEffects::WORM_BACKFLIP, MEDIA_PATH "/BACKFLIP.wav");
     key_filepath.emplace_back(SoundEffects::WORM_JUMP, MEDIA_PATH "/JUMP.wav");
     key_filepath.emplace_back(SoundEffects::WORM_ME_MUERO, MEDIA_PATH "/OHDEAR.wav");
+    key_filepath.emplace_back(SoundEffects::CRATE_LANDED, MEDIA_PATH "/CrateImpact.wav");
+    key_filepath.emplace_back(SoundEffects::CRATE_OPENED, MEDIA_PATH "/cratepop.wav");
 
     for (const auto& key_path: key_filepath) {
         Mix_Chunk* chunk = Mix_LoadWAV(key_path.second.data());

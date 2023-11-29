@@ -510,7 +510,7 @@ public:
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
         if ((time_till_detonation <= 0.5 || impacted) && !alredy_played_impact_sound){
-            effects_player.playAudio(SoundEffects::BANANA_IMPACT);
+            effects_player.playAudio(SoundEffects::GREEN_GRENADE_IMPACT);
             alredy_played_impact_sound = true;
         }
     }
@@ -583,12 +583,14 @@ private:
     Animation countdown;
     Animation explosion;
 
+    bool alredy_played_explosion_sound;
 public:
     explicit DynamiteProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
                                 TexturesPool& pool, Camera& camera):
             Projectile(initial_state, pool, camera),
             countdown(pool.get_projectile_texture(Projectiles::DYNAMITE_PROYECTILE), 126, 2, false),
-            explosion(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false) {}
+            explosion(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
+            alredy_played_explosion_sound(false){}
 
     inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
@@ -617,12 +619,11 @@ public:
     }
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
-        //if (impacted && !alredy_played_impact_sound){
-        //    effects_player.playAudio(SoundEffects::GREEN_GRENADE_IMPACT);
-        //    alredy_played_impact_sound = true;
-        //}
+        if ((time_till_detonation <= 0.5) && !alredy_played_explosion_sound){
+            effects_player.playAudio(SoundEffects::GREEN_GRENADE_IMPACT);
+            alredy_played_explosion_sound = true;
+        }
     }
-
 };
 
 // ----------------------- AIR STRIKE ----------------------
@@ -634,13 +635,15 @@ private:
 
     float current_angle;
 
+    bool alredy_played_impact_sound;
+
 public:
     explicit AirStrikeProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
                                  TexturesPool& pool, Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::AIR_STRIKE_PROYECTILE), 1, 1),
             impact(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
-            current_angle(0) {}
+            current_angle(0), alredy_played_impact_sound(false) {}
 
     inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
@@ -664,10 +667,10 @@ public:
                             TextPrinter& state_printer) override {}
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
-        //if (impacted && !alredy_played_impact_sound){
-        //    effects_player.playAudio(SoundEffects::GREEN_GRENADE_IMPACT);
-        //    alredy_played_impact_sound = true;
-        //}
+        if (impacted && !alredy_played_impact_sound){
+            effects_player.playAudio(SoundEffects::EXPLOSION_WITH_FIRE);
+            alredy_played_impact_sound = true;
+        }
     }
 };
 
@@ -681,17 +684,19 @@ protected:
     bool still_falling;
     bool was_opened;
 
+    bool alredy_played_land_sound;
+    bool alredy_played_open_sound;
 public:
     explicit Crate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool, Camera& camera):
             GameActor(initial_state->pos.x, initial_state->pos.y, camera),
             falling(pool.get_level_texture(TerrainActors::CRATE_FALLING), 27, 2, true),
             on_floor(pool.get_level_texture(TerrainActors::CRATE), 15, 1, false),
             still_falling(true),
-            was_opened(false) {}
+            was_opened(false), alredy_played_land_sound(false),
+            alredy_played_open_sound(false){}
 
     inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
                             TextPrinter& state_printer) override {}
-    inline void play_state_audio(AudioPlayer& effects_player) override {}
 };
 
 // ----------------------- TRAP CRATE ----------------------
@@ -728,6 +733,18 @@ public:
             on_floor.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
         }
     }
+
+    inline void play_state_audio(AudioPlayer& effects_player) override {
+        if (was_opened && !alredy_played_land_sound){
+            effects_player.playAudio(SoundEffects::CRATE_LANDED);
+            alredy_played_land_sound = true;
+        }
+
+        if (was_opened && !alredy_played_open_sound){
+            effects_player.playAudio(SoundEffects::BAZOOKA_IMPACT);
+            alredy_played_open_sound = true;
+        }
+    }
 };
 
 class HealCrate: public Crate {
@@ -762,6 +779,18 @@ public:
             on_floor.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
         }
     }
+
+    inline void play_state_audio(AudioPlayer& effects_player) override {
+        if (was_opened && !alredy_played_land_sound){
+            effects_player.playAudio(SoundEffects::CRATE_LANDED);
+            alredy_played_land_sound = true;
+        }
+
+        if (was_opened && !alredy_played_open_sound){
+            effects_player.playAudio(SoundEffects::CRATE_OPENED);
+            alredy_played_open_sound = true;
+        }
+    }
 };
 
 class AmmoCrate: public Crate {
@@ -794,6 +823,18 @@ public:
         } else {
             SDL2pp::Rect rect_floor = camera.calcRect(position.x, position.y, 60, 60);
             on_floor.render((*game_renderer), rect_floor, 0, 0, SDL_FLIP_NONE);
+        }
+    }
+
+    inline void play_state_audio(AudioPlayer& effects_player) override {
+        if (was_opened && !alredy_played_land_sound){
+            effects_player.playAudio(SoundEffects::CRATE_LANDED);
+            alredy_played_land_sound = true;
+        }
+
+        if (was_opened && !alredy_played_open_sound){
+            effects_player.playAudio(SoundEffects::CRATE_OPENED);
+            alredy_played_open_sound = true;
         }
     }
 };
