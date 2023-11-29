@@ -20,7 +20,7 @@ const TurnReset TurnHandler::need_to_update(const uint8_t players_quantity,
         auto it = players.begin();
         std::advance(it, player_turn);
 
-        if (it->second->worm_turn > (it->second->worms.size() - 1)) {
+        if (current_player_worms_quantity > it->second->worms.size()) {
             return advanceTurn(players_quantity);
         }
 
@@ -96,6 +96,7 @@ const ActualTurn TurnHandler::updateTurn(const std::chrono::duration<float>& ela
     auto it = players.begin();
     std::advance(it, player_turn);
     uint8_t player_id = it->first;
+    current_player_worms_quantity = it->second->worms.size();
 
     switch (reset_timer) {
 
