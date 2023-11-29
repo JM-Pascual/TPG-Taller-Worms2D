@@ -185,7 +185,6 @@ void WormHandler::check_drown_worms() {
 
 void WormHandler::WW3Cheat() {
     AirStrike fake_airstrike = AirStrike();
-    fake_airstrike.infiniteAmmo();
 
     auto rng = std::mt19937(std::random_device{}());
     auto random = std::uniform_real_distribution<float>(10.0f, 50.0f);

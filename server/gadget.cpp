@@ -225,13 +225,14 @@ void AirStrike::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_ha
 }
 
 void AirStrike::shootCheat(Battlefield& battlefield, float& destination) {
-    b2Vec2 dest(destination, 0);
+    b2Vec2 dest(destination, AIRSTRIKE_ROCKET_Y_POSITION);
 
     for (int i = 0; i < AIRSTRIKE_ROCKETS; i++) {
 
         dest.x += AIRSTRIKE_ROCKET_SEPARATION;
 
-        std::shared_ptr<Projectile> projectile = std::make_shared<BazookaRocket>(battlefield, dest);
+        std::shared_ptr<Projectile> projectile =
+                std::make_shared<AirStrikeRocket>(battlefield, dest);
         battlefield.add_projectile(projectile);
     }
 }
