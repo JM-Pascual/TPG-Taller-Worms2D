@@ -116,7 +116,7 @@ public:
     DelayAmount grenade_explosion_delay();
 
     bool is_dead() override;
-    void collision_reaction() override;
+    void collision_reaction(b2Vec2 normal) override;
 
     void open_crate(bool& open) override;
 

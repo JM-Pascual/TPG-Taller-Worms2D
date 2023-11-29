@@ -35,6 +35,7 @@ void GameLoop::run() {
         game.battlefield.step();
         game.worm_handler.update_physics();
         game.worm_handler.update_weapon(turn_handler);
+        game.worm_handler.check_falling_worms();
 
         game.broadcaster.remove_closed_clients(game.ready_count, game.players);
 

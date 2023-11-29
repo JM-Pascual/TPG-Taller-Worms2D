@@ -139,8 +139,9 @@ void WormHandler::checkDeadWorms() {
 void WormHandler::check_falling_worms() {
     for (const auto& [id, player]: players) {
         for (const auto& [worm_id, worm]: player->worms) {
-            if (worm->body->GetLinearVelocity().y <= 1.0f && worm->falling) {
-                worm->pos_y_before_falling = worm->body->GetPosition().y;
+            if ((worm->body->GetLinearVelocity().y <= 1.0f &&  worm->body->GetLinearVelocity().y >= 0.0f)  && worm->falling) {
+
+                worm->pos_y_before_falling = b2Max(b2Vec2(0,worm->pos_y_before_falling), b2Vec2(0, worm->body->GetPosition().y)).y;
             }
         }
     }

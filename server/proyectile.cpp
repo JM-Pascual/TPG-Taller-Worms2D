@@ -111,7 +111,7 @@ Rocket::Rocket(Battlefield& battlefield, b2Vec2 position, int blast_radius, int 
                WeaponsAndTools type):
         Projectile(battlefield, position, blast_radius, epicenter_damage, type, ROCKET_DELAY) {}
 
-void Rocket::collision_reaction() {
+void Rocket::collision_reaction(b2Vec2 normal) {
     if (not dead) {
         collide();
         dead = true;
@@ -198,7 +198,7 @@ Grenade::Grenade(Battlefield& battlefield, b2Vec2 position, float explosion_dela
                  uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type):
         Projectile(battlefield, position, blast_radius, epicenter_damage, type, explosion_delay) {}
 
-void Grenade::collision_reaction() {}
+void Grenade::collision_reaction(b2Vec2 normal) {}
 
 void Grenade::updateTimer() {
     if (dead) {

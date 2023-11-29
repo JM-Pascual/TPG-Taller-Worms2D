@@ -14,11 +14,21 @@ void Contact_listener::PreSolve(b2Contact* contact, const b2Manifold* oldManifol
     auto* dataB = reinterpret_cast<Entity*>(contact2);
     auto* dataA = reinterpret_cast<Entity*>(contact1);
 
+
+    // Get the world manifold to obtain the collision normal
+    b2WorldManifold worldManifold;
+    contact->GetWorldManifold(&worldManifold);
+
+    // Get the collision normal
+    b2Vec2 normal = worldManifold.normal;
+
     if (dataA && dataB) {
 
-        dataA->collision_reaction();
-        dataB->collision_reaction();
+        dataA->collision_reaction(normal);
+        dataB->collision_reaction(normal);
     }
+
+
 }
 
 

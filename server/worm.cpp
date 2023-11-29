@@ -210,7 +210,7 @@ bool Worm::is_dead() {
     return dead;
 }
 
-void Worm::collision_reaction() {
+void Worm::collision_reaction(b2Vec2 normal) {
     Query_callback queryCallback;
     b2AABB aabb{};
     aabb.lowerBound = body->GetWorldCenter() - b2Vec2(WIDTH / 2, HEIGHT / 2);
@@ -286,9 +286,12 @@ void Worm::stop_falling() {
     auto vel = body->GetLinearVelocity();
 
     if (vel.x < MIN_X_VELOCITY) {
-            if (not is_walking && not was_damaged && not is_backflipping && not is_jumping) {
+        if(not(is_walking)){
+            if (not was_damaged && not is_backflipping && not is_jumping) {
                 body->SetAwake(false);
             }
+        }
+
     }
 
     if (vel.y < MIN_Y_VELOCITY) {

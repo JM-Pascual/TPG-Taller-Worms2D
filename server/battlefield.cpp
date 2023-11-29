@@ -52,6 +52,7 @@ void Battlefield::step() {
     post_action_explosion();
     update_drown_projectiles();
     update_drown_crates();
+
 }
 
 void Battlefield::newWindForce(const bool& no_wind_cheat_activated) {
