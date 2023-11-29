@@ -37,6 +37,7 @@ private:
     Battlefield& battlefield;
 
     uint8_t player_turn;
+    uint8_t worm_turn_id;
     std::chrono::duration<float> elapsed_time;
 
     std::map<uint8_t, std::unique_ptr<Player>>& players;
@@ -63,6 +64,7 @@ public:
             worm_handler(worm_handler),
             battlefield(battlefield),
             player_turn(0),
+            worm_turn_id(0),
             elapsed_time(0),
             players(players),
             current_players_quantity(0),
@@ -70,7 +72,7 @@ public:
             player_stop_action(false),
             infinite_turn_cheat_activated(false),
             no_wind_cheat_activated(false),
-            turn_number(1) {}
+            turn_number(0) {}
 
     const ActualTurn updateTurn(const std::chrono::duration<float>& elapsed);
 

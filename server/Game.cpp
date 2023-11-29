@@ -103,7 +103,7 @@ void Game::spawnWorms() {
 
     while (it != players.cend()) {
         for (auto& worm: it->second->worms) {
-            worm->recibe_life_modification(EXTRA_LIFE);
+            worm.second->recibe_life_modification(EXTRA_LIFE);
         }
 
         ++it;

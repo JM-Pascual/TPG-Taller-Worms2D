@@ -29,7 +29,7 @@ public:
 
     // Da la interfaz para ejecutar el comando
     virtual void execute(WormHandler& worm_handler, const uint8_t& turn_id,
-                         const uint8_t& worm_index, TurnHandler& turn_handler) = 0;
+                         TurnHandler& turn_handler) = 0;
 
     virtual ~PlayerAction() = default;
 };
@@ -46,7 +46,7 @@ public:
     explicit StartMoving(ServerSide::Protocol& protocol, const uint8_t& id);
 
     // Delega al servidor el movimiento del gusano
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~StartMoving() override = default;
@@ -60,7 +60,7 @@ public:
     explicit StopMoving(const uint8_t& id);
 
     // Delega al servidor el movimiento del gusano
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~StopMoving() override = default;
@@ -75,7 +75,7 @@ private:
 public:
     explicit Jump(ServerSide::Protocol& protocol, const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~Jump() override = default;
@@ -90,7 +90,7 @@ private:
 public:
     explicit ADSAngle(ServerSide::Protocol& protocol, const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~ADSAngle() override = default;
@@ -102,7 +102,7 @@ class StopADSAngle: public PlayerAction {
 public:
     explicit StopADSAngle(const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~StopADSAngle() override = default;
@@ -114,7 +114,7 @@ class FirePower: public PlayerAction {
 public:
     explicit FirePower(const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~FirePower() = default;
@@ -126,7 +126,7 @@ class Shoot: public PlayerAction {
 public:
     explicit Shoot(const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~Shoot() = default;
@@ -141,7 +141,7 @@ private:
 public:
     explicit Delay(ServerSide::Protocol& protocol, const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~Delay() = default;
@@ -156,7 +156,7 @@ private:
 public:
     explicit UseClickable(ServerSide::Protocol& protocol, const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~UseClickable() = default;
@@ -171,7 +171,7 @@ private:
 public:
     explicit ChangeGadget(ServerSide::Protocol& protocol, const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~ChangeGadget() = default;
@@ -181,7 +181,7 @@ class WW3Cheat: public PlayerAction {
 public:
     explicit WW3Cheat(const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~WW3Cheat() = default;
@@ -191,7 +191,7 @@ class NoWindCheat: public PlayerAction {
 public:
     explicit NoWindCheat(const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~NoWindCheat() = default;
@@ -201,7 +201,7 @@ class InfiniteAmmoCheat: public PlayerAction {
 public:
     explicit InfiniteAmmoCheat(const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~InfiniteAmmoCheat() = default;
@@ -211,7 +211,7 @@ class SupplyRunCheat: public PlayerAction {
 public:
     explicit SupplyRunCheat(const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~SupplyRunCheat() = default;
@@ -221,7 +221,7 @@ class ImmortalWorm: public PlayerAction {
 public:
     explicit ImmortalWorm(const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~ImmortalWorm() = default;
@@ -231,7 +231,7 @@ class MultipleJumpCheat: public PlayerAction {
 public:
     explicit MultipleJumpCheat(const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~MultipleJumpCheat() = default;
@@ -241,7 +241,7 @@ class InfiniteTurnCheat: public PlayerAction {
 public:
     explicit InfiniteTurnCheat(const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~InfiniteTurnCheat() = default;
@@ -251,7 +251,7 @@ class Everyone1HPCheat: public PlayerAction {
 public:
     explicit Everyone1HPCheat(const uint8_t& id);
 
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     ~Everyone1HPCheat() = default;
@@ -359,7 +359,7 @@ public:
     inline NullCommand(): PlayerAction(0) {}
 
     // Comportamiento nulo
-    void execute(WormHandler& worm_handler, const uint8_t& turn_id, const uint8_t& worm_index,
+    void execute(WormHandler& worm_handler, const uint8_t& turn_id,
                  TurnHandler& turn_handler) override;
 
     // Comportamiento nulo

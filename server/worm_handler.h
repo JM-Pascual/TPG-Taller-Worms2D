@@ -28,7 +28,7 @@ private:
 public:
     explicit WormHandler(std::map<uint8_t, std::unique_ptr<Player>>& players);
 
-    void updateTurnWorm(const uint8_t& id, const uint8_t& worm_index);
+    void updateTurnWorm(const uint8_t& id, const uint8_t& worm_id);
 
     void stop_turn_worm();
 
@@ -40,20 +40,17 @@ public:
 
 
     // temp protocol
-    void player_start_moving(const Direction& direction, const uint8_t& id,
-                             const uint8_t& worm_index);
-    void player_stop_moving(const uint8_t& id, const uint8_t& worm_index);
-    void player_jump(const JumpDir& direction, const uint8_t& id, const uint8_t& worm_index);
-    void player_start_aiming(const ADSAngleDir& direction, const uint8_t& id,
-                             const uint8_t& worm_index);
-    void player_stop_aiming(const uint8_t& id, const uint8_t& worm_index);
-    void player_start_charging(const uint8_t& id, const uint8_t& worm_index);
-    void player_shoot(const uint8_t& id, const uint8_t& worm_index, TurnHandler& turn_handler);
-    void player_use_clickable(b2Vec2 position, const uint8_t& id, const uint8_t& worm_index);
-    void player_set_delay(DelayAmount delay, const uint8_t& id, const uint8_t& worm_index);
+    void player_start_moving(const Direction& direction, const uint8_t& id);
+    void player_stop_moving(const uint8_t& id);
+    void player_jump(const JumpDir& direction, const uint8_t& id);
+    void player_start_aiming(const ADSAngleDir& direction, const uint8_t& id);
+    void player_stop_aiming(const uint8_t& id);
+    void player_start_charging(const uint8_t& id);
+    void player_shoot(const uint8_t& id, TurnHandler& turn_handler);
+    void player_use_clickable(b2Vec2 position, const uint8_t& id);
+    void player_set_delay(DelayAmount delay, const uint8_t& id);
 
-    void player_change_gadget(const WeaponsAndTools& gadget, const uint8_t& id,
-                              const uint8_t& worm_index);
+    void player_change_gadget(const WeaponsAndTools& gadget, const uint8_t& id);
 
     void checkDeadWorms();
     void check_drown_worms();

@@ -33,9 +33,9 @@ Player::Player():
 }
 
 uint8_t Player::calcAvgLife() {
-    float life_sum =
-            std::accumulate(worms.begin(), worms.end(), 0.0f,
-                            [](const float& sum, const auto& worm) { return sum + worm->life; });
+    float life_sum = std::accumulate(
+            worms.begin(), worms.end(), 0.0f,
+            [](const float& sum, const auto& worm) { return sum + worm.second->life; });
 
     return (uint8_t)(life_sum / worms.size());
 }
@@ -48,9 +48,10 @@ void Player::spawnWorms(Battlefield& battlefield, const uint8_t& worms_quantity,
 
 
     for (uint8_t i = 0; i < worms_quantity; i++) {
-        worms.push_back(std::make_shared<Worm>(battlefield, selected_weapon, selected_gadget_type,
-                                               worm_counter++, allow_multiple_jump, immortal_worms,
-                                               spawn_points.back(), id));
+        worms.insert(
+                {worm_counter++, std::make_shared<Worm>(battlefield, selected_weapon,
+                                                        selected_gadget_type, allow_multiple_jump,
+                                                        immortal_worms, spawn_points.back(), id)});
         spawn_points.pop_back();
     }
 }

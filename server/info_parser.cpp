@@ -52,9 +52,10 @@ void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states,
                    });
 
     // WORM & PLAYERS
-    uint8_t id_of_active_worm = game.players.at(id_of_active_player)
-                                        ->worms.at(game.players.at(id_of_active_player)->worm_turn)
-                                        ->id;
+    auto it = game.players.at(id_of_active_player)->worms.begin();
+    advance(it, game.players.at(id_of_active_player)->worm_turn);
+
+    uint8_t id_of_active_worm = (*it).first;
 
     for (const auto& [id, player]: game.players) {
         states.push_back(std::make_shared<PlayerStateG>(
@@ -63,12 +64,14 @@ void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states,
         std::transform(player->worms.begin(), player->worms.end(), std::back_inserter(states),
                        [&id_of_active_worm](const auto& worm) {
                            return std::make_shared<WormStateG>(
-                                   worm->id, worm->body->GetPosition().x,
-                                   worm->body->GetPosition().y, worm->weapon_type,
-                                   ((worm->id == id_of_active_worm)), worm->is_walking,
-                                   worm->is_jumping, worm->is_backflipping, worm->facing_right,
-                                   worm->falling, worm->aim_inclination_degrees,
-                                   worm->charging_shoot, worm->life, worm->drown, worm->using_tool, worm->team);
+                                   worm.first, worm.second->body->GetPosition().x,
+                                   worm.second->body->GetPosition().y, worm.second->weapon_type,
+                                   ((worm.first == id_of_active_worm)), worm.second->is_walking,
+                                   worm.second->is_jumping, worm.second->is_backflipping,
+                                   worm.second->facing_right, worm.second->falling,
+                                   worm.second->aim_inclination_degrees,
+                                   worm.second->charging_shoot, worm.second->life,
+                                   worm.second->drown, worm.second->using_tool, worm.second->team);
                        });
     }
 }

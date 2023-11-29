@@ -24,8 +24,7 @@ const TurnReset TurnHandler::need_to_update(const uint8_t players_quantity,
             return advanceTurn(players_quantity);
         }
 
-        if (it->second->worms.empty() ? true :
-                                        it->second->worms.at(it->second->worm_turn)->was_damaged) {
+        if (it->second->worms.empty() ? true : it->second->worms.at(worm_turn_id)->was_damaged) {
             return advanceTurn(players_quantity);
         }
     }
@@ -96,12 +95,17 @@ const ActualTurn TurnHandler::updateTurn(const std::chrono::duration<float>& ela
     auto it = players.begin();
     std::advance(it, player_turn);
     uint8_t player_id = it->first;
+
+    auto worm_it = it->second->worms.begin();
+    advance(worm_it, it->second->worm_turn);
+    worm_turn_id = worm_it->first;
+
     current_player_worms_quantity = it->second->worms.size();
 
     switch (reset_timer) {
 
         case TurnReset::TIMER_RESET: {
-            worm_handler.updateTurnWorm(player_id, it->second->worm_turn);
+            worm_handler.updateTurnWorm(player_id, worm_turn_id);
             battlefield.newWindForce(no_wind_cheat_activated);
             broadcaster.broadcast_turn(player_turn);
             break;
