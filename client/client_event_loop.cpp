@@ -221,11 +221,11 @@ void EventLoop::run() {
         turn_time = std::chrono::steady_clock::now() - turn_start;
         // tiempo restante turno = (uint8_t)(60 - turn_time)
 
-        players.render_actors(window.get_renderer());
+        players.play_actors_state(window.get_renderer(), audio_player);
         players.print_actors_state(window.get_renderer(), life_points_printer);
-        proyectiles.render_actors(window.get_renderer());
+        proyectiles.play_actors_state(window.get_renderer(), audio_player);
         proyectiles.print_actors_state(window.get_renderer(), timer_printer);
-        crates.render_actors(window.get_renderer());
+        crates.play_actors_state(window.get_renderer(), audio_player);
 
         terrain_elements.update_terrain();
         terrain_elements.render_terrain(window.get_renderer());
@@ -266,33 +266,6 @@ void EventLoop::viewWorm(const std::shared_ptr<WormStateG>& worm) {
             camera.fixActor(worm->pos.x, worm->pos.y, 32, 60);
         }
 
-
-        if (worm->is_backflipping) {
-            // audio_player.playAudio("test");
-            return;
-
-        } else if (worm->is_jumping) {
-            // audio_player.playAudio("test");
-            return;
-
-        } else if (worm->is_walking) {
-            // audio_player.playAudio("test");
-            return;
-
-        } else if (worm->charging_weapon) {
-            // audio_player.playAudio("test");
-            return;
-
-        } else if (worm->using_tool) {
-            // audio_player.playAudio("test");
-            return;
-
-        } else if (worm->falling) {
-            camera.fixActor(worm->pos.x, worm->pos.y, 32, 60);
-            // audio_player.playAudio("test");
-            return;
-        }
-
         camera_priority.priority = Priority::NONE;
     }
 }
@@ -309,7 +282,6 @@ void EventLoop::viewProjectile(const std::shared_ptr<ProjectileStateG>& proj) {
 
         if (not proj->impacted) {
             camera.fixActor(proj->pos.x, proj->pos.y, 60, 60);
-            // audio_player.playAudio("test");
             return;
         }
 

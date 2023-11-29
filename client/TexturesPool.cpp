@@ -103,13 +103,13 @@ void TexturesPool::load_projectile_textures() {
 
 void TexturesPool::load_effect_textures() {
     load_texture_into_map(DATA_PATH "/weapons/bazooka-explosion.png", effect_textures,
-                          Effects::NORMAL_EXPLOSION);
+                          VisualEffects::NORMAL_EXPLOSION);
     load_texture_into_map(DATA_PATH "/weapons/mortar-fragment-explosion.png", effect_textures,
-                          Effects::FRAGMENT_EXPLOSION);
+                          VisualEffects::FRAGMENT_EXPLOSION);
     load_texture_into_map(DATA_PATH "/stage/heal-crate-effect.png", effect_textures,
-                          Effects::CRATE_HEAL);
+                          VisualEffects::CRATE_HEAL);
     load_texture_into_map(DATA_PATH "/stage/ammo-crate-effect.png", effect_textures,
-                          Effects::CRATE_AMMO);
+                          VisualEffects::CRATE_AMMO);
 }
 
 void TexturesPool::load_tool_use_textures() {
@@ -213,7 +213,7 @@ std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_tool_usage_texture(
 }
 
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_effect_texture(
-        Effects effect_texture_to_fetch) {
+        VisualEffects effect_texture_to_fetch) {
     return (effect_textures[effect_texture_to_fetch]);
 }
 

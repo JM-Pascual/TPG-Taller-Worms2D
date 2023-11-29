@@ -18,7 +18,7 @@ std::shared_ptr<SDL2pp::Texture>& DeathAnimation::search_random_tomstone(Texture
 DeathAnimation::DeathAnimation(TexturesPool& pool, unsigned int delay) :
         worm_death_animation((pool.get_actor_texture(Actors::DYING_WORM)), 60, 0, false),
         worm_tombstone_animation((search_random_tomstone(pool)), 20, 3, true),
-        explosion(pool.get_effect_texture(Effects::NORMAL_EXPLOSION), 8, 3, false),
+        explosion(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
         currentFrame(0), delay(delay), counter(0) {}
 
 void DeathAnimation::update(bool iddle) {

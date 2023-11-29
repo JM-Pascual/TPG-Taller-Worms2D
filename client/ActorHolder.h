@@ -23,7 +23,8 @@ public:
 
     void remove_actor(const uint8_t& actor_id, std::shared_ptr<States> final_state);
 
-    void render_actors(std::shared_ptr<SDL2pp::Renderer>& game_renderer);
+    void play_actors_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                       AudioPlayer& effects_player);
 
     void print_actors_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
                             TextPrinter& state_printer);

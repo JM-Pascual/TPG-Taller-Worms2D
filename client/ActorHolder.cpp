@@ -15,13 +15,16 @@ void ActorHolder::remove_actor(const uint8_t& actor_id, std::shared_ptr<States> 
     active_actors.erase(actor_id);
 }
 
-void ActorHolder::render_actors(std::shared_ptr<SDL2pp::Renderer>& game_renderer) {
+void ActorHolder::play_actors_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                                AudioPlayer& effects_player) {
     for (auto& actor: active_actors) {
+        actor.second->play_state_audio(effects_player);
         actor.second->render(game_renderer);
     }
 
     for (auto& actor: inactive_actors) {
         actor.second.second->update(actor.second.first);
+        actor.second.second->play_state_audio(effects_player);
         actor.second.second->render(game_renderer);
     }
 }

@@ -32,7 +32,7 @@ private:
     std::unordered_map<WeaponsDraw, std::shared_ptr<SDL2pp::Texture>> draw_textures;
     std::unordered_map<Projectiles, std::shared_ptr<SDL2pp::Texture>> projectile_textures;
     std::unordered_map<ToolUsage, std::shared_ptr<SDL2pp::Texture>> tool_usage_textures;
-    std::unordered_map<Effects, std::shared_ptr<SDL2pp::Texture>> effect_textures;
+    std::unordered_map<VisualEffects, std::shared_ptr<SDL2pp::Texture>> effect_textures;
     std::unordered_map<Tombstones, std::shared_ptr<SDL2pp::Texture>> tombstones_textures;
 
     std::shared_ptr<SDL2pp::Renderer>& renderer;
@@ -45,7 +45,7 @@ public:
     std::shared_ptr<SDL2pp::Texture>& get_aim_texture(WeaponAiming aim_texture_to_fetch);
     std::shared_ptr<SDL2pp::Texture>& get_projectile_texture(Projectiles aim_texture_to_fetch);
     std::shared_ptr<SDL2pp::Texture>& get_tool_usage_texture(ToolUsage tool_use_texture_to_fetch);
-    std::shared_ptr<SDL2pp::Texture>& get_effect_texture(Effects aim_texture_to_fetch);
+    std::shared_ptr<SDL2pp::Texture>& get_effect_texture(VisualEffects aim_texture_to_fetch);
     std::shared_ptr<SDL2pp::Texture>& get_tombstone_texture(Tombstones tombstone_texture_to_fetch);
 };
 

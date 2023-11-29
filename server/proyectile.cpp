@@ -101,7 +101,7 @@ void Projectile::drowning() {
 
         } else {
             body->SetLinearVelocity( 0.7f * body->GetLinearVelocity());
-            explosion_delay -= 0.2f;
+            time_till_detonation -= 0.2f;
         }
     }
 }
