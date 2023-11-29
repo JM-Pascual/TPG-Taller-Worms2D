@@ -138,8 +138,9 @@ public:
                 walking.render((*game_renderer), render_rect, 0, 0,
                                facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
             } else if (tool_usage_animations.currently_animating_tool()) {
-                tool_usage_animations.render((*game_renderer), camera, 0, 0,
-                                             facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+                tool_usage_animations.play_actors_animation(
+                        (*game_renderer), camera, 0, 0,
+                        facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
             } else {
                 weapon_animations.render((*game_renderer), render_rect,
                                          facing_right ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
@@ -161,6 +162,11 @@ public:
 
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
+
+        if (tool_usage_animations.currently_animating_tool()){
+            tool_usage_animations.play_actors_sound_effects(effects_player);
+            return;
+        }
 
         if (life_points_remaining == 0.0f && !(alredy_played_death_sound)){
             effects_player.playAudio(SoundEffects::WORM_ME_MUERO);

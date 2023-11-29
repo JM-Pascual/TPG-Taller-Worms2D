@@ -6,6 +6,7 @@
 
 #include "SpecialToolAnimation.h"
 #include "TexturesPool.h"
+#include "audio_player.h"
 
 class ToolAnimationHolder {
 private:
@@ -20,9 +21,11 @@ public:
 
     void update(std::shared_ptr<WormStateG> &worm_state);
 
-    void render(SDL2pp::Renderer& renderer, Camera& camera, int non_squared_width,
+    void play_actors_animation(SDL2pp::Renderer& renderer, Camera& camera, int non_squared_width,
                 int non_squared_height, SDL_RendererFlip flipType = SDL_FLIP_HORIZONTAL,
                 double angle = 0.0);
+
+    void play_actors_sound_effects(AudioPlayer& effects_player);
 
     bool currently_animating_tool();
 };

@@ -30,11 +30,15 @@ void ToolAnimationHolder::update(std::shared_ptr<WormStateG>& worm_state) {
     }
 }
 
-void ToolAnimationHolder::render(SDL2pp::Renderer& renderer, Camera& camera, int non_squared_width,
-                                 int non_squared_height, SDL_RendererFlip flipType, double angle) {
-
+void ToolAnimationHolder::play_actors_animation(SDL2pp::Renderer& renderer, Camera& camera, int non_squared_width,
+                                 int non_squared_height,
+                                                SDL_RendererFlip flipType, double angle) {
     tool_animations.at(currently_equipped_item)->render(renderer, camera, non_squared_width,
                                              non_squared_height, flipType, angle);
+}
+
+void ToolAnimationHolder::play_actors_sound_effects(AudioPlayer& effects_player) {
+    tool_animations.at(currently_equipped_item)->play_effects(effects_player);
 }
 
 bool ToolAnimationHolder::currently_animating_tool() {

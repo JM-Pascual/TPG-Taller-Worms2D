@@ -8,9 +8,7 @@
 #include "common/States.h"
 
 #include "camera.h"
-
-class SdlTexture;
-class Area;
+#include "audio_player.h"
 
 class SpecialToolAnimation {
 protected:
@@ -45,9 +43,11 @@ public:
     virtual void render(SDL2pp::Renderer& renderer, Camera& camera, int non_squared_width,
                         int non_squared_height, SDL_RendererFlip flipType, double angle) = 0;
 
-    bool animation_ongoing() const{
+    [[nodiscard]] bool animation_ongoing() const{
         return currently_animating_tool;
     }
+
+    virtual void play_effects(AudioPlayer& effects_player) = 0;
 
 };
 
@@ -55,11 +55,13 @@ class TeleportAnimation : public SpecialToolAnimation {
 private:
     b2Vec2 initial_position;
     b2Vec2 teleport_position;
+
+    bool alredy_played_teleport_noise;
 public:
     TeleportAnimation(std::shared_ptr<SDL2pp::Texture> &texture,
                       unsigned int frames_in_texture, unsigned int delay_in_animation) :
             SpecialToolAnimation(texture, frames_in_texture, delay_in_animation),
-            initial_position(0,0), teleport_position(0,0){}
+            initial_position(0,0), teleport_position(0,0), alredy_played_teleport_noise(false){}
 
     void update_tool_animation(std::shared_ptr<WormStateG> &worm_state) override {
         if (!currently_animating_tool && worm_state->using_tool){
@@ -115,6 +117,13 @@ public:
         );
     }
 
+    void play_effects(AudioPlayer& effects_player) override{
+        if (!alredy_played_teleport_noise){
+            effects_player.playAudio(SoundEffects::TELEPORT);
+            alredy_played_teleport_noise = true;
+        }
+    }
+
     virtual ~TeleportAnimation() = default;
 };
 
@@ -122,11 +131,14 @@ class AirStrikeCallAnimation : public SpecialToolAnimation {
 private:
     b2Vec2 call_position;
     bool on_second_animation; //Bool to perform two iterations for longer animation
+
+    bool alredy_played_call_noise;
 public:
     AirStrikeCallAnimation(std::shared_ptr<SDL2pp::Texture> &texture,
                       unsigned int frames_in_texture, unsigned int delay_in_animation) :
             SpecialToolAnimation(texture, frames_in_texture, delay_in_animation),
-            call_position(0,0), on_second_animation(false){}
+            call_position(0,0), on_second_animation(false),
+            alredy_played_call_noise(false){}
 
     void update_tool_animation(std::shared_ptr<WormStateG> &worm_state) override {
         if (!currently_animating_tool && worm_state->using_tool){
@@ -171,17 +183,26 @@ public:
         );
     }
 
+    void play_effects(AudioPlayer& effects_player) override{
+        if (!alredy_played_call_noise){
+            effects_player.playAudio(SoundEffects::AIRSTRIKE);
+            alredy_played_call_noise = true;
+        }
+    }
+
     virtual ~AirStrikeCallAnimation() = default;
 };
 
 class BaseballHitAnimation : public SpecialToolAnimation {
 private:
     b2Vec2 use_position;
+
+    bool alredy_played_hit_noise;
 public:
     BaseballHitAnimation(std::shared_ptr<SDL2pp::Texture> &texture,
                            unsigned int frames_in_texture, unsigned int delay_in_animation) :
             SpecialToolAnimation(texture, frames_in_texture, delay_in_animation),
-            use_position(0,0){}
+            use_position(0,0), alredy_played_hit_noise(false){}
 
     void update_tool_animation(std::shared_ptr<WormStateG> &worm_state) override {
         if (!currently_animating_tool && worm_state->using_tool){
@@ -217,6 +238,14 @@ public:
                 SDL2pp::NullOpt,
                 flipType
         );
+    }
+
+    void play_effects(AudioPlayer& effects_player) override{
+        if (!alredy_played_hit_noise){
+            effects_player.playAudio(SoundEffects::BASEBALL_JINGLE);
+            effects_player.playAudio(SoundEffects::BASEBALL_IMPACT);
+            alredy_played_hit_noise = true;
+        }
     }
 
     virtual ~BaseballHitAnimation() = default;
