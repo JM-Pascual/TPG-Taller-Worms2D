@@ -213,6 +213,9 @@ void Worm::collision_reaction() {
     for (int i = 0; i < queryCallback.found_bodies_size(); i++) {
         b2Body* body_ = queryCallback.found_bodie_at(i);
 
+        if(body_ == body)
+            continue;
+
         reinterpret_cast<Entity*>(body_->GetUserData().pointer)->stop_falling();
     }
 }

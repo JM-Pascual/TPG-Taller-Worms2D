@@ -26,7 +26,7 @@
   max_power: 7
   min_falling_damage: 2.0
   max_falling_damage: 25.0
-  fall_damage_amplification: 3
+  fall_damage_amplification: 1
 
   bazooka_ammo: 255
   green_grenade_ammo: 255
