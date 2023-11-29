@@ -5,8 +5,8 @@
 #include "proyectile.h"
 
 Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
-           WeaponsAndTools& type, const uint8_t& id, const bool& allow_multiple_jump,
-           const bool& immortal_worms, const b2Vec2& position, const uint8_t& team):
+           WeaponsAndTools& type, const bool& allow_multiple_jump, const bool& immortal_worms,
+           const b2Vec2& position, const uint8_t& team):
         Entity(battlefield),
         life(INITIAL_LIFE),
         facing_right(true),
@@ -29,8 +29,7 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
         allow_multiple_jump(allow_multiple_jump),
         immortal_worms(immortal_worms),
         drown(false),
-        team(team),
-        id(id) {
+        team(team) {
     b2BodyDef wormDef;
     wormDef.type = b2_dynamicBody;
     wormDef.position = position;
@@ -238,8 +237,7 @@ Worm::Worm(Worm&& o):
         pos_y_before_falling(o.pos_y_before_falling),
         allow_multiple_jump(o.allow_multiple_jump),
         immortal_worms(o.immortal_worms),
-        team(o.team),
-        id(o.id) {
+        team(o.team) {
 
     o.life = 0.0f;
 

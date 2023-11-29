@@ -28,7 +28,7 @@ private:
     WeaponsAndTools selected_gadget_type;
     uint8_t worm_turn;
 
-    std::vector<std::shared_ptr<Worm>> worms;
+    std::map<uint8_t, std::shared_ptr<Worm>> worms;
 
     bool allow_multiple_jump;
     bool immortal_worms;

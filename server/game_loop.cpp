@@ -24,7 +24,7 @@ void GameLoop::run() {
 
         std::shared_ptr<PlayerAction> c;
         if (action_queue.try_pop(c)) {
-            c->execute(game.worm_handler, turn_id.player_id, turn_id.worm_index, turn_handler);
+            c->execute(game.worm_handler, turn_id.player_id, turn_handler);
         }
 
         game.worm_handler.check_drown_worms();
