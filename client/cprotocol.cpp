@@ -120,6 +120,9 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
         case StatesTag::CRATE_COUNT:
             return std::make_shared<CrateCount>(recvUint8());
 
+        case StatesTag::_YOU_WIN_:
+            return std::make_shared<YouWin>(recvUint8());
+
         default:
             return std::make_shared<PlayerCountL>(recvUint8());  // ToDo placeholder para un default
     }

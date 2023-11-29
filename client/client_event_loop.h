@@ -40,6 +40,7 @@ private:
     std::atomic<bool> runned;
     std::atomic<bool> mouse_priority;
     std::atomic<bool> kb_priority;
+    bool win;
     ClientSide::Protocol protocol;
     ClientSide::Receiver recv;
     ClientSide::Sender send;
@@ -72,6 +73,8 @@ private:
     void viewWorm(const std::shared_ptr<WormStateG>& worm);
 
     void viewProjectile(const std::shared_ptr<ProjectileStateG>& proj);
+
+    void rest(int& loop_start_time);
 
 public:
     /*

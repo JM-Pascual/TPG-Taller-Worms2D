@@ -13,6 +13,9 @@
 #define NOT_YOUR_TURN 0
 #define IS_YOUR_TURN 1
 
+#define YOU_LOSE 0
+#define YOU_WIN 1
+
 enum class SWIndex { INTRO, MENU, GAME_SEARCH, HELP, LOBBY };
 
 enum class _CrateType_ { FIRST_AID, AMMO_BOX, TRAP };
@@ -120,11 +123,7 @@ enum class Tombstones {
     TOMBSTONE_6
 };
 
-enum class ToolUsage{
-    AIR_STRIKE_CALL,
-    TELEPORT_USE,
-    BASEBALL_SWING
-};
+enum class ToolUsage { AIR_STRIKE_CALL, TELEPORT_USE, BASEBALL_SWING };
 
 enum class Effects { NORMAL_EXPLOSION, FRAGMENT_EXPLOSION, CRATE_HEAL, CRATE_AMMO };
 
@@ -179,7 +178,8 @@ enum class StatesTag {
     PLAYER_TURN,
     WORM_G,
     CRATE,
-    CRATE_COUNT
+    CRATE_COUNT,
+    _YOU_WIN_
 };
 
 #endif

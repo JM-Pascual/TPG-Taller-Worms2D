@@ -44,6 +44,8 @@ public:
 
     void broadcast_turn(const uint8_t& player_turn, const bool& block_input = false);
 
+    void broadcastWin(std::map<uint8_t, std::unique_ptr<Player>>& players);
+
     ~BroadCaster() = default;
 };
 

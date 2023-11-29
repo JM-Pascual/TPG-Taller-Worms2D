@@ -41,7 +41,7 @@ void ServerSide::Protocol::close() {
 
 // ------------------------------ RECEIVE ----------------------------------
 
-void ServerSide::Protocol::recvGameID(uint8_t& id) { id = this->recvUint8(); }
+void ServerSide::Protocol::recvGameID(int16_t& id) { id = this->recvUint8(); }
 
 uint8_t ServerSide::Protocol::recvUint8() {
     uint8_t n;
@@ -220,6 +220,12 @@ void ServerSide::Protocol::sendCrate(const std::shared_ptr<States>& state) {
     send(&p->id, sizeof(uint8_t));
 }
 
+void ServerSide::Protocol::sendYouWin(const std::shared_ptr<States>& state) {
+    std::shared_ptr<YouWin> turn = std::dynamic_pointer_cast<YouWin>(state);
+    send(&turn->tag, sizeof(uint8_t));
+    send(&turn->you_win, sizeof(uint8_t));
+}
+
 void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
     switch (state->tag) {
         case StatesTag::GAMES_COUNT_L:
@@ -265,6 +271,11 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
         case StatesTag::LEVEL_BUILD:
             sendLevelBuild(state);
             break;
+
+        case StatesTag::_YOU_WIN_:
+            sendYouWin(state);
+            break;
+
         default:
             break;
     }

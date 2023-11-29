@@ -294,7 +294,7 @@ void Everyone1HPCheat::execute(WormHandler& worm_handler, const uint8_t& turn_id
 
 // ----------------------- JOIN ----------------------
 
-Join::Join(GameBrowser& gb, uint8_t& id_to_join, const uint8_t& id,
+Join::Join(GameBrowser& gb, int16_t& id_to_join, const uint8_t& id,
            Queue<std::shared_ptr<States>>& state_queue):
         gb(gb), game_id(id_to_join), id(id), state_queue(state_queue) {}
 
@@ -302,7 +302,7 @@ void Join::execute() { gb.join_game(game_id, id, state_queue); }
 
 // ----------------------- CREATE ----------------------
 
-Create::Create(GameBrowser& gb, uint8_t& id_to_create, const uint8_t& id,
+Create::Create(GameBrowser& gb, int16_t& id_to_create, const uint8_t& id,
                Queue<std::shared_ptr<States>>& state_queue, ServerSide::Protocol& protocol):
         Join(gb, id_to_create, id, state_queue) {
     protocol.recvString64(desc);

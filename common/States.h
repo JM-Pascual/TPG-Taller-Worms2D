@@ -135,7 +135,8 @@ public:
                         const bool& is_walking, const bool& is_jumping, const bool& is_backflipping,
                         const bool& facing_right, const bool& falling,
                         const float& aim_inclination_degrees, const bool& charging_weapon,
-                        const float& life, const bool& drown, const bool& using_tool, const uint8_t team);
+                        const float& life, const bool& drown, const bool& using_tool,
+                        const uint8_t team);
 
     ~WormStateG() override = default;
 };
@@ -171,6 +172,13 @@ public:
 
     explicit PlayerTurn(const bool& is_your_turn):
             States(StatesTag::PLAYER_TURN), is_your_turn(is_your_turn) {}
+};
+
+class YouWin: public States {
+public:
+    const uint8_t you_win;
+
+    explicit YouWin(const bool& you_win): States(StatesTag::_YOU_WIN_), you_win(you_win) {}
 };
 
 // --------------- COUNT STATES ----------------------

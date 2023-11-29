@@ -278,12 +278,12 @@ public:
 class Join: public LobbyAction {
 private:
     GameBrowser& gb;
-    uint8_t& game_id;
+    int16_t& game_id;
     const uint8_t& id;
     Queue<std::shared_ptr<States>>& state_queue;
 
 public:
-    explicit Join(GameBrowser& gb, uint8_t& id_to_join, const uint8_t& id,
+    explicit Join(GameBrowser& gb, int16_t& id_to_join, const uint8_t& id,
                   Queue<std::shared_ptr<States>>& state_queue);
 
     void execute() override;
@@ -299,7 +299,7 @@ private:
     std::string map;
 
 public:
-    explicit Create(GameBrowser& gb, uint8_t& id_to_create, const uint8_t& id,
+    explicit Create(GameBrowser& gb, int16_t& id_to_create, const uint8_t& id,
                     Queue<std::shared_ptr<States>>& state_queue, ServerSide::Protocol& protocol);
 
     ~Create() override = default;
@@ -314,7 +314,7 @@ private:
     const uint8_t id_game;
 
 public:
-    explicit Ready(GameBrowser& gb, const uint8_t& id, const uint8_t& id_game):
+    explicit Ready(GameBrowser& gb, const uint8_t& id, const int16_t& id_game):
             gb(gb), id(id), id_game(id_game) {}
 
     void execute() override;
@@ -341,10 +341,10 @@ class ExitGame: public LobbyAction {
 private:
     GameBrowser& gb;
     const uint8_t& player_id;
-    const uint8_t& game_id;
+    const int16_t& game_id;
 
 public:
-    explicit ExitGame(GameBrowser& gb, const uint8_t& player_id, const uint8_t& game_id):
+    explicit ExitGame(GameBrowser& gb, const uint8_t& player_id, const int16_t& game_id):
             gb(gb), player_id(player_id), game_id(game_id) {}
 
     void execute() override;
