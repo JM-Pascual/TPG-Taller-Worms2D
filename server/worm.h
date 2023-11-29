@@ -27,7 +27,7 @@
 #define INCLINACION_MAX (b2_pi / 2)
 #define INCLINACION_MIN (-b2_pi / 2)
 
-#define MIN_SQUARED_VELOCITY 0.1
+#define MIN_SQUARED_VELOCITY 0.1f
 #define MIN_Y_VELOCITY 1
 #define MIN_X_VELOCITY 10
 
