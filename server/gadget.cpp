@@ -194,8 +194,8 @@ void Teleport::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_han
     Query_callback queryCallback;
     b2AABB aabb{};
 
-    aabb.upperBound = worm.position() + b2Vec2(0.1f,1.0f);
-    aabb.lowerBound = worm.position() - b2Vec2(0.1f,1.0f);
+    aabb.upperBound = worm.getPosition() + b2Vec2(0.1f, 1.0f);
+    aabb.lowerBound = worm.getPosition() - b2Vec2(0.1f, 1.0f);
 
 
     battlefield.add_query_AABB(&queryCallback, aabb);
@@ -207,15 +207,13 @@ void Teleport::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_han
             continue;
 
         b2Vec2 position;
-        position.x = worm.position().x;
-        position.y = worm.position().y + 2.0f;
+        position.x = worm.getPosition().x;
+        position.y = worm.getPosition().y + 2.0f;
         worm.change_clicked_position(position);
         worm.change_position();
     }
 
     worm.use_tool();
-
-
 
 
     turn_handler.use_stop_action();
@@ -283,8 +281,9 @@ void BaseballBat::bat(Battlefield& battlefield, Worm& worm) {
     Query_callback queryCallback;
     b2AABB aabb;
 
-    aabb.lowerBound = worm.position() - b2Vec2(BAT_RANGE * (1 - worm.is_facing_right()), BAT_RANGE);
-    aabb.upperBound = worm.position() + b2Vec2(BAT_RANGE * (worm.is_facing_right()), BAT_RANGE);
+    aabb.lowerBound =
+            worm.getPosition() - b2Vec2(BAT_RANGE * (1 - worm.is_facing_right()), BAT_RANGE);
+    aabb.upperBound = worm.getPosition() + b2Vec2(BAT_RANGE * (worm.is_facing_right()), BAT_RANGE);
 
     battlefield.add_query_AABB(&queryCallback, aabb);
 
@@ -295,7 +294,7 @@ void BaseballBat::bat(Battlefield& battlefield, Worm& worm) {
         if (worm.distance_to_body(body_) >= BAT_RANGE)
             continue;
 
-        applyBlastImpulse(body_, worm.position(), body_->GetWorldCenter(), BAT_DAMAGE,
+        applyBlastImpulse(body_, worm.getPosition(), body_->GetWorldCenter(), BAT_DAMAGE,
                           worm.set_bullet_angle());
     }
 }
@@ -312,8 +311,8 @@ void BaseballBat::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 ap
 
     Entity* entity = reinterpret_cast<Entity*>(body_->GetUserData().pointer);
 
-    b2Vec2 final_impulse = blastPower * BAT_POWER_FACTOR * direction ;
+    b2Vec2 final_impulse = blastPower * BAT_POWER_FACTOR * direction;
     entity->apply_explosion(final_impulse);
     entity->recibe_life_modification(-blastPower);
-    //entity->start_falling();
+    // entity->start_falling();
 }

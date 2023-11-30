@@ -17,7 +17,7 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
         runned(false),
         mouse_priority(false),
         kb_priority(false),
-        win(false),
+        win(-1),
         protocol(hostname, servname),
         recv(this->protocol, game_state_queue, lobby_state_queue, runned),
         send(this->protocol, this->action_queue),
@@ -213,6 +213,11 @@ void EventLoop::viewWorm(const std::shared_ptr<WormStateG>& worm) {
             camera.fixActor(worm->pos.x, worm->pos.y, 32, 60);
         }
 
+        if (worm->falling || worm->is_backflipping || worm->is_jumping) {
+            camera.fixActor(worm->pos.x, worm->pos.y, 32, 60);
+            return;
+        }
+
         camera_priority.priority = Priority::NONE;
     }
 }
@@ -289,6 +294,11 @@ void EventLoop::run() {
     }
 
     cheat_menu->close();
+
+    // Si win == -1, suponemos que el usuario salio con el ESC asi que omitimos la animacion
+    if (win < 0) {
+        return;
+    }
 
     while (window.render_end_of_game_texture(win)) {
         window.present_textures();
