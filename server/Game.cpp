@@ -10,7 +10,10 @@
 #include "proyectile.h"
 
 
-bool Game::non_locking_is_playing() { return (!players.empty() && players.size() == ready_count); }
+bool Game::non_locking_is_playing() {
+    auto sz = players.size();
+    return (sz > 1 && sz == ready_count);
+}
 
 void Game::notify_lobby_state() { broadcaster.broadcastLobby(); }
 
@@ -59,7 +62,8 @@ bool Game::isEmpty() {
 
 bool Game::is_playing() {
     std::lock_guard<std::mutex> lock(m);
-    return (!players.empty() && players.size() == ready_count);
+    auto sz = players.size();
+    return (sz > 1 && sz == ready_count);
 }
 
 void Game::set_player_ready(const uint8_t id) {

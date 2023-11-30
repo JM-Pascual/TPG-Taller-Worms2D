@@ -421,10 +421,18 @@ void MainWindow::lobbyHideAll() {
 }
 
 void MainWindow::startGame() {
-    for (auto& [id, player]: players) {
-        if (not player->ready_state) {
-            return;
-        }
+    auto sz = players.size();
+
+    if (sz <= 1) {
+        return;
+    }
+
+    uint8_t players_ready = std::accumulate(
+            players.begin(), players.end(), 0,
+            [](const int& sum, const auto& player) { return sum + player.second->ready_state; });
+
+    if (sz != players_ready) {
+        return;
     }
 
     initGame = true;
