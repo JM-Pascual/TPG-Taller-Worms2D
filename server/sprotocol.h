@@ -32,13 +32,8 @@ private:
     */
     void recv(void* data, unsigned int sz);
     /*
-        Envia data chequeando si se cierra el socket
-    */
-    void send(const void* data, unsigned int sz);
-    /*
         Recibe un int de 8 bits sin signo
     */
-    uint8_t recvUint8();
 
     void sendPosition(const b2Vec2& pos);
 
@@ -56,7 +51,6 @@ private:
 
     void sendProjectileState(const std::shared_ptr<States>& ps);
 
-    void sendFloat(float number);
 
     void sendTurn(const std::shared_ptr<States>& state);
 
@@ -67,6 +61,12 @@ private:
     void sendCrate(const std::shared_ptr<States>& state);
 
 public:
+    /*
+        Envia data chequeando si se cierra el socket
+    */
+    void send(const void* data, unsigned int sz);
+    uint8_t recvUint8();
+
     void sendStates(const std::shared_ptr<States>& state);
     /*
         Construye el protocolo y su respectivo socket
@@ -84,6 +84,10 @@ public:
         Recibe la direccion hacia la cual debe saltar el gusano
     */
     void recvJumpDir(JumpDir& dir);
+
+    void sendFloat(float number);
+
+    void sendString64(const std::string& str);
     /*
         Recibe la direccion hacia la cual debe inclinar la mira el gusano
     */

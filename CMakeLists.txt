@@ -80,3 +80,20 @@ target_link_libraries(server_exe ${GTest_LIBRARIES})
 set_target_properties(client_exe server_exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TARGET_DIR})
 set_target_properties(client_exe PROPERTIES OUTPUT_NAME worms2d)
 set_target_properties(server_exe PROPERTIES OUTPUT_NAME worms2dsv)
+
+enable_testing()
+
+add_executable(
+  worms2d_test
+  ${COMMON_SRC} client/cprotocol.cpp server/sprotocol.cpp test/protocol_test.cpp
+)
+
+target_link_libraries(
+  worms2d_test
+  box2d
+  GTest::gtest_main
+)
+
+
+include(GoogleTest)
+gtest_discover_tests(worms2d_test)

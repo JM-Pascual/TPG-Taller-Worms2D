@@ -38,17 +38,9 @@ private:
     */
     void recv(void* data, unsigned int sz);
 
-    uint8_t recvUint8();
-
-
-    float recvFloat();
-
-    bool recvBool();
 
     float meter_to_pixel_x(float meter_position);
     float meter_to_pixel_y(float meter_position);
-
-    void recvString64(std::string& str);
 
     std::shared_ptr<GameInfoL> recvGameInfo();
 
@@ -69,6 +61,14 @@ public:
     void sendString64(const std::string& str);
 
     void sendFloat(const float& number);
+
+    uint8_t recvUint8();
+
+    float recvFloat();
+
+    bool recvBool();
+
+    void recvString64(std::string& str);
 
     void recvCommand(Actions& c);
     /*

@@ -108,6 +108,12 @@ void ServerSide::Protocol::sendPosition(const b2Vec2& pos) {
     sendFloat(pos.y);
 }
 
+void ServerSide::Protocol::sendString64(const std::string& str) {
+    uint8_t length = str.length();
+    this->send(&length, sizeof(uint8_t));
+    this->send(str.data(), length);
+}
+
 void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<States>& ps) {
     std::shared_ptr<PlayerStateG> p = std::dynamic_pointer_cast<PlayerStateG>(ps);
 
