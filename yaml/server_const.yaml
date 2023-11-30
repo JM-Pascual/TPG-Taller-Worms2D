@@ -44,6 +44,8 @@
   air_strike_ammo: 2
   teleport_ammo: 255
 
+
+
   turn_duration_in_seconds: 60
   post_turn_duration_in_seconds: 3
 
@@ -105,4 +107,6 @@
   tide_level: 4
   left_border: 0
   right_border: 60
+
   drowning_projectile_factor: 0.7
+  impulse_reductive_factor: 0.4

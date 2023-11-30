@@ -490,9 +490,9 @@ public:
     inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
                             TextPrinter& state_printer) override {
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
-        state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
-                                                           time_till_detonation)),
-                                 rect.x, rect.y, 12, 15, 15, true);
+        state_printer.print_text((*game_renderer),
+                                 std::to_string(static_cast<int>(time_till_detonation)),
+                                 rect.x, rect.y, 0, 15, 15, true);
     }
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
@@ -545,7 +545,7 @@ public:
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
                                                            time_till_detonation)),
-                                 rect.x, rect.y, 12, 15, 15, true);
+                                 rect.x, rect.y, 0, 15, 15, true);
     }
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
@@ -600,7 +600,7 @@ public:
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
                                                            time_till_detonation)),
-                                 rect.x, rect.y, 12, 15, 15, true);
+                                 rect.x, rect.y, 0, 15, 15, true);
     }
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
@@ -655,7 +655,7 @@ public:
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
         state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
                                                            time_till_detonation)),
-                                 rect.x, rect.y, 12, 15, 15, true);
+                                 rect.x, rect.y, 0, 15, 15, true);
     }
 
     inline void play_state_audio(AudioPlayer& effects_player) override {

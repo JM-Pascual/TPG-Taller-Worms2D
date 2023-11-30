@@ -47,6 +47,7 @@
 #define LEFT_BORDER Config::yamlNode["left_border"].as<int>()
 #define RIGHT_BORDER Config::yamlNode["right_border"].as<int>()
 #define DROWNING_VELOCITY_FACTOR Config::yamlNode["drowning_projectile_factor"].as<float>()
+#define IMPULSE_REDUCTIVE_FACTOR Config::yamlNode["impulse_reductive_factor"].as<float>()
 
 
 

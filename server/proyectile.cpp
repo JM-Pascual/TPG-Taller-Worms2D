@@ -85,7 +85,7 @@ void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 app
 
     Entity* entity = reinterpret_cast<Entity*>(body_->GetUserData().pointer);
 
-    b2Vec2 final_impulse = damage * 0.4f * blastDir;
+    b2Vec2 final_impulse = damage * IMPULSE_REDUCTIVE_FACTOR * blastDir;
     entity->apply_explosion(final_impulse);
     entity->recibe_life_modification(-damage);
 }
