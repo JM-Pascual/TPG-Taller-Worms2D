@@ -43,6 +43,11 @@
 
 
 #define DEGTORAD (180 / b2_pi)
+#define TIDE_LEVEL Config::yamlNode["tide_level"].as<int>()
+#define LEFT_BORDER Config::yamlNode["left_border"].as<int>()
+#define RIGHT_BORDER Config::yamlNode["right_border"].as<int>()
+#define DROWNING_VELOCITY_FACTOR Config::yamlNode["drowning_projectile_factor"].as<float>()
+
 
 
 class Battlefield;

@@ -38,7 +38,7 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
 
     body = battlefield.add_body(wormDef);
     b2CircleShape wormBox;
-    wormBox.m_radius = 0.5f;
+    wormBox.m_radius = RADIUS;
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &wormBox;
@@ -108,13 +108,13 @@ void Worm::change_aim_direction() {
 
         case ADSAngleDir::UP:
 
-            if (aim_inclination_degrees <= INCLINACION_MAX) {
+            if (aim_inclination_degrees <= INCLINATION_MAX) {
                 aim_inclination_degrees += ANGLE_VARIATION;
             }
             break;
         case ADSAngleDir::DOWN:
 
-            if (aim_inclination_degrees >= INCLINACION_MIN) {
+            if (aim_inclination_degrees >= INCLINATION_MIN) {
                 aim_inclination_degrees -= ANGLE_VARIATION;
             }
             break;
@@ -213,8 +213,8 @@ bool Worm::is_dead() {
 void Worm::collision_reaction(b2Vec2 normal) {
     Query_callback queryCallback;
     b2AABB aabb{};
-    aabb.lowerBound = body->GetWorldCenter() - b2Vec2(WIDTH / 2, HEIGHT / 2);
-    aabb.upperBound = body->GetWorldCenter() + b2Vec2(WIDTH / 2, HEIGHT / 2);
+    aabb.lowerBound = body->GetWorldCenter() - b2Vec2(RADIUS / 2, RADIUS / 2);
+    aabb.upperBound = body->GetWorldCenter() + b2Vec2(RADIUS / 2, RADIUS / 2);
     battlefield.add_query_AABB(&queryCallback, aabb);
 
     // check which of these bodies have their center of mass within the blast radius
@@ -274,7 +274,7 @@ void Worm::stop_all() {
 }
 
 void Worm::start_falling() {
-    //pos_y_before_falling = body->GetPosition().y;
+    pos_y_before_falling = body->GetPosition().y;
     falling = true;
 }
 

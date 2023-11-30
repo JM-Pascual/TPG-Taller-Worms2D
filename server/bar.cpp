@@ -45,7 +45,7 @@ float Bar::get_bar_width() const { return (width); }
 
 float Bar::get_bar_height() const { return (BAR_HEIGHT); }
 
-#include <iostream>
+
 void Bar::collision_reaction(b2Vec2 normal) {
     Query_callback queryCallback;
     b2AABB aabb{};
@@ -58,27 +58,22 @@ void Bar::collision_reaction(b2Vec2 normal) {
         b2Body *body_ = queryCallback.found_bodie_at(i);
 
         // 0 < Angulo < 45 || 135 < Angulo < 180
-        //std::cout << "x: " << normal.x << "  y: "<<normal.y << std::endl;
+        if (std::abs(sinf(angle)) > (std::sqrt(2) / 2) )
+            continue;
 
-        if (std::abs(sinf(angle)) > (std::sqrt(2) / 2) ) //|| normal.y <= 0.005f)
-            continue;
-        /*
-        if((std::abs(sinf(angle)) == 0 && normal.y < 1.0f))
-            continue;
-        */
-        std::cout << std::abs(std::atan2(normal.y, normal.x )) + std::abs(angle) << " angle: "<< angle << " normal angle "<< std::atan2(normal.y, normal.x ) <<  std::endl;
         float normal_angle;
         normal_angle = std::atan2(normal.y, normal.x );
+
 
         if((normal.x <  0)){
             normal_angle = b2_pi - normal_angle;
         }
-
+        // normal_angle + angle = 90 y estoy arriba de la entidad
         if((normal_angle + std::abs(angle) > 1.56f && normal_angle +  std::abs(angle) < 1.58f)){
-           if(normal.y >= 0)
-            reinterpret_cast<Entity *>(body_->GetUserData().pointer)->stop_falling();
+           if(normal.y >= 0){
+               reinterpret_cast<Entity *>(body_->GetUserData().pointer)->stop_falling();
+           }
         }
-
     }
 }
 void Bar::applyWindResistance(const float& wind_force) {}
