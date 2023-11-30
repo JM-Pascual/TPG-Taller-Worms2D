@@ -23,16 +23,23 @@ const TurnReset TurnHandler::need_to_update(const uint8_t players_quantity,
         return advanceTurn(players_quantity);
     }
 
-
     {
         auto it = players.begin();
         std::advance(it, player_turn);
 
         if (current_player_worms_quantity > it->second->worms.size()) {
+            current_player_worms_quantity = it->second->worms.size();
             return advanceTurn(players_quantity);
         }
 
         if (it->second->worms.empty() ? true : it->second->worms.at(worm_turn_id)->was_damaged) {
+            return advanceTurn(players_quantity);
+        }
+
+        auto worm_it = it->second->worms.begin();
+        advance(worm_it, it->second->worm_turn);
+
+        if (it->second->worms.count(worm_it->first) != 1) {
             return advanceTurn(players_quantity);
         }
     }
