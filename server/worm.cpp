@@ -38,7 +38,7 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
 
     body = battlefield.add_body(wormDef);
     b2CircleShape wormBox;
-    wormBox.m_radius = 0.5f;
+    wormBox.m_radius = RADIUS;
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &wormBox;
@@ -63,7 +63,7 @@ void Worm::move() {
                 b2Vec2(20 * std::pow(-1, 1 - facing_right) / TICK_RATE, 0), true);
     }
 
-    start_falling();
+    //start_falling();
 }
 
 void Worm::stop() {
@@ -85,7 +85,7 @@ void Worm::jump(const JumpDir& direction) {
         return;
     }
 
-    start_falling();
+    //start_falling();
 
     switch (direction) {
         case (JumpDir::FRONT):
@@ -108,13 +108,13 @@ void Worm::change_aim_direction() {
 
         case ADSAngleDir::UP:
 
-            if (aim_inclination_degrees <= INCLINACION_MAX) {
+            if (aim_inclination_degrees <= INCLINATION_MAX) {
                 aim_inclination_degrees += ANGLE_VARIATION;
             }
             break;
         case ADSAngleDir::DOWN:
 
-            if (aim_inclination_degrees >= INCLINACION_MIN) {
+            if (aim_inclination_degrees >= INCLINATION_MIN) {
                 aim_inclination_degrees -= ANGLE_VARIATION;
             }
             break;
@@ -180,6 +180,15 @@ b2Vec2 Worm::set_bullet_direction() {
     bullet_position.y = (body->GetPosition().y + (ARM_LENGHT * sinf(aim_inclination_degrees)));
     return bullet_position;
 }
+
+b2Vec2 Worm::set_projectile_inplace() {
+    b2Vec2 position;
+    position.x = (body->GetPosition().x + (facing_factor()) * ARM_LENGHT);
+    position.y = (body->GetPosition().y);
+
+    return position;
+}
+
 // todo cambiar nombre
 b2Vec2 Worm::set_bullet_angle() {
     return b2Vec2(facing_factor() * cosf(aim_inclination_degrees), sinf(aim_inclination_degrees));
@@ -207,11 +216,11 @@ bool Worm::is_dead() {
     return dead;
 }
 
-void Worm::collision_reaction() {
+void Worm::collision_reaction(b2Vec2 normal) {
     Query_callback queryCallback;
     b2AABB aabb{};
-    aabb.lowerBound = body->GetWorldCenter() - b2Vec2(WIDTH / 2, HEIGHT / 2);
-    aabb.upperBound = body->GetWorldCenter() + b2Vec2(WIDTH / 2, HEIGHT / 2);
+    aabb.lowerBound = body->GetWorldCenter() - b2Vec2(RADIUS / 2, RADIUS / 2);
+    aabb.upperBound = body->GetWorldCenter() + b2Vec2(RADIUS / 2, RADIUS / 2);
     battlefield.add_query_AABB(&queryCallback, aabb);
 
     // check which of these bodies have their center of mass within the blast radius
@@ -283,10 +292,12 @@ void Worm::stop_falling() {
     auto vel = body->GetLinearVelocity();
 
     if (vel.x < MIN_X_VELOCITY) {
-        if ((not is_walking || not falling) && not was_damaged && not is_backflipping &&
-            not is_jumping) {
-            body->SetAwake(false);
+        if(not(is_walking)){
+            if (not was_damaged && not is_backflipping && not is_jumping) {
+                body->SetAwake(false);
+            }
         }
+
     }
 
     if (vel.y < MIN_Y_VELOCITY) {
@@ -337,3 +348,4 @@ void Worm::use_tool() { using_tool = true; }
 
 b2Vec2 Worm::position() { return body->GetWorldCenter(); }
 void Worm::open_crate(bool& open) { open = true; }
+

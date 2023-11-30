@@ -33,7 +33,7 @@ public:
 
     virtual inline void open_crate(bool& open) {}
 
-    virtual void collision_reaction() = 0;
+    virtual void collision_reaction(b2Vec2 normal) = 0;
 
     ~Entity();
 

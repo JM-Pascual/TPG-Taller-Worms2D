@@ -54,6 +54,7 @@ public:
 
     void checkDeadWorms();
     void check_drown_worms();
+    void check_falling_worms();
 
     void allWorms1HP();
 

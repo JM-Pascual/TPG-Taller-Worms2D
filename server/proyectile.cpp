@@ -64,7 +64,7 @@ void Projectile::collide() {
             continue;
 
         applyBlastImpulse(body_, body->GetWorldCenter(), bodyCom, epicenter_damage);
-        reinterpret_cast<Entity*>(body_->GetUserData().pointer)->start_falling();
+        //reinterpret_cast<Entity*>(body_->GetUserData().pointer)->start_falling();
     }
 }
 
@@ -72,9 +72,6 @@ void Projectile::collide() {
 void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 applyPoint,
                                    float blastPower) {
 
-    // float radio1  = body->GetFixtureList()->GetShape()->m_radius;
-    // float radio2  = body_->GetFixtureList()->GetShape()->m_radius;
-    // float dist  = radio1 + radio2;
 
     b2Vec2 blastDir = applyPoint - blastCenter;
     float distance = blastDir.Normalize();
@@ -88,19 +85,19 @@ void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 app
 
     Entity* entity = reinterpret_cast<Entity*>(body_->GetUserData().pointer);
 
-    b2Vec2 final_impulse = damage * 0.5f * blastDir;
+    b2Vec2 final_impulse = damage * 0.4f * blastDir;
     entity->apply_explosion(final_impulse);
     entity->recibe_life_modification(-damage);
 }
 
 void Projectile::drowning() {
 
-    if(body->GetPosition().y <= 4){
-        if (body->GetPosition().x < 0 || body->GetPosition().x > 60) {
+    if(body->GetPosition().y <= TIDE_LEVEL){
+        if (body->GetPosition().x < LEFT_BORDER || body->GetPosition().x > RIGHT_BORDER) {
             dead = true;
 
         } else {
-            body->SetLinearVelocity( 0.7f * body->GetLinearVelocity());
+            body->SetLinearVelocity(DROWNING_VELOCITY_FACTOR * body->GetLinearVelocity());
             time_till_detonation -= 0.2f;
         }
     }
@@ -111,7 +108,7 @@ Rocket::Rocket(Battlefield& battlefield, b2Vec2 position, int blast_radius, int 
                WeaponsAndTools type):
         Projectile(battlefield, position, blast_radius, epicenter_damage, type, ROCKET_DELAY) {}
 
-void Rocket::collision_reaction() {
+void Rocket::collision_reaction(b2Vec2 normal) {
     if (not dead) {
         collide();
         dead = true;
@@ -198,7 +195,7 @@ Grenade::Grenade(Battlefield& battlefield, b2Vec2 position, float explosion_dela
                  uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type):
         Projectile(battlefield, position, blast_radius, epicenter_damage, type, explosion_delay) {}
 
-void Grenade::collision_reaction() {}
+void Grenade::collision_reaction(b2Vec2 normal) {}
 
 void Grenade::updateTimer() {
     if (dead) {

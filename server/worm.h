@@ -14,8 +14,7 @@
 
 #define TICK_RATE Config::yamlNode["tick_rate"].as<int>()
 
-#define WIDTH Config::yamlNode["worm_width"].as<float>()
-#define HEIGHT Config::yamlNode["worm_height"].as<float>()
+#define RADIUS Config::yamlNode["worm_radius"].as<float>()
 
 #define ARM_LENGHT Config::yamlNode["arm_length"].as<float>()
 
@@ -24,14 +23,14 @@
 #define ANGLE_VARIATION (b2_pi / 64)
 
 
-#define INCLINACION_MAX (b2_pi / 2)
-#define INCLINACION_MIN (-b2_pi / 2)
+#define INCLINATION_MAX (b2_pi / 2)
+#define INCLINATION_MIN (-b2_pi / 2)
 
-#define MIN_SQUARED_VELOCITY 0.1f
-#define MIN_Y_VELOCITY 1
-#define MIN_X_VELOCITY 10
+#define MIN_SQUARED_VELOCITY Config::yamlNode["min_squared_velocity"].as<float>()
+#define MIN_Y_VELOCITY Config::yamlNode["min_y_velocity"].as<int>()
+#define MIN_X_VELOCITY Config::yamlNode["max_y_velocity"].as<int>()
 
-#define REFRESH_WALK 10
+#define REFRESH_WALK Config::yamlNode["refresh_walk"].as<int>()
 
 #define MIN_FALLING_DAMAGE_HEIGHT Config::yamlNode["min_falling_damage"].as<float>()
 #define MAX_FALLING_DAMAGE Config::yamlNode["max_falling_damage"].as<float>()
@@ -108,13 +107,15 @@ public:
     void use_chargeable_weapon(const std::shared_ptr<Projectile>& projectile);
     void use_positional_weapon(const std::shared_ptr<Projectile>& throwable);
 
+    b2Vec2 set_projectile_inplace();
+
 
     void change_position();
     b2Vec2 clicked_position_();
     DelayAmount grenade_explosion_delay();
 
     bool is_dead() override;
-    void collision_reaction() override;
+    void collision_reaction(b2Vec2 normal) override;
 
     void open_crate(bool& open) override;
 

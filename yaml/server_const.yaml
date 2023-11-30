@@ -19,14 +19,19 @@
   extra_worm_life: 25
 
   initial_life: 100
-  worm_width: 0.9
-  worm_height: 1.2
-  arm_length: 1.45  #(${worm_width} / 2) + 1
+  worm_radius: 0.5
+  arm_length: 0.9  #(${worm_width} / 2) + 1
   power_raise: 0.43
   max_power: 7
-  min_falling_damage: 2.0
+  min_falling_damage: 4.0
   max_falling_damage: 25.0
   fall_damage_amplification: 1
+
+  min_squared_velocity: 0.1
+  min_y_velocity: 1
+  max_y_velocity: 10
+  refresh_walk: 10
+
 
   bazooka_ammo: 255
   green_grenade_ammo: 255
@@ -69,7 +74,7 @@
 
   baseball_bat_range: 4
   baseball_bat_damage: 10
-  baseball_bat_power: 50
+  baseball_bat_factor: 2
 
   blast_radius_air_strike: 2
   epicenter_damage_air_strike: 40
@@ -96,3 +101,8 @@
   min_x_crate_spawn: 6.0
   max_x_crate_spawn: 52.0
   y_crate_spawn: 23.6
+
+  tide_level: 4
+  left_border: 0
+  right_border: 60
+  drowning_projectile_factor: 0.7

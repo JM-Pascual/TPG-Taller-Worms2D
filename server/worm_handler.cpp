@@ -95,10 +95,7 @@ void WormHandler::update_physics() {
         return;
     }
 
-    if (!turn_worm->is_walking && !turn_worm->is_jumping && !turn_worm->is_backflipping &&
-        !turn_worm->falling) {
-        // turn_worm->stop();
-    } else if (turn_worm->is_walking) {
+    if (turn_worm->is_walking) {
         turn_worm->move();
     }
 }
@@ -138,6 +135,18 @@ void WormHandler::checkDeadWorms() {
         }
     }
 }
+
+void WormHandler::check_falling_worms() {
+    for (const auto& [id, player]: players) {
+        for (const auto& [worm_id, worm]: player->worms) {
+            if ((worm->body->GetLinearVelocity().y <= 1.0f &&  worm->body->GetLinearVelocity().y >= 0.0f)  && worm->falling) {
+
+                worm->pos_y_before_falling = b2Max(b2Vec2(0,worm->pos_y_before_falling), b2Vec2(0, worm->body->GetPosition().y)).y;
+            }
+        }
+    }
+}
+
 
 const bool WormHandler::allWormsStayStill() {
     for (const auto& [id, player]: players) {
@@ -194,3 +203,4 @@ void WormHandler::WW3Cheat() {
         fake_airstrike.shootCheat(turn_worm->battlefield, x);
     }
 }
+

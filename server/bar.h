@@ -6,8 +6,8 @@
 
 #include "../common/const.h"
 
-#define BAR_WIDTH_SHORT 1.9//2.1f
-#define BAR_WIDTH_LONG 4.0//4.2f
+#define BAR_WIDTH_SHORT 2.1f//1.9f
+#define BAR_WIDTH_LONG 4.2f//4.0f
 #define BAR_HEIGHT 0.7f
 
 //Resolver estas contantes en el YAML
@@ -28,7 +28,7 @@ public:
     explicit Bar(Battlefield& battlefield, float x, float y,
                  float inclination_angle, bool is_long);
 
-    void collision_reaction() override;
+    void collision_reaction(b2Vec2 normal) override;
 
     void applyWindResistance(const float& wind_force) override;
 

@@ -26,8 +26,9 @@
 #define AIRSTRIKE_ROCKET_Y_POSITION Config::yamlNode["air_strike_rocket_y_position"].as<int>()
 
 #define BAT_DAMAGE Config::yamlNode["baseball_bat_damage"].as<int>()
-#define BAT_POWER Config::yamlNode["baseball_bat_power"].as<int>()
+#define BAT_POWER_FACTOR Config::yamlNode["baseball_bat_factor"].as<int>()
 #define BAT_RANGE Config::yamlNode["baseball_bat_range"].as<int>()
+
 
 class Worm;
 class Game;

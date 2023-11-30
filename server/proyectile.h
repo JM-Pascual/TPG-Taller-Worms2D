@@ -43,6 +43,11 @@
 
 
 #define DEGTORAD (180 / b2_pi)
+#define TIDE_LEVEL Config::yamlNode["tide_level"].as<int>()
+#define LEFT_BORDER Config::yamlNode["left_border"].as<int>()
+#define RIGHT_BORDER Config::yamlNode["right_border"].as<int>()
+#define DROWNING_VELOCITY_FACTOR Config::yamlNode["drowning_projectile_factor"].as<float>()
+
 
 
 class Battlefield;
@@ -65,7 +70,7 @@ public:
     void set_power(b2Vec2 power);
     std::shared_ptr<ProjectileStateG> get_proyectile_state(const uint8_t& proyectile_id);
 
-    inline void collision_reaction() override {}
+    inline void collision_reaction(b2Vec2 normal) override {}
 
     inline void applyWindResistance(const float& wind_force) override {}
 
@@ -88,7 +93,7 @@ protected:
 public:
     Rocket(Battlefield& battlefield, b2Vec2 position, int blast_radius, int epicenter_damage,
            WeaponsAndTools type);
-    void collision_reaction() override;
+    void collision_reaction(b2Vec2 normal) override;
     void applyWindResistance(const float& wind_force) override;
     void updateTimer() override;
     inline void second_collision_reaction() override{};
@@ -132,7 +137,7 @@ class Grenade: public Projectile {
 public:
     Grenade(Battlefield& battlefield, b2Vec2 position, float explosion_delay, uint8_t blast_radius,
             uint8_t epicenter_damage, WeaponsAndTools type);
-    void collision_reaction() override;
+    void collision_reaction(b2Vec2 normal) override;
     void applyWindResistance(const float& wind_force) override;
     void updateTimer() override;
     inline void second_collision_reaction() override{};

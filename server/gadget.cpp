@@ -166,11 +166,11 @@ void DynamiteGrenade::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& t
         return;
     }
 
-    b2Vec2 projectile_position = worm.set_bullet_direction();
+    b2Vec2 dynamite_position = worm.set_projectile_inplace();
     DelayAmount explosion_delay = worm.grenade_explosion_delay();
 
     std::shared_ptr<Projectile> dynamite =
-            std::make_shared<Dynamite>(battlefield, projectile_position, float(explosion_delay));
+            std::make_shared<Dynamite>(battlefield, dynamite_position, float(explosion_delay));
     battlefield.add_projectile(dynamite);
 
     worm.use_positional_weapon(dynamite);
@@ -190,7 +190,33 @@ void Teleport::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_han
         return;
     }
     worm.change_position();
+
+    Query_callback queryCallback;
+    b2AABB aabb{};
+
+    aabb.upperBound = worm.position() + b2Vec2(0.1f,1.0f);
+    aabb.lowerBound = worm.position() - b2Vec2(0.1f,1.0f);
+
+
+    battlefield.add_query_AABB(&queryCallback, aabb);
+
+    for (int i = 0; i < queryCallback.found_bodies_size(); i++) {
+        b2Body* body_ = queryCallback.found_bodie_at(i);
+
+        if (worm.distance_to_body(body_) == 0)
+            continue;
+
+        b2Vec2 position;
+        position.x = worm.position().x;
+        position.y = worm.position().y + 2.0f;
+        worm.change_clicked_position(position);
+        worm.change_position();
+    }
+
     worm.use_tool();
+
+
+
 
     turn_handler.use_stop_action();
 
@@ -269,7 +295,7 @@ void BaseballBat::bat(Battlefield& battlefield, Worm& worm) {
         if (worm.distance_to_body(body_) >= BAT_RANGE)
             continue;
 
-        applyBlastImpulse(body_, worm.position(), body_->GetWorldCenter(), BAT_POWER,
+        applyBlastImpulse(body_, worm.position(), body_->GetWorldCenter(), BAT_DAMAGE,
                           worm.set_bullet_angle());
     }
 }
@@ -286,8 +312,8 @@ void BaseballBat::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 ap
 
     Entity* entity = reinterpret_cast<Entity*>(body_->GetUserData().pointer);
 
-    b2Vec2 final_impulse = blastPower * direction;
+    b2Vec2 final_impulse = blastPower * BAT_POWER_FACTOR * direction ;
     entity->apply_explosion(final_impulse);
-    entity->recibe_life_modification(-BAT_DAMAGE);
-    entity->start_falling();
+    entity->recibe_life_modification(-blastPower);
+    //entity->start_falling();
 }
