@@ -30,7 +30,7 @@ void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states,
                                uint8_t id_of_active_player) {
     // WIND
     states.push_back(
-            std::make_shared<BattlefieldState>((float)game.battlefield.engine.wind_force));
+            std::make_shared<BattlefieldState>(game.battlefield.engine.wind_force));
 
     // CRATES
 
