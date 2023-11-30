@@ -139,9 +139,13 @@ void WormHandler::checkDeadWorms() {
 void WormHandler::check_falling_worms() {
     for (const auto& [id, player]: players) {
         for (const auto& [worm_id, worm]: player->worms) {
-            if ((worm->body->GetLinearVelocity().y <= 1.0f &&  worm->body->GetLinearVelocity().y >= 0.0f)  && worm->falling) {
+            if ((worm->body->GetLinearVelocity().y <= 1.0f) &&
+                (worm->body->GetLinearVelocity().y >= 0.0f) &&
+                (worm->pos_y_before_falling < worm->body->GetPosition().y) && worm->falling) {
 
-                worm->pos_y_before_falling = b2Max(b2Vec2(0,worm->pos_y_before_falling), b2Vec2(0, worm->body->GetPosition().y)).y;
+                worm->pos_y_before_falling = b2Max(b2Vec2(0, worm->pos_y_before_falling),
+                                                   b2Vec2(0, worm->body->GetPosition().y))
+                                                     .y;
             }
         }
     }
@@ -183,7 +187,7 @@ void WormHandler::playerInfiniteAmmo(const uint8_t& id) { players.at(id)->infini
 void WormHandler::check_drown_worms() {
     for (const auto& [id, player]: players) {
         for (const auto& [worm_id, worm]: player->worms) {
-            if (worm->position().y <= 4) {
+            if (worm->getPosition().y <= 4) {
                 worm->drown = true;
                 worm->life = 0.0f;
                 worm->was_damaged = true;
@@ -203,4 +207,3 @@ void WormHandler::WW3Cheat() {
         fake_airstrike.shootCheat(turn_worm->battlefield, x);
     }
 }
-

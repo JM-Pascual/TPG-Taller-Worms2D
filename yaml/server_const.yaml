@@ -27,7 +27,7 @@
   max_falling_damage: 25.0
   fall_damage_amplification: 1
 
-  min_squared_velocity: 0.1
+  min_squared_velocity: 0.0001
   min_y_velocity: 1
   max_y_velocity: 10
   refresh_walk: 10

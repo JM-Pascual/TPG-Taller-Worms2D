@@ -50,6 +50,7 @@ private:
     bool is_backflipping;
     bool falling;
     bool using_tool;
+    bool refresh_falling_pos;
 
     bool aiming;
     float aim_inclination_degrees;  // Radianes
@@ -121,7 +122,7 @@ public:
 
     void applyWindResistance(const float& wind_force) override;
 
-    b2Vec2 position();
+    b2Vec2 getPosition();
 
     float distance_to_body(b2Body* body_);
 

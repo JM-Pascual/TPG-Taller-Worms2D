@@ -15,6 +15,7 @@ Worm::Worm(Battlefield& battlefield, std::unique_ptr<Gadget>*& selected_weapon,
         is_backflipping(false),
         falling(false),
         using_tool(false),
+        refresh_falling_pos(true),
         aiming(false),
         aim_inclination_degrees(0),
         aim_direction(ADSAngleDir::UP),
@@ -63,7 +64,7 @@ void Worm::move() {
                 b2Vec2(20 * std::pow(-1, 1 - facing_right) / TICK_RATE, 0), true);
     }
 
-    //start_falling();
+    // start_falling();
 }
 
 void Worm::stop() {
@@ -85,7 +86,7 @@ void Worm::jump(const JumpDir& direction) {
         return;
     }
 
-    //start_falling();
+    // start_falling();
 
     switch (direction) {
         case (JumpDir::FRONT):
@@ -280,7 +281,11 @@ void Worm::stop_all() {
 }
 
 void Worm::start_falling() {
-    pos_y_before_falling = body->GetPosition().y;
+    if (refresh_falling_pos) {
+        pos_y_before_falling = body->GetPosition().y;
+        refresh_falling_pos = false;
+    }
+
     falling = true;
 }
 
@@ -292,12 +297,11 @@ void Worm::stop_falling() {
     auto vel = body->GetLinearVelocity();
 
     if (vel.x < MIN_X_VELOCITY) {
-        if(not(is_walking)){
+        if (not(is_walking)) {
             if (not was_damaged && not is_backflipping && not is_jumping) {
                 body->SetAwake(false);
             }
         }
-
     }
 
     if (vel.y < MIN_Y_VELOCITY) {
@@ -317,6 +321,7 @@ void Worm::stop_falling() {
         }
 
         pos_y_before_falling = 0.0f;
+        refresh_falling_pos = true;
     }
 }
 
@@ -346,6 +351,5 @@ bool Worm::is_facing_right() { return facing_right; }
 
 void Worm::use_tool() { using_tool = true; }
 
-b2Vec2 Worm::position() { return body->GetWorldCenter(); }
+b2Vec2 Worm::getPosition() { return body->GetWorldCenter(); }
 void Worm::open_crate(bool& open) { open = true; }
-
