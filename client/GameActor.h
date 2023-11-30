@@ -2,6 +2,7 @@
 #define GAMEACTOR_H
 
 #include <memory>
+#include <random>
 
 #include <SDL2pp/SDL2pp.hh>
 
@@ -17,6 +18,8 @@
 #include "death_animation.h"
 #include "text_printer.h"
 #include "audio_player.h"
+
+#define NAMES_IN_FILE Config::wormNames["amount_of_names"].as<int>()
 
 // ----------------------- ACTOR INTERFACE ----------------------
 
@@ -52,6 +55,9 @@ private:
 
     float aim_inclination_degrees;
 
+    TeamColours team_colour;
+    std::string worm_name;
+
     Animation walking;
     Animation jumping;
     Animation backflipping;
@@ -67,6 +73,24 @@ private:
     bool alredy_played_backflip_sound;
     bool alredy_played_death_sound;
 
+    std::string generate_random_name(){
+        // Seed the random number generator
+        std::random_device rd;
+        std::mt19937 rng(rd());
+
+        // Define a distribution (e.g., integers between 1 and amount_of_names)
+        std::uniform_int_distribution<int> dist(0, NAMES_IN_FILE-1);
+
+        // Generate a random number
+        int random_number = dist(rng);
+
+        // Access the correct YAML data
+        const YAML::Node& worm_names = Config::wormNames["worm-names"];
+
+        // Return the random name
+        return worm_names[random_number][0].as<std::string>();
+    }
+
 public:
     explicit Worm(std::shared_ptr<WormStateG>& initial_state, TexturesPool& pool, Camera& camera):
             GameActor(initial_state->pos.x, initial_state->pos.y, camera),
@@ -80,6 +104,8 @@ public:
             using_tool(initial_state->using_tool),
             life_points_remaining(initial_state->life),
             aim_inclination_degrees(initial_state->aim_inclination_degrees),
+            team_colour(TeamColours(initial_state->team)),
+            worm_name(this->generate_random_name()),
 
             walking(pool.get_actor_texture(Actors::WORM), 15, 1),
             jumping(pool.get_actor_texture(Actors::JUMPING_WORM), 5, 5, false),
@@ -155,8 +181,16 @@ public:
                             TextPrinter& state_printer) override {
         if (!on_turn_time) {
             SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 32, 60);
-            state_printer.print_text((*game_renderer), std::to_string(int(life_points_remaining)),
-                                     render_rect.x, render_rect.y, 1, 18, 30, true);
+            state_printer.print_team_text((*game_renderer),
+                                          std::to_string(int(life_points_remaining)), team_colour,
+                                          render_rect.x, render_rect.y,
+                                          1, 18, 30, true, 0.5, 0.5);
+
+            state_printer.print_team_text((*game_renderer),
+                                          worm_name, team_colour,
+                                          render_rect.x, render_rect.y,
+                                          -25, 40, 68, true,
+                                          (0.75 + (worm_name.length()*0.05)), 0.8);
         }
     }
 
@@ -403,9 +437,9 @@ public:
     inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
                             TextPrinter& state_printer) override {
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
-        state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
-                                                           time_till_detonation)),
-                                 rect.x, rect.y, 10, 15, 15, true);
+        state_printer.print_text((*game_renderer),
+                                 std::to_string(static_cast<int>(time_till_detonation)),
+                                 rect.x, rect.y, 0, 15, 15, true);
     }
 
     inline void play_state_audio(AudioPlayer& effects_player) override {

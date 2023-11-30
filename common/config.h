@@ -13,6 +13,7 @@ public:
     static YAML::Node yamlNode;
     static YAML::Node levelLayoutNode;
     static YAML::Node spawnLayoutNode;
+    static YAML::Node wormNames;
 
     Config(const Config&) = delete;
     Config& operator=(const Config&) = delete;

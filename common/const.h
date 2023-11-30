@@ -154,6 +154,13 @@ enum class SoundEffects {
     CRATE_OPENED
 };
 
+enum class TeamColours {
+    RED = 0x00,
+    BLUE = 0x01,
+    GREEN = 0x02,
+    YELLOW = 0x03
+};
+
 enum class Actors {
     WORM = 0x0,
     JUMPING_WORM,
@@ -162,7 +169,8 @@ enum class Actors {
     CROSSHAIR,
     POWER_CHARGE_BAR,
     STATE_SIGN,
-    TIMER_SIGN
+    TIMER_SIGN,
+
 };
 
 enum class WeaponsDraw {

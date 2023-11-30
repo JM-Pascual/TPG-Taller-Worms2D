@@ -86,8 +86,10 @@ void Game::spawnWorms() {
     size_t min_worms_player = WORMS_QUANTITY / players.size();
     size_t no_assigned_worms = WORMS_QUANTITY % players.size();
 
+    uint8_t team = 0;
+
     for (auto& [id, player]: players) {
-        player->spawnWorms(battlefield, min_worms_player, worm_counter, id, spawn_points);
+        player->spawnWorms(battlefield, min_worms_player, worm_counter, team++, spawn_points);
     }
 
     // Terminar si no hay worms que falten asignar
@@ -95,9 +97,11 @@ void Game::spawnWorms() {
         return;
     }
 
+    team = 0;
+
     auto it = players.cbegin();
     for (size_t i = 0; i < no_assigned_worms; i++) {
-        it->second->spawnWorms(battlefield, 1, worm_counter, it->first, spawn_points);
+        it->second->spawnWorms(battlefield, 1, worm_counter, team++, spawn_points);
         ++it;
     }
 

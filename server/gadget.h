@@ -43,7 +43,8 @@ public:
     virtual void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) = 0;
     void infiniteAmmo();
     void addAmmo(const uint8_t& ammo);
-    ~Gadget() = default;
+
+    virtual ~Gadget() = default;
 
     friend class Player;
 };
@@ -54,7 +55,7 @@ class GreenGrenade: public Gadget {
 public:
     GreenGrenade();
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
-    virtual ~GreenGrenade() = default;
+    ~GreenGrenade() override = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ RedGrenade ~~~~~~~~~~~~~~~~~~~~
@@ -63,7 +64,7 @@ class RedGrenade: public Gadget {
 public:
     RedGrenade();
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
-    virtual ~RedGrenade() = default;
+    ~RedGrenade() override = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ HolyGrenade ~~~~~~~~~~~~~~~~~~~~
@@ -72,7 +73,7 @@ class HolyGrenade: public Gadget {
 public:
     HolyGrenade();
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
-    virtual ~HolyGrenade() = default;
+    ~HolyGrenade() override = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ Banana ~~~~~~~~~~~~~~~~~~~~
@@ -81,7 +82,7 @@ class BananaGrenade: public Gadget {
 public:
     BananaGrenade();
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
-    virtual ~BananaGrenade() = default;
+    ~BananaGrenade() override = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ DynamiteGrenade ~~~~~~~~~~~~~~~~~~~~
@@ -90,7 +91,7 @@ class DynamiteGrenade: public Gadget {
 public:
     DynamiteGrenade();
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
-    virtual ~DynamiteGrenade() = default;
+    ~DynamiteGrenade() override = default;
 };
 
 
@@ -100,7 +101,7 @@ class Bazooka: public Gadget {
 public:
     Bazooka();
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
-    virtual ~Bazooka() = default;
+    ~Bazooka() override = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ Mortar ~~~~~~~~~~~~~~~~~~~~
@@ -109,7 +110,7 @@ class Mortar: public Gadget {
 public:
     Mortar();
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
-    virtual ~Mortar() = default;
+    ~Mortar() override = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ Teleport ~~~~~~~~~~~~~~~~~~~~
@@ -118,7 +119,7 @@ class Teleport: public Gadget {
 public:
     Teleport();
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
-    virtual ~Teleport() = default;
+    ~Teleport() override = default;
 };
 
 //~~~~~~~~~~~~~~~~~~~ AirStrike ~~~~~~~~~~~~~~~~~~~~
@@ -128,7 +129,7 @@ public:
     AirStrike();
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     void shootCheat(Battlefield& battlefield, float& destination);
-    virtual ~AirStrike() = default;
+    ~AirStrike() override = default;
 };
 
 
@@ -144,7 +145,7 @@ public:
     BaseballBat();
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
 
-    virtual ~BaseballBat() = default;
+    ~BaseballBat() override = default;
 };
 
 #endif  // WORMS2D_GADGET_H

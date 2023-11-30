@@ -188,69 +188,6 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
     }
 }
 
-void EventLoop::run() {
-    runned = true;
-
-    Window window(1280, 720);
-
-    TexturesPool txt_pool(window.get_renderer());
-
-    SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-
-    SDL2pp::SDLTTF ttf;
-
-    TextPrinter life_points_printer(15, txt_pool.get_actor_texture(Actors::STATE_SIGN));
-    TextPrinter timer_printer(12, txt_pool.get_actor_texture(Actors::TIMER_SIGN));
-
-    terrain_elements.load_base_terrain(txt_pool, camera);
-    audio_player.play_background_music();
-
-    input.start();
-
-    int loop_start_time = SDL_GetTicks();
-
-    std::chrono::duration<float> turn_time{};
-    std::chrono::time_point<std::chrono::steady_clock> turn_start;
-
-    while (!quit) {
-        window.clear_textures();
-
-        window.render_background(txt_pool);
-        process_game_states(turn_start, txt_pool);
-
-        turn_time = std::chrono::steady_clock::now() - turn_start;
-        // tiempo restante turno = (uint8_t)(60 - turn_time)
-
-        players.play_actors_state(window.get_renderer(), audio_player);
-        players.print_actors_state(window.get_renderer(), life_points_printer);
-        proyectiles.play_actors_state(window.get_renderer(), audio_player);
-        proyectiles.print_actors_state(window.get_renderer(), timer_printer);
-        crates.play_actors_state(window.get_renderer(), audio_player);
-
-        terrain_elements.update_terrain();
-        terrain_elements.render_terrain(window.get_renderer());
-
-        window.present_textures();
-
-        int loop_end_time = SDL_GetTicks();
-        int rest_time = FRAME_DURATION - (loop_end_time - loop_start_time);
-
-        if (rest_time < 0) {
-            int time_behind = -rest_time;
-
-            rest_time = FRAME_DURATION - time_behind % FRAME_DURATION;
-
-            int lost = time_behind + rest_time;
-            loop_start_time += lost;
-        }
-
-        SDL_Delay(rest_time);
-        loop_start_time += FRAME_DURATION;
-    }
-
-    cheat_menu->close();
-}
-
 void EventLoop::viewWorm(const std::shared_ptr<WormStateG>& worm) {
     if (camera_priority.priority == Priority::PROJECTILE) {
         return;
@@ -287,6 +224,74 @@ void EventLoop::viewProjectile(const std::shared_ptr<ProjectileStateG>& proj) {
 
         camera_priority.priority = Priority::NONE;
     }
+}
+
+void EventLoop::run() {
+    runned = true;
+
+    Window window(1280, 720);
+
+    TexturesPool txt_pool(window.get_renderer());
+
+    SDL2pp::SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+
+    SDL2pp::SDLTTF ttf;
+
+    TextPrinter life_points_printer(15, txt_pool.get_actor_texture(Actors::STATE_SIGN));
+    TextPrinter timer_printer(12, txt_pool.get_actor_texture(Actors::TIMER_SIGN));
+    TextPrinter turn_time_printer(22, txt_pool.get_actor_texture(Actors::TIMER_SIGN));
+
+    terrain_elements.load_base_terrain(txt_pool, camera);
+    audio_player.play_background_music();
+
+    input.start();
+
+    int loop_start_time = SDL_GetTicks();
+
+    std::chrono::duration<float> turn_time{};
+    std::chrono::time_point<std::chrono::steady_clock> turn_start;
+
+    while (!quit) {
+        window.clear_textures();
+
+        window.render_background(txt_pool);
+        process_game_states(turn_start, txt_pool);
+
+        turn_time = std::chrono::steady_clock::now() - turn_start;
+        // tiempo restante turno = (uint8_t)(60 - turn_time)
+
+        players.play_actors_state(window.get_renderer(), audio_player);
+        players.print_actors_state(window.get_renderer(), life_points_printer);
+        proyectiles.play_actors_state(window.get_renderer(), audio_player);
+        proyectiles.print_actors_state(window.get_renderer(), timer_printer);
+        crates.play_actors_state(window.get_renderer(), audio_player);
+
+        terrain_elements.update_terrain();
+        terrain_elements.render_terrain(window.get_renderer());
+
+        turn_time_printer.print_text(*(window.get_renderer()),
+                                 std::to_string((int)(60 - turn_time.count())),
+                                 25, 580, -20, 0, 45, true, 2.5, 2.5);
+
+        window.present_textures();
+
+        int loop_end_time = SDL_GetTicks();
+        int rest_time = FRAME_DURATION - (loop_end_time - loop_start_time);
+
+        if (rest_time < 0) {
+            int time_behind = -rest_time;
+
+            rest_time = FRAME_DURATION - time_behind % FRAME_DURATION;
+
+            int lost = time_behind + rest_time;
+            loop_start_time += lost;
+        }
+
+        SDL_Delay(rest_time);
+        loop_start_time += FRAME_DURATION;
+    }
+
+    cheat_menu->close();
 }
 
 EventLoop::~EventLoop() {
