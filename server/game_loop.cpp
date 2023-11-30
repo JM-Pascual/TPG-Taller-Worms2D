@@ -17,7 +17,7 @@ void GameLoop::run() {
     TurnHandler turn_handler(game.players, game.broadcaster, game.worm_handler, game.battlefield);
 
     try {
-        while (game.is_playing()) {
+        while (game.non_locking_is_playing()) {
             std::chrono::time_point<std::chrono::steady_clock> before =
                     std::chrono::steady_clock::now();
 
@@ -48,9 +48,9 @@ void GameLoop::run() {
 
             std::this_thread::sleep_for(elapsed_seconds);
         }
-    } catch (const SomeOneWins& e) {
-        game.broadcaster.broadcastWin(game.players);
-    }
+    } catch (const SomeOneWins& e) {}
+
+    game.broadcaster.broadcastWin(game.players);
 
     erase_id_queue.push(this->game_id);
 }
