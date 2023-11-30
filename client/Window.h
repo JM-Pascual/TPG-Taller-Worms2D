@@ -8,6 +8,8 @@
 
 #include "../common/const.h"
 
+#include "Animation.h"
+
 class TexturesPool;
 class Camera;
 
@@ -18,16 +20,19 @@ private:
 
     std::unordered_map<TerrainActors, std::shared_ptr<SDL2pp::Texture>&> background_textures;
 
+    std::unordered_map<bool, Animation> end_of_game_animations;
+
     void render_stage_texture(const std::shared_ptr<SDL2pp::Texture>& texture,
                               SDL2pp::Rect destination);
 
+    unsigned int ticks_since_end_of_game;
 public:
     Window(const int& width, const int& height);
 
     std::shared_ptr<SDL2pp::Renderer>& get_renderer();
 
-    /// Load background textures
-    void load_background_textures(TexturesPool& pool);
+    /// Loads background and general textures the window uses
+    void load_base_textures(TexturesPool& pool);
 
     /// Clears the actors_textures in screen calling the SDL2pp::Renderer::Clear method
     void clear_textures();
@@ -36,6 +41,8 @@ public:
     void present_textures();
 
     void render_background(TexturesPool& pool);
+
+    bool render_end_of_game_texture(bool won_game);
 
     ~Window() = default;
 

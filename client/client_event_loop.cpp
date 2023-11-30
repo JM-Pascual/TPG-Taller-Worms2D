@@ -241,8 +241,13 @@ void EventLoop::run() {
 
         rest(loop_start_time);
     }
-
     cheat_menu->close();
+
+    while(window.render_end_of_game_texture(win)){
+        window.present_textures();
+        rest(loop_start_time);
+    }
+
 }
 
 void EventLoop::rest(int& loop_start_time) {

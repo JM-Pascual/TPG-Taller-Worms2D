@@ -83,6 +83,8 @@ enum class Actions {
 };
 
 enum class TerrainActors {
+    WIN_SIGN,
+    LOOSE_SIGN,
     GRADIENT,
     BAR,
     LONG_BAR,

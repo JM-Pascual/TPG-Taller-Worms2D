@@ -138,11 +138,16 @@ void TexturesPool::load_worm_textures() {
 
 void TexturesPool::load_level_textures() {
     /// Loads all the level actors_textures and enables alpha blending
+    load_texture_into_map(DATA_PATH "/miscellaneous/win_sprite.png", level_actors_textures,
+                          TerrainActors::WIN_SIGN);
+    load_texture_into_map(DATA_PATH "/miscellaneous/lose_sprite.png", level_actors_textures,
+                          TerrainActors::LOOSE_SIGN);
     load_texture_into_map(DATA_PATH "/stage/gradient.bmp", level_actors_textures,
                           TerrainActors::GRADIENT, false);
     load_texture_into_map(DATA_PATH "/stage/background.png", level_actors_textures,
                           TerrainActors::BACKGROUND);
-    load_texture_into_map(DATA_PATH "/stage/bar.png", level_actors_textures, TerrainActors::BAR);
+    load_texture_into_map(DATA_PATH "/stage/bar.png", level_actors_textures,
+                          TerrainActors::BAR);
     load_texture_into_map(DATA_PATH "/stage/long-bar.png", level_actors_textures,
                           TerrainActors::LONG_BAR);
     load_texture_into_map(DATA_PATH "/stage/airjet.png", level_actors_textures,
@@ -165,7 +170,7 @@ void TexturesPool::load_tombstones_textures() {
                           Tombstones::TOMBSTONE_3);
     load_texture_into_map(DATA_PATH "/miscellaneous/tombstone4.png", tombstones_textures,
                           Tombstones::TOMBSTONE_4);
-    load_texture_into_map(DATA_PATH "/miscellaneous/tombstone5.png", tombstones_textures,
+    load_texture_into_map(DATA_PATH "/miscellaneous/tombstone1.png", tombstones_textures,
                           Tombstones::TOMBSTONE_5);
     load_texture_into_map(DATA_PATH "/miscellaneous/tombstone6.png", tombstones_textures,
                           Tombstones::TOMBSTONE_6);
