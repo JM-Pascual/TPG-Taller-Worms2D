@@ -169,7 +169,8 @@ enum class Actors {
     CROSSHAIR,
     POWER_CHARGE_BAR,
     STATE_SIGN,
-    TIMER_SIGN
+    TIMER_SIGN,
+
 };
 
 enum class WeaponsDraw {

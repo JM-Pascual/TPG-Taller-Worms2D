@@ -20,6 +20,7 @@ int main(int argc, char* argv[]) try {
 
     Config::commonNode = YAML::LoadFile(YAML_PATH "/common_const.yaml");
     Config::yamlNode = YAML::LoadFile(YAML_PATH "/client_const.yaml");
+    Config::wormNames = YAML::LoadFile(YAML_PATH "/player_names.yaml");
 
     Logger l(LOGNAME, LOGFILE);
     Game game(argc, argv);

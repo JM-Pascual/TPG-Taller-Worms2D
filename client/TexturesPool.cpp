@@ -124,7 +124,7 @@ void TexturesPool::load_tool_use_textures() {
 void TexturesPool::load_combat_textures() {
     load_texture_into_map(DATA_PATH "/weapons/crosshair.png", actors_textures,
                           Actors::CROSSHAIR);
-    load_texture_into_map(DATA_PATH "/miscellaneous/font-background.png", actors_textures,
+    load_texture_into_map(DATA_PATH "/miscellaneous/font-name-background.png", actors_textures,
                           Actors::STATE_SIGN, false);
     load_texture_into_map(DATA_PATH "/miscellaneous/timer-font-background.png", actors_textures,
                           Actors::TIMER_SIGN, false);

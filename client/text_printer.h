@@ -14,15 +14,20 @@ private:
     static SDL_Color interpret_team_colour(TeamColours team);
 public:
 
-    explicit TextPrinter(unsigned int font_size, std::shared_ptr<SDL2pp::Texture>& font_background);
+    explicit TextPrinter(unsigned int font_size,
+                         std::shared_ptr<SDL2pp::Texture>& font_background);
 
     void print_text(SDL2pp::Renderer& renderer, const std::string& text,
                     int x, int y, int in_line_adjustment = 0, int x_offset = 0, int y_offset = 0,
-                    bool with_background = false);
+                    bool with_background = false,
+                    float background_size_factor_x = 1,
+                    float background_size_factor_y = 1);
 
     void print_team_text(SDL2pp::Renderer& renderer, const std::string& text, TeamColours team,
                     int x, int y, int in_line_adjustment = 0, int x_offset = 0, int y_offset = 0,
-                    bool with_background = false);
+                    bool with_background = false,
+                         float background_reduce_factor_x = 1,
+                         float background_reduce_factor_y = 1);
 
     ~TextPrinter() = default;
 };
