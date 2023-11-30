@@ -94,3 +94,27 @@ void BroadCaster::broadcast_turn(const uint8_t& player_turn, const bool& block_i
         }
     }
 }
+
+void BroadCaster::broadcastWin(std::map<uint8_t, std::unique_ptr<Player>>& players) {
+    std::lock_guard<std::mutex> lock(m);
+
+    auto it = broadcast_map.begin();
+    auto player_it = players.begin();
+    for (uint8_t i = 0; i < broadcast_map.size(); i++) {
+        try {
+            if (player_it->second->is_playing) {
+                it->second->push(std::make_shared<YouWin>(YOU_WIN));
+                ++it;
+                ++player_it;
+                continue;
+            }
+
+            it->second->push(std::make_shared<YouWin>(YOU_LOSE));
+
+            ++it;
+            ++player_it;
+        } catch (const ClosedQueue& e) {  // Se ignoran queues cerradas, luego se eliminan
+            continue;
+        }
+    }
+}

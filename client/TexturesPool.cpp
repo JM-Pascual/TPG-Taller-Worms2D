@@ -21,14 +21,12 @@ void TexturesPool::load_texture_into_map(
 
 void TexturesPool::load_general_worm_textures() {
     /// Loads all the body actors_textures and enables alpha blending
-    load_texture_into_map(DATA_PATH "/worms/worm-left.png", actors_textures,
-                          Actors::WORM);
+    load_texture_into_map(DATA_PATH "/worms/worm-left.png", actors_textures, Actors::WORM);
     load_texture_into_map(DATA_PATH "/worms/worm-jump-up.png", actors_textures,
                           Actors::JUMPING_WORM);
     load_texture_into_map(DATA_PATH "/worms/worm-backflip.png", actors_textures,
                           Actors::BACKFLIP_WORM);
-    load_texture_into_map(DATA_PATH "/worms/worm-death.png", actors_textures,
-                          Actors::DYING_WORM);
+    load_texture_into_map(DATA_PATH "/worms/worm-death.png", actors_textures, Actors::DYING_WORM);
 }
 
 void TexturesPool::load_draw_textures() {
@@ -122,8 +120,7 @@ void TexturesPool::load_tool_use_textures() {
 }
 
 void TexturesPool::load_combat_textures() {
-    load_texture_into_map(DATA_PATH "/weapons/crosshair.png", actors_textures,
-                          Actors::CROSSHAIR);
+    load_texture_into_map(DATA_PATH "/weapons/crosshair.png", actors_textures, Actors::CROSSHAIR);
     load_texture_into_map(DATA_PATH "/miscellaneous/font-name-background.png", actors_textures,
                           Actors::STATE_SIGN, false);
     load_texture_into_map(DATA_PATH "/miscellaneous/timer-font-background.png", actors_textures,
@@ -140,6 +137,10 @@ void TexturesPool::load_worm_textures() {
 
 void TexturesPool::load_level_textures() {
     /// Loads all the level actors_textures and enables alpha blending
+    load_texture_into_map(DATA_PATH "/miscellaneous/win_sprite.png", level_actors_textures,
+                          TerrainActors::WIN_SIGN);
+    load_texture_into_map(DATA_PATH "/miscellaneous/lose_sprite.png", level_actors_textures,
+                          TerrainActors::LOOSE_SIGN);
     load_texture_into_map(DATA_PATH "/stage/gradient.bmp", level_actors_textures,
                           TerrainActors::GRADIENT, false);
     load_texture_into_map(DATA_PATH "/stage/background.png", level_actors_textures,
@@ -167,7 +168,7 @@ void TexturesPool::load_tombstones_textures() {
                           Tombstones::TOMBSTONE_3);
     load_texture_into_map(DATA_PATH "/miscellaneous/tombstone4.png", tombstones_textures,
                           Tombstones::TOMBSTONE_4);
-    load_texture_into_map(DATA_PATH "/miscellaneous/tombstone5.png", tombstones_textures,
+    load_texture_into_map(DATA_PATH "/miscellaneous/tombstone1.png", tombstones_textures,
                           Tombstones::TOMBSTONE_5);
     load_texture_into_map(DATA_PATH "/miscellaneous/tombstone6.png", tombstones_textures,
                           Tombstones::TOMBSTONE_6);

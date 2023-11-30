@@ -13,6 +13,9 @@
 #define NOT_YOUR_TURN 0
 #define IS_YOUR_TURN 1
 
+#define YOU_LOSE 0
+#define YOU_WIN 1
+
 enum class SWIndex { INTRO, MENU, GAME_SEARCH, HELP, LOBBY };
 
 enum class _CrateType_ { FIRST_AID, AMMO_BOX, TRAP };
@@ -80,6 +83,8 @@ enum class Actions {
 };
 
 enum class TerrainActors {
+    WIN_SIGN,
+    LOOSE_SIGN,
     GRADIENT,
     BAR,
     LONG_BAR,
@@ -120,11 +125,7 @@ enum class Tombstones {
     TOMBSTONE_6
 };
 
-enum class ToolUsage{
-    AIR_STRIKE_CALL,
-    TELEPORT_USE,
-    BASEBALL_SWING
-};
+enum class ToolUsage { AIR_STRIKE_CALL, TELEPORT_USE, BASEBALL_SWING };
 
 enum class VisualEffects { NORMAL_EXPLOSION, FRAGMENT_EXPLOSION, CRATE_HEAL, CRATE_AMMO };
 
@@ -154,12 +155,7 @@ enum class SoundEffects {
     CRATE_OPENED
 };
 
-enum class TeamColours {
-    RED = 0x00,
-    BLUE = 0x01,
-    GREEN = 0x02,
-    YELLOW = 0x03
-};
+enum class TeamColours { RED = 0x00, BLUE = 0x01, GREEN = 0x02, YELLOW = 0x03 };
 
 enum class Actors {
     WORM = 0x0,
@@ -214,7 +210,8 @@ enum class StatesTag {
     PLAYER_TURN,
     WORM_G,
     CRATE,
-    CRATE_COUNT
+    CRATE_COUNT,
+    _YOU_WIN_
 };
 
 #endif

@@ -7,7 +7,7 @@
 GameBrowser::GameBrowser(): game_id_count(0), cleaner(*this) { cleaner.start(); }
 
 void GameBrowser::create_game(const std::string& desc, const std::string& map,
-                              uint8_t& game_id_to_create) {
+                              int16_t& game_id_to_create) {
     std::unique_lock<std::mutex> lck(m);
 
     games.insert({game_id_count,

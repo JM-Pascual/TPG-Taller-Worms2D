@@ -1,5 +1,8 @@
 #include "client_event_loop.h"
 
+#include <chrono>
+#include <thread>
+
 #include "../common/const.h"
 
 #include "cheatmenu.h"
@@ -13,6 +16,8 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
         my_turn(false),
         runned(false),
         mouse_priority(false),
+        kb_priority(false),
+        win(false),
         protocol(hostname, servname),
         recv(this->protocol, game_state_queue, lobby_state_queue, runned),
         send(this->protocol, this->action_queue),
@@ -39,6 +44,11 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
             case StatesTag::PLAYER_G: {
                 continue;
             }
+
+            case StatesTag::_YOU_WIN_:
+                quit = true;
+                win = std::dynamic_pointer_cast<YouWin>(raw_state)->you_win;
+                break;
 
             case StatesTag::CRATE_COUNT:
                 expected_states += std::dynamic_pointer_cast<CrateCount>(raw_state)->quantity;
@@ -270,28 +280,37 @@ void EventLoop::run() {
         terrain_elements.render_terrain(window.get_renderer());
 
         turn_time_printer.print_text(*(window.get_renderer()),
-                                 std::to_string((int)(60 - turn_time.count())),
-                                 25, 580, -20, 0, 45, true, 2.5, 2.5);
+                                     std::to_string((int)(60 - turn_time.count())), 25, 580, -20, 0,
+                                     45, true, 2.5, 2.5);
 
         window.present_textures();
 
-        int loop_end_time = SDL_GetTicks();
-        int rest_time = FRAME_DURATION - (loop_end_time - loop_start_time);
-
-        if (rest_time < 0) {
-            int time_behind = -rest_time;
-
-            rest_time = FRAME_DURATION - time_behind % FRAME_DURATION;
-
-            int lost = time_behind + rest_time;
-            loop_start_time += lost;
-        }
-
-        SDL_Delay(rest_time);
-        loop_start_time += FRAME_DURATION;
+        rest(loop_start_time);
     }
 
     cheat_menu->close();
+
+    while (window.render_end_of_game_texture(win)) {
+        window.present_textures();
+        rest(loop_start_time);
+    }
+}
+
+void EventLoop::rest(int& loop_start_time) {
+    int loop_end_time = SDL_GetTicks();
+    int rest_time = FRAME_DURATION - (loop_end_time - loop_start_time);
+
+    if (rest_time < 0) {
+        int time_behind = -rest_time;
+
+        rest_time = FRAME_DURATION - time_behind % FRAME_DURATION;
+
+        int lost = time_behind + rest_time;
+        loop_start_time += lost;
+    }
+
+    SDL_Delay(rest_time);
+    loop_start_time += FRAME_DURATION;
 }
 
 EventLoop::~EventLoop() {

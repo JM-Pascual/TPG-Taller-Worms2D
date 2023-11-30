@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <random>
+#include <string>
 
 #include <SDL2pp/SDL2pp.hh>
 
@@ -14,10 +15,10 @@
 #include "TexturesPool.h"
 #include "ToolAnimationHolder.h"
 #include "WeaponAnimationHolder.h"
+#include "audio_player.h"
 #include "camera.h"
 #include "death_animation.h"
 #include "text_printer.h"
-#include "audio_player.h"
 
 #define NAMES_IN_FILE Config::wormNames["amount_of_names"].as<int>()
 
@@ -73,13 +74,13 @@ private:
     bool alredy_played_backflip_sound;
     bool alredy_played_death_sound;
 
-    std::string generate_random_name(){
+    std::string generate_random_name() {
         // Seed the random number generator
         std::random_device rd;
         std::mt19937 rng(rd());
 
         // Define a distribution (e.g., integers between 1 and amount_of_names)
-        std::uniform_int_distribution<int> dist(0, NAMES_IN_FILE-1);
+        std::uniform_int_distribution<int> dist(0, NAMES_IN_FILE - 1);
 
         // Generate a random number
         int random_number = dist(rng);
@@ -116,7 +117,7 @@ public:
             steps_counter_for_sound(0),
             alredy_played_jump_sound(false),
             alredy_played_backflip_sound(false),
-            alredy_played_death_sound(false){}
+            alredy_played_death_sound(false) {}
 
     inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<WormStateG>(actor_state);
@@ -183,58 +184,55 @@ public:
             SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 32, 60);
             state_printer.print_team_text((*game_renderer),
                                           std::to_string(int(life_points_remaining)), team_colour,
-                                          render_rect.x, render_rect.y,
-                                          1, 18, 30, true, 0.5, 0.5);
+                                          render_rect.x, render_rect.y, 1, 18, 30, true, 0.5, 0.5);
 
-            state_printer.print_team_text((*game_renderer),
-                                          worm_name, team_colour,
-                                          render_rect.x, render_rect.y,
-                                          -25, 40, 68, true,
-                                          (0.75 + (worm_name.length()*0.05)), 0.8);
+            state_printer.print_team_text((*game_renderer), worm_name, team_colour, render_rect.x,
+                                          render_rect.y, -25, 40, 68, true,
+                                          (0.75 + (worm_name.length() * 0.05)), 0.8);
         }
     }
 
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
 
-        if (tool_usage_animations.currently_animating_tool()){
+        if (tool_usage_animations.currently_animating_tool()) {
             tool_usage_animations.play_actors_sound_effects(effects_player);
             return;
         }
 
-        if (life_points_remaining == 0.0f && !(alredy_played_death_sound)){
+        if (life_points_remaining == 0.0f && !(alredy_played_death_sound)) {
             effects_player.playAudio(SoundEffects::WORM_ME_MUERO);
             alredy_played_death_sound = true;
-        } else if (alredy_played_death_sound){
+        } else if (alredy_played_death_sound) {
             return;
         }
 
-        if (is_walking){
-            if (steps_counter_for_sound % 18 == 0){
+        if (is_walking) {
+            if (steps_counter_for_sound % 18 == 0) {
                 effects_player.playAudio(SoundEffects::EXTEND_WALK);
             }
             steps_counter_for_sound++;
-        } else{
+        } else {
             steps_counter_for_sound = 0;
         }
 
-        if (is_jumping){
-            if (!alredy_played_jump_sound){
+        if (is_jumping) {
+            if (!alredy_played_jump_sound) {
                 effects_player.playAudio(SoundEffects::WORM_JUMP);
                 alredy_played_jump_sound = true;
             }
             return;
-        } else{
+        } else {
             alredy_played_jump_sound = false;
         }
 
-        if (is_backflipping){
-            if (!alredy_played_backflip_sound){
+        if (is_backflipping) {
+            if (!alredy_played_backflip_sound) {
                 effects_player.playAudio(SoundEffects::WORM_BACKFLIP);
                 alredy_played_backflip_sound = true;
             }
             return;
-        } else{
+        } else {
             alredy_played_backflip_sound = false;
         }
     }
@@ -249,10 +247,13 @@ class Projectile: public GameActor {
 protected:
     bool impacted;
     float time_till_detonation;
+
 public:
     explicit Projectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
                         Camera& camera):
-            GameActor(initial_state->pos.x, initial_state->pos.y, camera), impacted(false) {}
+            GameActor(initial_state->pos.x, initial_state->pos.y, camera),
+            impacted(false),
+            time_till_detonation(10) {}
 };
 
 
@@ -266,13 +267,15 @@ private:
     float current_angle;
 
     bool alredy_played_impact_sound;
+
 public:
     explicit BazookaProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
                                Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::BAZOOKA_PROYECTILE), 1, 1),
             impact(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
-            current_angle(0), alredy_played_impact_sound(false) {}
+            current_angle(0),
+            alredy_played_impact_sound(false) {}
 
     inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
@@ -296,7 +299,7 @@ public:
                             TextPrinter& state_printer) override {}
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
-        if (impacted && !alredy_played_impact_sound){
+        if (impacted && !alredy_played_impact_sound) {
             effects_player.playAudio(SoundEffects::BAZOOKA_IMPACT);
             alredy_played_impact_sound = true;
         }
@@ -313,13 +316,15 @@ private:
     float current_angle;
 
     bool alredy_played_impact_sound;
+
 public:
     explicit MortarProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
                               Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::MORTAR_PROYECTILE), 1, 1),
             impact(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
-            current_angle(0), alredy_played_impact_sound(false) {}
+            current_angle(0),
+            alredy_played_impact_sound(false) {}
 
     inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
@@ -343,7 +348,7 @@ public:
                             TextPrinter& state_printer) override {}
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
-        if (impacted && !alredy_played_impact_sound){
+        if (impacted && !alredy_played_impact_sound) {
             effects_player.playAudio(SoundEffects::EXPLOSION_WITH_FIRE);
             alredy_played_impact_sound = true;
         }
@@ -360,13 +365,15 @@ private:
     float current_angle;
 
     bool alredy_played_impact_sound;
+
 public:
     explicit MortarFragment(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
                             Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::MORTAR_FRAGMENT), 6, 1, true),
             impact(pool.get_effect_texture(VisualEffects::FRAGMENT_EXPLOSION), 11, 1, false),
-            current_angle(0), alredy_played_impact_sound(false) {}
+            current_angle(0),
+            alredy_played_impact_sound(false) {}
 
     inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
@@ -390,7 +397,7 @@ public:
                             TextPrinter& state_printer) override {}
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
-        if (impacted && !alredy_played_impact_sound){
+        if (impacted && !alredy_played_impact_sound) {
             effects_player.playAudio(SoundEffects::FRAGMENT_IMPACT);
             alredy_played_impact_sound = true;
         }
@@ -407,173 +414,14 @@ private:
     float current_angle;
 
     bool alredy_played_impact_sound;
+
 public:
     explicit GreenGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
                                     TexturesPool& pool, Camera& camera):
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::GREEN_GRENADE_PROYECTILE), 1, 1),
             impact(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
-            current_angle(0), alredy_played_impact_sound(false) {}
-
-    inline void update(std::shared_ptr<States>& actor_state) override {
-        auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
-        position = state->pos;
-        impacted = state->impacted;
-        current_angle = state->angle;
-        time_till_detonation = state->time_till_detonation;
-        impact.update(!impacted);
-    }
-
-    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
-        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
-        if (impacted) {
-            impact.render((*game_renderer), rect);
-        } else {
-            on_air.render((*game_renderer), rect, 0, 0, SDL_FLIP_NONE,
-                          (-1 * (current_angle * 180) / M_PI));
-        }
-    }
-
-    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                            TextPrinter& state_printer) override {
-        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
-        state_printer.print_text((*game_renderer),
-                                 std::to_string(static_cast<int>(time_till_detonation)),
-                                 rect.x, rect.y, 0, 15, 15, true);
-    }
-
-    inline void play_state_audio(AudioPlayer& effects_player) override {
-        if ((time_till_detonation <= 0.5 || impacted) && !alredy_played_impact_sound){
-            effects_player.playAudio(SoundEffects::GREEN_GRENADE_IMPACT);
-            alredy_played_impact_sound = true;
-        }
-    }
-};
-
-// ----------------------- RED GRENADE ----------------------
-
-class RedGrenadeProjectile: public Projectile {
-private:
-    Animation on_air;
-    Animation impact;
-
-    float current_angle;
-
-    bool alredy_played_impact_sound;
-public:
-    explicit RedGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
-                                  TexturesPool& pool, Camera& camera):
-            Projectile(initial_state, pool, camera),
-            on_air(pool.get_projectile_texture(Projectiles::RED_GRENADE_PROYECTILE), 1, 1),
-            impact(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
-            current_angle(0), alredy_played_impact_sound(false) {}
-
-    inline void update(std::shared_ptr<States>& actor_state) override {
-        auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
-        position = state->pos;
-        impacted = state->impacted;
-        current_angle = state->angle;
-        time_till_detonation = state->time_till_detonation;
-        impact.update(!impacted);
-    }
-
-    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
-        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
-        if (impacted) {
-            impact.render((*game_renderer), rect);
-        } else {
-            on_air.render((*game_renderer), rect, 0, 0, SDL_FLIP_NONE,
-                          (-1 * (current_angle * 180) / M_PI));
-        }
-    }
-
-    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                            TextPrinter& state_printer) override {
-        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
-        state_printer.print_text((*game_renderer),
-                                 std::to_string(static_cast<int>(time_till_detonation)),
-                                 rect.x, rect.y, 0, 15, 15, true);
-    }
-
-    inline void play_state_audio(AudioPlayer& effects_player) override {
-        if ((time_till_detonation <= 0.5 || impacted) && !alredy_played_impact_sound){
-            effects_player.playAudio(SoundEffects::EXPLOSION_WITH_FIRE);
-            alredy_played_impact_sound = true;
-        }
-    }
-};
-
-// ----------------------- BANANA ----------------------
-
-class BananaProjectile: public Projectile {
-private:
-    Animation on_air;
-    Animation impact;
-
-    float current_angle;
-
-    bool alredy_played_impact_sound;
-public:
-    explicit BananaProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
-                              Camera& camera):
-            Projectile(initial_state, pool, camera),
-            on_air(pool.get_projectile_texture(Projectiles::BANANA_PROYECTILE), 1, 1),
-            impact(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
-            current_angle(0), alredy_played_impact_sound(false) {}
-
-    inline void update(std::shared_ptr<States>& actor_state) override {
-        auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
-        position = state->pos;
-        impacted = state->impacted;
-        current_angle = state->angle;
-        time_till_detonation = state->time_till_detonation;
-        impact.update(!impacted);
-    }
-
-    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
-        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
-        if (impacted) {
-            impact.render((*game_renderer), rect);
-        } else {
-            on_air.render((*game_renderer), rect, 0, 0, SDL_FLIP_NONE,
-                          (-1 * (current_angle * 180) / M_PI));
-        }
-    }
-
-    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                            TextPrinter& state_printer) override {
-        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
-        state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
-                                                           time_till_detonation)),
-                                 rect.x, rect.y, 0, 15, 15, true);
-    }
-
-    inline void play_state_audio(AudioPlayer& effects_player) override {
-        if ((time_till_detonation <= 0.5 || impacted) && !alredy_played_impact_sound){
-            effects_player.playAudio(SoundEffects::GREEN_GRENADE_IMPACT);
-            alredy_played_impact_sound = true;
-        }
-    }
-};
-
-// ----------------------- HOLY GRENADE ----------------------
-
-class HolyGrenadeProjectile: public Projectile {
-private:
-    Animation on_air;
-    Animation impact;
-
-    float current_angle;
-
-    bool alredy_played_choir_sound;
-    bool alredy_played_impact_sound;
-public:
-    explicit HolyGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
-                                   TexturesPool& pool, Camera& camera):
-            Projectile(initial_state, pool, camera),
-            on_air(pool.get_projectile_texture(Projectiles::HOLY_GRENADE_PROYECTILE), 1, 1),
-            impact(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
-            current_angle(0), alredy_played_choir_sound(false),
+            current_angle(0),
             alredy_played_impact_sound(false) {}
 
     inline void update(std::shared_ptr<States>& actor_state) override {
@@ -598,18 +446,185 @@ public:
     inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
                             TextPrinter& state_printer) override {
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
-        state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
-                                                           time_till_detonation)),
-                                 rect.x, rect.y, 0, 15, 15, true);
+        state_printer.print_text((*game_renderer),
+                                 std::to_string(static_cast<int>(time_till_detonation)), rect.x,
+                                 rect.y, 0, 15, 15, true);
     }
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
-        if ((time_till_detonation <= 1.5) && !alredy_played_choir_sound){
+        if ((time_till_detonation <= 0.5 || impacted) && !alredy_played_impact_sound) {
+            effects_player.playAudio(SoundEffects::GREEN_GRENADE_IMPACT);
+            alredy_played_impact_sound = true;
+        }
+    }
+};
+
+// ----------------------- RED GRENADE ----------------------
+
+class RedGrenadeProjectile: public Projectile {
+private:
+    Animation on_air;
+    Animation impact;
+
+    float current_angle;
+
+    bool alredy_played_impact_sound;
+
+public:
+    explicit RedGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
+                                  TexturesPool& pool, Camera& camera):
+            Projectile(initial_state, pool, camera),
+            on_air(pool.get_projectile_texture(Projectiles::RED_GRENADE_PROYECTILE), 1, 1),
+            impact(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
+            current_angle(0),
+            alredy_played_impact_sound(false) {}
+
+    inline void update(std::shared_ptr<States>& actor_state) override {
+        auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
+        position = state->pos;
+        impacted = state->impacted;
+        current_angle = state->angle;
+        time_till_detonation = state->time_till_detonation;
+        impact.update(!impacted);
+    }
+
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        if (impacted) {
+            impact.render((*game_renderer), rect);
+        } else {
+            on_air.render((*game_renderer), rect, 0, 0, SDL_FLIP_NONE,
+                          (-1 * (current_angle * 180) / M_PI));
+        }
+    }
+
+    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                            TextPrinter& state_printer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        state_printer.print_text((*game_renderer),
+                                 std::to_string(static_cast<int>(time_till_detonation)), rect.x,
+                                 rect.y, 0, 15, 15, true);
+    }
+
+    inline void play_state_audio(AudioPlayer& effects_player) override {
+        if ((time_till_detonation <= 0.5 || impacted) && !alredy_played_impact_sound) {
+            effects_player.playAudio(SoundEffects::EXPLOSION_WITH_FIRE);
+            alredy_played_impact_sound = true;
+        }
+    }
+};
+
+// ----------------------- BANANA ----------------------
+
+class BananaProjectile: public Projectile {
+private:
+    Animation on_air;
+    Animation impact;
+
+    float current_angle;
+
+    bool alredy_played_impact_sound;
+
+public:
+    explicit BananaProjectile(std::shared_ptr<ProjectileStateG>& initial_state, TexturesPool& pool,
+                              Camera& camera):
+            Projectile(initial_state, pool, camera),
+            on_air(pool.get_projectile_texture(Projectiles::BANANA_PROYECTILE), 1, 1),
+            impact(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
+            current_angle(0),
+            alredy_played_impact_sound(false) {}
+
+    inline void update(std::shared_ptr<States>& actor_state) override {
+        auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
+        position = state->pos;
+        impacted = state->impacted;
+        current_angle = state->angle;
+        time_till_detonation = state->time_till_detonation;
+        impact.update(!impacted);
+    }
+
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        if (impacted) {
+            impact.render((*game_renderer), rect);
+        } else {
+            on_air.render((*game_renderer), rect, 0, 0, SDL_FLIP_NONE,
+                          (-1 * (current_angle * 180) / M_PI));
+        }
+    }
+
+    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                            TextPrinter& state_printer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        state_printer.print_text((*game_renderer),
+                                 std::to_string(static_cast<int>(time_till_detonation)), rect.x,
+                                 rect.y, 0, 15, 15, true);
+    }
+
+    inline void play_state_audio(AudioPlayer& effects_player) override {
+        if ((time_till_detonation <= 0.5 || impacted) && !alredy_played_impact_sound) {
+            effects_player.playAudio(SoundEffects::GREEN_GRENADE_IMPACT);
+            alredy_played_impact_sound = true;
+        }
+    }
+};
+
+// ----------------------- HOLY GRENADE ----------------------
+
+class HolyGrenadeProjectile: public Projectile {
+private:
+    Animation on_air;
+    Animation impact;
+
+    float current_angle;
+
+    bool alredy_played_choir_sound;
+    bool alredy_played_impact_sound;
+
+public:
+    explicit HolyGrenadeProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
+                                   TexturesPool& pool, Camera& camera):
+            Projectile(initial_state, pool, camera),
+            on_air(pool.get_projectile_texture(Projectiles::HOLY_GRENADE_PROYECTILE), 1, 1),
+            impact(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
+            current_angle(0),
+            alredy_played_choir_sound(false),
+            alredy_played_impact_sound(false) {}
+
+    inline void update(std::shared_ptr<States>& actor_state) override {
+        auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
+        position = state->pos;
+        impacted = state->impacted;
+        current_angle = state->angle;
+        time_till_detonation = state->time_till_detonation;
+        impact.update(!impacted);
+    }
+
+    inline void render(std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        if (impacted) {
+            impact.render((*game_renderer), rect);
+        } else {
+            on_air.render((*game_renderer), rect, 0, 0, SDL_FLIP_NONE,
+                          (-1 * (current_angle * 180) / M_PI));
+        }
+    }
+
+    inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
+                            TextPrinter& state_printer) override {
+        SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
+        state_printer.print_text((*game_renderer),
+                                 std::to_string(static_cast<int>(time_till_detonation)), rect.x,
+                                 rect.y, 0, 15, 15, true);
+    }
+
+    inline void play_state_audio(AudioPlayer& effects_player) override {
+        if ((time_till_detonation <= 1.5) && !alredy_played_choir_sound) {
             effects_player.playAudio(SoundEffects::HOLY_GRENADE_CHOIR);
             alredy_played_choir_sound = true;
         }
 
-        if ((time_till_detonation <= 0.5 || impacted) && !alredy_played_impact_sound){
+        if ((time_till_detonation <= 0.5 || impacted) && !alredy_played_impact_sound) {
             effects_player.playAudio(SoundEffects::GREEN_GRENADE_IMPACT);
             alredy_played_impact_sound = true;
         }
@@ -624,13 +639,14 @@ private:
     Animation explosion;
 
     bool alredy_played_explosion_sound;
+
 public:
     explicit DynamiteProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
                                 TexturesPool& pool, Camera& camera):
             Projectile(initial_state, pool, camera),
             countdown(pool.get_projectile_texture(Projectiles::DYNAMITE_PROYECTILE), 126, 2, false),
             explosion(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
-            alredy_played_explosion_sound(false){}
+            alredy_played_explosion_sound(false) {}
 
     inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
@@ -653,13 +669,13 @@ public:
     inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
                             TextPrinter& state_printer) override {
         SDL2pp::Rect rect = camera.calcRect(position.x, position.y, 60, 60);
-        state_printer.print_text((*game_renderer), std::to_string(static_cast<int>(
-                                                           time_till_detonation)),
-                                 rect.x, rect.y, 0, 15, 15, true);
+        state_printer.print_text((*game_renderer),
+                                 std::to_string(static_cast<int>(time_till_detonation)), rect.x,
+                                 rect.y, 0, 15, 15, true);
     }
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
-        if ((time_till_detonation <= 0.5) && !alredy_played_explosion_sound){
+        if ((time_till_detonation <= 0.5) && !alredy_played_explosion_sound) {
             effects_player.playAudio(SoundEffects::GREEN_GRENADE_IMPACT);
             alredy_played_explosion_sound = true;
         }
@@ -683,7 +699,8 @@ public:
             Projectile(initial_state, pool, camera),
             on_air(pool.get_projectile_texture(Projectiles::AIR_STRIKE_PROYECTILE), 1, 1),
             impact(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
-            current_angle(0), alredy_played_impact_sound(false) {}
+            current_angle(0),
+            alredy_played_impact_sound(false) {}
 
     inline void update(std::shared_ptr<States>& actor_state) override {
         auto state = std::dynamic_pointer_cast<ProjectileStateG>(actor_state);
@@ -707,7 +724,7 @@ public:
                             TextPrinter& state_printer) override {}
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
-        if (impacted && !alredy_played_impact_sound){
+        if (impacted && !alredy_played_impact_sound) {
             effects_player.playAudio(SoundEffects::EXPLOSION_WITH_FIRE);
             alredy_played_impact_sound = true;
         }
@@ -726,14 +743,16 @@ protected:
 
     bool alredy_played_land_sound;
     bool alredy_played_open_sound;
+
 public:
     explicit Crate(std::shared_ptr<CrateState>& initial_state, TexturesPool& pool, Camera& camera):
             GameActor(initial_state->pos.x, initial_state->pos.y, camera),
             falling(pool.get_level_texture(TerrainActors::CRATE_FALLING), 27, 2, true),
             on_floor(pool.get_level_texture(TerrainActors::CRATE), 15, 1, false),
             still_falling(true),
-            was_opened(false), alredy_played_land_sound(false),
-            alredy_played_open_sound(false){}
+            was_opened(false),
+            alredy_played_land_sound(false),
+            alredy_played_open_sound(false) {}
 
     inline void print_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
                             TextPrinter& state_printer) override {}
@@ -775,12 +794,12 @@ public:
     }
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
-        if (was_opened && !alredy_played_land_sound){
+        if (was_opened && !alredy_played_land_sound) {
             effects_player.playAudio(SoundEffects::CRATE_LANDED);
             alredy_played_land_sound = true;
         }
 
-        if (was_opened && !alredy_played_open_sound){
+        if (was_opened && !alredy_played_open_sound) {
             effects_player.playAudio(SoundEffects::BAZOOKA_IMPACT);
             alredy_played_open_sound = true;
         }
@@ -821,12 +840,12 @@ public:
     }
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
-        if (was_opened && !alredy_played_land_sound){
+        if (was_opened && !alredy_played_land_sound) {
             effects_player.playAudio(SoundEffects::CRATE_LANDED);
             alredy_played_land_sound = true;
         }
 
-        if (was_opened && !alredy_played_open_sound){
+        if (was_opened && !alredy_played_open_sound) {
             effects_player.playAudio(SoundEffects::CRATE_OPENED);
             alredy_played_open_sound = true;
         }
@@ -867,12 +886,12 @@ public:
     }
 
     inline void play_state_audio(AudioPlayer& effects_player) override {
-        if (was_opened && !alredy_played_land_sound){
+        if (was_opened && !alredy_played_land_sound) {
             effects_player.playAudio(SoundEffects::CRATE_LANDED);
             alredy_played_land_sound = true;
         }
 
-        if (was_opened && !alredy_played_open_sound){
+        if (was_opened && !alredy_played_open_sound) {
             effects_player.playAudio(SoundEffects::CRATE_OPENED);
             alredy_played_open_sound = true;
         }

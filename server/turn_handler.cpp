@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "../common/const.h"
+
 #include "Player.h"
 #include "battlefield.h"
 #include "broadcaster.h"
@@ -10,11 +12,17 @@
 const TurnReset TurnHandler::need_to_update(const uint8_t players_quantity,
                                             const std::chrono::duration<float>& elapsed) {
 
+    // Alguien gano???
+    if (worm_handler.players_alive() == 1) {
+        throw SomeOneWins();
+    }
+
     // Desconecta un player o primer turno
     if (players_quantity != current_players_quantity) {
         current_players_quantity = players_quantity;
         return advanceTurn(players_quantity);
     }
+
 
     {
         auto it = players.begin();

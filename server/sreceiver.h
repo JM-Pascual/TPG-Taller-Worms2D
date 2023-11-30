@@ -18,7 +18,7 @@ class Receiver: public Thread {
 private:
     ServerSide::Protocol& protocol;
     GameBrowser& browser;
-    uint8_t room_id;
+    int16_t room_id;
     Queue<std::shared_ptr<States>>& state_queue;
 
 public:

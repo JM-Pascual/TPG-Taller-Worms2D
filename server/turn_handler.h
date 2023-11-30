@@ -13,6 +13,13 @@
 
 #define BLOCK_PLAYERS_INPUT true
 
+#include <condition_variable>
+// Por alguna razon si no incluyo conditional variable no compila este struct
+struct SomeOneWins: public std::runtime_error {
+    SomeOneWins(): std::runtime_error("Someone win the game!") {}
+};
+
+
 enum class TurnReset { NOT_RESET = 0, TIMER_RESET = 1, WAIT_TURN_END = 2 };
 
 

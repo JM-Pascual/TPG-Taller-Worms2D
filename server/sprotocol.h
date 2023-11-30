@@ -60,6 +60,8 @@ private:
     float pixel_to_meter_y(float pixel_position);
     void sendCrate(const std::shared_ptr<States>& state);
 
+    void sendYouWin(const std::shared_ptr<States>& state);
+
 public:
     /*
         Envia data chequeando si se cierra el socket
@@ -117,7 +119,7 @@ public:
     /*
         Recibe la id del game al que se quiere conectar el cliente
     */
-    void recvGameID(uint8_t&);
+    void recvGameID(int16_t&);
     /*
         No tiene sentido ni copiar ni mover el protocolo
     */

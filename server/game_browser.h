@@ -57,7 +57,7 @@ public:
     /*
 
     */
-    void create_game(const std::string& desc, const std::string& map, uint8_t& game_id_to_create);
+    void create_game(const std::string& desc, const std::string& map, int16_t& game_id_to_create);
     /*
         Agrega client al GameLoop especificado por game_code
     */
