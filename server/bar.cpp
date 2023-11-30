@@ -66,12 +66,12 @@ void Bar::collision_reaction(b2Vec2 normal) {
         if((std::abs(sinf(angle)) == 0 && normal.y < 1.0f))
             continue;
         */
-        std::cout << std::abs(std::atan2(normal.y, normal.x )) + std::abs(angle) << " angle: "<< angle << "normal angle "<< std::atan2(normal.y, normal.x ) <<  std::endl;
+        std::cout << std::abs(std::atan2(normal.y, normal.x )) + std::abs(angle) << " angle: "<< angle << " normal angle "<< std::atan2(normal.y, normal.x ) <<  std::endl;
         float normal_angle;
         normal_angle = std::atan2(normal.y, normal.x );
 
-        if((std::atan2(normal.y, normal.x ) > b2_pi/2)){
-            normal_angle = std::atan2(normal.y, normal.x ) - b2_pi/2;
+        if((normal.x <  0)){
+            normal_angle = b2_pi - normal_angle;
         }
 
         if((normal_angle + std::abs(angle) > 1.56f && normal_angle +  std::abs(angle) < 1.58f)){
