@@ -19,7 +19,7 @@ void TextPrinter::print_text(SDL2pp::Renderer& renderer, const std::string& text
                                    background->GetHeight() * background_reduce_factor_y));
     }
     SDL2pp::Texture text_texture(renderer,
-                                 font.RenderText_Solid(text, SDL_Color{221, 15, 15, 255}));
+                                 font.RenderText_Solid(text, SDL_Color{221, 221, 221, 230}));
 
     SDL2pp::Rect text_rect(x+(x_offset/2), y-((y_offset*5)/8),
                            text_texture.GetWidth(), text_texture.GetHeight());

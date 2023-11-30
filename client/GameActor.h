@@ -189,7 +189,8 @@ public:
             state_printer.print_team_text((*game_renderer),
                                           worm_name, team_colour,
                                           render_rect.x, render_rect.y,
-                                          -25, 40, 68, true, 1, 0.8);
+                                          -25, 40, 68, true,
+                                          (0.75 + (worm_name.length()*0.05)), 0.8);
         }
     }
 
