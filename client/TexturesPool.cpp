@@ -144,7 +144,8 @@ void TexturesPool::load_level_textures() {
                           TerrainActors::GRADIENT, false);
     load_texture_into_map(DATA_PATH "/stage/background.png", level_actors_textures,
                           TerrainActors::BACKGROUND);
-    load_texture_into_map(DATA_PATH "/stage/bar.png", level_actors_textures, TerrainActors::BAR);
+    load_texture_into_map(DATA_PATH "/stage/bar.png", level_actors_textures,
+                          TerrainActors::BAR);
     load_texture_into_map(DATA_PATH "/stage/long-bar.png", level_actors_textures,
                           TerrainActors::LONG_BAR);
     load_texture_into_map(DATA_PATH "/stage/airjet.png", level_actors_textures,
@@ -155,6 +156,10 @@ void TexturesPool::load_level_textures() {
                           TerrainActors::CRATE);
     load_texture_into_map(DATA_PATH "/stage/mystery-crate-falling3.png", level_actors_textures,
                           TerrainActors::CRATE_FALLING);
+    load_texture_into_map(DATA_PATH "/stage/windl.png", actors_textures,
+                          Actors::WIND_LEFT);
+    load_texture_into_map(DATA_PATH "/stage/windr.png", actors_textures,
+                          Actors::WIND_RIGHT);
 }
 
 void TexturesPool::load_tombstones_textures() {

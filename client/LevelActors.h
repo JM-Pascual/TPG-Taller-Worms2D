@@ -133,4 +133,43 @@ public:
     }
 };
 
+// ----------------------- WIND ----------------------
+
+class Wind: public LevelActor {
+private:
+    std::shared_ptr<SDL2pp::Texture>& left_wind;
+    std::shared_ptr<SDL2pp::Texture>& right_wind;
+    float current_strenght;
+public:
+    explicit Wind(float x, float y, TexturesPool& pool, Camera& camera):
+            LevelActor(x, y, camera),
+            left_wind(pool.get_actor_texture(Actors::WIND_LEFT)),
+            right_wind(pool.get_actor_texture(Actors::WIND_RIGHT)),
+            current_strenght(0) {}
+
+    inline void update() override {
+        //The Wind animation is static due to not finding the complete texture
+    }
+
+    inline void update_strenght(float new_wind_strenght) {
+        current_strenght = new_wind_strenght;
+    }
+
+    inline void render(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        if (current_strenght < 0){
+            std::cout<<"Wind:"<<current_strenght<<std::endl;
+            game_renderer->Copy((*left_wind),
+                                SDL_Rect{0, 0, (int)(96 * (current_strenght/4)), 13},
+                                SDL_Rect{int(position.x), int(position.y),
+                                         (int)(96 * (current_strenght/4)), 20});
+        } else {
+            std::cout<<"Wind:"<<current_strenght<<std::endl;
+            game_renderer->Copy((*right_wind),
+                                SDL_Rect{0, 0, (int)(96 * (current_strenght/4)), 13},
+                                SDL_Rect{int(position.x), int(position.y),
+                                         (int)(96 * (current_strenght/4)), 20});
+        }
+    }
+};
+
 #endif  // LEVELACTORS_H

@@ -144,7 +144,7 @@ public:
 
 class BattlefieldState: public States {
 public:
-    const uint8_t wind_force;
+    const float wind_force;
 
     explicit BattlefieldState(const uint8_t& wind):
             States(StatesTag::BATTLEFIELD_G), wind_force(wind) {}

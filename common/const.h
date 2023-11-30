@@ -19,8 +19,6 @@ enum class _CrateType_ { FIRST_AID, AMMO_BOX, TRAP };
 
 enum class Direction { LEFT = 0, RIGHT = 1 };
 
-enum class IsMoving { NO = 0, YES = 1 };
-
 enum class JumpDir { FRONT = 0, BACK = 1 };
 
 enum class ADSAngleDir { UP = 0, DOWN = 1 };
@@ -87,16 +85,8 @@ enum class TerrainActors {
     WATER,
     AIR_JET,
     CRATE,
-    CRATE_FALLING
-};
-
-enum class TerrainInclinations {
-    HORIZONTAL,
-    VERTICAL,
-    INCLINED_RIGHT,
-    INCLINED_LEFT,
-    UPWARDS_RIGHT,
-    UPWARDS_LEFT
+    CRATE_FALLING,
+    WIND
 };
 
 enum class Projectiles {
@@ -170,7 +160,8 @@ enum class Actors {
     POWER_CHARGE_BAR,
     STATE_SIGN,
     TIMER_SIGN,
-
+    WIND_LEFT,
+    WIND_RIGHT
 };
 
 enum class WeaponsDraw {

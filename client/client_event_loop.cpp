@@ -40,6 +40,12 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                 continue;
             }
 
+            case StatesTag::BATTLEFIELD_G: {
+                auto state = std::dynamic_pointer_cast<BattlefieldState>(raw_state);
+                terrain_elements.update_battlefield(state);
+                continue;
+            }
+
             case StatesTag::CRATE_COUNT:
                 expected_states += std::dynamic_pointer_cast<CrateCount>(raw_state)->quantity;
                 continue;
