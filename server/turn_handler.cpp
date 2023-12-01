@@ -12,8 +12,8 @@
 const TurnReset TurnHandler::need_to_update(const uint8_t players_quantity,
                                             const std::chrono::duration<float>& elapsed) {
 
-    // Alguien gano???
-    if (worm_handler.players_alive() == 1) {
+    // Alguien gano??? Perdieron todos / empate???
+    if (worm_handler.players_alive() <= 1) {
         throw SomeOneWins();
     }
 
