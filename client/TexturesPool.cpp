@@ -157,9 +157,9 @@ void TexturesPool::load_level_textures() {
     load_texture_into_map(DATA_PATH "/stage/mystery-crate-falling3.png", level_actors_textures,
                           TerrainActors::CRATE_FALLING);
     load_texture_into_map(DATA_PATH "/stage/windl.png", actors_textures,
-                          Actors::WIND_LEFT);
+                          Actors::WIND_LEFT, false);
     load_texture_into_map(DATA_PATH "/stage/windr.png", actors_textures,
-                          Actors::WIND_RIGHT);
+                          Actors::WIND_RIGHT, false);
 }
 
 void TexturesPool::load_tombstones_textures() {

@@ -14,7 +14,7 @@ void TerrainHolder::load_base_terrain(TexturesPool& txt_pool, Camera& camera) {
     terrain_elements.at(TerrainActors::AIR_JET).emplace_back(
             std::make_unique<AttackJet>(-50, 30, txt_pool, camera));
     terrain_elements.at(TerrainActors::WIND).emplace_back(
-            std::make_unique<Wind>(980, 680, txt_pool, camera));
+            std::make_unique<Wind>(980, 50, txt_pool, camera));
 }
 
 void TerrainHolder::add_terrain_element(TerrainActors terrain_type,

@@ -156,14 +156,12 @@ public:
     }
 
     inline void render(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
-        if (current_strenght < 0){
-            std::cout<<"Wind:"<<current_strenght<<std::endl;
+        if (current_strenght < 0.0f){
             game_renderer->Copy((*left_wind),
-                                SDL_Rect{0, 0, (int)(96 * (current_strenght/4)), 13},
+                                SDL_Rect{0, 0, (int)(96 * abs((current_strenght/4))), 13},
                                 SDL_Rect{int(position.x), int(position.y),
-                                         (int)(96 * (current_strenght/4)), 20});
+                                         (int)(96 * abs((current_strenght/4))), 20});
         } else {
-            std::cout<<"Wind:"<<current_strenght<<std::endl;
             game_renderer->Copy((*right_wind),
                                 SDL_Rect{0, 0, (int)(96 * (current_strenght/4)), 13},
                                 SDL_Rect{int(position.x), int(position.y),
