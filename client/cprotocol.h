@@ -39,8 +39,8 @@ private:
     void recv(void* data, unsigned int sz);
 
 
-    float meter_to_pixel_x(float meter_position);
-    float meter_to_pixel_y(float meter_position);
+    float meter_to_pixel_x(const float& meter_position);
+    float meter_to_pixel_y(const float& meter_position);
 
     std::shared_ptr<GameInfoL> recvGameInfo();
 

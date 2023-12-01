@@ -1,11 +1,13 @@
 #ifndef WEAPONHOLDANIMATION_H
 #define WEAPONHOLDANIMATION_H
 
-#include <SDL2pp/SDL2pp.hh>
+#include <memory>
 #include <unordered_map>
 
-#include "Animation.h"
+#include <SDL2pp/SDL2pp.hh>
+
 #include "AimAnimation.h"
+#include "Animation.h"
 #include "TexturesPool.h"
 
 class WeaponAnimationHolder {
@@ -20,14 +22,15 @@ private:
     unsigned int weapon_drawn_frames_counter;
 
     void load_all_draw_animations(TexturesPool& pool);
+
 public:
     explicit WeaponAnimationHolder(TexturesPool& pool);
 
-    void update(float new_inclination_degrees, bool charging_power,
-                WeaponsAndTools equipped_weapon, bool weapon_currently_stored);
+    void update(const float& new_inclination_degrees, const bool& charging_power,
+                const WeaponsAndTools& equipped_weapon, const bool& weapon_currently_stored);
 
-    void render(SDL2pp::Renderer &renderer, SDL2pp::Rect dest,
-                SDL_RendererFlip flipType = SDL_FLIP_HORIZONTAL, double angle = 0.0);
+    void render(SDL2pp::Renderer& renderer, SDL2pp::Rect& dest,
+                const SDL_RendererFlip& flipType = SDL_FLIP_HORIZONTAL, const double& angle = 0.0);
 };
 
 

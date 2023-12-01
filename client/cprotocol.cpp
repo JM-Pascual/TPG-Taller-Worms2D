@@ -127,11 +127,11 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
     }
 }
 
-float ClientSide::Protocol::meter_to_pixel_x(float meter_position) {
+float ClientSide::Protocol::meter_to_pixel_x(const float& meter_position) {
     return (meter_position * PPM);
 }
 
-float ClientSide::Protocol::meter_to_pixel_y(float meter_position) {
+float ClientSide::Protocol::meter_to_pixel_y(const float& meter_position) {
     return (720 - meter_position * PPM);  // ToDo
 }
 

@@ -1,4 +1,5 @@
 #include "death_animation.h"
+
 #include <random>
 
 std::shared_ptr<SDL2pp::Texture>& DeathAnimation::search_random_tomstone(TexturesPool& pool) {
@@ -12,17 +13,19 @@ std::shared_ptr<SDL2pp::Texture>& DeathAnimation::search_random_tomstone(Texture
     // Generate a random number
     int random_number = dist(rng);
 
-    return pool.get_tombstone_texture(static_cast<Tombstones>(random_number % 6 +1));
+    return pool.get_tombstone_texture(static_cast<Tombstones>(random_number % 6 + 1));
 }
 
-DeathAnimation::DeathAnimation(TexturesPool& pool, unsigned int delay) :
+DeathAnimation::DeathAnimation(TexturesPool& pool, const unsigned int& delay):
         worm_death_animation((pool.get_actor_texture(Actors::DYING_WORM)), 60, 0, false),
         worm_tombstone_animation((search_random_tomstone(pool)), 20, 3, true),
         explosion(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
-        currentFrame(0), delay(delay), counter(0) {}
+        currentFrame(0),
+        delay(delay),
+        counter(0) {}
 
-void DeathAnimation::update(bool iddle) {
-    if (iddle){
+void DeathAnimation::update(const bool& iddle) {
+    if (iddle) {
         return;
     } else {
         worm_death_animation.update();
@@ -32,8 +35,8 @@ void DeathAnimation::update(bool iddle) {
     }
 }
 
-void DeathAnimation::render(SDL2pp::Renderer& renderer, SDL2pp::Rect dest) {
-    if (counter < 62){
+void DeathAnimation::render(SDL2pp::Renderer& renderer, const SDL2pp::Rect& dest) {
+    if (counter < 62) {
         worm_death_animation.render(renderer, dest);
     } else {
         explosion.render(renderer, dest);

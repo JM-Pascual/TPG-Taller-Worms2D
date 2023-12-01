@@ -75,7 +75,7 @@ void AudioPlayer::play_background_music() {
     }
 }
 
-void AudioPlayer::playAudio(SoundEffects key) {
+void AudioPlayer::playAudio(const SoundEffects& key) {
     if (effects.count(key) != 1) {
         return;
     }
@@ -85,7 +85,6 @@ void AudioPlayer::playAudio(SoundEffects key) {
                                      std::to_string(static_cast<int>(key)));
         return;
     }
-
 }
 
 AudioPlayer::~AudioPlayer() {

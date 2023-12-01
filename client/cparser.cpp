@@ -7,7 +7,7 @@
 
 void ClientSide::Parser::filterStates(Queue<std::shared_ptr<States>>& game_states,
                                       Queue<std::shared_ptr<States>>& lobby_states,
-                                      std::shared_ptr<States> state) {
+                                      const std::shared_ptr<States>& state) {
     switch (state->tag) {
         case StatesTag::GAMES_COUNT_L:
         case StatesTag::GAME_NOT_JOINABLE:

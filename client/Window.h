@@ -23,9 +23,10 @@ private:
     std::unordered_map<bool, Animation> end_of_game_animations;
 
     void render_stage_texture(const std::shared_ptr<SDL2pp::Texture>& texture,
-                              SDL2pp::Rect destination);
+                              const SDL2pp::Rect& destination);
 
     unsigned int ticks_since_end_of_game;
+
 public:
     Window(const int& width, const int& height);
 
@@ -42,7 +43,7 @@ public:
 
     void render_background(TexturesPool& pool);
 
-    bool render_end_of_game_texture(bool won_game);
+    bool render_end_of_game_texture(const bool& won_game);
 
     ~Window() = default;
 

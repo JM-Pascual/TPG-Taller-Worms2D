@@ -18,9 +18,10 @@ protected:
     Camera& camera;
 
 public:
-    explicit LevelActor(float x, float y, Camera& camera): position(x, y), camera(camera) {}
+    explicit LevelActor(const float& x, const float& y, Camera& camera):
+            position(x, y), camera(camera) {}
 
-    virtual inline void change_position(float x, float y) {
+    virtual inline void change_position(const float& x, const float& y) {
         position.x = x;
         position.y = y;
     }
@@ -39,8 +40,8 @@ private:
     float inclination;
 
 public:
-    explicit ShortBar(float x, float y, float inclination_degrees, TexturesPool& pool,
-                      Camera& camera):
+    explicit ShortBar(const float& x, const float& y, const float& inclination_degrees,
+                      TexturesPool& pool, Camera& camera):
             LevelActor(x, y, camera),
             texture(pool.get_level_texture(TerrainActors::BAR)),
             inclination(inclination_degrees) {}
@@ -61,8 +62,8 @@ private:
     float inclination;
 
 public:
-    explicit LongBar(float x, float y, float inclination_degrees, TexturesPool& pool,
-                     Camera& camera):
+    explicit LongBar(const float& x, const float& y, const float& inclination_degrees,
+                     TexturesPool& pool, Camera& camera):
             LevelActor(x, y, camera),
             texture(pool.get_level_texture(TerrainActors::LONG_BAR)),
             inclination(inclination_degrees) {}
@@ -82,7 +83,7 @@ private:
     Animation waves_animation;
 
 public:
-    explicit Water(float x, float y, TexturesPool& pool, Camera& camera):
+    explicit Water(const float& x, const float& y, TexturesPool& pool, Camera& camera):
             LevelActor(x, y, camera),
             waves_animation(Animation(pool.get_level_texture(TerrainActors::WATER), 11, 3)) {}
 
@@ -101,7 +102,7 @@ private:
     bool currently_flying;
 
 public:
-    explicit AttackJet(float x, float y, TexturesPool& pool, Camera& camera):
+    explicit AttackJet(const float& x, const float& y, TexturesPool& pool, Camera& camera):
             LevelActor(x, y, camera),
             on_air_texture(pool.get_level_texture(TerrainActors::AIR_JET)),
             currently_flying(false) {}
@@ -114,7 +115,7 @@ public:
         }
     }
 
-    inline void change_position(float x, float y) override {
+    inline void change_position(const float& x, const float& y) override {
         if (currently_flying) {
             return;
         }

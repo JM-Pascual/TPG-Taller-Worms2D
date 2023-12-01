@@ -1,12 +1,15 @@
 #ifndef TEXTURESPOOL_H
 #define TEXTURESPOOL_H
 
-#include <SDL2pp/SDL2pp.hh>
 #include <memory>
+#include <string>
 #include <unordered_map>
 
-#include "Window.h"
+#include <SDL2pp/SDL2pp.hh>
+
 #include "../common/const.h"
+
+#include "Window.h"
 
 class TexturesPool {
 private:
@@ -22,9 +25,10 @@ private:
     void load_tombstones_textures();
 
     template <typename EnumType>
-    void load_texture_into_map(const std::string& filePath,
-                            std::unordered_map<EnumType, std::shared_ptr<SDL2pp::Texture>>& textureMap,
-                            EnumType texture_enum, bool with_alpha_blending = true);
+    void load_texture_into_map(
+            const std::string& filePath,
+            std::unordered_map<EnumType, std::shared_ptr<SDL2pp::Texture>>& textureMap,
+            const EnumType& texture_enum, const bool& with_alpha_blending = true);
 
     std::unordered_map<Actors, std::shared_ptr<SDL2pp::Texture>> actors_textures;
     std::unordered_map<TerrainActors, std::shared_ptr<SDL2pp::Texture>> level_actors_textures;
@@ -36,17 +40,21 @@ private:
     std::unordered_map<Tombstones, std::shared_ptr<SDL2pp::Texture>> tombstones_textures;
 
     std::shared_ptr<SDL2pp::Renderer>& renderer;
+
 public:
     explicit TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer);
 
-    std::shared_ptr<SDL2pp::Texture>& get_actor_texture(Actors actor_to_fetch);
-    std::shared_ptr<SDL2pp::Texture>& get_level_texture(TerrainActors level_actor_to_fetch);
-    std::shared_ptr<SDL2pp::Texture>& get_draw_texture(WeaponsDraw draw_texture_to_fetch);
-    std::shared_ptr<SDL2pp::Texture>& get_aim_texture(WeaponAiming aim_texture_to_fetch);
-    std::shared_ptr<SDL2pp::Texture>& get_projectile_texture(Projectiles aim_texture_to_fetch);
-    std::shared_ptr<SDL2pp::Texture>& get_tool_usage_texture(ToolUsage tool_use_texture_to_fetch);
-    std::shared_ptr<SDL2pp::Texture>& get_effect_texture(VisualEffects aim_texture_to_fetch);
-    std::shared_ptr<SDL2pp::Texture>& get_tombstone_texture(Tombstones tombstone_texture_to_fetch);
+    std::shared_ptr<SDL2pp::Texture>& get_actor_texture(const Actors& actor_to_fetch);
+    std::shared_ptr<SDL2pp::Texture>& get_level_texture(const TerrainActors& level_actor_to_fetch);
+    std::shared_ptr<SDL2pp::Texture>& get_draw_texture(const WeaponsDraw& draw_texture_to_fetch);
+    std::shared_ptr<SDL2pp::Texture>& get_aim_texture(const WeaponAiming& aim_texture_to_fetch);
+    std::shared_ptr<SDL2pp::Texture>& get_projectile_texture(
+            const Projectiles& aim_texture_to_fetch);
+    std::shared_ptr<SDL2pp::Texture>& get_tool_usage_texture(
+            const ToolUsage& tool_use_texture_to_fetch);
+    std::shared_ptr<SDL2pp::Texture>& get_effect_texture(const VisualEffects& aim_texture_to_fetch);
+    std::shared_ptr<SDL2pp::Texture>& get_tombstone_texture(
+            const Tombstones& tombstone_texture_to_fetch);
 };
 
 

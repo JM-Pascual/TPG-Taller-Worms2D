@@ -1,10 +1,12 @@
 #ifndef DEATHANIMATION_H
 #define DEATHANIMATION_H
 
+#include <memory>
+
 #include <SDL2pp/SDL2pp.hh>
 
-#include "TexturesPool.h"
 #include "Animation.h"
+#include "TexturesPool.h"
 
 class DeathAnimation {
 private:
@@ -22,12 +24,13 @@ private:
     unsigned int counter;
 
     std::shared_ptr<SDL2pp::Texture>& search_random_tomstone(TexturesPool& pool);
+
 public:
-    explicit DeathAnimation(TexturesPool& pool, unsigned int delay = 0);
+    explicit DeathAnimation(TexturesPool& pool, const unsigned int& delay = 0);
 
-    void update(bool iddle = false);
+    void update(const bool& iddle = false);
 
-    void render(SDL2pp::Renderer &renderer, SDL2pp::Rect dest);
+    void render(SDL2pp::Renderer& renderer, const SDL2pp::Rect& dest);
 
     ~DeathAnimation() = default;
 };

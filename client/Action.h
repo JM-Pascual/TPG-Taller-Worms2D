@@ -16,7 +16,7 @@ class Action {
 public:
     const Actions c;
 
-    explicit Action(const Actions c): c(c) {}
+    explicit Action(const Actions& c): c(c) {}
 
     virtual void send(ClientSide::Protocol& protocol);
 
@@ -41,7 +41,7 @@ private:
     const Direction direction;
 
 public:
-    explicit StartMoving(Direction facing_right);
+    explicit StartMoving(const Direction& facing_right);
 
     void send(ClientSide::Protocol& protocol) override;
 
@@ -60,7 +60,7 @@ private:
     const JumpDir direction;
 
 public:
-    explicit Jump(JumpDir dir);
+    explicit Jump(const JumpDir& dir);
 
     void send(ClientSide::Protocol& protocol) override;
 
@@ -74,7 +74,7 @@ private:
     const ADSAngleDir direction;
 
 public:
-    explicit ADSAngle(ADSAngleDir dir);
+    explicit ADSAngle(const ADSAngleDir& dir);
 
     void send(ClientSide::Protocol& protocol) override;
 
@@ -120,7 +120,7 @@ private:
     const DelayAmount amount;
 
 public:
-    explicit Delay(DelayAmount amount);
+    explicit Delay(const DelayAmount& amount);
 
     void send(ClientSide::Protocol& protocol) override;
 
@@ -132,7 +132,7 @@ private:
     const WeaponsAndTools gadget;
 
 public:
-    explicit ChangeGadget(WeaponsAndTools gadget);
+    explicit ChangeGadget(const WeaponsAndTools& gadget);
 
     void send(ClientSide::Protocol& protocol) override;
 
@@ -160,7 +160,7 @@ private:
     const uint8_t game_id;
 
 public:
-    explicit JoinGame(uint8_t game_id): Action(Actions::JOIN), game_id(game_id) {}
+    explicit JoinGame(const uint8_t& game_id): Action(Actions::JOIN), game_id(game_id) {}
 
     void send(ClientSide::Protocol& protocol) override;
 

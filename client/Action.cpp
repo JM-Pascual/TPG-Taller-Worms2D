@@ -16,7 +16,7 @@ void NullAction::send(ClientSide::Protocol& protocol) {}
 // ################################ MOVEMENT ###############################
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~ START MOVING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-StartMoving::StartMoving(Direction direction):
+StartMoving::StartMoving(const Direction& direction):
         Action(Actions::START_MOVING), direction(direction) {}
 
 void StartMoving::send(ClientSide::Protocol& protocol) {
@@ -30,7 +30,7 @@ StopMoving::StopMoving(): Action(Actions::STOP_MOVING) {}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JUMP ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Jump::Jump(JumpDir dir): Action(Actions::JUMP), direction(dir) {}
+Jump::Jump(const JumpDir& dir): Action(Actions::JUMP), direction(dir) {}
 
 void Jump::send(ClientSide::Protocol& protocol) {
     Action::send(protocol);
@@ -42,7 +42,7 @@ void Jump::send(ClientSide::Protocol& protocol) {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ADSAngle ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ADSAngle::ADSAngle(ADSAngleDir dir): Action(Actions::ADS_ANGLE), direction(dir) {}
+ADSAngle::ADSAngle(const ADSAngleDir& dir): Action(Actions::ADS_ANGLE), direction(dir) {}
 
 void ADSAngle::send(ClientSide::Protocol& protocol) {
     Action::send(protocol);
@@ -71,7 +71,7 @@ void UseClickable::send(ClientSide::Protocol& protocol) {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Delay ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Delay::Delay(DelayAmount amount): Action(Actions::DELAY), amount(amount) {}
+Delay::Delay(const DelayAmount& amount): Action(Actions::DELAY), amount(amount) {}
 
 void Delay::send(ClientSide::Protocol& protocol) {
     Action::send(protocol);
@@ -80,7 +80,7 @@ void Delay::send(ClientSide::Protocol& protocol) {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ChangeGadget ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ChangeGadget::ChangeGadget(WeaponsAndTools gadget):
+ChangeGadget::ChangeGadget(const WeaponsAndTools& gadget):
         Action(Actions::CHANGE_WEAPON_OR_TOOL), gadget(gadget) {}
 
 void ChangeGadget::send(ClientSide::Protocol& protocol) {

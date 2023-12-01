@@ -6,7 +6,7 @@ template <typename EnumType>
 void TexturesPool::load_texture_into_map(
         const std::string& filePath,
         std::unordered_map<EnumType, std::shared_ptr<SDL2pp::Texture>>& textureMap,
-        EnumType texture_enum, bool with_alpha_blending) {
+        const EnumType& texture_enum, const bool& with_alpha_blending) {
 
     if (with_alpha_blending) {
         textureMap.insert({texture_enum, std::make_shared<SDL2pp::Texture>(
@@ -185,40 +185,41 @@ TexturesPool::TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer):
     load_tombstones_textures();
 }
 
-std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_actor_texture(Actors actor_to_fetch) {
+std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_actor_texture(const Actors& actor_to_fetch) {
     return (actors_textures[actor_to_fetch]);
 }
 
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_level_texture(
-        TerrainActors level_actor_to_fetch) {
+        const TerrainActors& level_actor_to_fetch) {
     return (level_actors_textures[level_actor_to_fetch]);
 }
 
-std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_aim_texture(WeaponAiming aim_texture_to_fetch) {
+std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_aim_texture(
+        const WeaponAiming& aim_texture_to_fetch) {
     return (aim_textures[aim_texture_to_fetch]);
 }
 
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_draw_texture(
-        WeaponsDraw draw_texture_to_fetch) {
+        const WeaponsDraw& draw_texture_to_fetch) {
     return (draw_textures[draw_texture_to_fetch]);
 }
 
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_projectile_texture(
-        Projectiles projectile_texture_to_fetch) {
+        const Projectiles& projectile_texture_to_fetch) {
     return (projectile_textures[projectile_texture_to_fetch]);
 }
 
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_tool_usage_texture(
-        ToolUsage tool_use_texture_to_fetch) {
+        const ToolUsage& tool_use_texture_to_fetch) {
     return (tool_usage_textures.at(tool_use_texture_to_fetch));
 }
 
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_effect_texture(
-        VisualEffects effect_texture_to_fetch) {
+        const VisualEffects& effect_texture_to_fetch) {
     return (effect_textures[effect_texture_to_fetch]);
 }
 
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_tombstone_texture(
-        Tombstones tombstone_texture_to_fetch) {
+        const Tombstones& tombstone_texture_to_fetch) {
     return (tombstones_textures[tombstone_texture_to_fetch]);
 }

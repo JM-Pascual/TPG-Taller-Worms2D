@@ -1,8 +1,10 @@
 #include "ActorHolder.h"
 
-bool ActorHolder::actor_loaded(const uint8_t& actor_id) { return (active_actors.count(actor_id) != 0); }
+bool ActorHolder::actor_loaded(const uint8_t& actor_id) {
+    return (active_actors.count(actor_id) != 0);
+}
 
-void ActorHolder::add_actor(uint8_t actor_id, std::shared_ptr<GameActor> new_actor) {
+void ActorHolder::add_actor(const uint8_t& actor_id, std::shared_ptr<GameActor> new_actor) {
     active_actors.insert({actor_id, new_actor});
 }
 
@@ -16,7 +18,7 @@ void ActorHolder::remove_actor(const uint8_t& actor_id, std::shared_ptr<States> 
 }
 
 void ActorHolder::play_actors_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
-                                AudioPlayer& effects_player) {
+                                    AudioPlayer& effects_player) {
     for (auto& actor: active_actors) {
         actor.second->play_state_audio(effects_player);
         actor.second->render(game_renderer);

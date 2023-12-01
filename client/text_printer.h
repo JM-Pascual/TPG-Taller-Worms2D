@@ -1,6 +1,9 @@
 #ifndef TEXT_PRINTER_H
 #define TEXT_PRINTER_H
 
+#include <memory>
+#include <string>
+
 #include <SDL2pp/SDL2pp.hh>
 
 #include "TexturesPool.h"
@@ -11,27 +14,27 @@ private:
     std::shared_ptr<SDL2pp::Texture>& background;
     unsigned int font_size;
 
-    static SDL_Color interpret_team_colour(TeamColours team);
-public:
+    static SDL_Color interpret_team_colour(const TeamColours& team);
 
-    explicit TextPrinter(unsigned int font_size,
+public:
+    explicit TextPrinter(const unsigned int& font_size,
                          std::shared_ptr<SDL2pp::Texture>& font_background);
 
-    void print_text(SDL2pp::Renderer& renderer, const std::string& text,
-                    int x, int y, int in_line_adjustment = 0, int x_offset = 0, int y_offset = 0,
-                    bool with_background = false,
-                    float background_size_factor_x = 1,
-                    float background_size_factor_y = 1);
+    void print_text(SDL2pp::Renderer& renderer, const std::string& text, const int& x, const int& y,
+                    const int& in_line_adjustment = 0, const int& x_offset = 0,
+                    const int& y_offset = 0, const bool& with_background = false,
+                    const float& background_size_factor_x = 1,
+                    const float& background_size_factor_y = 1);
 
     void print_team_text(SDL2pp::Renderer& renderer, const std::string& text, TeamColours team,
-                    int x, int y, int in_line_adjustment = 0, int x_offset = 0, int y_offset = 0,
-                    bool with_background = false,
-                         float background_reduce_factor_x = 1,
-                         float background_reduce_factor_y = 1);
+                         const int& x, const int& y, const int& in_line_adjustment = 0,
+                         const int& x_offset = 0, const int& y_offset = 0,
+                         const bool& with_background = false,
+                         const float& background_reduce_factor_x = 1,
+                         const float& background_reduce_factor_y = 1);
 
     ~TextPrinter() = default;
 };
-
 
 
 #endif  // TEXT_PRINTER_H

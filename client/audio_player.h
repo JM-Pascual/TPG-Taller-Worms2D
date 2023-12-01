@@ -15,12 +15,13 @@ private:
     Mix_Music* background_music;
 
     void load_effects();
+
 public:
     AudioPlayer();
 
     void play_background_music();
 
-    void playAudio(SoundEffects key);
+    void playAudio(const SoundEffects& key);
 
     ~AudioPlayer();
 };
