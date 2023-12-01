@@ -121,9 +121,18 @@ void WormHandler::checkDeadWorms() {
 
         auto it = player->worms.cbegin();
         while (it != player->worms.cend()) {
-            if ((*it).second->life == 0.0f) {
-                it = player->worms.erase(it);
+            if (it->second->life == 0.0f) {
 
+                {
+                    auto worm_it_aux = player->worms.cbegin();
+                    advance(worm_it_aux, player->worm_turn);
+
+                    if (worm_it_aux->first >= it->first) {
+                        --player->worm_turn;
+                    }
+                }
+
+                it = player->worms.erase(it);
                 continue;
             }
 
