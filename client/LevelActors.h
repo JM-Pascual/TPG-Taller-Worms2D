@@ -89,7 +89,31 @@ public:
     inline void update() override { waves_animation.update(); }
 
     inline void render(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
-        waves_animation.render((*game_renderer), camera.calcRect(0, 600, 1280, 40), 1240, 0);
+        waves_animation.render((*game_renderer), camera.calcRect(position.x, position.y, 1280, 40), 1240, 0);
+
+        waves_animation.render((*game_renderer), camera.calcRect(position.x +1280, position.y, 600, 40), 1240, 0);
+    }
+};
+
+// ----------------------- DEEP WATER ----------------------
+
+class DeepWater: public LevelActor {
+private:
+    std::shared_ptr<SDL2pp::Texture>& deep_blue_texture;
+
+public:
+    explicit DeepWater(float x, float y, TexturesPool& pool, Camera& camera):
+            LevelActor(x, y, camera),
+            deep_blue_texture(pool.get_level_texture(TerrainActors::DEEP_WATER)) {}
+
+    inline void update() override {}
+
+    inline void render(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 1280, 360);
+        game_renderer->Copy((*deep_blue_texture), SDL2pp::NullOpt, render_rect);
+
+        render_rect = camera.calcRect(position.x + 1280, position.y, 600, 360);
+        game_renderer->Copy((*deep_blue_texture), SDL2pp::NullOpt, render_rect);
     }
 };
 

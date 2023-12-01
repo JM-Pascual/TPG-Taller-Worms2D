@@ -83,6 +83,7 @@ enum class TerrainActors {
     LONG_BAR,
     BACKGROUND,
     WATER,
+    DEEP_WATER,
     AIR_JET,
     CRATE,
     CRATE_FALLING,

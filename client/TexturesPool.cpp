@@ -152,6 +152,8 @@ void TexturesPool::load_level_textures() {
                           TerrainActors::AIR_JET);
     load_texture_into_map(DATA_PATH "/blue-water-sprites/blue_water.png", level_actors_textures,
                           TerrainActors::WATER);
+    load_texture_into_map(DATA_PATH "/blue-water-sprites/deep-water.png", level_actors_textures,
+                          TerrainActors::DEEP_WATER);
     load_texture_into_map(DATA_PATH "/stage/mystery-crate-floor.png", level_actors_textures,
                           TerrainActors::CRATE);
     load_texture_into_map(DATA_PATH "/stage/mystery-crate-falling3.png", level_actors_textures,
