@@ -56,6 +56,10 @@ Crate::Crate(Battlefield& battlefield, const uint8_t& id):
 }
 
 void Crate::collision_reaction(b2Vec2 normal) {
+    if (falling) {
+        return;
+    }
+
     if (was_opened) {
         return;
     }
@@ -75,7 +79,7 @@ void Crate::stop_falling() {
 const bool Crate::wasOpened() { return was_opened; }
 
 const bool Crate::wasDrown() {
-    if(body->GetPosition().y < 0){
+    if (body->GetPosition().y < 0) {
         was_opened = true;
         falling = false;
     }
@@ -83,5 +87,3 @@ const bool Crate::wasDrown() {
 }
 
 Crate::~Crate() {}
-
-
