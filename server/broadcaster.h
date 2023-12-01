@@ -35,7 +35,7 @@ public:
 
     void broadcastLevelLayout();
 
-    void broadcastGame(uint8_t id_of_active_player);
+    void broadcastGame(const uint8_t& id_of_active_player);
 
     void remove_closed_clients(uint8_t& ready_count,
                                std::map<uint8_t, std::unique_ptr<Player>>& players);

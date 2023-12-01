@@ -195,9 +195,9 @@ b2Vec2 Worm::set_bullet_angle() {
     return b2Vec2(facing_factor() * cosf(aim_inclination_degrees), sinf(aim_inclination_degrees));
 }
 
-void Worm::change_bullet_explosion_delay(DelayAmount delay) { weapon_delay = delay; }
+void Worm::change_bullet_explosion_delay(const DelayAmount& delay) { weapon_delay = delay; }
 
-void Worm::change_clicked_position(b2Vec2 new_position) {
+void Worm::change_clicked_position(const b2Vec2& new_position) {
     using_tool = true;
     clicked_position = new_position;
 }
@@ -217,7 +217,7 @@ bool Worm::is_dead() {
     return dead;
 }
 
-void Worm::collision_reaction(b2Vec2 normal) {
+void Worm::collision_reaction(const b2Vec2& normal) {
     Query_callback queryCallback;
     b2AABB aabb{};
     aabb.lowerBound = body->GetWorldCenter() - b2Vec2(RADIUS / 2, RADIUS / 2);

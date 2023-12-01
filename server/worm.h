@@ -93,8 +93,8 @@ public:
     b2Vec2 set_bullet_direction();
     b2Vec2 set_bullet_power();
     b2Vec2 set_bullet_angle();
-    void change_bullet_explosion_delay(DelayAmount delay);
-    void change_clicked_position(b2Vec2 new_position);
+    void change_bullet_explosion_delay(const DelayAmount& delay);
+    void change_clicked_position(const b2Vec2& new_position);
 
     void change_aim_direction();
     void change_fire_power(TurnHandler& turn_handler);
@@ -116,7 +116,7 @@ public:
     DelayAmount grenade_explosion_delay();
 
     bool is_dead() override;
-    void collision_reaction(b2Vec2 normal) override;
+    void collision_reaction(const b2Vec2& normal) override;
 
     void open_crate(bool& open) override;
 

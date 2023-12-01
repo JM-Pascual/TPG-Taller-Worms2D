@@ -66,7 +66,7 @@ bool Game::is_playing() {
     return (sz > 1 && sz == ready_count);
 }
 
-void Game::set_player_ready(const uint8_t id) {
+void Game::set_player_ready(const uint8_t& id) {
     std::lock_guard<std::mutex> lock(m);
     // Esta unido al game el player[id]?
     if (players.count(id) == 1) {

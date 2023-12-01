@@ -2,8 +2,9 @@
 
 #include "battlefield.h"
 
-Projectile::Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radius,
-                       int epicenter_damage, WeaponsAndTools type, float explosion_delay):
+Projectile::Projectile(Battlefield& battlefield, const b2Vec2& position, const int& blast_radius,
+                       const int& epicenter_damage, const WeaponsAndTools& type,
+                       const float& explosion_delay):
         Entity(battlefield),
         type(type),
         blast_radius(blast_radius),
@@ -41,7 +42,7 @@ std::shared_ptr<ProjectileStateG> Projectile::get_proyectile_state(const uint8_t
                                               type, dead, vel_angle);
 }
 
-void Projectile::set_power(b2Vec2 power) { body->ApplyLinearImpulseToCenter(power, true); }
+void Projectile::set_power(const b2Vec2& power) { body->ApplyLinearImpulseToCenter(power, true); }
 
 void Projectile::collide() {
     if (dead) {
@@ -64,13 +65,13 @@ void Projectile::collide() {
             continue;
 
         applyBlastImpulse(body_, body->GetWorldCenter(), bodyCom, epicenter_damage);
-        //reinterpret_cast<Entity*>(body_->GetUserData().pointer)->start_falling();
+        // reinterpret_cast<Entity*>(body_->GetUserData().pointer)->start_falling();
     }
 }
 
 
-void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 applyPoint,
-                                   float blastPower) {
+void Projectile::applyBlastImpulse(b2Body* body_, const b2Vec2& blastCenter,
+                                   const b2Vec2& applyPoint, const float& blastPower) {
 
 
     b2Vec2 blastDir = applyPoint - blastCenter;
@@ -92,7 +93,7 @@ void Projectile::applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 app
 
 void Projectile::drowning() {
 
-    if(body->GetPosition().y <= TIDE_LEVEL){
+    if (body->GetPosition().y <= TIDE_LEVEL) {
         if (body->GetPosition().x < LEFT_BORDER || body->GetPosition().x > RIGHT_BORDER) {
             dead = true;
 
@@ -104,11 +105,11 @@ void Projectile::drowning() {
 }
 //~~~~~~~~~~~~~~~~~~~ Rocket ~~~~~~~~~~~~~~~~~~~~
 
-Rocket::Rocket(Battlefield& battlefield, b2Vec2 position, int blast_radius, int epicenter_damage,
-               WeaponsAndTools type):
+Rocket::Rocket(Battlefield& battlefield, const b2Vec2& position, const int& blast_radius,
+               const int& epicenter_damage, const WeaponsAndTools& type):
         Projectile(battlefield, position, blast_radius, epicenter_damage, type, ROCKET_DELAY) {}
 
-void Rocket::collision_reaction(b2Vec2 normal) {
+void Rocket::collision_reaction(const b2Vec2& normal) {
     if (not dead) {
         collide();
         dead = true;
@@ -119,7 +120,7 @@ void Rocket::applyWindResistance(const float& wind_force) {
     this->body->ApplyForce(b2Vec2(wind_force, 0), this->body->GetWorldCenter(), true);
 }
 
-void Rocket::apply_explosion(b2Vec2 final_impulse) { Entity::apply_explosion(b2Vec2(0, 0)); }
+void Rocket::apply_explosion(const b2Vec2& final_impulse) { Entity::apply_explosion(b2Vec2(0, 0)); }
 
 void Rocket::updateTimer() {
     if (dead) {
@@ -138,14 +139,14 @@ void Rocket::updateTimer() {
 
 //~~~~~~~~~~~~~~~~~~~ Bazooka ~~~~~~~~~~~~~~~~~~~~
 
-BazookaRocket::BazookaRocket(Battlefield& battlefield, b2Vec2 position):
+BazookaRocket::BazookaRocket(Battlefield& battlefield, const b2Vec2& position):
         Rocket(battlefield, position, BLAST_RADIUS_BAZOOKA, EPICENTER_DAMAGE_BAZOOKA,
                WeaponsAndTools::BAZOOKA) {}
 
 
 //~~~~~~~~~~~~~~~~~~~ Mortar ~~~~~~~~~~~~~~~~~~~~
 
-MortarRocket::MortarRocket(Battlefield& battlefield, b2Vec2 position):
+MortarRocket::MortarRocket(Battlefield& battlefield, const b2Vec2& position):
         Rocket(battlefield, position, BLAST_RADIUS_MORTAR, EPICENTER_DAMAGE_MORTAR,
                WeaponsAndTools::MORTAR),
         fragments(FRAGMENT_POWER) {}
@@ -173,7 +174,8 @@ void MortarRocket::second_collision_reaction() {
 
 //~~~~~~~~~~~~~~~~~~~ MortarFragment ~~~~~~~~~~~~~~~~~~~~
 
-MortarFragment::MortarFragment(Battlefield& battlefield, b2Vec2 position, b2Vec2 direction):
+MortarFragment::MortarFragment(Battlefield& battlefield, const b2Vec2& position,
+                               const b2Vec2& direction):
         Rocket(battlefield, position, BLAST_RADIUS_MORTAR_FRAGMENT,
                EPICENTER_DAMAGE_MORTAR_FRAGMENT, WeaponsAndTools::MORTAR_FRAGMENT) {
 
@@ -182,7 +184,7 @@ MortarFragment::MortarFragment(Battlefield& battlefield, b2Vec2 position, b2Vec2
 
 //~~~~~~~~~~~~~~~~~~~ AirStrikeRocket ~~~~~~~~~~~~~~~~~~~~
 
-AirStrikeRocket::AirStrikeRocket(Battlefield& battlefield, b2Vec2 position):
+AirStrikeRocket::AirStrikeRocket(Battlefield& battlefield, const b2Vec2& position):
         Rocket(battlefield, position, BLAST_RADIUS_AIR_STRIKE, EPICENTER_DAMAGE_AIR_STRIKE,
                WeaponsAndTools::AIR_STRIKE) {
 
@@ -191,11 +193,12 @@ AirStrikeRocket::AirStrikeRocket(Battlefield& battlefield, b2Vec2 position):
 
 //~~~~~~~~~~~~~~~~~~~ Grenade ~~~~~~~~~~~~~~~~~~~~
 
-Grenade::Grenade(Battlefield& battlefield, b2Vec2 position, float explosion_delay,
-                 uint8_t blast_radius, uint8_t epicenter_damage, WeaponsAndTools type):
+Grenade::Grenade(Battlefield& battlefield, const b2Vec2& position, const float& explosion_delay,
+                 const uint8_t& blast_radius, const uint8_t& epicenter_damage,
+                 const WeaponsAndTools& type):
         Projectile(battlefield, position, blast_radius, epicenter_damage, type, explosion_delay) {}
 
-void Grenade::collision_reaction(b2Vec2 normal) {}
+void Grenade::collision_reaction(const b2Vec2& normal) {}
 
 void Grenade::updateTimer() {
     if (dead) {
@@ -215,11 +218,11 @@ void Grenade::updateTimer() {
 void Grenade::applyWindResistance(const float& wind_force) {}
 
 
-Green::Green(Battlefield& battlefield, b2Vec2 position, float explosion_delay):
+Green::Green(Battlefield& battlefield, const b2Vec2& position, const float& explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_GREEN_GRENADE,
                 EPICENTER_DAMAGE_GREEN_GRENADE, WeaponsAndTools::GREEN_GRENADE) {}
 
-Red::Red(Battlefield& battlefield, b2Vec2 position, float explosion_delay):
+Red::Red(Battlefield& battlefield, const b2Vec2& position, const float& explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_RED_GRENADE,
                 EPICENTER_DAMAGE_RED_GRENADE, WeaponsAndTools::RED_GRENADE),
         fragments(FRAGMENTS_AMOUNT) {}
@@ -243,17 +246,17 @@ void Red::second_collision_reaction() {
     }
 }
 
-Banana::Banana(Battlefield& battlefield, b2Vec2 position, float explosion_delay):
+Banana::Banana(Battlefield& battlefield, const b2Vec2& position, const float& explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_BANANA,
                 EPICENTER_DAMAGE_BANANA, WeaponsAndTools::BANANA) {
     body->GetFixtureList()->SetRestitution(0.9);
 }
 
-Dynamite::Dynamite(Battlefield& battlefield, b2Vec2 position, float explosion_delay):
+Dynamite::Dynamite(Battlefield& battlefield, const b2Vec2& position, const float& explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_DYNAMITE,
                 EPICENTER_DAMAGE_DYNAMITE, WeaponsAndTools::DYNAMITE) {}
 
 
-Holy::Holy(Battlefield& battlefield, b2Vec2 position, float explosion_delay):
+Holy::Holy(Battlefield& battlefield, const b2Vec2& position, const float& explosion_delay):
         Grenade(battlefield, position, explosion_delay, BLAST_RADIUS_HOLY_GRENADE,
                 EPICENTER_DAMAGE_HOLY_GRENADE, WeaponsAndTools::HOLY_GRENADE) {}

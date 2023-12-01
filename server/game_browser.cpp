@@ -67,7 +67,7 @@ void GameBrowser::infoGames(std::vector<std::shared_ptr<GameInfoL>>& info) {
     }
 }
 
-void GameBrowser::set_player_ready(const uint8_t id, const uint8_t id_game) {
+void GameBrowser::set_player_ready(const uint8_t& id, const uint8_t& id_game) {
     std::unique_lock<std::mutex> lck(m);
     if (games.count(id_game) != 1) {
         return;
@@ -77,7 +77,7 @@ void GameBrowser::set_player_ready(const uint8_t id, const uint8_t id_game) {
     spdlog::get("server")->debug("Jugador {:d} cambio estado ready en juego {:d}", id, id_game);
 }
 
-const bool GameBrowser::game_started_playing(const uint8_t game_id) {
+const bool GameBrowser::game_started_playing(const uint8_t& game_id) {
     std::unique_lock<std::mutex> lck(m);
     return (games.count(game_id) == 1 && games.at(game_id)->is_playing());
     // Si el juego existe retorna si estan jugando, false en otro caso

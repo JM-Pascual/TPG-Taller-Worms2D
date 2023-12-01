@@ -66,7 +66,7 @@ std::unique_ptr<AmmoLeft> Player::getWeaponsAmmo() {
     return ammo_left;
 }
 
-void Player::change_weapon(WeaponsAndTools new_weapon) {
+void Player::change_weapon(const WeaponsAndTools& new_weapon) {
     if (weapons.count(new_weapon) != 1) {
         return;
     }

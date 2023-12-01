@@ -22,7 +22,7 @@ public:
 
     explicit Crate(Battlefield& battlefield, const uint8_t& id);
 
-    void collision_reaction(b2Vec2 normal) override;
+    void collision_reaction(const b2Vec2& normal) override;
 
     void stop_falling() override;
 

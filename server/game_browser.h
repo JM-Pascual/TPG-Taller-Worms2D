@@ -68,7 +68,7 @@ public:
     /*
 
     */
-    void set_player_ready(const uint8_t id, const uint8_t id_game);
+    void set_player_ready(const uint8_t& id, const uint8_t& id_game);
     /*
 
     */
@@ -80,7 +80,7 @@ public:
     /*
 
     */
-    const bool game_started_playing(const uint8_t game_id);
+    const bool game_started_playing(const uint8_t& game_id);
     /*
 
     */

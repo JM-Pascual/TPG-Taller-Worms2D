@@ -20,7 +20,8 @@ public:
 
     void makeLobbyState(std::list<std::shared_ptr<States>>& states);
 
-    void makeGameState(std::list<std::shared_ptr<States>>& states, uint8_t id_of_active_player);
+    void makeGameState(std::list<std::shared_ptr<States>>& states,
+                       const uint8_t& id_of_active_player);
 
     void makeLevelState(std::list<std::shared_ptr<States>>& states);
 };

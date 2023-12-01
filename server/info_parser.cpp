@@ -27,7 +27,7 @@ void InfoParser::makeLevelState(std::list<std::shared_ptr<States>>& states) {
 }
 
 void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states,
-                               uint8_t id_of_active_player) {
+                               const uint8_t& id_of_active_player) {
     // WIND
     states.push_back(
             std::make_shared<BattlefieldState>((uint8_t)game.battlefield.engine.wind_force));

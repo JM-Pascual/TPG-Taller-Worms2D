@@ -40,7 +40,7 @@ protected:
     uint8_t ammo;
 
 public:
-    explicit Gadget(uint8_t ammo);
+    explicit Gadget(const uint8_t& ammo);
     virtual void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) = 0;
     void infiniteAmmo();
     void addAmmo(const uint8_t& ammo);

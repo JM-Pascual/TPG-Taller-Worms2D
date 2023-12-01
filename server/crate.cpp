@@ -55,7 +55,7 @@ Crate::Crate(Battlefield& battlefield, const uint8_t& id):
     body->CreateFixture(&fixtureDef);
 }
 
-void Crate::collision_reaction(b2Vec2 normal) {
+void Crate::collision_reaction(const b2Vec2& normal) {
     if (falling) {
         return;
     }

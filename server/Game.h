@@ -91,7 +91,7 @@ public:
 
     bool is_playing();
 
-    void set_player_ready(uint8_t id);
+    void set_player_ready(const uint8_t& id);
 
     ~Game();
 

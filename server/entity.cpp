@@ -12,7 +12,7 @@ void Entity::recibe_life_modification(const float& life_variation) {}
 
 bool Entity::is_dead() { return dead; }
 
-void Entity::apply_explosion(b2Vec2 final_impulse) {
+void Entity::apply_explosion(const b2Vec2& final_impulse) {
     body->ApplyLinearImpulseToCenter(final_impulse, true);
 }
 

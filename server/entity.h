@@ -19,7 +19,7 @@ public:
 
     virtual void applyWindResistance(const float& wind_force) = 0;
 
-    virtual void apply_explosion(b2Vec2 final_impulse);
+    virtual void apply_explosion(const b2Vec2& final_impulse);
 
     virtual void stop_falling();
 
@@ -33,7 +33,7 @@ public:
 
     virtual inline void open_crate(bool& open) {}
 
-    virtual void collision_reaction(b2Vec2 normal) = 0;
+    virtual void collision_reaction(const b2Vec2& normal) = 0;
 
     ~Entity();
 

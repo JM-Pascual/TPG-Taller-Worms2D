@@ -6,7 +6,7 @@
 #include "turn_handler.h"
 #include "worm.h"
 
-Gadget::Gadget(uint8_t ammo): ammo(ammo) {}
+Gadget::Gadget(const uint8_t& ammo): ammo(ammo) {}
 
 void Gadget::infiniteAmmo() { ammo = 255; }
 

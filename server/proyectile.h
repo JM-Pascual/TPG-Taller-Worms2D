@@ -50,7 +50,6 @@
 #define IMPULSE_REDUCTIVE_FACTOR Config::yamlNode["impulse_reductive_factor"].as<float>()
 
 
-
 class Battlefield;
 class Game;
 
@@ -62,16 +61,18 @@ protected:
     float time_till_detonation;
     std::chrono::time_point<std::chrono::steady_clock> projectile_timer;
 
-    void applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
+    void applyBlastImpulse(b2Body* body_, const b2Vec2& blastCenter, const b2Vec2& applyPoint,
+                           const float& blastPower);
 
 public:
-    Projectile(Battlefield& battlefield, b2Vec2 position, int blast_radius, int epicenter_damage,
-               WeaponsAndTools type, float explosion_delay);
+    Projectile(Battlefield& battlefield, const b2Vec2& position, const int& blast_radius,
+               const int& epicenter_damage, const WeaponsAndTools& type,
+               const float& explosion_delay);
 
-    void set_power(b2Vec2 power);
+    void set_power(const b2Vec2& power);
     std::shared_ptr<ProjectileStateG> get_proyectile_state(const uint8_t& proyectile_id);
 
-    inline void collision_reaction(b2Vec2 normal) override {}
+    inline void collision_reaction(const b2Vec2& normal) override {}
 
     inline void applyWindResistance(const float& wind_force) override {}
 
@@ -89,12 +90,12 @@ public:
 
 class Rocket: public Projectile {
 protected:
-    void apply_explosion(b2Vec2 final_impulse) override;
+    void apply_explosion(const b2Vec2& final_impulse) override;
 
 public:
-    Rocket(Battlefield& battlefield, b2Vec2 position, int blast_radius, int epicenter_damage,
-           WeaponsAndTools type);
-    void collision_reaction(b2Vec2 normal) override;
+    Rocket(Battlefield& battlefield, const b2Vec2& position, const int& blast_radius,
+           const int& epicenter_damage, const WeaponsAndTools& type);
+    void collision_reaction(const b2Vec2& normal) override;
     void applyWindResistance(const float& wind_force) override;
     void updateTimer() override;
     inline void second_collision_reaction() override{};
@@ -105,7 +106,7 @@ public:
 
 class BazookaRocket: public Rocket {
 public:
-    BazookaRocket(Battlefield& battlefield, b2Vec2 position);
+    BazookaRocket(Battlefield& battlefield, const b2Vec2& position);
     ~BazookaRocket() override = default;
 };
 
@@ -114,7 +115,7 @@ private:
     int fragments;
 
 public:
-    MortarRocket(Battlefield& battlefield, b2Vec2 position);
+    MortarRocket(Battlefield& battlefield, const b2Vec2& position);
     void second_collision_reaction() override;
     ~MortarRocket() override = default;
 };
@@ -122,23 +123,24 @@ public:
 class MortarFragment: public Rocket {
 private:
 public:
-    MortarFragment(Battlefield& battlefield, b2Vec2 position, b2Vec2 direction);
+    MortarFragment(Battlefield& battlefield, const b2Vec2& position, const b2Vec2& direction);
     inline void applyWindResistance(const float& wind_force) override{};
     ~MortarFragment() override = default;
 };
 
 class AirStrikeRocket: public Rocket {
 public:
-    AirStrikeRocket(Battlefield& battlefield, b2Vec2 position);
+    AirStrikeRocket(Battlefield& battlefield, const b2Vec2& position);
     inline void applyWindResistance(const float& wind_force) override{};
     ~AirStrikeRocket() override = default;
 };
 
 class Grenade: public Projectile {
 public:
-    Grenade(Battlefield& battlefield, b2Vec2 position, float explosion_delay, uint8_t blast_radius,
-            uint8_t epicenter_damage, WeaponsAndTools type);
-    void collision_reaction(b2Vec2 normal) override;
+    Grenade(Battlefield& battlefield, const b2Vec2& position, const float& explosion_delay,
+            const uint8_t& blast_radius, const uint8_t& epicenter_damage,
+            const WeaponsAndTools& type);
+    void collision_reaction(const b2Vec2& normal) override;
     void applyWindResistance(const float& wind_force) override;
     void updateTimer() override;
     inline void second_collision_reaction() override{};
@@ -148,7 +150,7 @@ public:
 
 class Green: public Grenade {
 public:
-    Green(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
+    Green(Battlefield& battlefield, const b2Vec2& position, const float& explosion_delay);
 };
 
 class Red: public Grenade {
@@ -156,23 +158,23 @@ private:
     int fragments;
 
 public:
-    Red(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
+    Red(Battlefield& battlefield, const b2Vec2& position, const float& explosion_delay);
     void second_collision_reaction() override;
 };
 
 class Banana: public Grenade {
 public:
-    Banana(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
+    Banana(Battlefield& battlefield, const b2Vec2& position, const float& explosion_delay);
 };
 
 class Dynamite: public Grenade {
 public:
-    Dynamite(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
+    Dynamite(Battlefield& battlefield, const b2Vec2& position, const float& explosion_delay);
 };
 
 class Holy: public Grenade {
 public:
-    Holy(Battlefield& battlefield, b2Vec2 position, float explosion_delay);
+    Holy(Battlefield& battlefield, const b2Vec2& position, const float& explosion_delay);
 };
 
 

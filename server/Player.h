@@ -8,7 +8,6 @@
 #include <box2d/box2d.h>
 
 #include "../common/const.h"
-#include "common/config.h"
 
 #include "entity.h"
 #include "gadget.h"
@@ -43,7 +42,7 @@ public:
 
     void set_ready();
 
-    void change_weapon(WeaponsAndTools new_weapon);
+    void change_weapon(const WeaponsAndTools& new_weapon);
     std::unique_ptr<AmmoLeft> getWeaponsAmmo();
 
     void infiniteAmmo();
