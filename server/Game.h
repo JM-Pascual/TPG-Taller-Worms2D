@@ -53,8 +53,6 @@ private:
 
     void notify_lobby_state();
 
-    void notify_level_layout();
-
     bool non_locking_is_playing();
 
     void spawnWorms();

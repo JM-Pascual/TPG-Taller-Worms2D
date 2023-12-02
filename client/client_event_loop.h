@@ -24,6 +24,7 @@
 #include "csender.h"
 #include "inputHandler.h"
 #include "text_printer.h"
+#include "TeamResourcesHolder.h"
 
 #define FRAME_DURATION Config::yamlNode["frame_duration"].as<int>()
 
@@ -64,7 +65,7 @@ private:
     CameraPriority camera_priority;
 
     void process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
-                             TexturesPool& txt_pool);
+                             TexturesPool& txt_pool, TeamResourcesHolder& resources_holder);
 
     void viewWorm(const std::shared_ptr<WormStateG>& worm);
 

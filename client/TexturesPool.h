@@ -19,6 +19,7 @@ private:
     void load_projectile_textures();
     void load_tool_use_textures();
     void load_effect_textures();
+    void load_weapon_miniature_textures();
     void load_tombstones_textures();
 
     template <typename EnumType>
@@ -33,6 +34,7 @@ private:
     std::unordered_map<Projectiles, std::shared_ptr<SDL2pp::Texture>> projectile_textures;
     std::unordered_map<ToolUsage, std::shared_ptr<SDL2pp::Texture>> tool_usage_textures;
     std::unordered_map<VisualEffects, std::shared_ptr<SDL2pp::Texture>> effect_textures;
+    std::unordered_map<WeaponsAndTools, std::shared_ptr<SDL2pp::Texture>> miniature_weapons;
     std::unordered_map<Tombstones, std::shared_ptr<SDL2pp::Texture>> tombstones_textures;
 
     std::shared_ptr<SDL2pp::Renderer>& renderer;
@@ -46,6 +48,7 @@ public:
     std::shared_ptr<SDL2pp::Texture>& get_projectile_texture(Projectiles aim_texture_to_fetch);
     std::shared_ptr<SDL2pp::Texture>& get_tool_usage_texture(ToolUsage tool_use_texture_to_fetch);
     std::shared_ptr<SDL2pp::Texture>& get_effect_texture(VisualEffects aim_texture_to_fetch);
+    std::shared_ptr<SDL2pp::Texture>& get_weapon_miniature(WeaponsAndTools weapon_to_fetch);
     std::shared_ptr<SDL2pp::Texture>& get_tombstone_texture(Tombstones tombstone_texture_to_fetch);
 };
 

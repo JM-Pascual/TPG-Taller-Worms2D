@@ -96,14 +96,17 @@ class PlayerStateG: public States {
 public:
     const uint8_t id;
     const bool is_playing;
+    const bool currently_on_turn;
     const uint8_t avg_life;
-    const std::unique_ptr<AmmoLeft> gadgets;
+    const std::shared_ptr<AmmoLeft> gadgets;
 
-    explicit PlayerStateG(const bool& is_playing, const uint8_t& id, const uint8_t& avg_life,
-                          std::unique_ptr<AmmoLeft> weapon_ammo):
+    explicit PlayerStateG(const bool& is_playing, const bool& currently_on_turn,
+                          const uint8_t& id, const uint8_t& avg_life,
+                          std::shared_ptr<AmmoLeft> weapon_ammo):
             States(StatesTag::PLAYER_G),
             id(id),
             is_playing(is_playing),
+            currently_on_turn(currently_on_turn),
             avg_life(avg_life),
             gadgets(std::move(weapon_ammo)) {}
 };
