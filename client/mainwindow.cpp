@@ -219,9 +219,7 @@ void MainWindow::loadGameSearch() {
     ui->createMenu->lower();
 
     QStringList list = (QStringList() << "Sea"
-                                      << "Inferno"
-                                      << "Heaven"
-                                      << "Mansion");
+                                      << "Inferno");
     ui->map_cbox->addItems(list);
     ui->map_cbox->setCurrentIndex(-1);
 

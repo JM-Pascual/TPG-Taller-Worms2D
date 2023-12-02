@@ -7,11 +7,11 @@
 #include "proyectile.h"
 #include "worm_handler.h"
 
-Battlefield::Battlefield(): projectile_count(0), level_holder(*this), crate_count(0) {
-    std::string level_selected = "beach";
+Battlefield::Battlefield(std::string level_selected):
+        projectile_count(0), crate_count(0), level_holder(*this) {
     // Concat "_bars" to the level name
     level_selected += "_bars";
-    for (const auto& element: Config::levelLayoutNode[0][level_selected]) {
+    for (const auto& element: Config::levelLayoutNode[level_selected]) {
         // Extract values from the YAML node
         auto x = element[0].as<float>();
         auto y = element[1].as<float>();
@@ -52,7 +52,6 @@ void Battlefield::step() {
     post_action_explosion();
     update_drown_projectiles();
     update_drown_crates();
-
 }
 
 void Battlefield::newWindForce(const bool& no_wind_cheat_activated) {

@@ -5,6 +5,7 @@
 #include <map>
 #include <memory>
 #include <mutex>
+#include <string>
 #include <vector>
 
 #include <stdint.h>
@@ -20,18 +21,18 @@ class Crate;
 
 class Battlefield {
 private:
+    Engine engine;
     /*
         std::mutex m; No hace falta este lock, ya que el unico hilo que utiliza estos metodos es el
-       gameloop
+        gameloop
     */
     std::map<uint8_t, std::shared_ptr<Projectile>> projectiles;
     uint8_t projectile_count;
 
-    Engine engine;
-    LevelHolder level_holder;
-
     std::vector<std::shared_ptr<Crate>> crates;
     uint8_t crate_count;
+
+    LevelHolder level_holder;
 
     void updateProjectilesTimer();
     void post_action_explosion();
@@ -39,7 +40,7 @@ private:
     void update_drown_crates();
 
 public:
-    Battlefield();
+    explicit Battlefield(std::string level_selected);
 
     std::map<uint8_t, std::shared_ptr<Projectile>>& getProjectiles();
 

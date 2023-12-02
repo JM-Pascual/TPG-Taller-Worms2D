@@ -12,8 +12,8 @@ void Camera::checkBounds() {
         position[_X_] = MAP_WIDTH - WIDTH;
     }
 
-    if (position[_Y_] > MAP_HEIGHT - HEIGHT) {
-        position[_Y_] = MAP_HEIGHT - HEIGHT;
+    if (position[_Y_] > 0) {
+        position[_Y_] = 0;
     }
 }
 
@@ -25,11 +25,11 @@ void Camera::checkMouseBounds() {
         position[_X_] = MAP_WIDTH - WIDTH;
     }
 
-    if (position[_Y_] < 0) {
-        position[_Y_] = 0;
+    if (position[_Y_] < -HEIGHT) {
+        position[_Y_] = -HEIGHT;
 
-    } else if (position[_Y_] > MAP_HEIGHT - HEIGHT) {
-        position[_Y_] = MAP_HEIGHT - HEIGHT;
+    } else if (position[_Y_] > 0) {
+        position[_Y_] = 0;
     }
 }
 

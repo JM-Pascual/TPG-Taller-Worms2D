@@ -100,8 +100,8 @@
 
   crate_length: 0.8
 
-  min_x_crate_spawn: 6.0
-  max_x_crate_spawn: 52.0
+  min_x_crate_spawn: 10.0
+  max_x_crate_spawn: 45.0
   y_crate_spawn: 23.6
 
   tide_level: 4

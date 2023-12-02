@@ -35,7 +35,7 @@ public:
 
     virtual void collision_reaction(const b2Vec2& normal) = 0;
 
-    ~Entity();
+    virtual ~Entity();
 
     friend class Engine;
 };
