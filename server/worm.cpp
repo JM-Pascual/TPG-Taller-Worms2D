@@ -63,12 +63,14 @@ void Worm::move() {
         this->body->ApplyLinearImpulseToCenter(
                 b2Vec2(20 * std::pow(-1, 1 - facing_right) / TICK_RATE, 0), true);
     }
-
-    // start_falling();
 }
 
 void Worm::stop() {
     if (not body) {
+        return;
+    }
+
+    if (falling) {
         return;
     }
 
@@ -82,7 +84,7 @@ void Worm::jump(const JumpDir& direction) {
         return;
     }
 
-    if ((is_jumping || is_backflipping) && (not allow_multiple_jump)) {
+    if ((is_jumping || is_backflipping || falling || is_walking) && (not allow_multiple_jump)) {
         return;
     }
 
