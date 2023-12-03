@@ -30,7 +30,7 @@ void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states,
                                const uint8_t& id_of_active_player) {
     // WIND
     states.push_back(
-            std::make_shared<BattlefieldState>((uint8_t)game.battlefield.engine.wind_force));
+            std::make_shared<BattlefieldState>(game.battlefield.engine.wind_force));
 
     // CRATES
 
@@ -59,7 +59,8 @@ void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states,
 
     for (const auto& [id, player]: game.players) {
         states.push_back(std::make_shared<PlayerStateG>(
-                player->is_playing, id, player->calcAvgLife(), player->getWeaponsAmmo()));
+                player->is_playing, id == id_of_active_player,
+                id, player->calcAvgLife(), player->getWeaponsAmmo()));
 
         std::transform(player->worms.begin(), player->worms.end(), std::back_inserter(states),
                        [&id_of_active_worm](const auto& worm) {

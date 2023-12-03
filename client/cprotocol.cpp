@@ -93,7 +93,7 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
             return std::make_shared<PlayerStateL>(recvBool(), recvUint8());
 
         case StatesTag::BATTLEFIELD_G:
-            return std::make_shared<BattlefieldState>(recvUint8());
+            return std::make_shared<BattlefieldState>(recvFloat());
 
         case StatesTag::PLAYER_G:
             return recvPlayerGame();
@@ -159,18 +159,20 @@ std::shared_ptr<GameInfoL> ClientSide::Protocol::recvGameInfo() {
 
 std::shared_ptr<PlayerStateG> ClientSide::Protocol::recvPlayerGame() {
     uint8_t id = recvUint8();
+    bool currently_on_turn = recvBool();
     bool is_playing = recvBool();
-    auto ammo_left = std::make_unique<AmmoLeft>();
+    auto ammo_left = std::make_shared<AmmoLeft>();
 
     for (size_t i = 0; i < GADGETS_QUANTITY; i++) {
-        WeaponsAndTools type = (WeaponsAndTools)recvUint8();
+        auto type = (WeaponsAndTools)recvUint8();
         uint8_t ammo = recvUint8();
         ammo_left->weapon_ammo.insert({type, ammo});
     }
 
     uint8_t avg_life = recvUint8();
 
-    return std::make_shared<PlayerStateG>(is_playing, id, avg_life, std::move(ammo_left));
+    return std::make_shared<PlayerStateG>(is_playing, currently_on_turn,
+                                          id, avg_life, std::move(ammo_left));
 }
 
 std::shared_ptr<WormStateG> ClientSide::Protocol::recvWormGame() {

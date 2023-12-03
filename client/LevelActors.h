@@ -90,7 +90,31 @@ public:
     inline void update() override { waves_animation.update(); }
 
     inline void render(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
-        waves_animation.render((*game_renderer), camera.calcRect(0, 600, 1280, 40), 1240, 0);
+        waves_animation.render((*game_renderer), camera.calcRect(position.x, position.y, 1280, 40), 1240, 0);
+
+        waves_animation.render((*game_renderer), camera.calcRect(position.x +1280, position.y, 600, 40), 1240, 0);
+    }
+};
+
+// ----------------------- DEEP WATER ----------------------
+
+class DeepWater: public LevelActor {
+private:
+    std::shared_ptr<SDL2pp::Texture>& deep_blue_texture;
+
+public:
+    explicit DeepWater(float x, float y, TexturesPool& pool, Camera& camera):
+            LevelActor(x, y, camera),
+            deep_blue_texture(pool.get_level_texture(TerrainActors::DEEP_WATER)) {}
+
+    inline void update() override {}
+
+    inline void render(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 1280, 360);
+        game_renderer->Copy((*deep_blue_texture), SDL2pp::NullOpt, render_rect);
+
+        render_rect = camera.calcRect(position.x + 1280, position.y, 600, 360);
+        game_renderer->Copy((*deep_blue_texture), SDL2pp::NullOpt, render_rect);
     }
 };
 
@@ -130,6 +154,43 @@ public:
         } else {
             SDL2pp::Rect render_rect = camera.calcRect(position.x, position.y, 140, 140);
             game_renderer->Copy((*on_air_texture), SDL2pp::NullOpt, render_rect);
+        }
+    }
+};
+
+// ----------------------- WIND ----------------------
+
+class Wind: public LevelActor {
+private:
+    std::shared_ptr<SDL2pp::Texture>& left_wind;
+    std::shared_ptr<SDL2pp::Texture>& right_wind;
+    float current_strenght;
+public:
+    explicit Wind(float x, float y, TexturesPool& pool, Camera& camera):
+            LevelActor(x, y, camera),
+            left_wind(pool.get_actor_texture(Actors::WIND_LEFT)),
+            right_wind(pool.get_actor_texture(Actors::WIND_RIGHT)),
+            current_strenght(0) {}
+
+    inline void update() override {
+        //The Wind animation is static due to not finding the complete texture
+    }
+
+    inline void update_strenght(float new_wind_strenght) {
+        current_strenght = new_wind_strenght;
+    }
+
+    inline void render(const std::shared_ptr<SDL2pp::Renderer>& game_renderer) override {
+        if (current_strenght < 0.0f){
+            game_renderer->Copy((*left_wind),
+                                SDL_Rect{0, 0, (int)(96 * abs((current_strenght/4))), 13},
+                                SDL_Rect{int(position.x), int(position.y),
+                                         (int)(96 * abs((current_strenght/4))), 20});
+        } else {
+            game_renderer->Copy((*right_wind),
+                                SDL_Rect{0, 0, (int)(96 * (current_strenght/4)), 13},
+                                SDL_Rect{int(position.x), int(position.y),
+                                         (int)(96 * (current_strenght/4)), 20});
         }
     }
 };

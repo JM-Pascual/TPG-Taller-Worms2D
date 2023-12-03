@@ -119,6 +119,7 @@ void ServerSide::Protocol::sendPlayerState(const std::shared_ptr<States>& ps) {
 
     send(&p->tag, sizeof(uint8_t));
     send(&p->id, sizeof(uint8_t));
+    send(&p->currently_on_turn, sizeof(bool));
     send(&p->is_playing, sizeof(bool));
 
     for (const auto& [type, ammo]: p->gadgets->weapon_ammo) {
@@ -201,7 +202,7 @@ void ServerSide::Protocol::sendPlayerLobby(const std::shared_ptr<States>& count)
 void ServerSide::Protocol::sendBattlefield(const std::shared_ptr<States>& state) {
     std::shared_ptr<BattlefieldState> p = std::dynamic_pointer_cast<BattlefieldState>(state);
     send(&p->tag, sizeof(uint8_t));
-    send(&p->wind_force, sizeof(uint8_t));
+    sendFloat(p->wind_force);
 }
 
 void ServerSide::Protocol::sendLevelBuild(const std::shared_ptr<States>& lb) {

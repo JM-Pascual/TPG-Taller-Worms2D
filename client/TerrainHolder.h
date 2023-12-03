@@ -19,6 +19,7 @@ public:
     void render_terrain(const std::shared_ptr<SDL2pp::Renderer>& game_renderer);
     void update_terrain();
     void change_jet_position(const float& x, const float& y);
+    void update_battlefield(std::shared_ptr<BattlefieldState>& state);
     ~TerrainHolder() = default;
 };
 

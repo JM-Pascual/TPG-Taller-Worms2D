@@ -32,7 +32,7 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
 }
 
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
-                                    TexturesPool& txt_pool) {
+                                    TexturesPool& txt_pool, TeamResourcesHolder& resources_holder) {
     std::shared_ptr<States> raw_state = nullptr;
     int expected_states = MAX_PLAYERS + WORMS_QUANTITY + 3;  //+ proj_count + crate_count + level
     for (int j = 0; j < expected_states; j++) {
@@ -42,6 +42,14 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
 
         switch (raw_state->tag) {
             case StatesTag::PLAYER_G: {
+                auto state = std::dynamic_pointer_cast<PlayerStateG>(raw_state);
+                resources_holder.update_team(state);
+                continue;
+            }
+
+            case StatesTag::BATTLEFIELD_G: {
+                auto state = std::dynamic_pointer_cast<BattlefieldState>(raw_state);
+                terrain_elements.update_battlefield(state);
                 continue;
             }
 
@@ -259,6 +267,8 @@ void EventLoop::run() {
     terrain_elements.load_base_terrain(txt_pool, camera);
     audio_player.play_background_music();
 
+    TeamResourcesHolder team_resources_holder(txt_pool);
+
     input.start();
 
     int loop_start_time = SDL_GetTicks();
@@ -270,7 +280,7 @@ void EventLoop::run() {
         window.clear_textures();
 
         window.render_background(txt_pool);
-        process_game_states(turn_start, txt_pool);
+        process_game_states(turn_start, txt_pool, team_resources_holder);
 
         turn_time = std::chrono::steady_clock::now() - turn_start;
         // tiempo restante turno = (uint8_t)(60 - turn_time)
@@ -283,6 +293,8 @@ void EventLoop::run() {
 
         terrain_elements.update_terrain();
         terrain_elements.render_terrain(window.get_renderer());
+
+        team_resources_holder.render_team_resources(window.get_renderer(), life_points_printer);
 
         turn_time_printer.print_text(*(window.get_renderer()),
                                      std::to_string((int)(60 - turn_time.count())), 25, 580, -20, 0,

@@ -145,17 +145,47 @@ void TexturesPool::load_level_textures() {
                           TerrainActors::GRADIENT, false);
     load_texture_into_map(DATA_PATH "/stage/background.png", level_actors_textures,
                           TerrainActors::BACKGROUND);
-    load_texture_into_map(DATA_PATH "/stage/bar.png", level_actors_textures, TerrainActors::BAR);
+    load_texture_into_map(DATA_PATH "/stage/bar.png", level_actors_textures,
+                          TerrainActors::BAR);
     load_texture_into_map(DATA_PATH "/stage/long-bar.png", level_actors_textures,
                           TerrainActors::LONG_BAR);
     load_texture_into_map(DATA_PATH "/stage/airjet.png", level_actors_textures,
                           TerrainActors::AIR_JET);
     load_texture_into_map(DATA_PATH "/blue-water-sprites/blue_water.png", level_actors_textures,
                           TerrainActors::WATER);
+    load_texture_into_map(DATA_PATH "/blue-water-sprites/deep-water.png", level_actors_textures,
+                          TerrainActors::DEEP_WATER);
     load_texture_into_map(DATA_PATH "/stage/mystery-crate-floor.png", level_actors_textures,
                           TerrainActors::CRATE);
     load_texture_into_map(DATA_PATH "/stage/mystery-crate-falling3.png", level_actors_textures,
                           TerrainActors::CRATE_FALLING);
+    load_texture_into_map(DATA_PATH "/stage/windl.png", actors_textures,
+                          Actors::WIND_LEFT, false);
+    load_texture_into_map(DATA_PATH "/stage/windr.png", actors_textures,
+                          Actors::WIND_RIGHT, false);
+}
+
+void TexturesPool::load_weapon_miniature_textures() {
+    load_texture_into_map(DATA_PATH "/weapons-icons/bazooka.png", miniature_weapons,
+                          WeaponsAndTools::BAZOOKA);
+    load_texture_into_map(DATA_PATH "/weapons-icons/mortar.png", miniature_weapons,
+                          WeaponsAndTools::MORTAR);
+    load_texture_into_map(DATA_PATH "/weapons-icons/green.png", miniature_weapons,
+                          WeaponsAndTools::GREEN_GRENADE);
+    load_texture_into_map(DATA_PATH "/weapons-icons/red.png", miniature_weapons,
+                          WeaponsAndTools::RED_GRENADE);
+    load_texture_into_map(DATA_PATH "/weapons-icons/dynamite.png", miniature_weapons,
+                          WeaponsAndTools::DYNAMITE);
+    load_texture_into_map(DATA_PATH "/weapons-icons/holy.png", miniature_weapons,
+                          WeaponsAndTools::HOLY_GRENADE);
+    load_texture_into_map(DATA_PATH "/weapons-icons/baseball.png", miniature_weapons,
+                          WeaponsAndTools::BASEBALL_BAT);
+    load_texture_into_map(DATA_PATH "/weapons-icons/airstrike.png", miniature_weapons,
+                          WeaponsAndTools::AIR_STRIKE);
+    load_texture_into_map(DATA_PATH "/weapons-icons/teleport.png", miniature_weapons,
+                          WeaponsAndTools::TELEPORT);
+    load_texture_into_map(DATA_PATH "/weapons-icons/banana.png", miniature_weapons,
+                          WeaponsAndTools::BANANA);
 }
 
 void TexturesPool::load_tombstones_textures() {
@@ -182,6 +212,7 @@ TexturesPool::TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer):
     load_projectile_textures();
     load_tool_use_textures();
     load_effect_textures();
+    load_weapon_miniature_textures();
     load_tombstones_textures();
 }
 
@@ -222,4 +253,8 @@ std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_effect_texture(
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_tombstone_texture(
         const Tombstones& tombstone_texture_to_fetch) {
     return (tombstones_textures[tombstone_texture_to_fetch]);
+}
+std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_weapon_miniature(
+        WeaponsAndTools weapon_to_fetch) {
+    return (miniature_weapons[weapon_to_fetch]);
 }

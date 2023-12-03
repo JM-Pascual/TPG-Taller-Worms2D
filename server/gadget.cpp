@@ -39,8 +39,6 @@ void Bazooka::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_hand
     worm.use_chargeable_weapon(projectile);
 
     turn_handler.use_stop_action();
-
-    --ammo;
 }
 
 //~~~~~~~~~~~~~~~~~~~ Mortar ~~~~~~~~~~~~~~~~~~~~
@@ -83,8 +81,6 @@ void GreenGrenade::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn
     worm.use_chargeable_weapon(green_grenade);
 
     turn_handler.use_stop_action();
-
-    --ammo;
 }
 
 //~~~~~~~~~~~~~~~~~~~ Red_grenade ~~~~~~~~~~~~~~~~~~~~
@@ -217,8 +213,6 @@ void Teleport::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_han
 
 
     turn_handler.use_stop_action();
-
-    --ammo;
 }
 
 //~~~~~~~~~~~~~~~~~~~ AirStrike ~~~~~~~~~~~~~~~~~~~~
@@ -273,8 +267,6 @@ void BaseballBat::shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_
 
     worm.use_tool();
     turn_handler.use_stop_action();
-
-    --ammo;
 }
 
 void BaseballBat::bat(Battlefield& battlefield, Worm& worm) {
