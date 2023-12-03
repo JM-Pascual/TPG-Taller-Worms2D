@@ -45,9 +45,15 @@ void TeamResourcesHolder::render_team_resources(
         game_renderer->Copy(*weapon_miniature.second, SDL2pp::NullOpt,
                             SDL2pp::Rect(10, 10 + 25*counter_of_iterations, 25, 25));
         //Then render the ammo left
-        text_printer.print_text((*game_renderer), std::to_string(
-                                         team_gadgets[current_player_in_turn]
-                                                 ->weapon_ammo[weapon_miniature.first]),
+
+        std::string ammo_left = std::to_string(team_gadgets[current_player_in_turn]->weapon_ammo[
+                weapon_miniature.first]);
+
+        if (ammo_left == "255"){
+            ammo_left = "Unlimited";
+        }
+
+        text_printer.print_text((*game_renderer), ammo_left,
                                     35, 10 + 25*counter_of_iterations, 0, 5, -5, false, 0.5, 0.5);
         counter_of_iterations++;
     }
