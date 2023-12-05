@@ -70,7 +70,7 @@ void Worm::stop() {
         return;
     }
 
-    if (falling) {
+    if (is_jumping || is_backflipping) {
         return;
     }
 
