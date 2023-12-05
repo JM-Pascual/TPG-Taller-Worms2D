@@ -305,6 +305,12 @@ void EventLoop::run() {
                                      std::to_string((int)(60 - turn_time.count())), 25, 580, -20, 0,
                                      45, true, 2.5, 2.5);
 
+        if (my_turn){
+            turn_time_printer.print_text(*(window.get_renderer()),
+                                         "Your Turn", 25, 580, 0, -30,
+                                         105, false, 1, 1);
+        }
+
         window.present_textures();
 
         rest(loop_start_time);
