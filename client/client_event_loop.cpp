@@ -1,6 +1,7 @@
 #include "client_event_loop.h"
 
 #include <chrono>
+#include <iostream>
 #include <thread>
 
 #include "../common/const.h"
@@ -35,7 +36,8 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
                                     TexturesPool& txt_pool, TeamResourcesHolder& resources_holder) {
     std::shared_ptr<States> raw_state = nullptr;
-    int expected_states = MAX_PLAYERS + WORMS_QUANTITY + 6;  //+ proj_count + crate_count + level
+    int expected_states =
+            MAX_PLAYERS + WORMS_QUANTITY + 10;  //+ proj_count + crate_count + level + wind + turn
     for (int j = 0; j < expected_states; j++) {
         if (not game_state_queue.try_pop(raw_state)) {
             continue;
