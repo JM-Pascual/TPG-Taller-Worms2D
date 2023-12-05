@@ -317,7 +317,9 @@ void EventLoop::run() {
         return;
     }
 
-    while (window.render_end_of_game_texture(win)) {
+    TextPrinter end_of_game_printer(45, txt_pool.get_actor_texture(Actors::STATE_SIGN));
+
+    while (window.render_end_of_game_texture(win, end_of_game_printer)) {
         window.present_textures();
         rest(loop_start_time);
     }

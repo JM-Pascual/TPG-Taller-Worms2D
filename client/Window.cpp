@@ -50,13 +50,21 @@ void Window::render_background(TexturesPool& pool, Camera& camera) {
                          camera.calcRect(350, 420, 1080, 200));
 }
 
-bool Window::render_end_of_game_texture(const bool& won_game) {
+bool Window::render_end_of_game_texture(const bool& won_game, TextPrinter& text_printer) {
     if (ticks_since_end_of_game <= 200) {
         end_of_game_animations.at(won_game).update(false);
         end_of_game_animations.at(won_game).render(
                 (*game_renderer), SDL2pp::Rect(0, 0, game_renderer->GetOutputWidth(),
                                                game_renderer->GetOutputHeight()));
         ticks_since_end_of_game++;
+
+        if (won_game){
+            text_printer.print_text((*game_renderer), "You WIN!", 0, 0, 0, 0, 0, false, 0.5, 0.5);
+        } else{
+            text_printer.print_text((*game_renderer), "You LOOSE! Keep training!",
+                                    0, 0, 0, 0, 0, false, 0.5, 0.5);
+        }
+
         return true;
     }
 

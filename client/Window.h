@@ -9,9 +9,11 @@
 #include "../common/const.h"
 
 #include "Animation.h"
+#include "text_printer.h"
 
 class TexturesPool;
 class Camera;
+class TextPrinter;
 
 class Window {
 private:
@@ -43,7 +45,7 @@ public:
 
     void render_background(TexturesPool& pool, Camera& camera);
 
-    bool render_end_of_game_texture(const bool& won_game);
+    bool render_end_of_game_texture(const bool& won_game, TextPrinter& text_printer);
 
     ~Window() = default;
 
