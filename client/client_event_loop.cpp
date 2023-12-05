@@ -81,6 +81,7 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                                              std::make_shared<TrapCrate>(state, txt_pool, camera));
                             continue;
                     }
+                    crates.delete_inactive_actors();
                 } else {
                     if (state->was_opened) {
                         crates.remove_actor(state->id, raw_state);
