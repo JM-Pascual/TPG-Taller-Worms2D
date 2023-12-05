@@ -17,6 +17,7 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
         runned(false),
         mouse_priority(true),
         kb_priority(false),
+        loaded_base_textures(false),
         win(-1),
         protocol(hostname, servname),
         recv(this->protocol, game_state_queue, lobby_state_queue, runned),
@@ -182,7 +183,8 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
 
             case StatesTag::LEVEL_BUILD: {
                 auto state = std::dynamic_pointer_cast<LevelStateG>(raw_state);
-
+                txt_pool.load_level_textures(state->map_name);
+                loaded_base_textures = true;
                 // Charge all the bars as terrain
                 for (auto& bar: state->bars) {
                     if (bar.type == TerrainActors::BAR) {
@@ -279,7 +281,10 @@ void EventLoop::run() {
     while (!quit) {
         window.clear_textures();
 
-        window.render_background(txt_pool);
+        if (loaded_base_textures){
+            window.render_background(txt_pool, camera);
+        }
+
         process_game_states(turn_start, txt_pool, team_resources_holder);
 
         turn_time = std::chrono::steady_clock::now() - turn_start;

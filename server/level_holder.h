@@ -20,7 +20,7 @@ public:
 
     void add_bar(const float& x, const float& y, const float& angle, const bool& is_long);
 
-    std::shared_ptr<LevelStateG> get_level_building_state();
+    std::shared_ptr<LevelStateG> get_level_building_state(const std::string& map_name);
 };
 
 

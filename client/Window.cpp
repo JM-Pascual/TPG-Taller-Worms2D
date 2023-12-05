@@ -35,8 +35,7 @@ void Window::clear_textures() { game_renderer->Clear(); }
 
 void Window::present_textures() { game_renderer->Present(); }
 
-void Window::render_background(TexturesPool& pool) {
-    int vcenter = (game_renderer->GetOutputHeight() / 2);
+void Window::render_background(TexturesPool& pool, Camera& camera) {
 
     if (background_textures.empty()) {
         load_base_textures(pool);
@@ -46,8 +45,9 @@ void Window::render_background(TexturesPool& pool) {
             background_textures.at(TerrainActors::GRADIENT),
             SDL2pp::Rect(0, 0, game_renderer->GetOutputWidth(), game_renderer->GetOutputHeight()));
 
+
     render_stage_texture(background_textures.at(TerrainActors::BACKGROUND),
-                         SDL2pp::Rect(0, vcenter - 160, game_renderer->GetOutputWidth(), 200));
+                         camera.calcRect(350, 420, 1080, 200));
 }
 
 bool Window::render_end_of_game_texture(const bool& won_game) {

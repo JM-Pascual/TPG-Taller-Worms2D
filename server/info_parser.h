@@ -23,7 +23,7 @@ public:
     void makeGameState(std::list<std::shared_ptr<States>>& states,
                        const uint8_t& id_of_active_player);
 
-    void makeLevelState(std::list<std::shared_ptr<States>>& states);
+    void makeLevelState(std::list<std::shared_ptr<States>>& states, const std::string& map_name);
 };
 
 

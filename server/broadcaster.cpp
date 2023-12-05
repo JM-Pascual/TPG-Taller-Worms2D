@@ -34,9 +34,9 @@ void BroadCaster::broadcastLobby() {
     broadcast(states);
 }
 
-void BroadCaster::broadcastLevelLayout() {
+void BroadCaster::broadcastLevelLayout(const std::string& map_name) {
     std::list<std::shared_ptr<States>> states;
-    infoParser.makeLevelState(states);
+    infoParser.makeLevelState(states, map_name);
     broadcast(states);
 }
 

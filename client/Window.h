@@ -41,7 +41,7 @@ public:
     /// Presents the actors_textures in screen calling the SDL2pp::Renderer::Present method
     void present_textures();
 
-    void render_background(TexturesPool& pool);
+    void render_background(TexturesPool& pool, Camera& camera);
 
     bool render_end_of_game_texture(const bool& won_game);
 

@@ -83,11 +83,14 @@ struct BarDto {
 
 class LevelStateG: public States {
 public:
+    std::string map_name;
     uint8_t amount_of_bars;
     std::vector<BarDto> bars;
 
-    explicit LevelStateG(const uint8_t& amount_of_bars, std::vector<BarDto> bars):
-            States(StatesTag::LEVEL_BUILD), amount_of_bars(amount_of_bars), bars(std::move(bars)) {}
+    explicit LevelStateG(const std::string map_name,
+                         const uint8_t& amount_of_bars,
+                         std::vector<BarDto> bars) : States(StatesTag::LEVEL_BUILD),
+            map_name(map_name), amount_of_bars(amount_of_bars), bars(std::move(bars)) {}
 };
 
 // --------------- TEAM STATE ----------------------

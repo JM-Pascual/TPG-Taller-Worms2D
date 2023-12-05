@@ -33,7 +33,7 @@ public:
 
     void broadcastLobby();
 
-    void broadcastLevelLayout();
+    void broadcastLevelLayout(const std::string& map_name);
 
     void broadcastGame(const uint8_t& id_of_active_player);
 

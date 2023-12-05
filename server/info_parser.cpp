@@ -22,8 +22,8 @@ void InfoParser::makeLobbyState(std::list<std::shared_ptr<States>>& states) {
                    });
 }
 
-void InfoParser::makeLevelState(std::list<std::shared_ptr<States>>& states) {
-    states.push_back((game.battlefield.level_holder.get_level_building_state()));
+void InfoParser::makeLevelState(std::list<std::shared_ptr<States>>& states, const std::string& map_name) {
+    states.push_back((game.battlefield.level_holder.get_level_building_state(map_name)));
 }
 
 void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states,

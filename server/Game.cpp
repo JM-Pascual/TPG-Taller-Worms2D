@@ -80,7 +80,7 @@ void Game::set_player_ready(const uint8_t& id) {
     // Inicio el gl si estan todos listos y no esta iniciado ya
     if (not gameloop.is_alive() && this->non_locking_is_playing()) {
         spawnWorms();
-        broadcaster.broadcastLevelLayout();
+        broadcaster.broadcastLevelLayout(map_name);
         gameloop.start();
         need_to_join_loop = true;
     }

@@ -17,7 +17,7 @@ private:
     void load_aiming_textures();
     void load_draw_textures();
     void load_general_worm_textures();
-    void load_level_textures();
+    void load_general_textures();
     void load_combat_textures();
     void load_projectile_textures();
     void load_tool_use_textures();
@@ -46,6 +46,7 @@ private:
 public:
     explicit TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer);
 
+    void load_level_textures(const std::string& level_name);
     std::shared_ptr<SDL2pp::Texture>& get_actor_texture(const Actors& actor_to_fetch);
     std::shared_ptr<SDL2pp::Texture>& get_level_texture(const TerrainActors& level_actor_to_fetch);
     std::shared_ptr<SDL2pp::Texture>& get_draw_texture(const WeaponsDraw& draw_texture_to_fetch);

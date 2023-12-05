@@ -135,16 +135,12 @@ void TexturesPool::load_worm_textures() {
     this->load_aiming_textures();
 }
 
-void TexturesPool::load_level_textures() {
+void TexturesPool::load_general_textures() {
     /// Loads all the level actors_textures and enables alpha blending
     load_texture_into_map(DATA_PATH "/miscellaneous/win_sprite.png", level_actors_textures,
                           TerrainActors::WIN_SIGN);
     load_texture_into_map(DATA_PATH "/miscellaneous/lose_sprite.png", level_actors_textures,
                           TerrainActors::LOOSE_SIGN);
-    load_texture_into_map(DATA_PATH "/stage/gradient.bmp", level_actors_textures,
-                          TerrainActors::GRADIENT, false);
-    load_texture_into_map(DATA_PATH "/stage/background.png", level_actors_textures,
-                          TerrainActors::BACKGROUND);
     load_texture_into_map(DATA_PATH "/stage/bar.png", level_actors_textures,
                           TerrainActors::BAR);
     load_texture_into_map(DATA_PATH "/stage/long-bar.png", level_actors_textures,
@@ -206,14 +202,22 @@ void TexturesPool::load_tombstones_textures() {
 
 TexturesPool::TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer):
         renderer(game_renderer) {
-    load_level_textures();
     load_worm_textures();
+    load_general_textures();
     load_combat_textures();
     load_projectile_textures();
     load_tool_use_textures();
     load_effect_textures();
     load_weapon_miniature_textures();
     load_tombstones_textures();
+}
+
+void TexturesPool::load_level_textures(const std::string& level_name){
+    /// Loads all the level actors_textures and enables alpha blending
+    load_texture_into_map(DATA_PATH "/stage/" + level_name + "-gradient.png", level_actors_textures,
+                          TerrainActors::GRADIENT, false);
+    load_texture_into_map(DATA_PATH "/stage/" + level_name + "-background.png", level_actors_textures,
+                          TerrainActors::BACKGROUND);
 }
 
 std::shared_ptr<SDL2pp::Texture>& TexturesPool::get_actor_texture(const Actors& actor_to_fetch) {

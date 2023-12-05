@@ -208,6 +208,7 @@ void ServerSide::Protocol::sendBattlefield(const std::shared_ptr<States>& state)
 void ServerSide::Protocol::sendLevelBuild(const std::shared_ptr<States>& lb) {
     std::shared_ptr<LevelStateG> p = std::dynamic_pointer_cast<LevelStateG>(lb);
     send(&p->tag, sizeof(uint8_t));
+    sendString64(p->map_name);
     send(&p->amount_of_bars, sizeof(uint8_t));
 
     for (const auto& bar: p->bars) {

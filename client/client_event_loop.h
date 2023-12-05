@@ -41,6 +41,7 @@ private:
     std::atomic<bool> runned;
     std::atomic<bool> mouse_priority;
     std::atomic<bool> kb_priority;
+    bool loaded_base_textures;
     int8_t win;
     ClientSide::Protocol protocol;
     ClientSide::Receiver recv;
