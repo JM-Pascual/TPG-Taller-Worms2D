@@ -83,6 +83,7 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                                              std::make_shared<TrapCrate>(state, txt_pool, camera));
                             continue;
                     }
+                    crates.delete_inactive_actors();
                 } else {
                     if (state->was_opened) {
                         crates.remove_actor(state->id, raw_state);
@@ -120,11 +121,13 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                         case (WeaponsAndTools::BAZOOKA): {
                             proyectiles.add_actor(state->id, std::make_shared<BazookaProjectile>(
                                                                      state, txt_pool, camera));
+                            proyectiles.delete_inactive_actors();
                             continue;
                         }
                         case WeaponsAndTools::MORTAR: {
                             proyectiles.add_actor(state->id, std::make_shared<MortarProjectile>(
                                                                      state, txt_pool, camera));
+                            proyectiles.delete_inactive_actors();
                             continue;
                         }
 
@@ -132,6 +135,7 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                             proyectiles.add_actor(state->id,
                                                   std::make_shared<GreenGrenadeProjectile>(
                                                           state, txt_pool, camera));
+                            proyectiles.delete_inactive_actors();
                             continue;
                         }
                         case WeaponsAndTools::RED_GRENADE:
@@ -141,15 +145,18 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                         case WeaponsAndTools::BANANA:
                             proyectiles.add_actor(state->id, std::make_shared<BananaProjectile>(
                                                                      state, txt_pool, camera));
+                            proyectiles.delete_inactive_actors();
                             continue;
                         case WeaponsAndTools::HOLY_GRENADE:
                             proyectiles.add_actor(state->id,
                                                   std::make_shared<HolyGrenadeProjectile>(
                                                           state, txt_pool, camera));
+                            proyectiles.delete_inactive_actors();
                             continue;
                         case WeaponsAndTools::DYNAMITE:
                             proyectiles.add_actor(state->id, std::make_shared<DynamiteProjectile>(
                                                                      state, txt_pool, camera));
+                            proyectiles.delete_inactive_actors();
                             continue;
                         case WeaponsAndTools::MORTAR_FRAGMENT:
                             proyectiles.add_actor(state->id, std::make_shared<MortarFragment>(
@@ -207,7 +214,6 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                         default:
                             continue;
                     }
-                    break;
                 }
             }
 
