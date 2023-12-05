@@ -35,7 +35,7 @@ EventLoop::EventLoop(const char* hostname, const char* servname,
 void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
                                     TexturesPool& txt_pool, TeamResourcesHolder& resources_holder) {
     std::shared_ptr<States> raw_state = nullptr;
-    int expected_states = MAX_PLAYERS + WORMS_QUANTITY + 3;  //+ proj_count + crate_count + level
+    int expected_states = MAX_PLAYERS + WORMS_QUANTITY + 6;  //+ proj_count + crate_count + level
     for (int j = 0; j < expected_states; j++) {
         if (not game_state_queue.try_pop(raw_state)) {
             continue;
@@ -57,7 +57,7 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
             case StatesTag::_YOU_WIN_:
                 quit = true;
                 win = std::dynamic_pointer_cast<YouWin>(raw_state)->you_win;
-                break;
+                continue;
 
             case StatesTag::CRATE_COUNT:
                 expected_states += std::dynamic_pointer_cast<CrateCount>(raw_state)->quantity;
@@ -71,15 +71,15 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                         case _CrateType_::FIRST_AID:
                             crates.add_actor(state->id,
                                              std::make_shared<HealCrate>(state, txt_pool, camera));
-                            break;
+                            continue;
                         case _CrateType_::AMMO_BOX:
                             crates.add_actor(state->id,
                                              std::make_shared<AmmoCrate>(state, txt_pool, camera));
-                            break;
+                            continue;
                         case _CrateType_::TRAP:
                             crates.add_actor(state->id,
                                              std::make_shared<TrapCrate>(state, txt_pool, camera));
-                            break;
+                            continue;
                     }
                 } else {
                     if (state->was_opened) {
@@ -96,7 +96,7 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                 if (!players.actor_loaded(state->id)) {
                     players.add_actor(state->id, std::make_shared<Worm>(state, txt_pool, camera));
                 } else {
-                    if (state->life == 0.0f) {
+                    if (state->life <= 0.0f) {
                         players.remove_actor(state->id, raw_state);
                     } else {
                         players.update_actor_state(state->id, raw_state);
@@ -118,50 +118,50 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                         case (WeaponsAndTools::BAZOOKA): {
                             proyectiles.add_actor(state->id, std::make_shared<BazookaProjectile>(
                                                                      state, txt_pool, camera));
-                            break;
+                            continue;
                         }
                         case WeaponsAndTools::MORTAR: {
                             proyectiles.add_actor(state->id, std::make_shared<MortarProjectile>(
                                                                      state, txt_pool, camera));
-                            break;
+                            continue;
                         }
 
                         case WeaponsAndTools::GREEN_GRENADE: {
                             proyectiles.add_actor(state->id,
                                                   std::make_shared<GreenGrenadeProjectile>(
                                                           state, txt_pool, camera));
-                            break;
+                            continue;
                         }
                         case WeaponsAndTools::RED_GRENADE:
                             proyectiles.add_actor(state->id, std::make_shared<RedGrenadeProjectile>(
                                                                      state, txt_pool, camera));
-                            break;
+                            continue;
                         case WeaponsAndTools::BANANA:
                             proyectiles.add_actor(state->id, std::make_shared<BananaProjectile>(
                                                                      state, txt_pool, camera));
-                            break;
+                            continue;
                         case WeaponsAndTools::HOLY_GRENADE:
                             proyectiles.add_actor(state->id,
                                                   std::make_shared<HolyGrenadeProjectile>(
                                                           state, txt_pool, camera));
-                            break;
+                            continue;
                         case WeaponsAndTools::DYNAMITE:
                             proyectiles.add_actor(state->id, std::make_shared<DynamiteProjectile>(
                                                                      state, txt_pool, camera));
-                            break;
+                            continue;
                         case WeaponsAndTools::MORTAR_FRAGMENT:
                             proyectiles.add_actor(state->id, std::make_shared<MortarFragment>(
                                                                      state, txt_pool, camera));
-                            break;
+                            continue;
                         case WeaponsAndTools::BASEBALL_BAT:
-                            break;
+                            continue;
                         case WeaponsAndTools::AIR_STRIKE:
                             proyectiles.add_actor(state->id, std::make_shared<AirStrikeProjectile>(
                                                                      state, txt_pool, camera));
                             terrain_elements.change_jet_position(state->pos.x, state->pos.y);
-                            break;
+                            continue;
                         case WeaponsAndTools::TELEPORT:
-                            break;
+                            continue;
                     }
 
                 } else {
@@ -187,19 +187,26 @@ void EventLoop::process_game_states(std::chrono::time_point<std::chrono::steady_
                 loaded_base_textures = true;
                 // Charge all the bars as terrain
                 for (auto& bar: state->bars) {
-                    if (bar.type == TerrainActors::BAR) {
-                        terrain_elements.add_terrain_element(
-                                TerrainActors::BAR,
-                                std::make_unique<ShortBar>(bar.x, bar.y, bar.angle, txt_pool,
-                                                           camera));
-                    } else {
-                        terrain_elements.add_terrain_element(
-                                TerrainActors::LONG_BAR,
-                                std::make_unique<LongBar>(bar.x, bar.y, bar.angle, txt_pool,
-                                                          camera));
+                    switch (bar.type) {
+                        case (TerrainActors::BAR):
+                            terrain_elements.add_terrain_element(
+                                    TerrainActors::BAR,
+                                    std::make_unique<ShortBar>(bar.x, bar.y, bar.angle, txt_pool,
+                                                               camera));
+                            continue;
+
+                        case (TerrainActors::LONG_BAR):
+                            terrain_elements.add_terrain_element(
+                                    TerrainActors::LONG_BAR,
+                                    std::make_unique<LongBar>(bar.x, bar.y, bar.angle, txt_pool,
+                                                              camera));
+                            continue;
+
+                        default:
+                            continue;
                     }
+                    break;
                 }
-                continue;
             }
 
             default:
@@ -281,7 +288,7 @@ void EventLoop::run() {
     while (!quit) {
         window.clear_textures();
 
-        if (loaded_base_textures){
+        if (loaded_base_textures) {
             window.render_background(txt_pool, camera);
         }
 
@@ -305,9 +312,8 @@ void EventLoop::run() {
                                      std::to_string((int)(60 - turn_time.count())), 25, 580, -20, 0,
                                      45, true, 2.5, 2.5);
 
-        if (my_turn){
-            turn_time_printer.print_text(*(window.get_renderer()),
-                                         "Your Turn", 25, 580, 0, -30,
+        if (my_turn) {
+            turn_time_printer.print_text(*(window.get_renderer()), "Your Turn", 25, 580, 0, -30,
                                          105, false, 1, 1);
         }
 

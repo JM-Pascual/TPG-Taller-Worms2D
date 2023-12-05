@@ -83,14 +83,16 @@ struct BarDto {
 
 class LevelStateG: public States {
 public:
-    std::string map_name;
-    uint8_t amount_of_bars;
+    const std::string map_name;
+    const uint8_t amount_of_bars;
     std::vector<BarDto> bars;
 
-    explicit LevelStateG(const std::string map_name,
-                         const uint8_t& amount_of_bars,
-                         std::vector<BarDto> bars) : States(StatesTag::LEVEL_BUILD),
-            map_name(map_name), amount_of_bars(amount_of_bars), bars(std::move(bars)) {}
+    explicit LevelStateG(const std::string& map_name, const uint8_t& amount_of_bars,
+                         std::vector<BarDto> bars):
+            States(StatesTag::LEVEL_BUILD),
+            map_name(map_name),
+            amount_of_bars(amount_of_bars),
+            bars(std::move(bars)) {}
 };
 
 // --------------- TEAM STATE ----------------------
@@ -103,9 +105,8 @@ public:
     const uint8_t avg_life;
     const std::shared_ptr<AmmoLeft> gadgets;
 
-    explicit PlayerStateG(const bool& is_playing, const bool& currently_on_turn,
-                          const uint8_t& id, const uint8_t& avg_life,
-                          std::shared_ptr<AmmoLeft> weapon_ammo):
+    explicit PlayerStateG(const bool& is_playing, const bool& currently_on_turn, const uint8_t& id,
+                          const uint8_t& avg_life, std::shared_ptr<AmmoLeft> weapon_ammo):
             States(StatesTag::PLAYER_G),
             id(id),
             is_playing(is_playing),
