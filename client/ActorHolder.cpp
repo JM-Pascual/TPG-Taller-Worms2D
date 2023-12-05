@@ -37,3 +37,7 @@ void ActorHolder::print_actors_state(std::shared_ptr<SDL2pp::Renderer>& game_ren
         actor.second->print_state(game_renderer, state_printer);
     }
 }
+
+void ActorHolder::delete_inactive_actors() {
+    inactive_actors.clear();
+}

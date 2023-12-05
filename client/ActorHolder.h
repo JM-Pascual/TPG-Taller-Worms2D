@@ -30,6 +30,8 @@ public:
 
     void print_actors_state(std::shared_ptr<SDL2pp::Renderer>& game_renderer,
                             TextPrinter& state_printer);
+
+    void delete_inactive_actors();
 };
 
 
