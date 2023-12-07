@@ -17,7 +17,10 @@ public:
     const Actions c;
 
     explicit Action(const Actions& c): c(c) {}
-
+    /*
+        @param protocol: Protocolo del cliente
+        @brief Envia los atributos de la accion necesarios para que sea ejecutada en el servidor
+    */
     virtual void send(ClientSide::Protocol& protocol);
 
     virtual ~Action() = default;

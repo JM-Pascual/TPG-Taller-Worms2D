@@ -24,10 +24,18 @@ private:
     EventLoop client;
 
 public:
+    /*
+        @brief Crea el eventloop y las ventanas de qt
+    */
     Game(int& argc, char* argv[]);
-
+    /*
+        @brief Corre el menu de qt y luego inicia el eventloop si se ingreso a un game. Retorna el
+       output de qt.
+    */
     int run();
-
+    /*
+        @brief Joinea el eventloop si se ingreso a un game.
+    */
     ~Game();
 };
 

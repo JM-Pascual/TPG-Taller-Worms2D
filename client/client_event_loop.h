@@ -14,6 +14,7 @@
 #include "ActorHolder.h"
 #include "GameActor.h"
 #include "LevelActors.h"
+#include "TeamResourcesHolder.h"
 #include "TerrainHolder.h"
 #include "TexturesPool.h"
 #include "Window.h"
@@ -24,7 +25,6 @@
 #include "csender.h"
 #include "inputHandler.h"
 #include "text_printer.h"
-#include "TeamResourcesHolder.h"
 
 #define FRAME_DURATION Config::yamlNode["frame_duration"].as<int>()
 
@@ -65,27 +65,47 @@ private:
     Queue<std::shared_ptr<Action>> action_queue;
 
     CameraPriority camera_priority;
+    /*
+        @param turn_start: Momento de inicio del turno
+        @parma txt_pool: Pool de texturas
+        @param resources_holder: Texturas segun el equipo
 
+        @brief Procesa los gamestate segun su tag
+    */
     void process_game_states(std::chrono::time_point<std::chrono::steady_clock>& turn_start,
                              TexturesPool& txt_pool, TeamResourcesHolder& resources_holder);
+    /*
+        @param worm: Gamestate del worm
 
+        @brief Centra la camara en el worm si la prioridad lo admite
+    */
     void viewWorm(const std::shared_ptr<WormStateG>& worm);
+    /*
+        @param proj: GameState del proyectil
 
+        @brief Centra la camara en el proyectil si la prioridad lo admite
+    */
     void viewProjectile(const std::shared_ptr<ProjectileStateG>& proj);
+    /*
+        @param loop_start_time: Referencia al momento de inicio del loop del render
 
+        @brief Descansa un intervalo la ui de sdl
+    */
     void rest(int& loop_start_time);
 
 public:
     /*
-        Construye el cliente con su protocolo
+        @brief Construye el eventloop e inicializa los hilos sender y receiver
     */
     explicit EventLoop(const char* hostname, const char* servname,
                        std::unique_ptr<CheatMenu>& cheat_menu);
     /*
-        Corre el cliente
+        @brief Corre el eventloop, iniciando la ventana de sdl y el input handler
     */
     void run() override;
-
+    /*
+        @brief Joinea los hilos y libera la memoria
+    */
     ~EventLoop() override;
 
     friend class MainWindow;

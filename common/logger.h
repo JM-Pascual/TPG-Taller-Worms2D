@@ -7,10 +7,12 @@ class Logger {
 private:
 public:
     /*
-        Configura al logger global de nombre log_name a dumpear los logs en logfile
+        @brief Configura al logger global de nombre log_name a dumpear los logs en logfile
     */
     explicit Logger(const std::string& log_name, const std::string& logfile);
-
+    /*
+        @brief Dumpea el backtrace del logger
+    */
     ~Logger();
 };
 
