@@ -60,10 +60,28 @@ fi
         make -j4 > /dev/null
         sudo make install > /dev/null
 
-    echo "Installing yaml-cpp, google-test & spdlog"
+    echo "Installing yaml-cpp, google-test"
         sudo apt install -qq libgtest-dev libyaml-cpp-dev libyaml-cpp0.7 -y
-        sudo apt install -qq libspdlog-dev libspdlog1.10 libspdlog-dev:i386 libspdlog1 -y
-        sudo apt install -qq libspdlog1:i386 libspdlog1-fmt8 libspdlog1-fmt8:i386 -y
+
+    echo "Installing spdlog"
+        cd ${TEMP}
+        git clone -q --depth 1 --branch 10.1.1 git@github.com:fmtlib/fmt.git > /dev/null
+        cd fmt
+        mkdir build
+        cd build
+        cmake .. > /dev/null
+        make -j4 > /dev/null
+        sudo make install > /dev/null
+
+        cd ${TEMP}
+        git clone -q --depth 1 --branch v1.12.0 git@github.com:gabime/spdlog.git > /dev/null
+        cd spdlog
+        mkdir build
+        cd build
+        cmake .. > /dev/null
+        make -j4 > /dev/null
+        sudo make install > /dev/null
+
 
     echo "Installing QT6"
         sudo apt install -qq -y qmake6 qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-tools-dev
@@ -121,6 +139,7 @@ fi
 
         #clean build
         rm -rf build
+        rm -rf target
         mkdir build
         cd build
         cmake ${WORMS_PATH} > /dev/null
@@ -130,8 +149,12 @@ fi
         cd ${WORMS_PATH}
         mkdir ${TARGET_PATH}
         mv ./target ${TARGET_PATH}
+        
         cp worms2D.sh ${TARGET_PATH}
         cp worms2Dserver.sh ${TARGET_PATH}
+        chmod +x ${TARGET_PATH}/worms2D.sh
+        chmod +x ${TARGET_PATH}/worms2Dserver.sh
+
         cp -r ./yaml ${TARGET_PATH}
         cp -r ./sprites ${TARGET_PATH}
         cp -r ./client/resources ${TARGET_PATH}
