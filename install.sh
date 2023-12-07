@@ -1,3 +1,4 @@
+#!/bin/bash
 readonly TEMP=~/Downloads/Worms2DTemp
 readonly TARGET_PATH=~/Desktop/Worms2D
 readonly WORMS_PATH=$(echo "$(pwd)")
