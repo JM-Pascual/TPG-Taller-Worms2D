@@ -83,7 +83,7 @@
   air_strike_rockets: 6
   air_strike_rocket_separation: 0.6
   air_strike_rocket_deviation_x: 3.2
-  air_strike_rocket_y_position: 22
+  air_strike_rocket_y_position: 35
 
   blast_radius_teleport: 0
   epicenter_damage_teleport: 0
@@ -102,7 +102,7 @@
 
   min_x_crate_spawn: 10.0
   max_x_crate_spawn: 45.0
-  y_crate_spawn: 23.6
+  y_crate_spawn: 35.0
 
   tide_level: 4
   left_border: 0
