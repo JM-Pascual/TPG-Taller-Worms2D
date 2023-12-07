@@ -28,8 +28,14 @@ public:
 
     inline void applyWindResistance(const float& wind_force) override {}
 
+    /*
+        @brief Retorna verdadero en caso estar abierta, falso en caso contrario
+     */
     const bool wasOpened();
 
+    /*
+        @brief Retorna verdadero en caso de haber caído al agua, falso en caso contrario
+     */
     const bool wasDrown();
 
     friend class InfoParser;

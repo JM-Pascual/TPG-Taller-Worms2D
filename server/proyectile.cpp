@@ -33,11 +33,11 @@ Projectile::Projectile(Battlefield& battlefield, const b2Vec2& position, const i
 }
 
 
-std::shared_ptr<ProjectileStateG> Projectile::get_proyectile_state(const uint8_t& proyectile_id) {
+std::shared_ptr<ProjectileStateG> Projectile::get_projectile_state(const uint8_t& projectile_id) {
 
     float vel_angle = b2Atan2(body->GetLinearVelocity().y, body->GetLinearVelocity().x);
 
-    return std::make_shared<ProjectileStateG>(proyectile_id, body->GetPosition().x,
+    return std::make_shared<ProjectileStateG>(projectile_id, body->GetPosition().x,
                                               body->GetPosition().y, this->time_till_detonation,
                                               type, dead, vel_angle);
 }
@@ -65,7 +65,6 @@ void Projectile::collide() {
             continue;
 
         applyBlastImpulse(body_, body->GetWorldCenter(), bodyCom, epicenter_damage);
-        // reinterpret_cast<Entity*>(body_->GetUserData().pointer)->start_falling();
     }
 }
 

@@ -32,19 +32,50 @@ private:
     bool allow_multiple_jump;
     bool immortal_worms;
 
+    /*
+        @param battlefield: //todo
+        @param worms_quantity:
+        @param worms_counter: Cantidad de worms
+        @param spawn_points: Vector con las posiciones iniciales de los worms
+
+        @brief Setea la posición inicial de todos los worms del jugador
+     */
     void spawnWorms(Battlefield& battlefield, const uint8_t& worms_quantity, uint8_t& worm_counter,
                     const uint8_t& id, std::vector<b2Vec2>& spawn_points);
 
 public:
+
+    /*
+        @brief Crea al jugador con todas sus armas y seta a la bazooka como arma inicial
+     */
     Player();
 
+    /*
+        @brief Calcula la vida promedio de todos los worms que estan jugando
+     */
     uint8_t calcAvgLife();
 
+    /*
+        @brief Setea al jugador en ready
+     */
     void set_ready();
 
+
+    /*
+        @param new_weapon: Arma seleccionada
+
+        @brief Cambia el arma por la pasada por parámetro
+     */
     void change_weapon(const WeaponsAndTools& new_weapon);
+
+    /*
+        @brief Retorna la cantidad de munición de todas las armas
+     */
     std::unique_ptr<AmmoLeft> getWeaponsAmmo();
 
+    /*
+        @brief Setea a todas las armas con munición infinita
+     */
     void infiniteAmmo();
 
     ~Player() = default;

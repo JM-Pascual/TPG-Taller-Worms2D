@@ -2,6 +2,10 @@
 
   bar_x: 38.4 # 76.8 / 2
   bar_y: 0.4 # 0.8 / 2
+  bar_width_short: 2.1
+  bar_width_long: 4.2
+  bar_height: 0.7
+
 
   gravity_x: 0
   gravity_y: -16.5

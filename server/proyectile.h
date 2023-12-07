@@ -61,6 +61,14 @@ protected:
     float time_till_detonation;
     std::chrono::time_point<std::chrono::steady_clock> projectile_timer;
 
+    /*
+        @param body_: cuerpo a aplicar al impulso
+        @param blastCenter: Centro de la explosión
+        @param applyPoint: Posición del body sobre el cual se aplica la explosión
+        @param blastPower: Fuerza del impulso en el centro de la explosión
+
+        @brief Aplica un impulso al body pasado según su posición respecto del blastCenter y del blastPower
+     */
     void applyBlastImpulse(b2Body* body_, const b2Vec2& blastCenter, const b2Vec2& applyPoint,
                            const float& blastPower);
 
@@ -69,18 +77,42 @@ public:
                const int& epicenter_damage, const WeaponsAndTools& type,
                const float& explosion_delay);
 
+    /*
+        @param power: Componentes de la fuerza del impulso
+
+        @brief Setea un impulso según el valor pasado por parámetro
+     */
     void set_power(const b2Vec2& power);
-    std::shared_ptr<ProjectileStateG> get_proyectile_state(const uint8_t& proyectile_id);
+
+    /*
+        @param proyectil_id: Identificador del proyectil
+        @brief Retorna el estado actual del proyectil
+    */
+    std::shared_ptr<ProjectileStateG> get_projectile_state(const uint8_t& projectile_id);
 
     inline void collision_reaction(const b2Vec2& normal) override {}
 
     inline void applyWindResistance(const float& wind_force) override {}
 
+    /*
+        @brief Según que tipo de proyectil se aplica una reacción luego de su explosión
+    */
     virtual void second_collision_reaction() = 0;
+
+    /*
+        @brief Actualiza el temporizador de la explosión del proyectil
+    */
     virtual void updateTimer() = 0;
 
+    /*
+        @brief Realiza la explosión del proyectil
+     */
     virtual void collide();
 
+
+    /*
+        @brief Modifica los atributos del proyectil en el caso de estar en el agua para simular que se está hundiendo
+     */
     void drowning();
 
     virtual ~Projectile() = default;
@@ -116,6 +148,10 @@ private:
 
 public:
     MortarRocket(Battlefield& battlefield, const b2Vec2& position);
+
+    /*
+        @brief Genera nuevos proyectiles
+    */
     void second_collision_reaction() override;
     ~MortarRocket() override = default;
 };
@@ -159,6 +195,10 @@ private:
 
 public:
     Red(Battlefield& battlefield, const b2Vec2& position, const float& explosion_delay);
+
+    /*
+        @brief Genera nuevos proyectiles
+     */
     void second_collision_reaction() override;
 };
 

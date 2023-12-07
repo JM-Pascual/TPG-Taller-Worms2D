@@ -33,6 +33,14 @@ private:
 public:
     FirstAid();
 
+
+    /*
+        @param create_body: Cuerpo de la caja
+        @param battlefield: Clase encargada de manipular la caja
+        @param was_opened: Verdadero si la caja esta abierta, falso en caso contrario
+
+        @brief En el que el parámetro was_opened sea verdadero se le aplica una modificación de vida positiva a las entidades cercanas
+     */
     void collision_reaction(b2Body*& crate_body, Battlefield& battlefield,
                             bool& was_opened) override;
 };
@@ -44,6 +52,14 @@ private:
 public:
     AmmoBox();
 
+
+    /*
+        @param create_body: Cuerpo de la caja
+        @param battlefield: Clase encargada de manipular la caja
+        @param was_opened: Verdadero si la caja esta abierta, falso en caso contrario
+
+        @brief En el que el parámetro was_opened sea verdadero se realiza un aumento de de munición a la entidad que colisiono con la caja
+     */
     void collision_reaction(b2Body*& crate_body, Battlefield& battlefield,
                             bool& was_opened) override;
 };
@@ -55,6 +71,13 @@ private:
 public:
     Trap();
 
+    /*
+        @param create_body: Cuerpo de la caja
+        @param battlefield: Clase encargada de manipular la caja
+        @param was_opened: Verdadero si la caja esta abierta, falso en caso contrario
+
+        @brief En el que el parámetro was_opened sea verdadero se ejecuta una explosión que disminuye la vida de las entidades cercanas
+     */
     void collision_reaction(b2Body*& crate_body, Battlefield& battlefield,
                             bool& was_opened) override;
 };

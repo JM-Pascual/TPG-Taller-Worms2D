@@ -28,13 +28,20 @@ private:
 public:
     explicit Acceptor(const char* servname);
 
+    /*
+        @brief Acepta clientes
+     */
     void run() override;
 
+    /*
+        @brief Realiza un shutdown y close del socket
+     */
     void kill();
 
     ~Acceptor();
+
     /*
-     *  No queremos ni copiar ni mover el acceptor
+        @brief No queremos ni copiar ni mover el acceptor
      */
     Acceptor(const Acceptor&) = delete;
     Acceptor& operator=(const Acceptor&) = delete;
