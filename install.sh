@@ -61,7 +61,9 @@ fi
         sudo make install > /dev/null
 
     echo "Installing yaml-cpp, google-test & spdlog"
-        sudo apt install -qq libgtest-dev libyaml-cpp-dev libyaml-cpp0.7 libspdlog-dev libspdlog1.10 -y
+        sudo apt install -qq libgtest-dev libyaml-cpp-dev libyaml-cpp0.7 -y
+        sudo apt install -qq libspdlog-dev libspdlog1.10 libspdlog-dev:i386 libspdlog1 -y
+        sudo apt install -qq libspdlog1:i386 libspdlog1-fmt8 libspdlog1-fmt8:i386 -y
 
     echo "Installing QT6"
         sudo apt install -qq -y qmake6 qt6-base-dev qt6-base-dev-tools qt6-multimedia-dev qt6-tools-dev
