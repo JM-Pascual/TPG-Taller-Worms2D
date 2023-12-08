@@ -11,8 +11,13 @@
 
 class Contact_listener: public b2ContactListener {
 public:
-
+    /*
+        @brief Resuelve el pre contacto entre dos cuerpos
+    */
     void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) override;
+    /*
+        @brief Resuelve el post contacto entre dos cuerpos
+    */
     void EndContact(b2Contact* contact) override;
     friend class Engine;
 };

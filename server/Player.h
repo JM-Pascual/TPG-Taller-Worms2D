@@ -33,9 +33,9 @@ private:
     bool immortal_worms;
 
     /*
-        @param battlefield: //todo
-        @param worms_quantity:
-        @param worms_counter: Cantidad de worms
+        @param battlefield: Referencia al battlefield del juego
+        @param worms_quantity: Cantidad de worms a spawnear
+        @param worms_counter: Contador de ID de worms
         @param spawn_points: Vector con las posiciones iniciales de los worms
 
         @brief Setea la posición inicial de todos los worms del jugador
@@ -44,7 +44,6 @@ private:
                     const uint8_t& id, std::vector<b2Vec2>& spawn_points);
 
 public:
-
     /*
         @brief Crea al jugador con todas sus armas y seta a la bazooka como arma inicial
      */

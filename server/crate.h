@@ -19,7 +19,9 @@ private:
 
 public:
     const uint8_t crate_id;
-
+    /*
+        @brief Genera una caja de tipo random que puede contener municion, vida o explotar
+    */
     explicit Crate(Battlefield& battlefield, const uint8_t& id);
 
     void collision_reaction(const b2Vec2& normal) override;

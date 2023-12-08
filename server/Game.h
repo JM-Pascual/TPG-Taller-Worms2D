@@ -57,7 +57,8 @@ private:
     void notify_lobby_state();
 
     /*
-        @brief todo
+        @brief Retorna verdadero en el caso de que haya más de un jugador jugando, falso en caso
+       contrario
      */
     bool non_locking_is_playing();
 
@@ -119,7 +120,8 @@ public:
     bool isEmpty();
 
     /*
-        @brief Retorna verdadero en el caso de que haya más de un jugador jugando, falso en caso contrario
+        @brief Retorna verdadero en el caso de que haya más de un jugador jugando, falso en caso
+       contrario
      */
     bool is_playing();
 

@@ -3,6 +3,7 @@
 
 #include <list>
 #include <memory>
+#include <string>
 
 class States;
 class Game;
@@ -19,26 +20,27 @@ public:
     explicit inline InfoParser(Game& game): game(game) {}
 
     /*
-        @param states: todo
+        @param states: Referencia a la lista de states a llenar
 
-        @brief
+        @brief Pushea en la lista de states todos los states de lobby que puede para luego enviarlos
      */
     void makeLobbyState(std::list<std::shared_ptr<States>>& states);
 
     /*
-        @param states:
-        @param id_of_active_player:
+        @param states: Referencia a la lista de states a llenar
+        @param id_of_active_player: ID del jugador con el turno
 
-        @brief
+        @brief Pushea en la lista de states todos los states de game que puede para luego enviarlos
      */
     void makeGameState(std::list<std::shared_ptr<States>>& states,
                        const uint8_t& id_of_active_player);
 
     /*
-        @param states:
-        @param map_name:
+        @param states: Referencia a la lista de states a llenar
+        @param map_name: Nombre del mapa en curso
 
-        @brief
+        @brief Pushea en la lista de states todos los states de game (especializados en el mapa)
+            que puede para luego enviarlos
      */
     void makeLevelState(std::list<std::shared_ptr<States>>& states, const std::string& map_name);
 };

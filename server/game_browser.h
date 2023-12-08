@@ -33,7 +33,7 @@ public:
     void kill();
 
     /*
-        @brief Corre el Cleaner
+        @brief Corre el Cleaner esperando a popear una id de un juego a eliminar
     */
     void run() override;
 
@@ -57,7 +57,6 @@ private:
     void erase_game(const uint8_t& game_id);
 
 public:
-
     /*
         @brief Inicializa el conteo de las id de GameLoop en 0 (game_id_count)
     */
@@ -87,7 +86,8 @@ public:
         @param player_id: Id de jugador a ser removido
         @param game_id: Id de partida a la cual el jugador es removido
 
-        @brief Remueve a jugador con ip pasada por parámetro de la partida de ip pasada por parámetro
+        @brief Remueve a jugador con ip pasada por parámetro de la partida de ip pasada por
+       parámetro
     */
     void removeLobbyPlayer(const uint8_t& player_id, const uint8_t& game_id);
 
@@ -95,7 +95,8 @@ public:
         @param player_id: Id de jugador a ser seteado ready
         @param game_id: Id de partida
 
-        @brief Setea al jugador con ip pasado por parámetro ready en la partida con id pasado por parámetro
+        @brief Setea al jugador con ip pasado por parámetro ready en la partida con id pasado por
+       parámetro
 
     */
     void set_player_ready(const uint8_t& id, const uint8_t& id_game);
@@ -103,7 +104,8 @@ public:
     /*
         @param game_id: Id de la partida
 
-        @brief Retorna, en el caso de existir, la action queue de la partida con id pasado por parámetro
+        @brief Retorna, en el caso de existir, la action queue de la partida con id pasado por
+       parámetro
     */
     Queue<std::shared_ptr<PlayerAction>>& getQueue(const uint8_t& game_id);
 
