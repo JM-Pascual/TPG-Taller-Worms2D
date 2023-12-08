@@ -15,19 +15,21 @@ private:
 
 public:
     /*
-        Crea el servidor junto a su protocolo
+        @param servname: Puerto en el cual inicializar el protocolo
+
+        @brief Crea el servidor junto a su protocolo
     */
     explicit Server(char* servname);
     /*
-        Corre el servidor
+        @brief Corre el servidor
     */
     void run();
     /*
-        Libera la memoria alocada de acceptor
+        @brief Libera la memoria alocada de acceptor
     */
     ~Server();
     /*
-        No tiene sentido ni copiar ni mover el servidor
+        No queremos ni copiar ni mover el servidor
     */
     Server(const Server&) = delete;
     Server& operator=(const Server&) = delete;

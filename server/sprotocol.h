@@ -28,47 +28,112 @@ private:
     bool recv_was_closed;
 
     /*
-        Recibe data chequeando si se cierra el socket
+        @param data: Puntero al dato a recibir
+        @param sz: Cantidad de bytes a recibir
+
+        @brief Recibe data chequeando si se cierra el socket
     */
     void recv(void* data, unsigned int sz);
     /*
-        Recibe un int de 8 bits sin signo
+        @param pos: Referencia a la posicion a ser enviada
+
+        @brief Envia una posicion a traves del socket
     */
-
     void sendPosition(const b2Vec2& pos);
-
+    /*
+        @param ps: State de tipo PlayerStateG
+    */
     void sendPlayerState(const std::shared_ptr<States>& ps);
+    /*
+        @param state: State de tipo WormState
 
+        @brief Envia el game state completo de WormState
+    */
     void sendWormState(const std::shared_ptr<States>& state);
+    /*
+        @param count: State de tipo GameInfo
 
+        @brief Envia el game state completo de GameInfo
+    */
     void sendGameInfo(const std::shared_ptr<States>& count);
+    /*
+        @param count: State de tipo CountState o sus subclases
 
+        @brief Envia el game state completo de CountState
+    */
     void sendCount(const std::shared_ptr<States>& count);
+    /*
+        @param count: State de tipo PlayerLobby
 
+        @brief Envia el game state completo de PlayerLobby
+    */
     void sendPlayerLobby(const std::shared_ptr<States>& count);
+    /*
+        @param lb: State de tipo Level
 
+        @brief Envia el game state completo de Level
+    */
     void sendLevelBuild(const std::shared_ptr<States>& lb);
+    /*
+        @param ps: State de tipo Projectile
 
+        @brief Envia el game state completo de Projectile
+    */
     void sendProjectileState(const std::shared_ptr<States>& ps);
+    /*
+        @param state: State de tipo Turn
 
-
+        @brief Envia el game state completo de Turn
+    */
     void sendTurn(const std::shared_ptr<States>& state);
+    /*
+        @param state: State de tipo BattlefieldG
 
+        @brief Envia el game state completo de BattlefieldG
+    */
     void sendBattlefield(const std::shared_ptr<States>& state);
+    /*
+        @param pixel_position: Posicion en x en pixeles
 
-    float pixel_to_meter_x(float pixel_position);
-    float pixel_to_meter_y(float pixel_position);
+        @brief Convierte la posicion en x en pixeles a metros
+    */
+    float pixel_to_meter_x(const float& pixel_position);
+    /*
+        @param pixel_position: Posicion en y en pixeles
+
+        @brief Convierte la posicion en y en pixeles a metros
+    */
+    float pixel_to_meter_y(const float& pixel_position);
+    /*
+        @param state: Game state de una caja
+
+        @brief Envia el game state completo de una caja de provisiones
+    */
     void sendCrate(const std::shared_ptr<States>& state);
+    /*
+        @param state: State de tipo YouWin
 
+        @brief Envia el game state completo de YouWin
+    */
     void sendYouWin(const std::shared_ptr<States>& state);
 
 public:
     /*
-        Envia data chequeando si se cierra el socket
+        @param data: Dato a ser enviado
+        @param sz: Cantidad de bytes a ser enviados
+
+        @brief Envia data chequeando si se cierra el socket
     */
     void send(const void* data, unsigned int sz);
+    /*
+        @brief Retorna un uint8_t el cual es recibido a traves del socket
+    */
     uint8_t recvUint8();
+    /*
+        @param state: Game/Lobby State a ser enviado
 
+        @brief Envia un state a traves del socket dependiendo de su tag
+    */
     void sendStates(const std::shared_ptr<States>& state);
     /*
         Construye el protocolo y su respectivo socket
@@ -86,9 +151,17 @@ public:
         Recibe la direccion hacia la cual debe saltar el gusano
     */
     void recvJumpDir(JumpDir& dir);
+    /*
+        @param number: Referencia al float a ser enviado
 
+        @brief Envia un float
+    */
     void sendFloat(float number);
+    /*
+        @param str: Referencia al string a ser enviado
 
+        @brief Envia un string de 64 bytes maximo
+    */
     void sendString64(const std::string& str);
     /*
         Recibe la direccion hacia la cual debe inclinar la mira el gusano
@@ -110,11 +183,15 @@ public:
         Recibe un string de maximo 64 caracteres
     */
     void recvString64(std::string& desc);
-
-
+    /*
+        @brief Retorna un float el cual es recibido a traves del socket
+    */
     float recvFloat();
+    /*
+        @param position: Referencia a la posicion a ser recibida
 
-
+        @brief Recibe una posicion a traves del socket
+    */
     void recvPosition(b2Vec2& position);
     /*
         Recibe la id del game al que se quiere conectar el cliente

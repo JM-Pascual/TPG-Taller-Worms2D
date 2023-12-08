@@ -18,12 +18,19 @@ private:
     Queue<std::shared_ptr<States>>& game_states;
 
 public:
+    /*
+        @param protocol: Referencia al protocolo del cliente
+        @param game_states: Referencia a la queue del cliente
+    */
     explicit Sender(ServerSide::Protocol& protocol, Queue<std::shared_ptr<States>>& game_states);
-    // Corre el sender esperando que la event_queue tenga un elemento para poder enviar
-    //  a traves del protocolo
+    /*
+        @brief Corre el sender esperando que la event_queue tenga un elemento para poder enviar
+        a traves del protocolo
+    */
     void run() override;
-
-    // Debido al uso del heap no se puede copiar ni mover el loop
+    /*
+        @brief No queremos ni mover ni copiar el sender
+    */
     Sender(const Sender&) = delete;
     Sender& operator=(const Sender&) = delete;
 

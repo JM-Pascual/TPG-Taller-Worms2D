@@ -27,20 +27,30 @@ private:
     Queue<std::shared_ptr<States>> state_queue;
 
 public:
+    /*
+        @param peer: Socket para inicializar el protocolo
+        @param browser: Referencia a game browser
+        @param id: ID del jugador
+
+        @brief Inicializa los hilos sender y receiver
+    */
     explicit Client(Socket&& peer, GameBrowser& browser, const uint8_t& id);
     /*
-        Retorna si ambos hilos estan 'vivos'
+        @brief Retorna si ambos hilos estan 'vivos'
     */
     bool isAlive();
     /*
-        Detiene los hilos recv y send de forma forzosa y (en un supuesto caso) de forma 'gentil'
+        @brief Detiene los hilos recv y send de forma forzosa y (en un supuesto caso) de forma
+       'gentil'
     */
     void stop();
     /*
-        Termina de forma forzosa los threads send y receive
+        @brief Termina de forma forzosa los threads send y receive
     */
     void kill();
-
+    /*
+        @brief Joinea el sender y receiver
+    */
     ~Client();
 };
 }  // namespace ServerSide

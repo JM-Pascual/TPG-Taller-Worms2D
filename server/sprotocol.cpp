@@ -291,10 +291,10 @@ void ServerSide::Protocol::sendStates(const std::shared_ptr<States>& state) {
 }
 
 
-float ServerSide::Protocol::pixel_to_meter_x(float pixel_position) {
+float ServerSide::Protocol::pixel_to_meter_x(const float& pixel_position) {
     return (pixel_position / PPM);
 }
 
-float ServerSide::Protocol::pixel_to_meter_y(float pixel_position) {
+float ServerSide::Protocol::pixel_to_meter_y(const float& pixel_position) {
     return ((720 - pixel_position) / PPM);
 }

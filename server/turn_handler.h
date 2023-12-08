@@ -57,10 +57,19 @@ private:
     bool no_wind_cheat_activated;
 
     unsigned int turn_number;
+    /*
+        @param players_quantity: Cantidad de jugadores actualmente en la partida
+        @param elapsed: Cantidad de tiempo que demoro el anterior game loop
 
+        @brief Valida si se requiere empezar un nuevo turno o debe continuar el mismo worm
+    */
     const TurnReset need_to_update(const uint8_t players_quantity,
                                    const std::chrono::duration<float>& elapsed);
+    /*
+        @param players_quantity: Cantidad de jugadores actualmente en la partida
 
+        @brief Avanza el turno al proximo worm y/o player
+    */
     const TurnReset advanceTurn(const uint8_t& players_quantity);
 
 public:
@@ -80,17 +89,31 @@ public:
             infinite_turn_cheat_activated(false),
             no_wind_cheat_activated(false),
             turn_number(0) {}
+    /*
+        @param elapsed: Cantidad de tiempo que demoro el anterior game loop
 
+        @brief Actualiza el turno si se requiere y retorna la id del jugador y worm activos
+    */
     const ActualTurn updateTurn(const std::chrono::duration<float>& elapsed);
-
+    /*
+        @brief Retorna si el jugador uso una accion la cual activa el post turno
+    */
     const bool& player_used_stop_action();
-
+    /*
+        @brief Activa el post turno
+    */
     void use_stop_action();
-
+    /*
+        @brief Switch de cheat de turno infinito al worm actual
+    */
     void activateInfiniteTurn();
-
+    /*
+        @brief Switch de cheat eliminacion del viento
+    */
     void activateNoWind();
-
+    /*
+        @brief Cheat de spawn de 7 cajas de provisiones aleatorias
+    */
     void supplyRun();
 };
 
