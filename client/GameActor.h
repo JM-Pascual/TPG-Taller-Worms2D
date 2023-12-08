@@ -207,14 +207,6 @@ public:
             return;
         }
 
-        if (is_walking) {
-            if (steps_counter_for_sound % 18 == 0) {
-                effects_player.playAudio(SoundEffects::EXTEND_WALK);
-            }
-            steps_counter_for_sound++;
-        } else {
-            steps_counter_for_sound = 0;
-        }
 
         if (is_jumping) {
             if (!alredy_played_jump_sound) {
@@ -234,6 +226,15 @@ public:
             return;
         } else {
             alredy_played_backflip_sound = false;
+        }
+
+        if (is_walking) {
+            if (steps_counter_for_sound % 18 == 0) {
+                effects_player.playAudio(SoundEffects::EXTEND_WALK);
+            }
+            steps_counter_for_sound++;
+        } else {
+            steps_counter_for_sound = 0;
         }
     }
 
