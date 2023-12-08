@@ -128,7 +128,9 @@ void WormHandler::checkDeadWorms() {
                     advance(worm_it_aux, player->worm_turn);
 
                     if (worm_it_aux->first >= it->first) {
-                        --player->worm_turn;
+                        if (player->worm_turn != 0) {
+                            --player->worm_turn;
+                        }
                     }
                 }
 
