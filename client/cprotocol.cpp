@@ -123,7 +123,7 @@ std::shared_ptr<States> ClientSide::Protocol::recvStates() {
             return std::make_shared<YouWin>(recvUint8());
 
         default:
-            return std::make_shared<PlayerCountL>(recvUint8());  // ToDo placeholder para un default
+            return std::make_shared<PlayerCountL>(recvUint8());
     }
 }
 
@@ -132,7 +132,7 @@ float ClientSide::Protocol::meter_to_pixel_x(const float& meter_position) {
 }
 
 float ClientSide::Protocol::meter_to_pixel_y(const float& meter_position) {
-    return (720 - meter_position * PPM);  // ToDo
+    return (720 - meter_position * PPM);
 }
 
 void ClientSide::Protocol::recvString64(std::string& str) {

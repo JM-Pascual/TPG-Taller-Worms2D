@@ -14,8 +14,6 @@ void Engine::create_battlefield() { world->SetContactListener(listener); }
 
 b2Body* Engine::add_body(b2BodyDef& bodyDef) { return world->CreateBody(&bodyDef); }
 
-// ToDo Ver si puedo cambiar el nombre, esto queda como un pasamanos pasando este metodo a game para
-// que lo pase a game_loop
 void Engine::step() {
     applyWindForce();
     world->Step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);

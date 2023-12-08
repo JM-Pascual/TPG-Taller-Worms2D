@@ -645,7 +645,7 @@ public:
     explicit DynamiteProjectile(std::shared_ptr<ProjectileStateG>& initial_state,
                                 TexturesPool& pool, Camera& camera):
             Projectile(initial_state, pool, camera),
-            countdown(pool.get_projectile_texture(Projectiles::DYNAMITE_PROYECTILE), 126, 2, false),
+            countdown(pool.get_projectile_texture(Projectiles::DYNAMITE_PROYECTILE), 126, 1, false),
             explosion(pool.get_effect_texture(VisualEffects::NORMAL_EXPLOSION), 8, 3, false),
             alredy_played_explosion_sound(false) {}
 

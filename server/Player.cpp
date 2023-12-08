@@ -8,8 +8,6 @@
 #include "battlefield.h"
 #include "engine.h"
 
-// ToDo Hardocdeado para que los worms aparezcan en la mitad del mapa
-
 Player::Player():
         ready(false),
         is_playing(true),

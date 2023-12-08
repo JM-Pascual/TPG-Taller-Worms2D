@@ -192,7 +192,6 @@ b2Vec2 Worm::set_projectile_inplace() {
     return position;
 }
 
-// todo cambiar nombre
 b2Vec2 Worm::set_bullet_angle() {
     return b2Vec2(facing_factor() * cosf(aim_inclination_degrees), sinf(aim_inclination_degrees));
 }
