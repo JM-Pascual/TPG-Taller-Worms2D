@@ -41,6 +41,14 @@ protected:
 
 public:
     explicit Gadget(const uint8_t& ammo);
+
+    /*
+        @param battlefield: Clase que se encarga de almacenar el proyectil disparado y generar las físicas del mismo
+        @param worm: Entidad que realiza el disparo
+        @param turn_handler: Clase que se encarga de manejar cuando turno del disparo
+
+        @brief Según el tipo de herramienta dispara o ejecuta la acción correspondiente solicitada por el worm
+     */
     virtual void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) = 0;
     void infiniteAmmo();
     void addAmmo(const uint8_t& ammo);
@@ -55,6 +63,10 @@ public:
 class GreenGrenade: public Gadget {
 public:
     GreenGrenade();
+
+    /*
+        @brief Lanza la granada en una dirección y una fuerza determinada solicitada por el worm
+     */
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     ~GreenGrenade() override = default;
 };
@@ -64,6 +76,10 @@ public:
 class RedGrenade: public Gadget {
 public:
     RedGrenade();
+
+    /*
+        @brief Lanza la granada en una dirección y una fuerza determinada solicitada por el worm
+     */
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     ~RedGrenade() override = default;
 };
@@ -73,6 +89,10 @@ public:
 class HolyGrenade: public Gadget {
 public:
     HolyGrenade();
+
+    /*
+        @brief Lanza la granada en una dirección y una fuerza determinada solicitada por el worm
+     */
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     ~HolyGrenade() override = default;
 };
@@ -82,6 +102,10 @@ public:
 class BananaGrenade: public Gadget {
 public:
     BananaGrenade();
+
+    /*
+        @brief Lanza la granada en una dirección y una fuerza determinada solicitada por el worm
+     */
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     ~BananaGrenade() override = default;
 };
@@ -91,6 +115,10 @@ public:
 class DynamiteGrenade: public Gadget {
 public:
     DynamiteGrenade();
+
+    /*
+        @brief Deja la granada en la dirección solicitada por el worm
+     */
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     ~DynamiteGrenade() override = default;
 };
@@ -101,6 +129,10 @@ public:
 class Bazooka: public Gadget {
 public:
     Bazooka();
+
+    /*
+        @brief Lanza el proyectil en una dirección y una fuerza determinada solicitada por el worm
+    */
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     ~Bazooka() override = default;
 };
@@ -110,6 +142,10 @@ public:
 class Mortar: public Gadget {
 public:
     Mortar();
+
+    /*
+        @brief Lanza el proyectil en una dirección y una fuerza determinada solicitada por el worm
+    */
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     ~Mortar() override = default;
 };
@@ -119,6 +155,10 @@ public:
 class Teleport: public Gadget {
 public:
     Teleport();
+
+    /*
+        @brief Cambia la posición del worm según la posición solicitada por el mismo
+    */
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
     ~Teleport() override = default;
 };
@@ -128,7 +168,15 @@ public:
 class AirStrike: public Gadget {
 public:
     AirStrike();
+
+    /*
+        @brief Lanza una cantidad de proyectiles en la zona solicitada por el worm
+    */
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
+
+    /*
+        @brief Lanza una cantidad de proyectiles en la zona solicitada por el parametro destination
+    */
     void shootCheat(Battlefield& battlefield, float& destination);
     ~AirStrike() override = default;
 };
@@ -139,11 +187,24 @@ public:
 class BaseballBat: public Gadget {
 private:
     void bat(Battlefield& battlefield, Worm& worm);
+
+    /*
+        @param body_: cuerpo a aplicar al impulso
+        @param blastCenter: Centro de la explosión
+        @param applyPoint: Posición del body sobre el cual se aplica la explosión
+        @param blastPower: Fuerza del impulso en el centro de la explosión
+
+        @brief Aplica un impulso al body pasado según su posición respecto del blastCenter y del blastPower
+     */
     void applyBlastImpulse(b2Body* body_, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower,
                            b2Vec2 direction);
 
 public:
     BaseballBat();
+
+    /*
+        @brief Realiza la acción de bateo aplicando un impulso a entidades cercanas
+    */
     void shoot(Battlefield& battlefield, Worm& worm, TurnHandler& turn_handler) override;
 
     ~BaseballBat() override = default;

@@ -51,10 +51,19 @@ private:
     GameLoop gameloop;
     bool need_to_join_loop;
 
+    /*
+        @brief Notifica el estado del lobby
+     */
     void notify_lobby_state();
 
+    /*
+        @brief todo
+     */
     bool non_locking_is_playing();
 
+    /*
+        @brief Aplica posición inicial a todos los worms
+     */
     void spawnWorms();
 
 public:
@@ -82,18 +91,41 @@ public:
         }
     }
 
+    /*
+        @brief Retorna la action_queue
+     */
     Queue<std::shared_ptr<PlayerAction>>& get_action_queue();
 
+    /*
+        @brief Retorna la información del juego
+     */
     std::shared_ptr<GameInfoL> getInfo();
 
+    /*
+        param state_queue: Queue a ser agregada
+        @brief  Agrega un nuevo cliente a la client_queue
+     */
     void add_client_queue(const uint8_t& id, Queue<std::shared_ptr<States>>& state_queue);
 
+    /*
+        @param player_id: Id del jugador a ser removido
+        @brief Remueve al jugador de Lobby de la ip pasada por parámetro
+     */
     void removeLobbyPlayer(const uint8_t& player_id);
 
+    /*
+        @brief Retorna verdadero en caso de no haber jugadores, falso en caso contrario
+     */
     bool isEmpty();
 
+    /*
+        @brief Retorna verdadero en el caso de que haya más de un jugador jugando, falso en caso contrario
+     */
     bool is_playing();
 
+    /*
+        @brief Setea al jugador con id pasado por parámetro ready
+     */
     void set_player_ready(const uint8_t& id);
 
     ~Game();

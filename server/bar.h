@@ -6,11 +6,9 @@
 
 #include "entity.h"
 
-#define BAR_WIDTH_SHORT 2.1f  // 1.9f
-#define BAR_WIDTH_LONG 4.2f   // 4.0f
-#define BAR_HEIGHT 0.7f
-
-// Resolver estas contantes en el YAML
+#define BAR_WIDTH_SHORT Config::yamlNode["bar_width_short"].as<float>()
+#define BAR_WIDTH_LONG Config::yamlNode["bar_width_long"].as<float>()
+#define BAR_HEIGHT Config::yamlNode["bar_height"].as<float>()
 
 class Battlefield;
 class LevelHolder;
@@ -29,6 +27,11 @@ public:
     explicit Bar(Battlefield& battlefield, const float& x, const float& y,
                  const float& inclination_angle, const bool& is_long);
 
+
+    /*
+        @brief Según la dirección de la normal de la colisión entre una entidad y la barra
+               genera que la entidad se detenga en caso cumplir las condiciones solicitadas
+     */
     void collision_reaction(const b2Vec2& normal) override;
 
     void applyWindResistance(const float& wind_force) override;

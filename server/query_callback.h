@@ -11,7 +11,17 @@ private:
 
 public:
     bool ReportFixture(b2Fixture* fixture) override;
+
+    /*
+        @brief Retorna la cantidad de cuerpos encontrados
+     */
     int found_bodies_size();
+
+    /*
+        @param i: Posición del vector del cuerpo buscado
+
+        @brief Retorna el cuerpo encontrado por en la posición pasada por parámetro
+    */
     b2Body* found_bodie_at(const int& i);
 };
 

@@ -1,4 +1,4 @@
-#ifndef SERVER_RECEIVER_H
+    #ifndef SERVER_RECEIVER_H
 #define SERVER_RECEIVER_H
 
 #include <memory>

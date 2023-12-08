@@ -11,6 +11,7 @@
 
 class Contact_listener: public b2ContactListener {
 public:
+
     void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) override;
     void EndContact(b2Contact* contact) override;
     friend class Engine;

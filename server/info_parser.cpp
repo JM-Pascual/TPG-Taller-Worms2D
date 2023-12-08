@@ -48,7 +48,7 @@ void InfoParser::makeGameState(std::list<std::shared_ptr<States>>& states,
 
     std::transform(game.battlefield.projectiles.begin(), game.battlefield.projectiles.end(),
                    std::back_inserter(states), [](const auto& projectile) {
-                       return projectile.second->get_proyectile_state(projectile.first);
+                       return projectile.second->get_projectile_state(projectile.first);
                    });
 
     // WORM & PLAYERS
