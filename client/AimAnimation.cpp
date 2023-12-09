@@ -4,14 +4,22 @@
 #include <memory>
 
 void AimAnimation::load_all_aim_textures(TexturesPool& pool) {
+    // Non aimable weapons
+    weapon_non_aim_textures.insert(
+            {WeaponsAndTools::DYNAMITE, (pool.get_aim_texture(WeaponAiming::WORM_AIM_DYNAMITE))});
+
+    weapon_non_aim_textures.insert({WeaponsAndTools::AIR_STRIKE,
+                                (pool.get_aim_texture(WeaponAiming::WORM_AIM_AIR_STRIKE))});
+
+    weapon_non_aim_textures.insert(
+            {WeaponsAndTools::TELEPORT, (pool.get_aim_texture(WeaponAiming::WORM_AIM_TELEPORT))});
+
+    // Aimable weapons
     weapon_aim_textures.insert(
             {WeaponsAndTools::BAZOOKA, (pool.get_aim_texture(WeaponAiming::WORM_AIM_BAZOOKA))});
 
     weapon_aim_textures.insert(
             {WeaponsAndTools::MORTAR, (pool.get_aim_texture(WeaponAiming::WORM_AIM_MORTAR))});
-
-    weapon_aim_textures.insert(
-            {WeaponsAndTools::DYNAMITE, (pool.get_aim_texture(WeaponAiming::WORM_AIM_DYNAMITE))});
 
     weapon_aim_textures.insert({WeaponsAndTools::GREEN_GRENADE,
                                 (pool.get_aim_texture(WeaponAiming::WORM_AIM_GREEN_GRENADE))});
@@ -27,12 +35,6 @@ void AimAnimation::load_all_aim_textures(TexturesPool& pool) {
 
     weapon_aim_textures.insert({WeaponsAndTools::BASEBALL_BAT,
                                 (pool.get_aim_texture(WeaponAiming::WORM_AIM_BASEBALL_BAT))});
-
-    weapon_aim_textures.insert({WeaponsAndTools::AIR_STRIKE,
-                                (pool.get_aim_texture(WeaponAiming::WORM_AIM_AIR_STRIKE))});
-
-    weapon_aim_textures.insert(
-            {WeaponsAndTools::TELEPORT, (pool.get_aim_texture(WeaponAiming::WORM_AIM_TELEPORT))});
 }
 
 AimAnimation::AimAnimation(TexturesPool& pool):
@@ -47,6 +49,8 @@ void AimAnimation::render(const WeaponsAndTools& current_weapon, SDL2pp::Rendere
                           SDL2pp::Rect& dest, const SDL_RendererFlip& flipType,
                           const double& angle) {
 
+    // Las animaciones aim tienen 32 frames
+
     if (current_weapon == WeaponsAndTools::BASEBALL_BAT) {
         dest.SetW(50);
         renderer.Copy((*weapon_aim_textures.at(current_weapon)),
@@ -59,9 +63,7 @@ void AimAnimation::render(const WeaponsAndTools& current_weapon, SDL2pp::Rendere
         return;
     }
 
-    if (current_weapon != WeaponsAndTools::DYNAMITE &&
-        current_weapon != WeaponsAndTools::AIR_STRIKE &&
-        current_weapon != WeaponsAndTools::TELEPORT) {
+    if (weapon_non_aim_textures.count(current_weapon) == 0) {
         renderer.Copy((*weapon_aim_textures.at(current_weapon)),
                       SDL2pp::Rect(0,
                                    std::min((16 * 60 - (60) * int(-1 * ((this->current_inclination /
@@ -78,8 +80,6 @@ void AimAnimation::render(const WeaponsAndTools& current_weapon, SDL2pp::Rendere
                                                                        (M_PI / 32))))),
                                           1860),
                                  35, 60),
-                    // SDL2pp::Rect (dest.x * (1 + (cos(current_inclination)*0.35)), (dest.y * (1 -
-                    // (sin(current_inclination))*0.35)), 35, 60),
                     SDL2pp::Rect((dest.x + (40 * cos(current_inclination))),
                                  (dest.y - 40 * sin(current_inclination)), 35, 60),
                     angle, SDL2pp::NullOpt, flipType);
@@ -91,8 +91,6 @@ void AimAnimation::render(const WeaponsAndTools& current_weapon, SDL2pp::Rendere
                                                                        (M_PI / 32))))),
                                           1860),
                                  35, 60),
-                    // SDL2pp::Rect (dest.x * (1 - cos(current_inclination)*0.35), dest.y * (1 -
-                    // sin(current_inclination)*0.35), 35, 60),
                     SDL2pp::Rect((dest.x - (40 * cos(current_inclination))),
                                  (dest.y - 40 * sin(current_inclination)), 35, 60),
                     angle, SDL2pp::NullOpt, flipType);
@@ -101,8 +99,8 @@ void AimAnimation::render(const WeaponsAndTools& current_weapon, SDL2pp::Rendere
         power_charge_animation->render(renderer, SDL2pp::Rect(dest.x, dest.y - 35, 35, 60), 0, 0);
 
     } else {
-        renderer.Copy((*weapon_aim_textures.at(current_weapon)), SDL2pp::Rect(0, 0, 35, 60), dest,
-                      angle, SDL2pp::NullOpt, flipType);
+        renderer.Copy((*weapon_non_aim_textures.at(current_weapon)), SDL2pp::Rect(0, 0, 35, 60),
+                      dest, angle, SDL2pp::NullOpt, flipType);
     }
 }
 

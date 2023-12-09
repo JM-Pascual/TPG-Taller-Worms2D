@@ -25,12 +25,23 @@ private:
     void load_weapon_miniature_textures();
     void load_tombstones_textures();
 
+    /**
+     * @brief Método template para cargar una textura al mapa correspondiente.
+     *
+     * @param filePath Path de la textura a cargar.
+     * @param textureMap Map donde se va a cargar la textura.
+     * @param texture_enum Enum que va a actuar como llave de la textura.
+     * @param with_alpha_blending Indica si la textura debe cargarse con Alpha Blending.
+     */
     template <typename EnumType>
     void load_texture_into_map(
             const std::string& filePath,
             std::unordered_map<EnumType, std::shared_ptr<SDL2pp::Texture>>& textureMap,
             const EnumType& texture_enum, const bool& with_alpha_blending = true);
 
+    /**
+     * @brief Maps que guardan las texturas del juego.
+     */
     std::unordered_map<Actors, std::shared_ptr<SDL2pp::Texture>> actors_textures;
     std::unordered_map<TerrainActors, std::shared_ptr<SDL2pp::Texture>> level_actors_textures;
     std::unordered_map<WeaponAiming, std::shared_ptr<SDL2pp::Texture>> aim_textures;
@@ -46,6 +57,11 @@ private:
 public:
     explicit TexturesPool(std::shared_ptr<SDL2pp::Renderer>& game_renderer);
 
+    /**
+     * @brief Carga todas las texturas del juego.
+     *
+     * @param level_name Nombre del nivel actual iniciado.
+     */
     void load_level_textures(const std::string& level_name);
     std::shared_ptr<SDL2pp::Texture>& get_actor_texture(const Actors& actor_to_fetch);
     std::shared_ptr<SDL2pp::Texture>& get_level_texture(const TerrainActors& level_actor_to_fetch);
