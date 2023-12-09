@@ -17,7 +17,7 @@ loop#GoldenRod por cada atributo
 end
 
 parser -->> recv : action_ptr
-recv ->> game_queue : push(action)
+recv ->> game_queue : push(action_ptr)
 
 
 @enduml

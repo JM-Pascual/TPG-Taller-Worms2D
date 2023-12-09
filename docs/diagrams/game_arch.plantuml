@@ -1,0 +1,32 @@
+@startuml game_arch
+allowmixing
+hide empty attributes
+skinparam classBackgroundColor white
+
+
+    class Acceptor
+    note right of Acceptor : Thread
+
+    class GameBrowser
+    class Game {
+        - battlefield : Battlefield
+        - broadcaster : Broadcaster
+        - worm_handler : WormHandler
+    }
+    class Player
+    class Worm
+
+    class GameLoop
+    note top of GameLoop : Thread
+
+    database action_queue
+
+    Acceptor --* GameBrowser
+    GameBrowser --* "*" Game
+    Game --* "*" Player
+    Player --* "*" Worm
+    Game --* GameLoop
+    GameLoop --* action_queue
+
+
+@enduml

@@ -1,48 +1,56 @@
-# formato yaml
+# <p style="text-align: center;">Manual tecnico</p>
 
-## cliente
+# <p style="text-align: center;">Formato de archivos YAML</p>
 
-El formato de client_const.yaml es de la forma key: value
+## Cliente
 
-## common
+El formato de client_const.yaml es de la forma 
+    
+    key: value
 
-El formato de common_const.yaml es de la forma key: value
+## Common
 
-## spawn points
+El formato de common_const.yaml es de la forma      
+    
+    key: value
+
+## Spawn points
 
 El formato de spawn_points.yaml es de la forma 
 
-nombre_mapa:
-    - [x_1, y_1]
-    - ..
-    - [x_n, y_n]
+    map_name:
+        - [x_1, y_1]
+        - ..
+        - [x_n, y_n]
 
-## server
+## Server
 
-El formato de server_const.yaml es de la forma key: value
+El formato de server_const.yaml es de la forma 
 
-## player names
+    key: value
+
+## Player names
 
 El formato de player_names.yaml es de la forma
 
-worm-names:
-    - [name_str_1]
-    - ..
-    - [name_str_n]
+    worm-names:
+        - [name_str_1]
+        - ..
+        - [name_str_n]
 
-amount_of_names: n
+    amount_of_names: n
 
 ## level bars
 
 El formato de level_bars.yaml es de la forma
 
-nombre_mapa_bars:
-    - [x_1, y_1, angle_1, is_long_1]
-    - ...
-    - [x_n, y_n, angle_n, is_long_n]
+    map_name_bars:
+        - [x_1, y_1, angle_1, is_long_1]
+        - ...
+        - [x_n, y_n, angle_n, is_long_n]
 
 
-# Protocolo
+# <p style="text-align: center;">Formato del protocolo</p>
 
 Ambos protocolos (Cliente y Servidor) cuentan con funciones para enviar y recibir 3 tipos de datos basicos, uint8_t (o sus variantes como un enum o bool que ocupen tambien un byte), float y string64. Esto con el fin de enviar los States incluidos en States.h
 
@@ -83,3 +91,30 @@ CrateCount: Contiene la cantidad de cajas de provisiones en el juego
 GameNotJoinable: Contiene una cantidad dummy de Games disponibles con el objetivo de no unirse al juego
 
 ConnectionError: Contiene una cantidad dummy de Games disponibles con el objetivo de no unirse al juego o salirse de el
+
+# <p style="text-align: center;">Diagramas</p>
+
+## Arquitectura de la comunicacion
+
+<img src="diagrams/comms.png" alt="comms">
+
+
+Ambos clientes, tanto del lado del cliente como del servidor envian y reciben los states de manera asincronica.
+
+## Arquitectura del monitor de juegos
+
+<img src="diagrams/game_arch.png" alt="comms">
+
+En cada step el gameloop popea de action_queue una accion recibida a ejecutar.
+
+## Recibo de una accion del lado del servidor
+
+<img src="diagrams/recvAction.png" alt="recvAction">
+
+Una vez recibida esta accion, el gameloop puede popearla de la queue y ejecutarla.
+
+## Explosion de un proyectil por tiempo
+
+<img src="diagrams/projectileTimer.png" alt="projectileTimer">
+
+El metodo "collide" actua de misma manera independientemente del comportamiento del proyectil, ya sea unicamente explotar por tiempo o por colision.
